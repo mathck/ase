@@ -11,7 +11,8 @@
 			<param-name>com.sun.jersey.config.property.packages</param-name>
 			<param-value>at.tuwien.ase</param-value>
 		</init-param>
-        <!-- POJO mapping for JSON support -->
+
+		<!-- POJO mapping for JSON support -->
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>
@@ -21,7 +22,7 @@
 
 	<servlet-mapping>
 		<servlet-name>jersey-serlvet</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>
