@@ -1,18 +1,14 @@
-package at.tuwien.ase.domain;
+package at.tuwien.ase.domain.task;
 
 /**
- * Task POJO
- *
- * @author Daniel Hofer
+ * Created by mathc_000 on 05-Nov-15.
  */
-
-public class Task {
+public abstract class Task {
 
     private int id;
     private String title;
     private String description;
 
-    // Must have no-argument constructor
     public Task() {
 
     }
@@ -23,16 +19,16 @@ public class Task {
         this.id = id;
     }
 
-    public void setDescription(String fname) {
-        this.description = fname;
+    public void setDescription(String desc) {
+        this.description = desc;
     }
 
     public String getDescription() {
         return this.description;
     }
 
-    public void setTitle(String lname) {
-        this.title = lname;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getTitle() {
@@ -45,14 +41,5 @@ public class Task {
 
     public int getId() {
         return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", title='" + title + '\'' +
-                '}';
     }
 }

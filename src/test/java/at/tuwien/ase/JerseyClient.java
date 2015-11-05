@@ -1,6 +1,6 @@
-package test.java.at.tuwien.ase;
+package at.tuwien.ase;
 
-import at.tuwien.ase.domain.Task;
+import at.tuwien.ase.domain.task.ParentTask;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -19,7 +19,7 @@ public class JerseyClient {
     public static void main(String[] args) {
         try {
 
-            Task st = new Task(1, "this is task 1", "description of task 1");
+            ParentTask st = new ParentTask(1, "this is task 1", "description of task 1");
 
             ClientConfig clientConfig = new DefaultClientConfig();
 

@@ -1,6 +1,6 @@
 package at.tuwien.ase.service;
 
-import at.tuwien.ase.domain.Task;
+import at.tuwien.ase.domain.task.ParentTask;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,9 +23,9 @@ public class RestService {
     @GET
     @Path("/print/{title}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Task produceJSON(@PathParam("title") String title ) {
+    public ParentTask produceJSON(@PathParam("title") String title ) {
 
-        Task st = new Task(1, "title of task is '"+title+"'", "description of '"+title+"'");
+        ParentTask st = new ParentTask(1, "title of task is '"+title+"'", "description of '"+title+"'");
 
         return st;
     }
@@ -33,7 +33,7 @@ public class RestService {
     @POST
     @Path("/send")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response consumeJSON( Task student ) {
+    public Response consumeJSON( ParentTask student ) {
 
         String output = student.toString();
 
