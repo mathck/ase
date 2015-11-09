@@ -1,14 +1,15 @@
 package at.tuwien.ase.domain.task;
 
 /**
- * Created by mathc_000 on 05-Nov-15.
+ * Created by DanielHofer on 04.11.2015.
  */
-public abstract class Task {
+public class Task {
 
     private int id;
     private String title;
     private String description;
 
+    // Must have no-argument constructor
     public Task() {
 
     }
@@ -19,16 +20,16 @@ public abstract class Task {
         this.id = id;
     }
 
-    public void setDescription(String desc) {
-        this.description = desc;
+    public void setDescription(String fname) {
+        this.description = fname;
     }
 
     public String getDescription() {
         return this.description;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(String lname) {
+        this.title = lname;
     }
 
     public String getTitle() {
@@ -41,5 +42,14 @@ public abstract class Task {
 
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

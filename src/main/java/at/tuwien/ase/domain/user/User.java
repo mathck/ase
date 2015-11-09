@@ -1,4 +1,4 @@
-package at.tuwien.ase.entity;
+package at.tuwien.ase.domain.user;
 
 import at.tuwien.ase.service.PasswordEncryption;
 

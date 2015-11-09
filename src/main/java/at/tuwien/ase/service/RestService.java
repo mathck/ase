@@ -1,6 +1,10 @@
 package at.tuwien.ase.service;
 
-import at.tuwien.ase.domain.task.ParentTask;
+import at.tuwien.ase.dao.task.TaskDAO;
+import at.tuwien.ase.domain.task.Task;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,31 +15,54 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
 /**
- * Class containing all REST services
+ * REST services
  *
- * @author Daniel Hofer
+ * Created by DanielHofer on 04.11.2015.
  */
 
-@Path("/jsonServices")
+@Path("/")
 public class RestService {
 
+
     @GET
-    @Path("/print/{title}")
+    @Path("/task/{id}/{title}/{description}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ParentTask produceJSON(@PathParam("title") String title ) {
+    public Task produceJSON(@PathParam("id") int id, @PathParam("title") String title, @PathParam("description") String description) {
 
-        ParentTask st = new ParentTask(1, "title of task is '"+title+"'", "description of '"+title+"'");
+        ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+        TaskDAO taskDAO = (TaskDAO) context.getBean("taskDAO");
 
-        return st;
+        //create new task
+        Task task = new Task(id, title, description);
+
+        //db insert
+        taskDAO.insertTask(task);
+
+        return task;
+    }
+
+    @GET
+    @Path("/task/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Task produceJSON(@PathParam("id") int id) {
+
+        ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+        TaskDAO taskDAO = (TaskDAO) context.getBean("taskDAO");
+
+        //find task by id
+        Task task = taskDAO.findByTaskId(id);
+
+        return task;
     }
 
     @POST
     @Path("/send")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response consumeJSON( ParentTask student ) {
+    public Response consumeJSON(Task task) {
 
-        String output = student.toString();
+        String output = task.toString();
 
         return Response.status(200).entity(output).build();
     }

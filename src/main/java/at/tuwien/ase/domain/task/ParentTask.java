@@ -1,9 +1,7 @@
 package at.tuwien.ase.domain.task;
 
 /**
- * ParentTask POJO
- *
- * @author Daniel Hofer
+ * Created by DanielHofer on 04.11.2015.
  */
 
 public class ParentTask extends Task {
