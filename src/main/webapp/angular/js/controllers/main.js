@@ -116,7 +116,7 @@ materialAdmin
                 closeOnConfirm: false 
             }, function(){
                 localStorage.clear();
-                swal("Done!", "localStorage is cleared", "success"); 
+                swal("Done!", "localStorage is cleared", "success");
             });
             
         }
