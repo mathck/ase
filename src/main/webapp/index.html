@@ -18,18 +18,18 @@
     <body class="login-content" data-ng-controller="loginCtrl as lctrl">
 
         <!-- Login -->
-        <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
+        <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1" data-ng-app="restLoginApp" data-ng-controller="restLoginCtrl">
             <div class="input-group m-b-20">
                 <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
                 <div class="fg-line">
-                    <input type="text" class="form-control" placeholder="E-Mail">
+                    <input type="text" class="form-control" placeholder="E-Mail" data-ng-model="mail">
                 </div>
             </div>
 
             <div class="input-group m-b-20">
                 <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
                 <div class="fg-line">
-                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="password" class="form-control" placeholder="Password" data-ng-model="password">
                 </div>
             </div>
 
@@ -43,7 +43,7 @@
                 </label>
             </div>
 
-            <a href="" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+            <a href="" class="btn btn-login btn-danger btn-float" data-ng-click="postLogin()"><i class="zmdi zmdi-arrow-forward"></i></a>
 
             <ul class="login-navigation">
                 <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register</li>
@@ -51,6 +51,7 @@
             </ul>
         </div>
 
+        <script src="login.js"></script>
         <!-- Register -->
         <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1">
 
@@ -172,7 +173,6 @@
         <script src="angular/vendors/bower_components/angular-resource/angular-resource.min.js"></script>
         <script src="angular/vendors/bower_components/angular-animate/angular-animate.min.js"></script>
         <script src="angular/vendors/bower_components/angular-resource/angular-resource.min.js"></script>
-
         
         <!-- Angular Modules -->
         <script src="angular/vendors/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
