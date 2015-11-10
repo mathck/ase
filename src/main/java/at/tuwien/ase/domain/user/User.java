@@ -2,10 +2,13 @@ package at.tuwien.ase.domain.user;
 
 import at.tuwien.ase.service.PasswordEncryption;
 
+import java.io.Serializable;
+
 /**
  * Created by Tomislav on 05/11/2015.
  */
-public abstract class User {
+public abstract class User implements Serializable {
+
     private String name;
     private String surname;
     private String email;
