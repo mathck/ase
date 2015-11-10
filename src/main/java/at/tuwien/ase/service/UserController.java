@@ -1,5 +1,6 @@
 package at.tuwien.ase.service;
 
+import at.tuwien.ase.domain.user.RegistrationUnit;
 import at.tuwien.ase.domain.user.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +12,15 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @RequestMapping(value = "/user/test", method = RequestMethod.GET)
-    @ResponseBody
-    public String test() {
-        return "Test successful";
+    public @ResponseBody User test() {
+        return new  User("test@test.com", "testpass");
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ResponseBody
-    public User user(@RequestBody User user) {
+    public User user(@RequestBody RegistrationUnit newUser) {
+        User user = newUser.createUser();
+        user.toFile();
         System.out.println("Created new user " + user.getEmail());
         //TODO Save user to db
         return user;

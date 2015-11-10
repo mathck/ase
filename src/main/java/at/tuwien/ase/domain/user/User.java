@@ -2,14 +2,16 @@ package at.tuwien.ase.domain.user;
 
 import at.tuwien.ase.service.PasswordEncryption;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.Serializable;
 
 /**
  * Created by Tomislav on 05/11/2015.
  */
-public abstract class User implements Serializable {
+public class User implements Serializable {
 
-    private String name;
+    private String givenName;
     private String surname;
     private String email;
     private byte[] password;
@@ -36,10 +38,10 @@ public abstract class User implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return givenName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String givenName) {
+        this.givenName = givenName;
     }
 
     public String getSurname() {
@@ -48,4 +50,18 @@ public abstract class User implements Serializable {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    public void toFile() {
+        try {
+            PrintWriter out = new PrintWriter(email + ".txt");
+            out.println("email: " + email);
+            out.println("give name: " + givenName);
+            out.println("surname: " + surname);
+            out.println("encrypted password: " + password.toString());
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
