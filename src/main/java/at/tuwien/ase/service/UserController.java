@@ -12,13 +12,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @RequestMapping(value = "/user/test", method = RequestMethod.GET)
-    public @ResponseBody User test() {
-        return new  User("test@test.com", "testpass");
+    public @ResponseBody RegistrationUnit test() {
+        RegistrationUnit testUser = new RegistrationUnit();
+        testUser.setEmail("test");
+        testUser.setFirstName("test");
+        testUser.setLastName("test");
+        testUser.setPassword("test");
+        return testUser;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    @ResponseBody
-    public User user(@RequestBody RegistrationUnit newUser) {
+    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")
+    public @ResponseBody User user(@RequestBody RegistrationUnit newUser) {
         User user = newUser.createUser();
         user.toFile();
         System.out.println("Created new user " + user.getEmail());
