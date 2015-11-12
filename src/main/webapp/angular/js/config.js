@@ -98,7 +98,7 @@ materialAdmin
             
             .state ('tables.tables', {
                 url: '/tables',
-                templateUrl: 'views/tables.html'
+                templateUrl: 'views/tablesMichi.html'
             })
             
             .state ('tables.data-table', {
