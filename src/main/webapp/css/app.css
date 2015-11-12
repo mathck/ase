@@ -7816,10 +7816,10 @@ a.waves-effect .waves-ripple {
   color: #673ab7 !important;
 }
 .bgm-lightblue {
-  background-color: #03a9f4 !important;
+  background-color: #0288D1 !important;
 }
 .c-lightblue {
-  color: #03a9f4 !important;
+  color: #0288D1 !important;
 }
 .bgm-cyan {
   background-color: #00bcd4 !important;
@@ -8065,7 +8065,7 @@ body #content {
   }
 }
 #header {
-  background: #03A9F4;
+  background: #0288D1;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   height: 65px;
   position: fixed;
@@ -8369,7 +8369,7 @@ body #content {
   left: 0;
   width: 100%;
   height: 65px;
-  background: #03A9F4;
+  background: #0288D1;
   -webkit-transition: all;
   -o-transition: all;
   transition: all;
@@ -9292,10 +9292,10 @@ a.lv-footer:hover {
   font-weight: 400;
 }
 .card-header h2 small {
-  display: block;
-  margin-top: 5px;
-  color: #AEAEAE;
-  line-height: 160%;
+   display: block;
+   margin-top: 5px;
+   color: #AEAEAE;
+   line-height: 160%;
 }
 @media screen and (min-width: 768px) {
   .card-header.ch-alt {
@@ -9315,10 +9315,8 @@ a.lv-footer:hover {
   color: #fff;
 }
 .card-header .actions {
-  position: absolute;
-  right: 10px;
-  z-index: 2;
-  top: 15px;
+  position: relative;
+
 }
 .card-header .btn-float {
   right: 25px;
@@ -12035,7 +12033,7 @@ a.thumbnail.active {
   background: #8bc34a;
 }
 .modal[data-modal-color="lightblue"] .modal-content {
-  background: #03a9f4;
+  background: #0288D1;
 }
 .modal[data-modal-color="amber"] .modal-content {
   background: #ffc107;
@@ -12891,7 +12889,7 @@ body.login-content:before {
   position: absolute;
   top: 0;
   left: 0;
-  background: #03A9F4;
+  background: #0288D1;
   content: "";
   z-index: 0;
 }
@@ -13249,8 +13247,8 @@ body.login-content:before {
   color: #4caf50;
 }
 .t-view .tvb-stats > li.tvbs-likes {
-  border-color: #03a9f4;
-  color: #03a9f4;
+  border-color: #0288D1;
+  color: #0288D1;
 }
 .t-view .tvb-stats > li.tvbs-views {
   border-color: #ff9800;
@@ -13310,7 +13308,7 @@ body.login-content:before {
   margin-top: -5px;
 }
 .p-menu > li:not(.active) > a {
-  color: #03A9F4;
+  color: #0288D1;
 }
 .p-menu > li:not(.active) > a:hover {
   color: #333;
@@ -13594,11 +13592,11 @@ body.login-content:before {
   }
 }
 .block-header > h2 {
-  font-size: 15px;
-  color: #777;
-  margin: 0;
-  font-weight: 400;
-  text-transform: uppercase;
+   font-size: 15px;
+   color: #777;
+   margin: 0;
+   font-weight: 400;
+   text-transform: uppercase;
 }
 .block-header > h2 > small {
   display: block;
@@ -15804,6 +15802,4 @@ hr.fc-divider {
 }
 .sweet-alert .btn {
   padding: 6px 12px;
-  font-size: 13px;
-  margin: 20px 2px 0;
-}
+  font-size: 13p
