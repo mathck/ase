@@ -1,5 +1,5 @@
 <div class="container">
-
+<!--
     <div class="block-header">
         <h2>Malinda Hollaway <small>Web/UI Developer, Dubai, United Arab Emirates</small></h2>
 
@@ -23,15 +23,16 @@
             </li>
         </ul>
     </div>
-
+-->
     <div class="card" id="profile-main" data-ng-controller="profileCtrl as pctrl">
         <div class="pm-overview c-overflow">
             <div class="pmo-pic">
                 <div class="p-relative">
                     <a href="">
-                        <img class="img-responsive" src="img/profile-pics/profile-pic-2.jpg" alt="">
+                        <img class="img-responsive" src="img/avatars/actor.png" alt="">
                     </a>
 
+                    <!--
                     <div class="dropdown pmop-message" dropdown>
                         <button dropdown-toggle class="btn bgm-white btn-float">
                             <i class="zmdi zmdi-comment-text-alt"></i>
@@ -47,22 +48,23 @@
                     <a href="" class="pmop-edit">
                         <i class="zmdi zmdi-camera"></i> <span class="hidden-xs">Update Profile Picture</span>
                     </a>
+                    -->
                 </div>
 
-
+<!--
                 <div class="pmo-stat">
-                    <h2 class="m-0 c-white">1562</h2>
-                    Total Connections
+                    <h3 class="m-0 c-white">mathck@gmail.com</h3>
                 </div>
+                -->
             </div>
 
             <div class="pmo-block pmo-contact hidden-xs">
                 <h2>Contact</h2>
 
                 <ul>
-                    <li><i class="zmdi zmdi-phone"></i> {{ pctrl.mobileNumber }}</li>
+                    <!--<li><i class="zmdi zmdi-phone"></i> {{ pctrl.mobileNumber }}</li>-->
                     <li><i class="zmdi zmdi-email"></i> {{ pctrl.emailAddress }}</li>
-                    <li><i class="zmdi zmdi-facebook-box"></i> {{ pctrl.skype }}</li>
+                    <!--<li><i class="zmdi zmdi-facebook-box"></i> {{ pctrl.skype }}</li>
                     <li><i class="zmdi zmdi-twitter"></i> {{ pctrl.twitter }} (twitter.com/malinda)</li>
                     <li>
                         <i class="zmdi zmdi-pin"></i>
@@ -71,10 +73,10 @@
                             {{ pctrl.addressCity }}, <br/>
                             {{ pctrl.addressCountry }}
                         </address>
-                    </li>
+                    </li>-->
                 </ul>
             </div>
-
+<!--
             <div class="pmo-block pmo-items hidden-xs">
                 <h2>Connections</h2>
 
@@ -119,10 +121,11 @@
                     </div>
                 </div>
             </div>
+            -->
         </div>
 
         <div class="pm-body clearfix">
-            <ul class="tab-nav tn-justified" data-ng-include="'template/profile-menu.html'"></ul>
+            <!--<ul class="tab-nav tn-justified" data-ng-include="'template/profile-menu.html'"></ul>-->
 
 
             <data ui-view></data>
