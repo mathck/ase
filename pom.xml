@@ -40,23 +40,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- jersey dependency for rest service -->
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-server</artifactId>
-      <version>1.9</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>1.9</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-json</artifactId>
-      <version>1.9</version>
-    </dependency>
-
    <!-- log4j dependency -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -92,6 +75,19 @@
       <artifactId>spring-webmvc</artifactId>
       <version>${springframework.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>${springframework.version}</version>
+    </dependency>
+
+    <!-- Jackson JSON Processor -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.4.1</version>
+    </dependency>
+
 
   </dependencies>
   <build>

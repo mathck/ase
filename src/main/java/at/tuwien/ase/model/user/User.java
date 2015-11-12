@@ -1,6 +1,6 @@
-package at.tuwien.ase.domain.user;
+package at.tuwien.ase.model.user;
 
-import at.tuwien.ase.service.PasswordEncryption;
+import at.tuwien.ase.controller.PasswordEncryption;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

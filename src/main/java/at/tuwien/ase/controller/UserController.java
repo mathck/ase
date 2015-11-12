@@ -1,7 +1,7 @@
-package at.tuwien.ase.service;
+package at.tuwien.ase.controller;
 
-import at.tuwien.ase.domain.user.RegistrationUnit;
-import at.tuwien.ase.domain.user.User;
+import at.tuwien.ase.model.user.RegistrationUnit;
+import at.tuwien.ase.model.user.User;
 import org.springframework.web.bind.annotation.*;
 
 /**

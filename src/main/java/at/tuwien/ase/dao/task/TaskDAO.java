@@ -1,6 +1,6 @@
 package at.tuwien.ase.dao.task;
 
-import at.tuwien.ase.domain.task.Task;
+import at.tuwien.ase.model.task.Task;
 
 /**
  * Created by DanielHofer on 09.11.2015.

@@ -1,23 +1,24 @@
-package at.tuwien.ase.domain.task;
+package at.tuwien.ase.model.task;
 
 /**
- * Created by DanielHofer on 04.11.2015.
+ * Created by mathc_000 on 05-Nov-15.
  */
+public class Subtask extends Task {
 
-public class ParentTask extends Task {
+    // todo add task parameters
 
     // Must have no-argument constructor
-    public ParentTask() {
+    public Subtask() {
 
     }
 
-    public ParentTask(int id, String title, String description) {
+    public Subtask(int id, String title, String description) {
         super(id, title, description);
     }
 
     @Override
     public String toString() {
-        return ParentTask.class.getName() + "{" +
+        return Subtask.class.getName() + "{" +
                 "id=" + this.getId() +
                 ", description='" + this.getDescription() + '\'' +
                 ", title='" + this.getTitle() + '\'' +

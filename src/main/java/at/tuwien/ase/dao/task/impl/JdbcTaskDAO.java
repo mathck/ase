@@ -1,7 +1,7 @@
 package at.tuwien.ase.dao.task.impl;
 
 import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.domain.task.Task;
+import at.tuwien.ase.model.task.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

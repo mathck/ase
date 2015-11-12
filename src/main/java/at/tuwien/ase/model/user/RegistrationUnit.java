@@ -1,4 +1,4 @@
-package at.tuwien.ase.domain.user;
+package at.tuwien.ase.model.user;
 
 import java.io.Serializable;
 

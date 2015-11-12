@@ -1,4 +1,4 @@
-package at.tuwien.ase.domain.task;
+package at.tuwien.ase.model.task;
 
 /**
  * Created by DanielHofer on 04.11.2015.
