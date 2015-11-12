@@ -18,7 +18,7 @@
     <body class="login-content" data-ng-controller="loginCtrl as lctrl">
 
         <!-- Login -->
-        <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1" data-ng-app="restLoginApp" data-ng-controller="restLoginCtrl">
+        <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1" ><!-- data-ng-app="restLoginApp" data-ng-controller="restLoginCtrl" -->
             <div class="input-group m-b-20">
                 <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
                 <div class="fg-line">
@@ -53,9 +53,40 @@
 
         <script src="userRestInterface.js"></script>
         <!-- Register -->
-        <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1" data-ng-app="restRegisterApp" data-ng-controller="restRegisterCtrl">
+        <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1" ><!-- data-ng-app="restRegisterApp" data-ng-controller="restRegisterCtrl" -->
 
-            <button class="btn btn-info waves-effect" data-swal-warning="">Select Avatar</button>
+            <div class="card-body card-padding p-t-0" data-ng-controller="ModalDemoCtrl">
+
+                <script type="text/ng-template" id="myModalContent.html">
+
+                    <div class="modal-body">
+                        <!--<p>{{ modalContent }}</p>-->
+                        <div class="card-body card-padding">
+
+                            <div class="lightbox row">
+                                <div data-src="angular/media/gallery/1.jpg" class="col-sm-2 col-xs-6">
+                                    <div class="lightbox-item">
+                                        <img src="angular/media/gallery/thumbs/1.jpg" alt="" />
+                                    </div>
+                                </div>
+
+                                <div data-src="angular/media/gallery/2.jpg" class="col-sm-2 col-xs-6" data-sub-html="<em><h3>This is a caption heading</h3><p>Here goes the description...</p></em>">
+                                    <div class="lightbox-item">
+                                        <img src="angular/media/gallery/thumbs/2.jpg" alt=""  />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-link" ng-click="cancel()">Cancel</button>
+                    </div>
+                </script>
+
+                <button class="btn btn-info waves-effect" data-swal-warning="" ng-click="open('lg')">Select Avatar</button>
+
+            </div>
 
             <div class="input-group m-b-20">
                 <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
