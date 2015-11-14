@@ -1,9 +1,11 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.dao.task.TaskDAO;
+
 import at.tuwien.ase.model.task.Task;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -13,37 +15,32 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TaskController {
 
-    @RequestMapping(value = "/task/{id}/{title}/{description}", method = RequestMethod.GET)
-    public @ResponseBody Task test(@PathVariable("id") int id, @PathVariable("title") String title, @PathVariable("description") String description) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-        TaskDAO taskDAO = (TaskDAO) context.getBean("taskDAO");
+    @Autowired
+    private TaskDAO taskDAO;
 
-        //create new task
-        Task task = new Task(id, title, description);
+    private static final Logger logger = LogManager.getLogger(TaskController.class);
 
-        //db insert
-        taskDAO.insertTask(task);
 
-        return task;
-    }
+    @RequestMapping(value = "workspace/projects/{projectId}/tasks/{taskId}", method = RequestMethod.GET)
+    public @ResponseBody Task task(@PathVariable("projectId") int projectId, @PathVariable("taskId") int taskId) {
 
-    @RequestMapping(value = "/task/{id}", method = RequestMethod.GET)
-    public @ResponseBody Task task(@PathVariable("id") int id) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-        TaskDAO taskDAO = (TaskDAO) context.getBean("taskDAO");
+        logger.debug("get task with id="+taskId);
 
         //find task by id
-        Task task = taskDAO.findByTaskId(id);
+        Task task = taskDAO.findByTaskId(taskId);
 
         return task;
     }
 
-    @RequestMapping(value = "/task", method = RequestMethod.POST, consumes = "application/json")
-    public @ResponseBody Task task(@RequestBody Task task) {
+    @RequestMapping(value = "workspace/projects/{projectId}/tasks", method = RequestMethod.POST, consumes = "application/json")
+    public @ResponseBody Task task(@RequestBody Task task, @PathVariable("projectId") int projectId) {
 
-        Task t = task;
+        logger.debug("post new task with id="+task.getId());
 
-        return t;
+        //db insert and return id
+        task.setId(taskDAO.insertTask(task));
+
+        return task;
     }
 
 }

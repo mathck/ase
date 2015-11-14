@@ -12,8 +12,9 @@ public interface TaskDAO
      * used to insert new Task objects to db
      *
      * @param task
+     * @return task id from db
      */
-    public void insertTask(Task task);
+    public int insertTask(Task task);
 
     /**
      * used to find task by id

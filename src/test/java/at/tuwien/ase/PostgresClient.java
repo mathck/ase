@@ -13,7 +13,7 @@ public class PostgresClient {
     public static void main( String[] args )
     {
         ApplicationContext context =
-                new ClassPathXmlApplicationContext("beans.xml");
+                new ClassPathXmlApplicationContext("src/main/webapp/WEB-INF/applicationContext.xml");
 
         //create new task
         TaskDAO taskDAO = (TaskDAO) context.getBean("taskDAO");

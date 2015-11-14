@@ -1,7 +1,7 @@
 package at.tuwien.ase.dao.task.impl;
 
-import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.dao.task.IssueDAO;
+import at.tuwien.ase.model.task.Issue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 /**
- * Created by DanielHofer on 09.11.2015.
+ * Created by DanielHofer on 14.11.2015.
  */
 
 @Repository
-public class JdbcTaskDAO implements TaskDAO {
+public class JdbcIssueDAO implements IssueDAO {
 
     private static final Logger logger = LogManager.getLogger(JdbcTaskDAO.class);
     private DataSource dataSource;
@@ -37,19 +37,19 @@ public class JdbcTaskDAO implements TaskDAO {
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public int insertTask(final Task task) {
+    public int insertIssue(final Issue issue) {
 
-        final String sql = "INSERT INTO TASK (TITLE, DESCRIPTION) VALUES (?, ?)";
+        final String sql = "INSERT INTO ISSUE (TITLE, DESCRIPTION) VALUES (?, ?)";
 
-        logger.debug("insert into db: task with id="+task.getId());
+        logger.debug("insert into db: issue with id="+issue.getId());
 
         jdbcTemplate.update(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                         PreparedStatement ps =
                                 connection.prepareStatement(sql, new String[] {"id"});
-                        ps.setString(1, task.getTitle());
-                        ps.setString(2, task.getDescription());
+                        ps.setString(1, issue.getTitle());
+                        ps.setString(2, issue.getDescription());
                         return ps;
                     }
                 },
@@ -59,16 +59,16 @@ public class JdbcTaskDAO implements TaskDAO {
 
     }
 
-    public Task findByTaskId(int taskId) {
+    public Issue findByIssueId(int issueId) {
 
-        logger.debug("retrieve from db: task with id="+taskId);
+        logger.debug("retrieve from db: issue with id="+issueId);
 
-        Task task = this.jdbcTemplate.queryForObject(
-                "SELECT ID, TITLE, DESCRIPTION FROM TASK WHERE ID = ?",
-                new Object[]{taskId},
-                new RowMapper<Task>() {
-                    public Task mapRow(ResultSet rs, int taskId) throws SQLException {
-                        Task task = new Task();
+        Issue issue = this.jdbcTemplate.queryForObject(
+                "SELECT ID, TITLE, DESCRIPTION FROM ISSUE WHERE ID = ?",
+                new Object[]{issueId},
+                new RowMapper<Issue>() {
+                    public Issue mapRow(ResultSet rs, int taskId) throws SQLException {
+                        Issue task = new Issue();
                         task.setId(Integer.valueOf(rs.getString("ID")));
                         task.setTitle(rs.getString("TITLE"));
                         task.setDescription(rs.getString("DESCRIPTION"));
@@ -76,7 +76,7 @@ public class JdbcTaskDAO implements TaskDAO {
                     }
                 });
 
-        return task;
+        return issue;
 
     }
 }
