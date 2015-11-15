@@ -2,9 +2,11 @@
     <div class="profile-menu">
         <a href="" toggle-submenu>
             <div class="profile-pic">
-                <img src="img/avatars/actor.png" alt="profile picture" />
+                <img src="img/avatars/actor.png" alt="profile picture"/>
+                <span class="level">
+                    Level 1 <!-- TODO Binding general level -->
+                </span>
             </div>
-
             <div class="profile-info"> <!-- TODO Binding email -->
                 mathck@gmail.com
 
@@ -34,6 +36,17 @@
         <li data-ui-sref-active="active">
             <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
         </li>
+        <li data-ui-sref-active="active"> <!-- TODO Link to Create Project View -->
+            <a data-ui-sref-active="active" data-ui-sref="form.createProject" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-folder"></i> Create Project</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="calendar" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-chart"></i> Rewards</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="calendar" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-assignment-o"></i> Templates</a>
+        </li>
+
+        <!--
         <li data-ui-sref-active="active">
             <a data-ui-sref="typography" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-format-underlined"></i> Typography</a>
         </li>
@@ -121,5 +134,6 @@
                 <li><a href="404.html">Error 404</a></li>
             </ul>
         </li>
+        -->
     </ul>
 </div>

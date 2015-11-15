@@ -4,7 +4,7 @@ materialAdmin
 
 
         $stateProvider
-        
+
             //------------------------------
             // HOME
             //------------------------------
@@ -132,9 +132,9 @@ materialAdmin
                 }
             })
 
-            .state ('form.form-components', {
-                url: '/form-components',
-                templateUrl: 'views/form-components.html',
+            .state ('form.createProject', {
+                url: '/createProject',
+                templateUrl: 'views/createProject.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
                         return $ocLazyLoad.load ([
