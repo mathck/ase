@@ -14,10 +14,10 @@ public class UserController {
     @RequestMapping(value = "/user/test", method = RequestMethod.GET)
     public @ResponseBody RegistrationUnit test() {
         RegistrationUnit testUser = new RegistrationUnit();
-        testUser.setEmail("test");
-        testUser.setFirstName("test");
-        testUser.setLastName("test");
-        testUser.setPassword("test");
+        testUser.setEmail("testmail");
+        testUser.setFirstName("testname");
+        testUser.setLastName("testlastname");
+        testUser.setPassword("testPW");
         return testUser;
     }
 
