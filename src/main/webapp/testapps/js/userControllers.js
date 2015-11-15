@@ -1,11 +1,11 @@
-var app = angular.module('taskit.controllers', []);
+var app = angular.module('taskit.userControllers', []);
 
 app.controller('restUserListCtrl', ['$scope', 'UsersFactory', 'UserFactory', '$location',
     function ($scope, UsersFactory, UserFactory, $location) {
 
         // callback for ng-click 'editUser':
         $scope.updateUser = function (userId) {
-            $location.path('/user-edit/' + userId);
+            $location.path('/user-update/' + userId);
         };
 
         // callback for ng-click 'deleteUser':
@@ -39,12 +39,24 @@ app.controller('restUserUpdateCtrl', ['$scope', '$routeParams', 'UserFactory', '
         $scope.user = UserFactory.show({id: $routeParams.id});
     }]);
 
-app.controller('restUserCreationCtrl', ['$scope', 'UsersFactory', '$location',
+app.controller('restUserRegistrationCtrl', ['$scope', 'UsersFactory', '$location',
     function ($scope, UsersFactory, $location) {
 
-        // callback for ng-click 'createNewUser':
-        $scope.createNewUser = function () {
+        // callback for ng-click 'saveUser':
+        $scope.saveUser = function () {
+            console.log($scope.user);
             UsersFactory.create($scope.user);
+            console.log($scope.user);
+            $location.path('/user-list');
+        }
+    }]);
+
+app.controller('restLoginCtrl', ['$scope', 'LoginFactory', '$location',
+    function ($scope, LoginFactory, $location) {
+
+        // callback for ng-click 'loginUser':
+        $scope.loginUser = function () {
+            LoginFactory.create($scope.login);
             $location.path('/user-list');
         }
     }]);

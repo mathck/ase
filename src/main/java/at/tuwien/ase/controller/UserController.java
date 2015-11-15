@@ -23,12 +23,8 @@ public class UserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public @ResponseBody RegistrationUnit testList() {
-        RegistrationUnit testUser = new RegistrationUnit();
-        testUser.setEmail("testmail");
-        testUser.setFirstName("testname");
-        testUser.setLastName("testlastname");
-        testUser.setPassword("testPW");
-        return testUser;
+        //TODO return list of users (if necessary?)
+        return null;
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")

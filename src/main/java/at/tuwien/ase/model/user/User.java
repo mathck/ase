@@ -11,8 +11,8 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
 
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
     private byte[] password;
     private byte[] salt;
@@ -38,25 +38,25 @@ public class User implements Serializable {
     }
 
     public String getName() {
-        return firstname;
+        return firstName;
     }
     public void setName(String givenName) {
-        this.firstname = givenName;
+        this.firstName = givenName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void toFile() {
         try {
             PrintWriter out = new PrintWriter(email + ".txt");
             out.println("email: " + email);
-            out.println("firstname: " + firstname);
-            out.println("lastname: " + lastname);
+            out.println("firstName: " + firstName);
+            out.println("lastName: " + lastName);
             out.println("encrypted password: " + password.toString());
             out.close();
         } catch (FileNotFoundException e) {

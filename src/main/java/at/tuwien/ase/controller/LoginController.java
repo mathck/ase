@@ -17,7 +17,7 @@ public class LoginController {
     public @ResponseBody Login login(@RequestBody LoginUnit newLogin) {
         Login login  = newLogin.createLogin();
         login.toFile();
-        System.out.println("Created new user " + login.getEmail());
+        System.out.println("Received new login " + login.getEmail());
         //TODO Authenticate user and send token
         return login;
     }
