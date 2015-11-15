@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST, consumes = "application/json")
-    public @ResponseBody
-    Login login(@RequestBody LoginUnit newLogin) {
+    public @ResponseBody Login login(@RequestBody LoginUnit newLogin) {
         Login login  = newLogin.createLogin();
         login.toFile();
         System.out.println("Created new user " + login.getEmail());

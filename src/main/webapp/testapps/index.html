@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" ng-app="taskit">
+<head>
+    <meta charset="utf-8">
+    <title>TaskIt Webapp</title>
+</head>
+<body>
+<ul class="menu">
+    <li><a href="#/user-login">user-login</a></li>
+    <li><a href="#/user-register">user-registration/</a></li>
+    <li><a href="#/user-list">user-list</a></li>
+    <li><a href="#/user-update/test">user-update</a></li>
+</ul>
+
+<div ng-view></div>
+<!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>-->
+<script src="../vendors/bower_components/angular/angular.min.js"></script>
+<script src="../vendors/bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="../vendors/bower_components/angular-route/angular-route.min.js"></script>
+
+<!-- AngularJS App Code ==================================================== -->
+<script src="js/app.js"></script>
+<script src="js/userServices.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/directives.js"></script>
+
+</body>
+</html>

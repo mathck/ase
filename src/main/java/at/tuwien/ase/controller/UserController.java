@@ -21,6 +21,16 @@ public class UserController {
         return testUser;
     }
 
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public @ResponseBody RegistrationUnit testList() {
+        RegistrationUnit testUser = new RegistrationUnit();
+        testUser.setEmail("testmail");
+        testUser.setFirstName("testname");
+        testUser.setLastName("testlastname");
+        testUser.setPassword("testPW");
+        return testUser;
+    }
+
     @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")
     public @ResponseBody User user(@RequestBody RegistrationUnit newUser) {
         User user = newUser.createUser();
