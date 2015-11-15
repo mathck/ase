@@ -1,9 +1,9 @@
 var taskServices = angular.module('taskit.taskServices', ['ngResource']);
 
 taskServices.factory('TasksFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects', {}, {
-        query: { method: 'GET', isArray: true },
-        create: { method: 'POST' }
+    return $resource('/taskit/api/workspace/projects/:pid', {}, {
+        query: { method: 'GET', params: {pid: '@pid'}, isArray: true },
+        create: { method: 'POST' params: {pid: '@pid'}}
     })
 });
 
