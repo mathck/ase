@@ -9286,7 +9286,7 @@ a.lv-footer:hover {
   }
 }
 .card-header h2 {
-  margin: 0;
+  margin-left: 0;
   line-height: 100%;
   font-size: 17px;
   font-weight: 400;
@@ -9313,10 +9313,6 @@ a.lv-footer:hover {
 .card-header[class*="bgm-"] h2,
 .card-header[class*="bgm-"] h2 small {
   color: #fff;
-}
-.card-header .actions {
-  position: relative;
-
 }
 .card-header .btn-float {
   right: 25px;
@@ -15802,4 +15798,4 @@ hr.fc-divider {
 }
 .sweet-alert .btn {
   padding: 6px 12px;
-  font-size: 13p
+  font-
