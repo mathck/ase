@@ -24,9 +24,9 @@ import javax.sql.DataSource;
  */
 
 @Repository
-public class JdbcIssueDAO implements IssueDAO {
+public class IssueDAOImpl implements IssueDAO {
 
-    private static final Logger logger = LogManager.getLogger(JdbcTaskDAO.class);
+    private static final Logger logger = LogManager.getLogger(TaskDAOImpl.class);
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
@@ -41,13 +41,13 @@ public class JdbcIssueDAO implements IssueDAO {
 
         final String sql = "INSERT INTO ISSUE (TITLE, DESCRIPTION) VALUES (?, ?)";
 
-        logger.debug("insert into db: issue with id="+issue.getId());
+        logger.debug("insert into db: issue with id=" + issue.getId());
 
         jdbcTemplate.update(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                         PreparedStatement ps =
-                                connection.prepareStatement(sql, new String[] {"id"});
+                                connection.prepareStatement(sql, new String[]{"id"});
                         ps.setString(1, issue.getTitle());
                         ps.setString(2, issue.getDescription());
                         return ps;
@@ -61,7 +61,7 @@ public class JdbcIssueDAO implements IssueDAO {
 
     public Issue findByIssueId(int issueId) {
 
-        logger.debug("retrieve from db: issue with id="+issueId);
+        logger.debug("retrieve from db: issue with id=" + issueId);
 
         Issue issue = this.jdbcTemplate.queryForObject(
                 "SELECT ID, TITLE, DESCRIPTION FROM ISSUE WHERE ID = ?",

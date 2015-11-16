@@ -6,8 +6,7 @@ import at.tuwien.ase.model.task.Task;
  * Created by DanielHofer on 09.11.2015.
  */
 
-public interface TaskDAO
-{
+public interface TaskDAO {
     /**
      * used to insert new Task objects to db
      *

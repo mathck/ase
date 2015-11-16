@@ -1,8 +1,10 @@
 package at.tuwien.ase.controller;
 
+import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.dao.task.TaskDAO;
 
 import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +18,28 @@ import org.springframework.web.bind.annotation.*;
 public class TaskController {
 
     @Autowired
-    private TaskDAO taskDAO;
+    private TaskService taskService;
+
+    @Autowired
+    private GenericRestExceptionHandler genericRestExceptionHandler;
 
     private static final Logger logger = LogManager.getLogger(TaskController.class);
 
 
     @RequestMapping(value = "workspace/projects/{projectId}/tasks/{taskId}", method = RequestMethod.GET)
-    public @ResponseBody Task task(@PathVariable("projectId") int projectId, @PathVariable("taskId") int taskId) {
+    public
+    @ResponseBody
+    Task getTask(@PathVariable("projectId") int projectId, @PathVariable("taskId") int taskId) throws Exception {
 
-        logger.debug("get task with id="+taskId);
-
-        //find task by id
-        Task task = taskDAO.findByTaskId(taskId);
-
-        return task;
+        return taskService.getTask(taskId);
     }
 
     @RequestMapping(value = "workspace/projects/{projectId}/tasks", method = RequestMethod.POST, consumes = "application/json")
-    public @ResponseBody Task task(@RequestBody Task task, @PathVariable("projectId") int projectId) {
+    public
+    @ResponseBody
+    Task postTask(@RequestBody Task task, @PathVariable("projectId") int projectId) throws Exception {
 
-        logger.debug("post new task with id="+task.getId());
-
-        //db insert and return id
-        task.setId(taskDAO.insertTask(task));
-
-        return task;
+        return taskService.postTask(task);
     }
 
 }

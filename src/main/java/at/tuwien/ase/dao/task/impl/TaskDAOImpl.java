@@ -24,9 +24,9 @@ import javax.sql.DataSource;
  */
 
 @Repository
-public class JdbcTaskDAO implements TaskDAO {
+public class TaskDAOImpl implements TaskDAO {
 
-    private static final Logger logger = LogManager.getLogger(JdbcTaskDAO.class);
+    private static final Logger logger = LogManager.getLogger(TaskDAOImpl.class);
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
@@ -41,13 +41,13 @@ public class JdbcTaskDAO implements TaskDAO {
 
         final String sql = "INSERT INTO TASK (TITLE, DESCRIPTION) VALUES (?, ?)";
 
-        logger.debug("insert into db: task with id="+task.getId());
+        logger.debug("insert into db: task with id=" + task.getId());
 
         jdbcTemplate.update(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                         PreparedStatement ps =
-                                connection.prepareStatement(sql, new String[] {"id"});
+                                connection.prepareStatement(sql, new String[]{"id"});
                         ps.setString(1, task.getTitle());
                         ps.setString(2, task.getDescription());
                         return ps;
@@ -61,7 +61,7 @@ public class JdbcTaskDAO implements TaskDAO {
 
     public Task findByTaskId(int taskId) {
 
-        logger.debug("retrieve from db: task with id="+taskId);
+        logger.debug("retrieve from db: task with id=" + taskId);
 
         Task task = this.jdbcTemplate.queryForObject(
                 "SELECT ID, TITLE, DESCRIPTION FROM TASK WHERE ID = ?",

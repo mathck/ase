@@ -7,8 +7,7 @@ import at.tuwien.ase.model.task.Issue;
  * Created by DanielHofer on 14.14.11.2015.
  */
 
-public interface IssueDAO
-{
+public interface IssueDAO {
     /**
      * used to insert new issue objects to db
      *
