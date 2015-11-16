@@ -13,5 +13,5 @@ angular.module('taskit', ['ngRoute', 'taskit.filters', 'taskit.directives',
         $routeProvider.when('/task-create', {templateUrl: 'task/task-create.html', controller: 'restTaskCreateCtrl'});
         $routeProvider.when('/task-update/:id', {templateUrl: 'task/task-update.html', controller: 'restTaskUpdateCtrl'});
 
-        $routeProvider.otherwise({redirectTo: '/user-login'});
+        $routeProvider.otherwise({redirectTo: 'user-login'});
     }]);
