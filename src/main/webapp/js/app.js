@@ -6,6 +6,13 @@ var materialAdmin = angular.module('materialAdmin', [
     'angular-loading-bar',
     'oc.lazyLoad',
     'nouislider',
-    'ngTable'
+    'ngTable',
+    'ngRoute',
+    'taskit.filters',
+    'taskit.directives',
+    'taskit.userServices',
+    'taskit.userControllers',
+    'taskit.taskServices',
+    'taskit.taskControllers'
 ])
  

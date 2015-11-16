@@ -274,14 +274,27 @@ materialAdmin
     // LOGIN
     //=================================================
 
-    .controller('loginCtrl', function(){
-        
-        //Status
-    
-        this.login = 1;
-        this.register = 0;
-        this.forgot = 0;
+    .controller('loginCtrl', function ( LoginFactory, UsersFactory, $location) {
+
+            // callback for ng-click 'loginUser':
+            this.loginUser = function () {
+                LoginFactory.create(this.login);
+                console.log("login is " + this.login.email );
+                //$location.path('/user-list');
+            }
+             // callback for ng-click 'saveUser':
+            this.createUser = function () {
+                console.log("registration is " + this.user.email + this.user.password + this.user.firstName, + this.user.lastName);
+                UsersFactory.create(this.user);
+                //$location.path('/user-list');
+            }
+
+            //Status
+            this.loginStat = 1;
+            this.register = 0;
+            this.forgot = 0;
     })
+
 
 
     //=================================================

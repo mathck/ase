@@ -18,18 +18,18 @@
 <body class="login-content" data-ng-controller="loginCtrl as lctrl">
 
 <!-- Login -->
-<div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1" ><!-- data-ng-app="restLoginApp" data-ng-controller="restLoginCtrl" -->
+<div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.loginStat === 1 }" data-ng-if="lctrl.loginStat === 1" ><!-- data-ng-app="restLoginApp" data-ng-controller="restLoginCtrl" -->
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
         <div class="fg-line">
-            <input type="text" class="form-control" placeholder="E-Mail" data-ng-model="mail">
+            <input type="text" class="form-control" placeholder="E-Mail" data-ng-model="lctrl.login.email">
         </div>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
         <div class="fg-line">
-            <input type="password" class="form-control" placeholder="Password" data-ng-model="password">
+            <input type="password" class="form-control" placeholder="Password" data-ng-model="lctrl.login.password">
         </div>
     </div>
 
@@ -43,15 +43,14 @@
         </label>
     </div>
 
-    <a href="main.html" class="btn btn-login bgm-teal btn-float" data-ng-click="postLogin()"><i class="zmdi zmdi-arrow-forward"></i></a>
+    <a href="" class="btn btn-login bgm-teal btn-float" data-ng-click="lctrl.loginUser()"><i class="zmdi zmdi-arrow-forward"></i></a>
 
     <ul class="login-navigation">
-        <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register</li>
-        <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.login = 0; lctrl.forgot = 1">Forgot Password?</li>
+        <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.loginStat = 0; lctrl.register = 1">Register</li>
+        <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.loginStat = 0; lctrl.forgot = 1">Forgot Password?</li>
     </ul>
 </div>
 
-<script src="userRestInterface.js"></script>
 <!-- Register -->
 <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1" ><!-- data-ng-app="restRegisterApp" data-ng-controller="restRegisterCtrl" -->
 
@@ -243,44 +242,44 @@
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
         <div class="fg-line">
-            <input type="text" class="form-control" placeholder="First Name" data-ng-model="firstName">
+            <input type="text" class="form-control" placeholder="First Name" data-ng-model="lctrl.user.firstName">
         </div>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
         <div class="fg-line">
-            <input type="text" class="form-control" placeholder="Last Name" data-ng-model="lastName">
+            <input type="text" class="form-control" placeholder="Last Name" data-ng-model="lctrl.user.lastName">
         </div>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
         <div class="fg-line">
-            <input type="text" class="form-control" placeholder="Email Address" data-ng-model="emailRegistration">
+            <input type="text" class="form-control" placeholder="Email Address" data-ng-model="lctrl.user.email">
         </div>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
         <div class="fg-line">
-            <input type="password" class="form-control" placeholder="Password" data-ng-model="passwordRegistration1">
+            <input type="password" class="form-control" placeholder="Password" data-ng-model="lctrl.user.password">
         </div>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
         <div class="fg-line">
-            <input type="password" class="form-control" placeholder="Re-Enter Password" data-ng-model="passwordRegistration2">
+            <input type="password" class="form-control" placeholder="Re-Enter Password" data-ng-model="lctrl.passwordCheck">
         </div>
     </div>
 
     <div class="clearfix"></div>
 
-    <a href="" class="btn btn-login bgm-teal btn-float" data-ng-model="registerButton"><i class="zmdi zmdi-arrow-forward"></i></a>
+    <a href="" class="btn btn-login bgm-teal btn-float" data-ng-model="registerButton" data-ng-click="lctrl.createUser()"><i class="zmdi zmdi-arrow-forward"></i></a>
 
     <ul class="login-navigation">
-        <li data-block="#l-login" class="bgm-cyan" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>
+        <li data-block="#l-login" class="bgm-cyan" data-ng-click="lctrl.register = 0; lctrl.loginStat = 1">Login</li>
         <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">Forgot Password?</li>
     </ul>
 </div>
@@ -299,7 +298,7 @@
     <a href="" class="btn btn-login bgm-teal btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
 
     <ul class="login-navigation">
-        <li data-block="#l-login" class="bgm-cyan" data-ng-click="lctrl.forgot = 0; lctrl.login = 1">Login</li>
+        <li data-block="#l-login" class="bgm-cyan" data-ng-click="lctrl.forgot = 0; lctrl.loginStat = 1">Login</li>
         <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Register</li>
     </ul>
 </div>
@@ -362,6 +361,7 @@
 <script src="vendors/bower_components/angular-loading-bar/src/loading-bar.js"></script>
 <script src="vendors/bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
 <script src="vendors/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="vendors/bower_components/angular-route/angular-route.min.js"></script>
 
 <!-- Common Vendors -->
 <script src="vendors/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
@@ -383,6 +383,13 @@
 <script src="js/controllers/ui-bootstrap.js"></script>
 <script src="js/controllers/table.js"></script>
 
+<!--<script src="js/taskit/app.js"></script>-->
+<script src="js/taskit/directives.js"></script>
+<script src="js/taskit/filters.js"></script>
+<script src="js/taskit/taskControllers.js"></script>
+<script src="js/taskit/taskServices.js"></script>
+<script src="js/taskit/userControllers.js"></script>
+<script src="js/taskit/userServices.js"></script>
 
 <!-- Template Modules -->
 <script src="js/modules/template.js"></script>
