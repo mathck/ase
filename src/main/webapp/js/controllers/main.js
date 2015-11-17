@@ -274,13 +274,13 @@ materialAdmin
     // LOGIN
     //=================================================
 
-    .controller('loginCtrl', function ( LoginFactory, UsersFactory, $location) {
+    .controller('loginCtrl', function ( LoginFactory, UsersFactory, $location, $window) {
 
             // callback for ng-click 'loginUser':
             this.loginUser = function () {
                 LoginFactory.create(this.login);
                 console.log("login is " + this.login.email );
-                //$location.path('/user-list');
+                $window.location.href='/taskit/main.html';
             }
              // callback for ng-click 'saveUser':
             this.createUser = function () {
