@@ -1,0 +1,13 @@
+<div>
+    <h1>Project List Test</h1>
+    <div ng-repeat="task in tasks">
+        <div>
+            <td>{{ project.id }}</td>
+            <td>{{ project.title }}</td>
+            <td>{{ project.description }}</td>
+            <td><a ng-click="updateProject(project.id)">edit Task</a></td>
+            <td><a ng-click="deleteProject(project.id)">delete Task</a></td>
+        </div>
+    </div>
+
+</div>
