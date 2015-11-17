@@ -9,7 +9,7 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 
 /**
- * Created by Tomislav on 05/11/2015.
+ * Created by Tomislav Nikic on 05/11/2015.
  */
 public class PasswordEncryption {
 

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Created by Tomislav on 10/11/2015.
+ * Created by Tomislav Nikic on 10/11/2015.
  */
 
 @RestController

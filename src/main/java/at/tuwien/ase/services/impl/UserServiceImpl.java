@@ -26,5 +26,40 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public User addUser(User newUser) {
+        System.out.println("Created new user " + newUser.getEmail());
+        //TODO Save user to db
+        return newUser;
+    }
+
+    @Override
+    public User addUser(String email, String password) {
+        User newUser = new User(email, password);
+        //TODO Save user to db
+        return newUser;
+    }
+
+    @Override
+    public User updateUser(String email, String password, String firstName, String lastName, String avatar) {
+        User user = this.getUserByMail(email);
+        if(email != null)
+            user.setEmail(email);
+        if(password != null)
+            user.setPassword(password);
+        if(firstName != null)
+            user.setName(firstName);
+        if(lastName != null)
+            user.setLastName(lastName);
+        if(avatar != null)
+            user.setAvatar(avatar);
+        return user;
+    }
+
+    public User getUserByMail(String email) {
+        //TODO Get user by email
+        return null;
+    }
+
 
 }

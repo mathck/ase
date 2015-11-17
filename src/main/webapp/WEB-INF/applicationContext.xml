@@ -4,13 +4,13 @@
        xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-
     <!-- Scans within the base package of the application for @Component classes to configure as beans -->
+    <!-- @author Tomislav Nikic -->
     <context:component-scan base-package="at.tuwien.ase" />
-
     <mvc:annotation-driven />
 
     <!-- initialization for data source -->
+    <!-- @author Daniel Hofer -->
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>

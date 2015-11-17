@@ -3,7 +3,7 @@ package at.tuwien.ase.model.user;
 import java.io.Serializable;
 
 /**
- * Created by Tomislav on 10/11/2015.
+ * Created by Tomislav Nikic on 10/11/2015.
  */
 public class RegistrationUnit implements Serializable {
 
