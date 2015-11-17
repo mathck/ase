@@ -17,8 +17,8 @@ public class ProjectServiceImpl implements ProjectService {
     private static final Logger logger = LogManager.getLogger(ProjectServiceImpl.class);
 
     @Override
-    public Project createProject(String id, String description) {
-        Project project = new Project(id, description);
+    public Project createProject(String id, String title, String description) {
+        Project project = new Project(id, title, description);
         //TODO Write to db
         return project;
     }

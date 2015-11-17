@@ -9,7 +9,7 @@ import java.util.LinkedList;
  */
 public interface ProjectService {
 
-    Project createProject(String id, String description);
+    Project createProject(String id, String title, String description);
     boolean saveProject(Project project);
     boolean deleteProject(String id);
 

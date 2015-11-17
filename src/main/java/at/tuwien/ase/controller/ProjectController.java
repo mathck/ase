@@ -1,12 +1,12 @@
 package at.tuwien.ase.controller;
 
+import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.model.project.Project;
 import at.tuwien.ase.model.project.Role;
 import at.tuwien.ase.model.user.User;
 import at.tuwien.ase.services.ProjectService;
 import at.tuwien.ase.services.UserService;
-import at.tuwien.ase.services.impl.ProjectServiceImpl;
-import at.tuwien.ase.services.impl.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -17,15 +17,23 @@ public class ProjectController {
 
     // Creating service objects
     // @author Tomislav Nikic
-    ProjectService pm = new ProjectServiceImpl();
-    UserService us = new UserServiceImpl();
+    @Autowired
+    private ProjectService pm;
+    @Autowired
+    private UserService us;
+
+    @Autowired
+    private GenericRestExceptionHandler genericRestExceptionHandler;
+
+    // Creating service objects
+    // @author Tomislav Nikic
 
     // Returning test json for testing and insight on format
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/test", method = RequestMethod.GET)
     @ResponseBody
     public Project test() {
-        Project testProject = pm.createProject("testID", "testDescription");
+        Project testProject = pm.createProject("testID", "testName", "testDescription");
         User testUser = us.addUser("testEmail@test.com", "testPassword");
         testProject.addUser(testUser, Role.ADMIN);
         return testProject;

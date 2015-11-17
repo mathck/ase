@@ -1,6 +1,5 @@
 package at.tuwien.ase.model.project;
 
-import at.tuwien.ase.exceptions.UserRoleNotFoundException;
 import at.tuwien.ase.model.task.Issue;
 import at.tuwien.ase.model.task.Task;
 import at.tuwien.ase.model.user.User;
@@ -14,6 +13,7 @@ public class Project {
 
     // Essential info
     private String id;
+    private String title;
     private String description;
 
     // Lists
@@ -23,9 +23,10 @@ public class Project {
 
     // Creating project and setting up lists
     // @author Tomislav Nikic
-    public Project(String id, String description) {
-        this.description = description;
+    public Project(String id, String title, String description) {
         this.id = id;
+        this.title = title;
+        this.description = description;
 
         userList = new LinkedList<UserRole>();
         taskList = new LinkedList<Task>();
@@ -39,6 +40,15 @@ public class Project {
     }
     public void setId(String id) {
         this.id = id;
+    }
+
+    // Getter and setter for Title
+    // @author Tomislav Nikic
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     // Getter and setter for Description
@@ -68,11 +78,11 @@ public class Project {
     public LinkedList<UserRole> getAllUser() {
         return userList;
     }
-    public UserRole getUserRole(User user) throws UserRoleNotFoundException {
+    public UserRole getUserRole(User user) {
         for(UserRole iterator : userList)
             if(iterator.getUser() == user)
                 return iterator;
-        throw new UserRoleNotFoundException();
+        return null;
     }
 
     // Add/delete a task to/from the list
