@@ -1,6 +1,6 @@
-var app = angular.module('taskit.taskControllers', []);
+var taskController = angular.module('taskit.taskControllers', []);
 
-app.controller('restTaskListCtrl', ['$scope', 'TasksFactory', 'TaskFactory', '$location',
+taskController.controller('restTaskListCtrl', ['$scope', 'TasksFactory', 'TaskFactory', '$location',
     function ($scope, TasksFactory, TaskFactory, $location) {
 
         // callback for ng-click 'editTask':
@@ -22,7 +22,7 @@ app.controller('restTaskListCtrl', ['$scope', 'TasksFactory', 'TaskFactory', '$l
         $scope.tasks = TasksFactory.query();
     }]);
 
-app.controller('restTaskUpdateCtrl', ['$scope', '$routeParams', 'TaskFactory', '$location',
+taskController.controller('restTaskUpdateCtrl', ['$scope', '$routeParams', 'TaskFactory', '$location',
     function ($scope, $routeParams, TaskFactory, $location) {
 
         // callback for ng-click 'showTask':
@@ -44,12 +44,12 @@ app.controller('restTaskUpdateCtrl', ['$scope', '$routeParams', 'TaskFactory', '
         $scope.task = TaskFactory.show({id: $routeParams.id});
     }]);
 
-app.controller('restTaskCreateCtrl', ['$scope', 'TasksFactory', '$location',
+taskController.controller('restTaskCreateCtrl', ['$scope', 'TasksFactory', '$location',
     function ($scope, TasksFactory, $location) {
 
         // callback for ng-click 'saveTask':
         $scope.createTask = function () {
-            console.log($scope.task);
+            console.log("Task:" + $scope.task);
             TasksFactory.create($scope.task);
             //console.log($scope.task);
             $location.path('/task-list');

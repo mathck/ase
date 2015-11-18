@@ -1,6 +1,6 @@
-var app = angular.module('taskit.projectControllers', []);
+var projectController = angular.module('taskit.projectControllers', []);
 
-app.controller('restProjectListCtrl', ['$scope', 'ProjectsFactory', 'ProjectFactory', '$location',
+projectController.controller('restProjectListCtrl', ['$scope', 'ProjectsFactory', 'ProjectFactory', 'UserFactory', '$location',
     function ($scope, ProjectsFactory, ProjectFactory, $location) {
 
         // callback for ng-click 'editProject':
@@ -16,17 +16,29 @@ app.controller('restProjectListCtrl', ['$scope', 'ProjectsFactory', 'ProjectFact
 
         // callback for ng-click 'createProject':
         $scope.createProject = function () {
-            //$scope.project.userList="";
-            //$scope.project.taskList="";
-            //$scope.project.issueList="";
-            console.log($scope.project);
-            $location.path('/project-list');
+            var loggedUser=UserFactory.show('test');
+            var newUserList=[];
+            var newProject;
+            newProject[id]=$scope.project.id;
+            newProject[title]=$scope.project.title;
+            newProject[description]=$scope.project.description;
+            newProject[userList]=[];
+            //newProject.userList.push(loggedUser);
+            newProject[taskList]=[];
+            newProject[issueList]=[];
+
+            console.log("User: " + loggedUser);
+            console.log("Project: " + newProject);
+            console.log("still here");
+            ProjectFactory.create(newProject);
+            //$location.path('/project-list');
+            console.log("and here");
         };
 
         $scope.projects = ProjectsFactory.query();
     }]);
 
-app.controller('restProjectUpdateCtrl', ['$scope', '$routeParams', 'ProjectFactory', '$location',
+projectController.controller('restProjectUpdateCtrl', ['$scope', '$routeParams', 'ProjectFactory', '$location',
     function ($scope, $routeParams, ProjectFactory, $location) {
 
         // callback for ng-click 'showProject':
@@ -48,7 +60,7 @@ app.controller('restProjectUpdateCtrl', ['$scope', '$routeParams', 'ProjectFacto
         $scope.project = ProjectFactory.show({id: $routeParams.id});
     }]);
 
-app.controller('restProjectCreateCtrl', ['$scope', 'ProjectsFactory', '$location',
+projectController.controller('restProjectCreateCtrl', ['$scope', 'ProjectsFactory', '$location',
     function ($scope, ProjectsFactory, $location) {
 
         // callback for ng-click 'saveProject':
