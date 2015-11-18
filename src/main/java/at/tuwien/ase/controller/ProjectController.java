@@ -30,7 +30,7 @@ public class ProjectController {
 
     // Returning test json for testing and insight on format
     // @author Tomislav Nikic
-    @RequestMapping(value = "/workspace/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/workspace/projects/test", method = RequestMethod.GET)
     @ResponseBody
     public Project test() {
         Project testProject = pm.createProject("testID", "testName", "testDescription");
@@ -41,7 +41,7 @@ public class ProjectController {
 
     // Returning the project if project id is provided
     // @author Tomislav Nikic
-    @RequestMapping(value = "/workspace/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/workspace/projects/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Project getProject(@PathVariable("id") String id) {
         return pm.getByID(id);
@@ -49,7 +49,7 @@ public class ProjectController {
 
     // Saves provided project and returns a copy if successful
     // @author Tomislav Nikic
-    @RequestMapping(value = "/workspace", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/workspace/projects", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public Project createProject(@RequestBody Project project) {
         pm.saveProject(project);
@@ -58,7 +58,7 @@ public class ProjectController {
 
     // Updates project with provided project and returns new project (set null if no change)
     // @author Tomislav Nikic
-    @RequestMapping(value = "/workspace", method = RequestMethod.PATCH, consumes = "application/json")
+    @RequestMapping(value = "/workspace/projects", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public Project updateProject(@RequestBody Project project) {
         pm.deleteProject(project.getId());

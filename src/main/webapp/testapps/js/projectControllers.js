@@ -16,6 +16,10 @@ app.controller('restProjectListCtrl', ['$scope', 'ProjectsFactory', 'ProjectFact
 
         // callback for ng-click 'createProject':
         $scope.createProject = function () {
+            //$scope.project.userList="";
+            //$scope.project.taskList="";
+            //$scope.project.issueList="";
+            console.log($scope.project);
             $location.path('/project-list');
         };
 
