@@ -271,7 +271,7 @@ materialAdmin
 
 
     //=================================================
-    // LOGIN
+    // LOGIN & REGISTER
     //=================================================
 
     .controller('loginCtrl', function ( LoginFactory, UsersFactory, $location, $window) {
@@ -282,7 +282,7 @@ materialAdmin
                 console.log("login is " + this.login.email );
                 $window.location.href='/taskit/main.html';
             }
-             // callback for ng-click 'saveUser':
+            // callback for ng-click 'saveUser':
             this.createUser = function () {
                 console.log("registration is " + this.user.email + this.user.password + this.user.firstName, + this.user.lastName);
                 UsersFactory.create(this.user);
@@ -295,7 +295,34 @@ materialAdmin
             this.forgot = 0;
     })
 
+    //=================================================
+    // PROJECT CREATION
+    //=================================================
 
+    .controller('createProjectCtrl', function ( ProjectsFactory, UsersFactory, $location, $window) {
+
+            // callback for ng-click 'create Project':
+        console.log("starting");
+        this.createProject = function () {
+            UserFactory.show("test").then(function(loggedUser){
+            var newProject = {
+                id: undefined,
+                title: $scope.project.title,
+                description: $scope.project.description,
+                userList: []
+                //taskList: [],
+                //issueList: [],
+            };
+            //newProject.userList.push(loggedUser);
+
+            console.log(loggedUser);
+            console.log(newProject);
+            console.log("still here");
+            ProjectsFactory.create(newProject);
+            //$location.path('/project-list');
+            console.log("and here");
+        });};
+    })
 
     //=================================================
     // CALENDAR

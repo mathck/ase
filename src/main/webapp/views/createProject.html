@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-ng-controller="createProjectCtrl">
     <div class="block-header">
         <h2>Create Project</h2>
 
@@ -27,7 +27,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
                         <div class="fg-line">
-                                <input type="text" class="form-control input-lg" placeholder="Title">
+                                <input type="text" class="form-control input-lg" placeholder="Title" data-ng-model="project.title">
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                     <p class="c-black f-500 m-b-20">Description</p>
                     <div class="form-group">
                         <div class="fg-line">
-                            <textarea class="form-control" rows="5" placeholder="Write your project description here...."></textarea>
+                            <textarea class="form-control" rows="5" placeholder="Write your project description here...." data-ng-model=project.description"></textarea>
                         </div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
             <div class="row">
                 <div class="col-sm-8 m-b-15">
                     <p class="f-500 c-black m-b-15">Contributor/s</p>
-                    <select  chosen multiple data-placeholder="Select a User..." class="w-100">
+                    <select  chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerContributor">
                         <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                         <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                         <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-sm-4 m-b-15">
                     <p class="f-500 c-black m-b-15">Manager/s</p>
-                    <select  chosen multiple data-placeholder="Select a User..." class="w-100">
+                    <select  chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerManager">
                         <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                         <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                         <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
@@ -117,7 +117,7 @@
         <div class="card-body card-padding">
             <div class="row">
                 <div class="col-sm-9 m-b-15">
-                    <select  chosen multiple data-placeholder="Select a Reward..." class="w-100">
+                    <select  chosen multiple data-placeholder="Select a Reward..." class="w-100" data-ng-model="rewardPicker">
                         <option value="Reward 1">Reward1 | Level 2</option>
                         <option value="Reward 2">Reward1 | Level 4</option>
                         <option value="Reward 3">Reward1 | Level 2</option>
@@ -134,7 +134,7 @@
         <ul class="actions">
             <li>
                 <div class="col-sm-3">
-                    <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project"><i class="zmdi zmdi-check"></i>Create Project</button>
+                    <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project" data-ng-click="createProject()"><i class="zmdi zmdi-check"></i>Create Project</button>
                 </div>
             </li>
         </ul>
