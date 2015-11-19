@@ -21,6 +21,9 @@ public class Project {
     private LinkedList<Task> taskList;
     private LinkedList<Issue> issueList;
 
+    //Default Constructor - necessary for REST POST Functionality!
+    public Project(){}
+
     // Creating project and setting up lists
     // @author Tomislav Nikic
     public Project(String id, String title, String description) {
@@ -31,6 +34,8 @@ public class Project {
         userList = new LinkedList<UserRole>();
         taskList = new LinkedList<Task>();
         issueList = new LinkedList<Issue>();
+
+
     }
 
     // Getter and setter for ID

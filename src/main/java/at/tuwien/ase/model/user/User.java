@@ -26,6 +26,9 @@ public class User {
     private byte[] password;
     private byte[] salt;
 
+    //Default Constructor - necessary for REST POST Functionality!
+    public User() {}
+
     // @author Tomislav Nikic
     public User(String email, String password) {
         this.email = email;

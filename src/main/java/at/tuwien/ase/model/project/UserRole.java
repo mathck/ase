@@ -11,6 +11,9 @@ public class UserRole {
     private User user;
     private Role role;
 
+    //Default Constructor - necessary for REST POST Functionality!
+    public UserRole() {}
+
     // @author Tomislav Nikic
     public UserRole(User user, String projectID, Role role) {
         this.user = user;

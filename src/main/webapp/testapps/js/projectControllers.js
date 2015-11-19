@@ -16,23 +16,7 @@ projectController.controller('restProjectListCtrl', ['$scope', 'ProjectsFactory'
 
         // callback for ng-click 'createProject':
         $scope.createProject = function () {
-            var loggedUser=UserFactory.show('test');
-            var newUserList=[];
-            var newProject;
-            newProject[id]=$scope.project.id;
-            newProject[title]=$scope.project.title;
-            newProject[description]=$scope.project.description;
-            newProject[userList]=[];
-            //newProject.userList.push(loggedUser);
-            newProject[taskList]=[];
-            newProject[issueList]=[];
 
-            console.log("User: " + loggedUser);
-            console.log("Project: " + newProject);
-            console.log("still here");
-            ProjectFactory.create(newProject);
-            //$location.path('/project-list');
-            console.log("and here");
         };
 
         $scope.projects = ProjectsFactory.query();
@@ -60,14 +44,27 @@ projectController.controller('restProjectUpdateCtrl', ['$scope', '$routeParams',
         $scope.project = ProjectFactory.show({id: $routeParams.id});
     }]);
 
-projectController.controller('restProjectCreateCtrl', ['$scope', 'ProjectsFactory', '$location',
-    function ($scope, ProjectsFactory, $location) {
+projectController.controller('restProjectCreateCtrl', ['$scope', 'UserFactory', 'ProjectsFactory', '$location',
+    function ($scope, UserFactory, ProjectsFactory, $location) {
 
         // callback for ng-click 'saveProject':
         $scope.createProject = function () {
-            console.log($scope.project);
-            ProjectsFactory.create($scope.project);
-            //console.log($scope.project);
-            $location.path('/project-list');
+            var loggedUser=UserFactory.show("test");
+            var newProject = {
+                id: $scope.project.id,
+                title: $scope.project.title,
+                description: $scope.project.description
+                //userList: [],
+                //taskList: [],
+                //issueList: [],
+            };
+            //newProject.userList.push(loggedUser);
+
+            console.log(loggedUser);
+            console.log(newProject);
+            console.log("still here");
+            ProjectsFactory.create(newProject);
+            //$location.path('/project-list');
+            console.log("and here");
         }
     }]);
