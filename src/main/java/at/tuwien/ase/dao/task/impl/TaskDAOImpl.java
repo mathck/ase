@@ -96,9 +96,8 @@ public class TaskDAOImpl implements TaskDAO {
     public void updateIssueToTask(int iID) {
 
        this.jdbcTemplate.update(
-                "UPDATE TASK SET TASK_TYPE = ? WHERE ID = ?",
-                this.taskType, iID);
-
+                "UPDATE TASK SET TASK_TYPE = ?, UPDATE_DATE = ? WHERE ID = ?",
+                this.taskType, new Date(), iID);
 
     }
 
