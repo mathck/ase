@@ -47,7 +47,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         this.jdbcTemplate.update(
                 "INSERT INTO TASK (ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE) VALUES (?, ?, ?, ?, ?, ?)",
-                task.getId(), task.getTitle(), task.getDescription(), this.taskType, new Date(), new Date());
+                task.getId(), task.getTitle(), task.getDescription(), this.taskType, task.getCreationDate(), task.getUpdateDate());
 
     }
 

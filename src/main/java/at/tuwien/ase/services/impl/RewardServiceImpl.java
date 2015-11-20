@@ -3,6 +3,8 @@ package at.tuwien.ase.services.impl;
 import at.tuwien.ase.dao.task.RewardDAO;
 import at.tuwien.ase.model.miscellaneous.Reward;
 import at.tuwien.ase.services.RewardService;
+
+import java.util.Date;
 import java.util.LinkedList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,11 +26,11 @@ public class RewardServiceImpl implements RewardService {
 
     public int writeReward(Reward reward) {
         logger.debug("create new reward");
-
         int id;
 
         id = this.getNewID();
         reward.setId(id);
+        reward.setCreationDate(new Date());
 
         rewardDAO.insertReward(reward);
 
@@ -37,32 +39,27 @@ public class RewardServiceImpl implements RewardService {
 
     public boolean deleteReward(String rID) {
         logger.debug("delete reward with id="+rID);
-
-        return false;
+        return rewardDAO.removeReward(rID);
     }
 
     public Reward getByID(int rID) {
         logger.debug("get reward with id="+rID);
-
         return rewardDAO.findByID(rID);
     }
 
     public LinkedList<Reward> getAllRewards() {
         logger.debug("get all rewards");
-
         return rewardDAO.loadAll();
     }
 
     public LinkedList<Reward> getAllRewardsFromUser(String uID) {
         logger.debug("get all rewards from user with id="+uID);
-
-        return null;
+        return rewardDAO.loadAllByUser(uID);
     }
 
     public LinkedList<Reward> getAllRewardsFromProject(String pID) {
         logger.debug("get all rewards from project with id="+pID);
-
-        return null;
+        return rewardDAO.loadAllByProject(pID);
     }
 
     public int getNewID() {

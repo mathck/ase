@@ -7,25 +7,25 @@ import java.util.Date;
  */
 public class Reward {
     private int id;
-    private String user_mail;
+    private String userMail;
     private String name;
     private String description;
     private int xpbase;
-    private String image_link;
-    private Date creation_date;
+    private String imageLink;
+    private Date creationDate;
 
     // Must have no-argument constructor
     public Reward() {
 
     }
 
-    public Reward(String user_mail, String name, String description, int xpbase, String image_link, Date creation_date) {
-        this.user_mail = user_mail;
+    public Reward(String userMail, String name, String description, int xpbase, String imageLink, Date creationDate) {
+        this.userMail = userMail;
         this.name = name;
         this.description = description;
         this.xpbase = xpbase;
-        this.image_link = image_link;
-        this.creation_date = creation_date;
+        this.imageLink = imageLink;
+        this.creationDate = creationDate;
     }
 
     public int getId() {
@@ -36,12 +36,12 @@ public class Reward {
         this.id = id;
     }
 
-    public String getUser_mail() {
-        return user_mail;
+    public String getUserMail() {
+        return userMail;
     }
 
-    public void setUser_mail(String user_mail) {
-        this.user_mail = user_mail;
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
     }
 
     public String getName() {
@@ -68,32 +68,32 @@ public class Reward {
         this.xpbase = xpbase;
     }
 
-    public String getImage_link() {
-        return image_link;
+    public String getImageLink() {
+        return imageLink;
     }
 
-    public void setImage_link(String image_link) {
-        this.image_link = image_link;
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
-    public Date getCreation_date() {
-        return creation_date;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
     public String toString() {
         return "Reward{" +
                 "id=" + id +
-                ", user_mail='" + user_mail + '\'' +
+                ", userMail='" + userMail + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", xpbase=" + xpbase +
-                ", image_link='" + image_link + '\'' +
-                ", creation_date=" + creation_date +
+                ", imageLink='" + imageLink + '\'' +
+                ", creationDate=" + creationDate +
                 '}';
     }
 }

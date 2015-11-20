@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -39,6 +40,8 @@ public class TaskServiceImpl implements TaskService {
 
         id = taskDAO.getNewID();
         task.setId(id);
+        task.setCreationDate(new Date());
+        task.setUpdateDate(new Date());
 
         Project project = projectDAO.findByID(pID);
         project.addTask(task);
@@ -51,6 +54,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public boolean deleteTask(String pID, int tID) {
+        logger.debug("delete task with id="+tID);
         Project project = projectDAO.findByID(pID);
         project.deleteTask(tID);
         projectDAO.removeProject(pID);
@@ -60,19 +64,16 @@ public class TaskServiceImpl implements TaskService {
 
     public LinkedList<Task> getAllTasks() {
         logger.debug("get all tasks");
-
         return taskDAO.loadAll();
     }
 
     public LinkedList<Task> getAllTasksFromUser(String uID) {
         logger.debug("get all tasks from user"+uID);
-
         return taskDAO.loadAllByUser(uID);
     }
 
     public LinkedList<Task> getAllTasksFromProject(String pID) {
         logger.debug("get all tasks from project");
-
         return taskDAO.loadAllByProject(pID);
     }
 

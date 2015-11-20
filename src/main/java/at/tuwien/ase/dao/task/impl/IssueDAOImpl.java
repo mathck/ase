@@ -46,7 +46,7 @@ public class IssueDAOImpl implements IssueDAO {
 
         this.jdbcTemplate.update(
                 "INSERT INTO TASK (ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE) VALUES (?, ?, ?, ?, ?, ?)",
-                issue.getId(), issue.getTitle(), issue.getDescription(), this.taskType, new Date(), new Date());
+                issue.getId(), issue.getTitle(), issue.getDescription(), this.taskType, issue.getCreationDate(), issue.getUpdateDate());
 
     }
 

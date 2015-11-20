@@ -39,7 +39,7 @@ public class RewardDAOImpl implements RewardDAO{
 
         this.jdbcTemplate.update(
                 "INSERT INTO REWARD (ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE) VALUES (?, ?, ?, ?, ?, ?, ? )",
-                reward.getId(), reward.getUser_mail() ,reward.getName(), reward.getDescription(), reward.getXpbase(), reward.getImage_link(), new Date());
+                reward.getId(), reward.getUserMail() ,reward.getName(), reward.getDescription(), reward.getXpbase(), reward.getImageLink(), reward.getCreationDate());
 
         return null;
     }
@@ -54,15 +54,15 @@ public class RewardDAOImpl implements RewardDAO{
                 "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE FROM REWARD WHERE ID = ?",
                 new Object[]{rID},
                 new RowMapper<Reward>() {
-                    public Reward mapRow(ResultSet rs, int taskId) throws SQLException {
+                    public Reward mapRow(ResultSet rs, int rewardId) throws SQLException {
                         Reward reward = new Reward();
                         reward.setId(Integer.valueOf(rs.getString("ID")));
-                        reward.setUser_mail(rs.getString("USER_MAIL"));
+                        reward.setUserMail(rs.getString("USER_MAIL"));
                         reward.setName(rs.getString("NAME"));
                         reward.setDescription(rs.getString("DESCRIPTION"));
                         reward.setXpbase(rs.getInt("XPBASE"));
-                        reward.setImage_link(rs.getString("IMAGE_LINK"));
-                        reward.setCreation_date(rs.getDate("CREATION_DATE"));
+                        reward.setImageLink(rs.getString("IMAGE_LINK"));
+                        reward.setCreationDate(rs.getDate("CREATION_DATE"));
                         return reward;
                     }
                 });
@@ -78,16 +78,16 @@ public class RewardDAOImpl implements RewardDAO{
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql);
         for (Map<String,Object> row : rows) {
 
-            Reward customer = new Reward();
-            customer.setId((Integer)row.get("id"));
-            customer.setUser_mail((String)row.get("user_mail"));
-            customer.setName((String)row.get("name"));
-            customer.setDescription((String)row.get("description"));
-            customer.setXpbase((Integer)row.get("xpbase"));
-            customer.setImage_link((String)row.get("image_link"));
-            customer.setCreation_date((Date)row.get("creation_date"));
+            Reward reward = new Reward();
+            reward.setId((Integer)row.get("id"));
+            reward.setUserMail((String)row.get("user_mail"));
+            reward.setName((String)row.get("name"));
+            reward.setDescription((String)row.get("description"));
+            reward.setXpbase((Integer)row.get("xpbase"));
+            reward.setImageLink((String)row.get("image_link"));
+            reward.setCreationDate((Date)row.get("creation_date"));
 
-            rewards.add(customer);
+            rewards.add(reward);
         }
 
         return rewards;

@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -72,6 +73,8 @@ public class IssueServiceImpl implements IssueService {
 
         id = issueDAO.getNewID();
         issue.setId(id);
+        issue.setCreationDate(new Date());
+        issue.setUpdateDate(new Date());
 
         Project project = projectDAO.findByID(pID);
         project.addIssue(issue);
