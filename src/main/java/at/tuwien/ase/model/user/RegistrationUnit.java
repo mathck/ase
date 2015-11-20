@@ -9,6 +9,7 @@ public class RegistrationUnit implements Serializable {
 
     private String firstName;
     private String lastName;
+    private String avatar;
     private String email;
     private String password;
 
@@ -17,6 +18,13 @@ public class RegistrationUnit implements Serializable {
 
     public String getLastName() {return lastName;}
     public void setLastName(String lastName) {this.lastName = lastName;}
+
+    public String getAvatar() {
+        return avatar;
+    }
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
@@ -28,7 +36,9 @@ public class RegistrationUnit implements Serializable {
         User newUser = new User(email, password);
         newUser.setName(firstName);
         newUser.setLastName(lastName);
+        newUser.setAvatar(avatar);
         return newUser;
     }
+
 
 }

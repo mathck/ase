@@ -4,34 +4,25 @@ import at.tuwien.ase.controller.TaskController;
 import at.tuwien.ase.model.task.Issue;
 import at.tuwien.ase.model.task.Task;
 
+import java.util.LinkedList;
+
 
 /**
  * Created by DanielHofer on 16.16.11.2015.
  */
 public interface IssueService {
 
+    int writeIssue(String pID, Issue issue);
 
-    /**
-     * get Issue by id
-     *
-     * @param issueId
-     * @return created Issue
-     */
-    public Issue getIssue(int issueId);
+    boolean deleteIssue(String pID, int iID);
 
-    /**
-     * update issue to task
-     *
-     * @param issueId
-     * @return Task object
-     */
-    public Task updateIssue(int issueId);
+    Issue getByID(int iID);
+    LinkedList<Issue> getAllIssues();
+    LinkedList<Issue> getAllIssuesFromUser(String uID);
+    LinkedList<Issue> getAllIssuesFromProject(String pID);
 
-    /**
-     * create new issue
-     *
-     * @param issue
-     * @return created Issue
-     */
-    public Issue postIssue(Issue issue);
+    int updateIssue(String pID, int iID);
+
+    int getNewID();
+
 }

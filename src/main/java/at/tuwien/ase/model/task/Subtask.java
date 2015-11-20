@@ -13,7 +13,7 @@ public class Subtask extends Task {
     }
 
     public Subtask(int id, String title, String description) {
-        super(id, title, description);
+        super(title, description);
     }
 
     @Override

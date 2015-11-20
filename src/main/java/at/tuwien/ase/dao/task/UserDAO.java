@@ -2,25 +2,18 @@ package at.tuwien.ase.dao.task;
 
 import at.tuwien.ase.model.user.User;
 
+import java.util.LinkedList;
+
 /**
- * Created by DanielHofer on 16.16.11.2015.
+ * Created by Daniel Hofer on 16.16.11.2015.
  */
 public interface UserDAO {
 
-    /**
-     * used to insert new User objects to db
-     *
-     * @param user
-     * @return task id from db
-     */
-    public int insertUser(User user);
+    User insertUser(User user);
+    boolean removeUser(String uID);
 
-    /**
-     * used to find user by id
-     *
-     * @param userId
-     * @return user object
-     */
-    public User findByUserId(int userId);
+    User findByID(String uID);
+    LinkedList<User> loadAll();
+    LinkedList<User> loadAllByProject(String pID);
 
 }

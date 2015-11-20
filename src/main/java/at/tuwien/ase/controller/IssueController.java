@@ -1,55 +1,63 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
-import at.tuwien.ase.dao.task.IssueDAO;
 import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
 import at.tuwien.ase.services.IssueService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
+
 /**
- * Created by DanielHofer on 14.11.2015.
+ * Created by Daniel Hofer on 14.11.2015.
  */
 
 @RestController
 public class IssueController {
 
     @Autowired
-    private IssueService issueService;
+    private IssueService is;
 
     @Autowired
     private GenericRestExceptionHandler genericRestExceptionHandler;
 
     private static final Logger logger = LogManager.getLogger(TaskController.class);
 
-
-    @RequestMapping(value = "workspace/projects/{projectId}/issues/{issueId}", method = RequestMethod.GET)
-    public
+    // @author Tomislav Nikic
+    @RequestMapping(value = "workspace/projects/{pID}/issues/{iID}", method = RequestMethod.GET)
     @ResponseBody
-    Issue getIssue(@PathVariable("projectId") int projectId, @PathVariable("issueId") int issueId) throws Exception {
-
-        return issueService.getIssue(issueId);
-
+    public Issue getIssue(@PathVariable("pID") int pID, @PathVariable("iID") int iID) throws Exception {
+        return is.getByID(iID);
     }
 
-    @RequestMapping(value = "workspace/projects/{projectId}/issues/{issueId}", method = RequestMethod.PATCH)
-    public
+    // @author Tomislav Nikic
+    @RequestMapping(value = "workspace/projects/{pID}/issues", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    Task updateIssue(@PathVariable("projectId") int projectId, @PathVariable("issueId") int issueId) throws Exception {
-
-        return issueService.updateIssue(issueId);
-
+    public int createIssue(@RequestBody Issue issue, @PathVariable("pID") String pID) throws Exception {
+        return is.writeIssue(pID, issue);
     }
 
-    @RequestMapping(value = "workspace/projects/{projectId}/issues", method = RequestMethod.POST, consumes = "application/json")
-    public
+    // @author Tomislav Nikic
+    @RequestMapping(value = "workspace/projects/{pID}/issues/{iID}", method = RequestMethod.PATCH)
     @ResponseBody
-    Issue postIssue(@RequestBody Issue issue, @PathVariable("projectId") int projectId) throws Exception {
+    public int updateIssue(@PathVariable("pID") String pID, @PathVariable("iID") int iID) throws Exception {
+        return is.updateIssue(pID, iID);
+    }
 
-        return issueService.postIssue(issue);
+    // @author Tomislav Nikic
+    @RequestMapping(value = "workspace/projects/{pID}/issues", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Issue> getAllIssuesFromProject(@PathVariable("pID") String pID) {
+        return is.getAllIssuesFromProject(pID);
+    }
+
+    // @author Tomislav Nikic
+    @RequestMapping(value = "workspace/projects/issues/{uID}", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Issue> getAllIssuesFromUser(@PathVariable("uID") String uID) {
+        return is.getAllIssuesFromUser(uID);
     }
 
 }

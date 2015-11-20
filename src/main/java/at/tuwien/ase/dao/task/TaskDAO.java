@@ -2,25 +2,21 @@ package at.tuwien.ase.dao.task;
 
 import at.tuwien.ase.model.task.Task;
 
+import java.util.LinkedList;
+
 /**
- * Created by DanielHofer on 09.11.2015.
+ * Created by Daniel Hofer on 09.11.2015.
  */
-
 public interface TaskDAO {
-    /**
-     * used to insert new Task objects to db
-     *
-     * @param task
-     * @return task id from db
-     */
-    public int insertTask(Task task);
 
-    /**
-     * used to find task by id
-     *
-     * @param taskId
-     * @return task object
-     */
-    public Task findByTaskId(int taskId);
+    int insertTask(Task task);
+    boolean removeTask(int tID);
+
+    Task findByID(int tID);
+    LinkedList<Task> loadAll();
+    LinkedList<Task> loadAllByProject(String pID);
+    LinkedList<Task> loadAllByUser(String uID);
+
+    int getNewID();
 
 }

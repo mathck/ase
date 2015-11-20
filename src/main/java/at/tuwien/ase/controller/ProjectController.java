@@ -3,11 +3,15 @@ package at.tuwien.ase.controller;
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.model.project.Project;
 import at.tuwien.ase.model.project.Role;
+import at.tuwien.ase.model.task.Issue;
+import at.tuwien.ase.model.task.Task;
 import at.tuwien.ase.model.user.User;
 import at.tuwien.ase.services.ProjectService;
 import at.tuwien.ase.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedList;
 
 /**
  * Created by Tomislav Nikic on 16/11/2015.
@@ -15,55 +19,47 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ProjectController {
 
-    // Creating service objects
     // @author Tomislav Nikic
     @Autowired
-    private ProjectService pm;
+    private ProjectService ps;
     @Autowired
     private UserService us;
 
     @Autowired
     private GenericRestExceptionHandler genericRestExceptionHandler;
 
-    // Creating service objects
-    // @author Tomislav Nikic
-
-    // Returning test json for testing and insight on format
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects/test", method = RequestMethod.GET)
     @ResponseBody
-    public Project test() {
-        Project testProject = pm.createProject("testID", "testName", "testDescription");
-        User testUser = us.addUser("testEmail@test.com", "testPassword");
+    public Project test() throws Exception {
+        Project testProject = new Project("testID", "testName", "testDescription");
+        User testUser = new User("testEmail@test.com", "testPassword");
         testProject.addUser(testUser, Role.ADMIN);
         return testProject;
     }
 
-    // Returning the project if project id is provided
     // @author Tomislav Nikic
-    @RequestMapping(value = "/workspace/projects/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/workspace/projects/{pID}", method = RequestMethod.GET)
     @ResponseBody
-    public Project getProject(@PathVariable("id") String id) {
-        return pm.getByID(id);
+    public Project getProject(@PathVariable("pID") String pID) {
+        return ps.getByID(pID);
     }
 
-    // Saves provided project and returns a copy if successful
     // @author Tomislav Nikic
-    @RequestMapping(value = "/workspace/projects", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/workspace/projects/{uID}", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public Project createProject(@RequestBody Project project) {
-        pm.saveProject(project);
-        return project;
+    public Project createProject(@PathVariable("uID") String uID, @RequestParam(value = "role") Role role, @RequestBody Project project) {
+        ps.writeProject(project);
+        ps.addUser(project.getId(), us.getByID(uID), role);
+        return ps.getByID(project.getId());
     }
 
-    // Updates project with provided project and returns new project (set null if no change)
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public Project updateProject(@RequestBody Project project) {
-        pm.deleteProject(project.getId());
-        pm.saveProject(project);
-        return project;
+        ps.deleteProject(project.getId());
+        return ps.writeProject(project);
     }
 
 }

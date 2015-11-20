@@ -2,28 +2,25 @@ package at.tuwien.ase.services;
 
 import at.tuwien.ase.model.task.Issue;
 import at.tuwien.ase.model.task.Task;
+import sun.awt.image.ImageWatched;
+
+import java.util.LinkedList;
 
 /**
  * Created by DanielHofer on 16.16.11.2015.
  */
 public interface TaskService {
 
+    int writeTask(String pID, Task task);
 
-    /**
-     * get task by id
-     *
-     * @param taskId
-     * @return created task
-     */
-    public Task getTask(int taskId);
+    boolean deleteTask(String pID, int tID);
 
-    /**
-     * create new task
-     *
-     * @param task
-     * @return created task
-     */
-    public Task postTask(Task task);
+    Task getByID(int tID);
+    LinkedList<Task> getAllTasks();
+    LinkedList<Task> getAllTasksFromUser(String uID);
+    LinkedList<Task> getAllTasksFromProject(String pID);
+
+    int getNewID();
 
 }
 

@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserService us;
 
     @Autowired
     private GenericRestExceptionHandler genericRestExceptionHandler;
 
+    // @author Tomislav Nikic
     @RequestMapping(value = "/user/test", method = RequestMethod.GET)
-    public
     @ResponseBody
-    RegistrationUnit test() throws Exception {
+    public RegistrationUnit test() throws Exception {
         RegistrationUnit testUser = new RegistrationUnit();
         testUser.setEmail("testmail");
         testUser.setFirstName("testname");
@@ -32,23 +32,24 @@ public class UserController {
         return testUser;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    RegistrationUnit testList() throws Exception {
-        //TODO return list of users (if necessary?)
-        return null;
-    }
-
+    // @author Tomislav Nikic
     @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")
-    public
     @ResponseBody
-    User user(@RequestBody RegistrationUnit newUser) throws Exception {
-
-        return userService.addUser(newUser);
-
+    public User createUser(@RequestBody RegistrationUnit ru) throws Exception {
+        return us.writeUser(ru);
     }
 
-    //TODO RestController for login and authentication
+    // @author Tomislav Nikic
+    @RequestMapping(value = "/user/{uID}", method = RequestMethod.GET)
+    @ResponseBody
+    public User getUser(@PathVariable("uID") String uID) throws Exception {
+        return us.getByID(uID);
+    }
+
+    @RequestMapping(value = "/user/{uID}", method = RequestMethod.PATCH, consumes = "application/json")
+    @ResponseBody
+    public User updateUser(@PathVariable("uID") String uID, @RequestBody RegistrationUnit ru) throws Exception {
+        return us.updateUser(uID, ru.getEmail(),ru.getPassword(),ru.getFirstName(),ru.getLastName(),ru.getAvatar());
+    }
 
 }

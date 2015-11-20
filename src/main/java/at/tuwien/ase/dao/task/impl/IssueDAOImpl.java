@@ -16,18 +16,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 import javax.sql.DataSource;
 
 /**
- * Created by DanielHofer on 14.11.2015.
+ * Created by Daniel Hofer on 14.11.2015.
  */
 
 @Repository
 public class IssueDAOImpl implements IssueDAO {
 
     private static final Logger logger = LogManager.getLogger(TaskDAOImpl.class);
-    private DataSource dataSource;
+
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
 
@@ -59,11 +60,15 @@ public class IssueDAOImpl implements IssueDAO {
 
     }
 
-    public Issue findByIssueId(int issueId) {
+    public boolean removeIssue(int iID) {
+        return false;
+    }
+
+    public Issue findByID(int issueId) {
 
         logger.debug("retrieve from db: issue with id=" + issueId);
 
-        Issue issue = this.jdbcTemplate.queryForObject(
+        return this.jdbcTemplate.queryForObject(
                 "SELECT ID, TITLE, DESCRIPTION FROM ISSUE WHERE ID = ?",
                 new Object[]{issueId},
                 new RowMapper<Issue>() {
@@ -76,7 +81,21 @@ public class IssueDAOImpl implements IssueDAO {
                     }
                 });
 
-        return issue;
+    }
 
+    public LinkedList<Issue> loadAll() {
+        return null;
+    }
+
+    public LinkedList<Issue> loadAllByProject(String pID) {
+        return null;
+    }
+
+    public LinkedList<Issue> loadAllByUser(String uID) {
+        return null;
+    }
+
+    public int getNewID() {
+        return 0;
     }
 }

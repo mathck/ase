@@ -1,6 +1,10 @@
 package at.tuwien.ase.services;
 
 import at.tuwien.ase.model.project.Project;
+import at.tuwien.ase.model.project.Role;
+import at.tuwien.ase.model.task.Issue;
+import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.model.user.User;
 
 import java.util.LinkedList;
 
@@ -9,12 +13,14 @@ import java.util.LinkedList;
  */
 public interface ProjectService {
 
-    Project createProject(String id, String title, String description);
-    boolean saveProject(Project project);
-    boolean deleteProject(String id);
+    Project writeProject(Project project);
 
-    Project getByID(String id);
+    boolean deleteProject(String pID);
+
+    Project getByID(String pID);
     LinkedList<Project> getAllProjects();
-    LinkedList<Project> getAllProjectsFromUser(String email);
+    LinkedList<Project> getAllProjectsFromUser(String uID);
+
+    User addUser(String pID, User user, Role role);
 
 }

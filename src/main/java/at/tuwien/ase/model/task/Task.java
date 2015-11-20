@@ -1,7 +1,7 @@
 package at.tuwien.ase.model.task;
 
 /**
- * Created by DanielHofer on 04.11.2015.
+ * Created by Daniel Hofer on 04.11.2015.
  */
 public class Task {
 
@@ -14,10 +14,9 @@ public class Task {
 
     }
 
-    public Task(int id, String title, String description) {
+    public Task(String title, String description) {
         this.description = description;
         this.title = title;
-        this.id = id;
     }
 
     public void setDescription(String fname) {

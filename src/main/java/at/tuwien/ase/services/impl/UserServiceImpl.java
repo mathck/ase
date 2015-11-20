@@ -1,11 +1,15 @@
 package at.tuwien.ase.services.impl;
 
+import at.tuwien.ase.dao.task.UserDAO;
 import at.tuwien.ase.model.user.User;
 import at.tuwien.ase.model.user.RegistrationUnit;
 import at.tuwien.ase.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
 
 
 /**
@@ -15,34 +19,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    private UserDAO userDAO;
+
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    public User addUser(RegistrationUnit newUser) {
-        User user = newUser.createUser();
+    public User writeUser(RegistrationUnit ru) {
+        User user = ru.createUser();
         user.toFile();
-        System.out.println("Created new user " + user.getEmail());
-        //TODO Save user to db
-
+        userDAO.insertUser(user);
         return user;
     }
 
-    @Override
-    public User addUser(User newUser) {
-        System.out.println("Created new user " + newUser.getEmail());
-        //TODO Save user to db
-        return newUser;
+    public User getByID(String uID) {
+        return userDAO.findByID(uID);
     }
 
-    @Override
-    public User addUser(String email, String password) {
-        User newUser = new User(email, password);
-        //TODO Save user to db
-        return newUser;
+    public LinkedList<User> getAllUsers() {
+        return userDAO.loadAll();
     }
 
-    @Override
-    public User updateUser(String email, String password, String firstName, String lastName, String avatar) {
-        User user = this.getUserByMail(email);
+    public LinkedList<User> getAllUsersFromProject(String pID) {
+        return userDAO.loadAllByProject(pID);
+    }
+
+    public User updateUser(String uID, String email, String password, String firstName, String lastName, String avatar) {
+        User user = userDAO.findByID(uID);
         if(email != null)
             user.setEmail(email);
         if(password != null)
@@ -53,13 +55,8 @@ public class UserServiceImpl implements UserService {
             user.setLastName(lastName);
         if(avatar != null)
             user.setAvatar(avatar);
-        return user;
+        userDAO.removeUser(uID);
+        return userDAO.insertUser(user);
     }
-
-    public User getUserByMail(String email) {
-        //TODO Get user by email
-        return null;
-    }
-
 
 }

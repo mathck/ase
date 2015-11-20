@@ -14,10 +14,9 @@ public class Issue {
 
     }
 
-    public Issue(int id, String title, String description) {
+    public Issue(String title, String description) {
         this.description = description;
         this.title = title;
-        this.id = id;
     }
 
     public void setDescription(String fname) {

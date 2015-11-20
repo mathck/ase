@@ -3,23 +3,19 @@ package at.tuwien.ase.services;
 import at.tuwien.ase.model.user.RegistrationUnit;
 import at.tuwien.ase.model.user.User;
 
+import java.util.LinkedList;
+
 /**
  * Created by Daniel Hofer on 16.11.2015.
  */
 public interface UserService {
 
-    /**
-     * used to user
-     *
-     * @param newUser
-     * @return created user
-     */
-    public User addUser(RegistrationUnit newUser);
+    User writeUser(RegistrationUnit newUser);
 
-    public User addUser(User newUser);
-    public User addUser(String email, String password);
+    User getByID(String uID);
+    LinkedList<User> getAllUsers();
+    LinkedList<User> getAllUsersFromProject(String pID);
 
-    User updateUser(String email, String password, String firstName, String lastName, String avatar);
-    User getUserByMail(String email);
+    User updateUser(String uID, String email, String password, String firstName, String lastName, String avatar);
 
 }
