@@ -27,25 +27,29 @@ public class TaskController {
 
     private static final Logger logger = LogManager.getLogger(TaskController.class);
 
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/tasks/{tID}", method = RequestMethod.GET)
     @ResponseBody
     public Task getTask(@PathVariable("tID") int tID) throws Exception {
         return ts.getByID(tID);
     }
 
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public int createTask(@RequestBody Task task, @PathVariable("pID") String pID) throws Exception {
         return ts.writeTask(pID, task);
     }
 
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Task> getAllTasksFromProject(@PathVariable("pID") String pID) {
         return ts.getAllTasksFromProject(pID);
     }
 
-    @RequestMapping(value = "workspace/projects//tasks/{uID}", method = RequestMethod.GET)
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/users/{uID}/tasks", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Task> getAllTasksFromUser(@PathVariable("uID") String uID) {
         return ts.getAllTasksFromUser(uID);

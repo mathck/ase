@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 
 import javax.sql.DataSource;
@@ -32,31 +33,21 @@ public class TaskDAOImpl implements TaskDAO {
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
 
+    String taskType = new String("task");
+
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public int insertTask(final Task task) {
-
-        final String sql = "INSERT INTO TASK (TITLE, DESCRIPTION) VALUES (?, ?)";
+    public void insertTask(Task task) {
 
         logger.debug("insert into db: task with id=" + task.getId());
 
-        jdbcTemplate.update(
-                new PreparedStatementCreator() {
-                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps =
-                                connection.prepareStatement(sql, new String[]{"id"});
-                        ps.setString(1, task.getTitle());
-                        ps.setString(2, task.getDescription());
-                        return ps;
-                    }
-                },
-                keyHolder);
-
-        return keyHolder.getKey().intValue();
+        this.jdbcTemplate.update(
+                "INSERT INTO TASK (ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE) VALUES (?, ?, ?, ?, ?, ?)",
+                task.getId(), task.getTitle(), task.getDescription(), this.taskType, new Date(), new Date());
 
     }
 
@@ -69,7 +60,7 @@ public class TaskDAOImpl implements TaskDAO {
         logger.debug("retrieve from db: task with id=" + taskId);
 
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, TITLE, DESCRIPTION FROM TASK WHERE ID = ?",
+                "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS FROM TASK WHERE ID = ?",
                 new Object[]{taskId},
                 new RowMapper<Task>() {
                     public Task mapRow(ResultSet rs, int taskId) throws SQLException {
@@ -77,6 +68,13 @@ public class TaskDAOImpl implements TaskDAO {
                         task.setId(Integer.valueOf(rs.getString("ID")));
                         task.setTitle(rs.getString("TITLE"));
                         task.setDescription(rs.getString("DESCRIPTION"));
+                        task.setTaskType(rs.getString("TASK_TYPE"));
+                        task.setCreationDate(rs.getDate("CREATION_DATE"));
+                        task.setUpdateDate(rs.getDate("UPDATE_DATE"));
+                        task.setDslTemplateId(rs.getInt("DSL_TEMPLATE_ID"));
+                        task.setProjectId(rs.getInt("PROJECT_ID"));
+                        task.setUserMail(rs.getString("USER_MAIL"));
+                        task.setStatus(rs.getString("STATUS"));
                         return task;
                     }
                 });
@@ -88,14 +86,28 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     public LinkedList<Task> loadAllByProject(String pID) {
-        return null;
+       return null;
     }
 
     public LinkedList<Task> loadAllByUser(String uID) {
         return null;
     }
 
+    public void updateIssueToTask(int iID) {
+
+       this.jdbcTemplate.update(
+                "UPDATE TASK SET TASK_TYPE = ? WHERE ID = ?",
+                this.taskType, iID);
+
+
+    }
+
     public int getNewID() {
-        return 0;
+
+        Integer id = this.jdbcTemplate.queryForObject(
+                "SELECT nextval('seq_task_id')",
+                 Integer.class);
+
+        return id;
     }
 }

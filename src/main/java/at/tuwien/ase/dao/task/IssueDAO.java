@@ -10,7 +10,7 @@ import java.util.LinkedList;
  */
 public interface IssueDAO {
 
-    int insertIssue(Issue issue);
+    void insertIssue(Issue issue);
     boolean removeIssue(int iID);
 
     Issue findByID(int iID);

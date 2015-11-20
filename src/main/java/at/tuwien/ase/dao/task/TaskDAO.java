@@ -9,13 +9,15 @@ import java.util.LinkedList;
  */
 public interface TaskDAO {
 
-    int insertTask(Task task);
+    void insertTask(Task task);
     boolean removeTask(int tID);
 
     Task findByID(int tID);
     LinkedList<Task> loadAll();
     LinkedList<Task> loadAllByProject(String pID);
     LinkedList<Task> loadAllByUser(String uID);
+
+    void updateIssueToTask(int iID);
 
     int getNewID();
 

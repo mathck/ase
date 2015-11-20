@@ -25,25 +25,25 @@ public class IssueController {
 
     private static final Logger logger = LogManager.getLogger(TaskController.class);
 
-    // @author Tomislav Nikic
-    @RequestMapping(value = "workspace/projects/{pID}/issues/{iID}", method = RequestMethod.GET)
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/issues/{iID}", method = RequestMethod.GET)
     @ResponseBody
-    public Issue getIssue(@PathVariable("pID") int pID, @PathVariable("iID") int iID) throws Exception {
+    public Issue getIssue(@PathVariable("iID") int iID) throws Exception {
         return is.getByID(iID);
     }
 
-    // @author Tomislav Nikic
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/issues", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public int createIssue(@RequestBody Issue issue, @PathVariable("pID") String pID) throws Exception {
         return is.writeIssue(pID, issue);
     }
 
-    // @author Tomislav Nikic
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/issues/{iID}", method = RequestMethod.PATCH)
     @ResponseBody
-    public int updateIssue(@PathVariable("pID") String pID, @PathVariable("iID") int iID) throws Exception {
-        return is.updateIssue(pID, iID);
+    public int updateIssueToTask(@PathVariable("pID") String pID, @PathVariable("iID") int iID) throws Exception {
+        return is.updateIssueToTask(pID, iID);
     }
 
     // @author Tomislav Nikic
@@ -54,7 +54,7 @@ public class IssueController {
     }
 
     // @author Tomislav Nikic
-    @RequestMapping(value = "workspace/projects/issues/{uID}", method = RequestMethod.GET)
+    @RequestMapping(value = "workspace/users/{uID}/issues", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Issue> getAllIssuesFromUser(@PathVariable("uID") String uID) {
         return is.getAllIssuesFromUser(uID);

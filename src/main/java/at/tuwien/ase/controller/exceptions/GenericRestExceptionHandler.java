@@ -33,7 +33,8 @@ public class GenericRestExceptionHandler {
     //...
 
     private void logException(final Exception exception) {
-        logger.error(exception.getMessage());
+        logger.error(exception);
+        exception.printStackTrace();
     }
 
 }

@@ -33,16 +33,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public int writeTask(String pID, Task task) {
-        logger.debug("post new task with id=" + task.getId());
+        int id;
+
+        logger.debug("post new task");
+
+        id = taskDAO.getNewID();
+        task.setId(id);
 
         Project project = projectDAO.findByID(pID);
-
-        task.setId(taskDAO.getNewID());
         project.addTask(task);
-
         projectDAO.removeProject(pID);
         projectDAO.insertProject(project);
-        return taskDAO.insertTask(task);
+
+        taskDAO.insertTask(task);
+
+        return id;
     }
 
     public boolean deleteTask(String pID, int tID) {
@@ -54,14 +59,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public LinkedList<Task> getAllTasks() {
+        logger.debug("get all tasks");
+
         return taskDAO.loadAll();
     }
 
     public LinkedList<Task> getAllTasksFromUser(String uID) {
+        logger.debug("get all tasks from user"+uID);
+
         return taskDAO.loadAllByUser(uID);
     }
 
     public LinkedList<Task> getAllTasksFromProject(String pID) {
+        logger.debug("get all tasks from project");
+
         return taskDAO.loadAllByProject(pID);
     }
 

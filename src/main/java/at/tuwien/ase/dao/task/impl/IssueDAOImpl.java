@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 
 import javax.sql.DataSource;
@@ -31,6 +32,7 @@ public class IssueDAOImpl implements IssueDAO {
 
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
+    String taskType = new String("issue");
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -38,25 +40,13 @@ public class IssueDAOImpl implements IssueDAO {
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public int insertIssue(final Issue issue) {
-
-        final String sql = "INSERT INTO ISSUE (TITLE, DESCRIPTION) VALUES (?, ?)";
+    public void insertIssue(Issue issue) {
 
         logger.debug("insert into db: issue with id=" + issue.getId());
 
-        jdbcTemplate.update(
-                new PreparedStatementCreator() {
-                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps =
-                                connection.prepareStatement(sql, new String[]{"id"});
-                        ps.setString(1, issue.getTitle());
-                        ps.setString(2, issue.getDescription());
-                        return ps;
-                    }
-                },
-                keyHolder);
-
-        return keyHolder.getKey().intValue();
+        this.jdbcTemplate.update(
+                "INSERT INTO TASK (ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE) VALUES (?, ?, ?, ?, ?, ?)",
+                issue.getId(), issue.getTitle(), issue.getDescription(), this.taskType, new Date(), new Date());
 
     }
 
@@ -69,15 +59,22 @@ public class IssueDAOImpl implements IssueDAO {
         logger.debug("retrieve from db: issue with id=" + issueId);
 
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, TITLE, DESCRIPTION FROM ISSUE WHERE ID = ?",
+                "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS FROM TASK WHERE ID = ?",
                 new Object[]{issueId},
                 new RowMapper<Issue>() {
                     public Issue mapRow(ResultSet rs, int taskId) throws SQLException {
-                        Issue task = new Issue();
-                        task.setId(Integer.valueOf(rs.getString("ID")));
-                        task.setTitle(rs.getString("TITLE"));
-                        task.setDescription(rs.getString("DESCRIPTION"));
-                        return task;
+                        Issue issue = new Issue();
+                        issue.setId(Integer.valueOf(rs.getString("ID")));
+                        issue.setTitle(rs.getString("TITLE"));
+                        issue.setDescription(rs.getString("DESCRIPTION"));
+                        issue.setTaskType(rs.getString("TASK_TYPE"));
+                        issue.setCreationDate(rs.getDate("CREATION_DATE"));
+                        issue.setUpdateDate(rs.getDate("UPDATE_DATE"));
+                        issue.setDslTemplateId(rs.getInt("DSL_TEMPLATE_ID"));
+                        issue.setProjectId(rs.getInt("PROJECT_ID"));
+                        issue.setUserMail(rs.getString("USER_MAIL"));
+                        issue.setStatus(rs.getString("STATUS"));
+                        return issue;
                     }
                 });
 
@@ -96,6 +93,11 @@ public class IssueDAOImpl implements IssueDAO {
     }
 
     public int getNewID() {
-        return 0;
+
+        Integer id = this.jdbcTemplate.queryForObject(
+                "SELECT nextval('seq_task_id')",
+                Integer.class);
+
+        return id;
     }
 }

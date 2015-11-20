@@ -36,22 +36,29 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public int updateIssue(String pID, int iID) {
-        logger.debug("update issue with id="+iID);
-        Project project = projectDAO.findByID(pID);
-        Issue issue = issueDAO.findByID(iID);
-        Task task = new Task(issue.getTitle(),issue.getDescription());
-        task.setId(taskDAO.getNewID());
+    public int updateIssueToTask(String pID, int iID) {
+        logger.debug("update issue with id="+iID+" to task");
 
-        project.deleteIssue(issue.getId());
-        issueDAO.removeIssue(issue.getId());
+        //update issue to task
+        taskDAO.updateIssueToTask(iID);
+
+        //get project and delete issue
+        Project project = projectDAO.findByID(pID);
+        project.deleteIssue(iID);
+
+        //get updated task and add it to project
+        Task t = taskDAO.findByID(iID);
+        project.addTask(t);
+
+        //delete old project
         projectDAO.removeProject(pID);
 
-        taskDAO.insertTask(task);
-        project.addTask(task);
+        //insert new project
         projectDAO.insertProject(project);
 
-        return task.getId();
+        return iID;
+
+
     }
 
     public int getNewID() {
@@ -59,16 +66,21 @@ public class IssueServiceImpl implements IssueService {
     }
 
     public int writeIssue(String pID, Issue issue) {
-        logger.debug("post new issue with id="+issue.getId());
+        int id;
+
+        logger.debug("post new issue");
+
+        id = issueDAO.getNewID();
+        issue.setId(id);
+
         Project project = projectDAO.findByID(pID);
-
-        issue.setId(issueDAO.getNewID());
         project.addIssue(issue);
-
         projectDAO.removeProject(pID);
         projectDAO.insertProject(project);
 
-        return issueDAO.insertIssue(issue);
+        issueDAO.insertIssue(issue);
+
+        return id;
     }
 
     public boolean deleteIssue(String pID, int iID) {
