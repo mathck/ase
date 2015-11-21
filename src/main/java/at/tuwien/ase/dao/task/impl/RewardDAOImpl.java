@@ -45,24 +45,28 @@ public class RewardDAOImpl implements RewardDAO{
     }
 
     public boolean removeReward(String rID) {
+        // TODO
+
         return false;
     }
 
     public Reward findByID(int rID) {
 
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE FROM REWARD WHERE ID = ?",
+                "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
+                        "FROM REWARD " +
+                        "WHERE ID = ?",
                 new Object[]{rID},
                 new RowMapper<Reward>() {
                     public Reward mapRow(ResultSet rs, int rewardId) throws SQLException {
                         Reward reward = new Reward();
-                        reward.setId(Integer.valueOf(rs.getString("ID")));
-                        reward.setUserMail(rs.getString("USER_MAIL"));
-                        reward.setName(rs.getString("NAME"));
-                        reward.setDescription(rs.getString("DESCRIPTION"));
-                        reward.setXpbase(rs.getInt("XPBASE"));
-                        reward.setImageLink(rs.getString("IMAGE_LINK"));
-                        reward.setCreationDate(rs.getDate("CREATION_DATE"));
+                        reward.setId(Integer.valueOf(rs.getString("id")));
+                        reward.setUserMail(rs.getString("user_mail"));
+                        reward.setName(rs.getString("name"));
+                        reward.setDescription(rs.getString("description"));
+                        reward.setXpbase(rs.getInt("xpbase"));
+                        reward.setImageLink(rs.getString("image_link"));
+                        reward.setCreationDate(rs.getDate("creation_date"));
                         return reward;
                     }
                 });
@@ -71,7 +75,8 @@ public class RewardDAOImpl implements RewardDAO{
 
     public LinkedList<Reward> loadAll() {
 
-        String sql = "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE FROM REWARD";
+        String sql = "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
+                "FROM REWARD";
 
         LinkedList<Reward> rewards = new LinkedList<Reward>();
 
@@ -95,10 +100,14 @@ public class RewardDAOImpl implements RewardDAO{
     }
 
     public LinkedList<Reward> loadAllByUser(String uID) {
+        // TODO
+
         return null;
     }
 
     public LinkedList<Reward> loadAllByProject(String pID) {
+        // TODO
+
         return null;
     }
 

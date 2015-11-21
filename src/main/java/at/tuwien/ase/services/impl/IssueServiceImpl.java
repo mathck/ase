@@ -37,11 +37,11 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public int updateIssueToTask(String pID, int iID) {
+    public int updateIssueToTask(String pID, int iID, String uID) {
         logger.debug("update issue with id="+iID+" to task");
 
         //update issue to task
-        taskDAO.updateIssueToTask(iID);
+        taskDAO.updateIssueToTask(iID, uID);
 
         //get project and delete issue
         Project project = projectDAO.findByID(pID);

@@ -48,24 +48,27 @@ public class SubtaskDAOImpl implements SubtaskDAO {
     }
 
     public boolean removeSubtask(int tID) {
+        // TODO
+
         return false;
     }
 
     public Subtask findByID(int tID) {
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE FROM SUBTASK WHERE ID = ?",
+                "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+                        "FROM SUBTASK WHERE ID = ?",
                 new Object[]{tID},
                 new RowMapper<Subtask>() {
                     public Subtask mapRow(ResultSet rs, int subtaskId) throws SQLException {
                         Subtask subtask = new Subtask();
-                        subtask.setId(Integer.valueOf(rs.getString("ID")));
-                        subtask.setTitle(rs.getString("TITLE"));
-                        subtask.setDescription(rs.getString("DESCRIPTION"));
-                        subtask.setTaskId(rs.getInt("TASK_ID"));
-                        subtask.setStatus(rs.getString("STATUS"));
-                        subtask.setXp(rs.getInt("XP"));
-                        subtask.setCreationDate(rs.getDate("CREATION_DATE"));
-                        subtask.setUpdateDate(rs.getDate("UPDATE_DATE"));
+                        subtask.setId(Integer.valueOf(rs.getString("id")));
+                        subtask.setTitle(rs.getString("title"));
+                        subtask.setDescription(rs.getString("description"));
+                        subtask.setTaskId(rs.getInt("task_id"));
+                        subtask.setStatus(rs.getString("status"));
+                        subtask.setXp(rs.getInt("xp"));
+                        subtask.setCreationDate(rs.getDate("creation_date"));
+                        subtask.setUpdateDate(rs.getDate("update_date"));
                         return subtask;
                     }
                 });
@@ -73,7 +76,8 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     public LinkedList<Subtask> loadAll() {
 
-        String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE FROM SUBTASK";
+        String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+                "FROM SUBTASK";
 
         LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
 
@@ -98,14 +102,20 @@ public class SubtaskDAOImpl implements SubtaskDAO {
     }
 
     public LinkedList<Subtask> loadAllByTask(String tID) {
+        // TODO
+
         return null;
     }
 
     public LinkedList<Subtask> loadAllByProject(String pID) {
+        // TODO
+
         return null;
     }
 
     public LinkedList<Subtask> loadAllByUser(String uID) {
+        // TODO
+
         return null;
     }
 

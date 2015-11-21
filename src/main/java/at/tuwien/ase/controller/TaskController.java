@@ -42,6 +42,13 @@ public class TaskController {
     }
 
     // @author Daniel Hofer
+    @RequestMapping(value = "workspace/tasks", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Task> getAllTasks() {
+        return ts.getAllTasks();
+    }
+
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Task> getAllTasksFromProject(@PathVariable("pID") String pID) {

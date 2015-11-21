@@ -18,6 +18,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -33,12 +35,13 @@ public class TaskDAOImpl implements TaskDAO {
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
 
-    String taskType = new String("task");
+    String taskType;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.keyHolder = new GeneratedKeyHolder();
+        taskType = new String("task");
     }
 
     public void insertTask(Task task) {
@@ -52,6 +55,8 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     public boolean removeTask(int tID) {
+        // TODO
+
         return false;
     }
 
@@ -60,21 +65,23 @@ public class TaskDAOImpl implements TaskDAO {
         logger.debug("retrieve from db: task with id=" + taskId);
 
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS FROM TASK WHERE ID = ?",
+                "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+                        "FROM TASK " +
+                        "WHERE ID = ?",
                 new Object[]{taskId},
                 new RowMapper<Task>() {
                     public Task mapRow(ResultSet rs, int taskId) throws SQLException {
                         Task task = new Task();
-                        task.setId(Integer.valueOf(rs.getString("ID")));
-                        task.setTitle(rs.getString("TITLE"));
-                        task.setDescription(rs.getString("DESCRIPTION"));
-                        task.setTaskType(rs.getString("TASK_TYPE"));
-                        task.setCreationDate(rs.getDate("CREATION_DATE"));
-                        task.setUpdateDate(rs.getDate("UPDATE_DATE"));
-                        task.setDslTemplateId(rs.getInt("DSL_TEMPLATE_ID"));
-                        task.setProjectId(rs.getInt("PROJECT_ID"));
-                        task.setUserMail(rs.getString("USER_MAIL"));
-                        task.setStatus(rs.getString("STATUS"));
+                        task.setId(Integer.valueOf(rs.getString("id")));
+                        task.setTitle(rs.getString("title"));
+                        task.setDescription(rs.getString("description"));
+                        task.setTaskType(rs.getString("task_type"));
+                        task.setCreationDate(rs.getDate("creation_date"));
+                        task.setUpdateDate(rs.getDate("update_date"));
+                        task.setDslTemplateId(rs.getInt("dsl_template_id"));
+                        task.setProjectId(rs.getInt("project_id"));
+                        task.setUserMail(rs.getString("user_mail"));
+                        task.setStatus(rs.getString("status"));
                         return task;
                     }
                 });
@@ -82,22 +89,96 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     public LinkedList<Task> loadAll() {
-        return null;
+        String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+                "FROM TASK " +
+                "WHERE TASK_TYPE = ?";
+
+        LinkedList<Task> tasks = new LinkedList<Task>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql, this.taskType);
+        for (Map<String,Object> row : rows) {
+
+            Task task = new Task();
+            task.setId((Integer)row.get("id"));
+            task.setTitle((String)row.get("title"));
+            task.setDescription((String)row.get("description"));
+            task.setTaskType((String)row.get("task_type"));
+            task.setCreationDate((Date)row.get("creation_date"));
+            task.setUpdateDate((Date)row.get("update_date"));
+            task.setDslTemplateId((Integer)row.get("dsl_template_id"));
+            task.setProjectId((Integer)row.get("project_id"));
+            task.setUserMail((String)row.get("user_mail"));
+            task.setStatus((String)row.get("status"));
+
+            tasks.add(task);
+        }
+
+        return tasks;
     }
 
     public LinkedList<Task> loadAllByProject(String pID) {
-       return null;
+        String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+                "FROM TASK " +
+                "WHERE TASK_TYPE = ? AND PROJECT_ID = ?";
+
+        LinkedList<Task> tasks = new LinkedList<Task>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql, this.taskType, Integer.valueOf(pID));
+        for (Map<String,Object> row : rows) {
+
+            Task task = new Task();
+            task.setId((Integer)row.get("id"));
+            task.setTitle((String)row.get("title"));
+            task.setDescription((String)row.get("description"));
+            task.setTaskType((String)row.get("task_type"));
+            task.setCreationDate((Date)row.get("creation_date"));
+            task.setUpdateDate((Date)row.get("update_date"));
+            task.setDslTemplateId((Integer)row.get("dsl_template_id"));
+            task.setProjectId((Integer)row.get("project_id"));
+            task.setUserMail((String)row.get("user_mail"));
+            task.setStatus((String)row.get("status"));
+
+            tasks.add(task);
+        }
+
+        return tasks;
     }
 
     public LinkedList<Task> loadAllByUser(String uID) {
-        return null;
+        String sql = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.DSL_TEMPLATE_ID, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS " +
+                "FROM TASK, REL_USER_TASK, TASKIT_USER " +
+                "WHERE TASK_TYPE = ? AND REL_USER_TASK.USER_MAIL = ? AND REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL AND REL_USER_TASK.TASK_ID = TASK.ID";
+
+
+        LinkedList<Task> tasks = new LinkedList<Task>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql, this.taskType, uID);
+        for (Map<String,Object> row : rows) {
+
+            Task task = new Task();
+            task.setId((Integer)row.get("id"));
+            task.setTitle((String)row.get("title"));
+            task.setDescription((String)row.get("description"));
+            task.setTaskType((String)row.get("task_type"));
+            task.setCreationDate((Date)row.get("creation_date"));
+            task.setUpdateDate((Date)row.get("update_date"));
+            task.setDslTemplateId((Integer)row.get("dsl_template_id"));
+            task.setProjectId((Integer)row.get("project_id"));
+            task.setUserMail((String)row.get("user_mail"));
+            task.setStatus((String)row.get("status"));
+
+            tasks.add(task);
+        }
+
+        return tasks;
     }
 
-    public void updateIssueToTask(int iID) {
+    public void updateIssueToTask(int iID, String uID) {
 
        this.jdbcTemplate.update(
-                "UPDATE TASK SET TASK_TYPE = ?, UPDATE_DATE = ? WHERE ID = ?",
-                this.taskType, new Date(), iID);
+                "UPDATE TASK SET TASK_TYPE = ?, UPDATE_DATE = ?, USER_MAIL = ? " +
+                        "WHERE ID = ?",
+                this.taskType, new Date(), uID, iID);
 
     }
 

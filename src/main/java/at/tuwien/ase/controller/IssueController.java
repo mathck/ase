@@ -42,8 +42,8 @@ public class IssueController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/issues/{iID}", method = RequestMethod.PATCH)
     @ResponseBody
-    public int updateIssueToTask(@PathVariable("pID") String pID, @PathVariable("iID") int iID) throws Exception {
-        return is.updateIssueToTask(pID, iID);
+    public int updateIssueToTask(@PathVariable("pID") String pID, @PathVariable("iID") int iID, @RequestParam("userId") String uID) throws Exception {
+        return is.updateIssueToTask(pID, iID, uID);
     }
 
     // @author Tomislav Nikic

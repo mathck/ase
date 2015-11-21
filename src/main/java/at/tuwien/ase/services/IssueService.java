@@ -21,7 +21,7 @@ public interface IssueService {
     LinkedList<Issue> getAllIssuesFromUser(String uID);
     LinkedList<Issue> getAllIssuesFromProject(String pID);
 
-    int updateIssueToTask(String pID, int iID);
+    int updateIssueToTask(String pID, int iID, String uID);
 
     int getNewID();
 
