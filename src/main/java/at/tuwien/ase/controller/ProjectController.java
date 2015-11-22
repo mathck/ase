@@ -34,7 +34,12 @@ public class ProjectController {
     public Project test() throws Exception {
         Project testProject = new Project("testID", "testName", "testDescription");
         User testUser = new User("testEmail@test.com", "testPassword");
+        Task testTask = new Task("testTask", "testDesc");
+        Issue testIssue = new Issue("testIssue", "testIssue");
+
         testProject.addUser(testUser, Role.ADMIN);
+        testProject.addTask(testTask);
+        testProject.addIssue(testIssue);
         return testProject;
     }
 
