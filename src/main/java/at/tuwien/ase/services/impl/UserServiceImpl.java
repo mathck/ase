@@ -24,6 +24,14 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
+    public UserServiceImpl() {
+
+    }
+
+    public UserServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
     public User writeUser(RegistrationUnit ru) {
         User user = ru.createUser();
         user.toFile();
@@ -45,6 +53,10 @@ public class UserServiceImpl implements UserService {
 
     public User updateUser(String uID, String email, String password, String firstName, String lastName, String avatar) {
         User user = userDAO.findByID(uID);
+
+        if(user == null)
+            return null;
+
         if(email != null)
             user.setEmail(email);
         if(password != null)
@@ -55,6 +67,7 @@ public class UserServiceImpl implements UserService {
             user.setLastName(lastName);
         if(avatar != null)
             user.setAvatar(avatar);
+
         userDAO.removeUser(uID);
         return userDAO.insertUser(user);
     }

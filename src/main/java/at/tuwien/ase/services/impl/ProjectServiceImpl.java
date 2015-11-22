@@ -31,6 +31,16 @@ public class ProjectServiceImpl implements ProjectService {
 
     private static final Logger logger = LogManager.getLogger(ProjectServiceImpl.class);
 
+    public ProjectServiceImpl() {
+
+    }
+
+    public ProjectServiceImpl(ProjectDAO projectDAO, IssueDAO issueDAO, TaskDAO taskDAO) {
+        this.projectDAO = projectDAO;
+        this.issueDAO = issueDAO;
+        this.taskDAO = taskDAO;
+    }
+
     public Project writeProject(Project project) {
         logger.debug("create project with id " + project.getId());
         return projectDAO.insertProject(project);

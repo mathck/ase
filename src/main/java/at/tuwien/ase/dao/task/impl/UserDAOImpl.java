@@ -27,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public User insertUser(User user) {
-        return null;
+        return user;
     }
 
     public boolean removeUser(String uID) {
