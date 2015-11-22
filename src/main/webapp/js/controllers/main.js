@@ -325,6 +325,35 @@ materialAdmin
     })
 
     //=================================================
+    // ISSUE CREATION
+    //=================================================
+
+    .controller('createIssueCtrl', function ( ProjectsFactory, UsersFactory, $location, $window) {
+
+            // callback for ng-click 'create Project':
+        console.log("starting");
+        this.createProject = function () {
+            UserFactory.show("test").then(function(loggedUser){
+            var newProject = {
+                id: undefined,
+                title: $scope.issue.title,
+                description: $scope.issue.description,
+                userList: []
+                //taskList: [],
+                //issueList: [],
+            };
+            //newProject.userList.push(loggedUser);
+
+            console.log(loggedUser);
+            console.log(newIssue);
+            console.log("still here");
+            ProjectsFactory.create(newIssue);
+            //$location.path('/project-list');
+            console.log("and here");
+        });};
+    })
+
+    //=================================================
     // CALENDAR
     //=================================================
     
