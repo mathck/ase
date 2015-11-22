@@ -96,7 +96,8 @@ public class User {
             out.println("firstName: " + firstName);
             out.println("lastName: " + lastName);
             out.println("encrypted password: " + password.toString());
-            out.println("projects: " + projectList.toString());
+            if(projectList != null && !projectList.isEmpty())
+                    out.println("projects: " + projectList.toString());
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
