@@ -4,29 +4,24 @@
     <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 
     <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
-
     <section id="content">
-        <div class="container" data-ng-controller="createProjectCtrl"><!---->
+
+         <div class="container" data-ng-controller="createTaskCtrl"><!---->
             <div class="block-header">
-                <h2>Create Project</h2>
+                <h2>Create Task</h2>
 
                 <ul class="actions">
                     <li>
                         <div class="col-sm-3">
                             <button class="btn btn-danger waves-effect" data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-arrow-back"></i>&nbsp;Cancel</button>
                         </div>
-                    </li><!--
-                    <li>
-                        <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project"><i class="zmdi zmdi-check"></i>Create Project</button>
-                        </div>
-                    </li>-->
+                    </li>
                 </ul>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h2><small>Fill in the provided fields in order to create a new project.</small></h2>
+                    <h2><small>Fill in the provided fields in order to create a new task.</small></h2>
                 </div>
 
                 <div class="card-body card-padding">
@@ -35,7 +30,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
                                 <div class="fg-line">
-                                        <input type="text" class="form-control input-lg" placeholder="Title" data-ng-model="project.title">
+                                        <input type="text" class="form-control input-lg" placeholder="Title" data-ng-model="task.title">
                                 </div>
                             </div>
                         </div>
@@ -47,37 +42,7 @@
                         <div class="col-sm-12">
                             <p class="c-black f-500 m-b-20">Description</p>
                             <div class="fg-line">
-                                <textarea class="form-control input-md description" style="height:8em;" placeholder="Write your description here..." data-ng-model="project.description"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <br/>
-
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <p class="c-black f-500 m-b-20">Estimated Time</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="zmdi zmdi-watch"></i></span>
-                                <div class="fg-line">
-                                    <input type="text" class="form-control" data-input-mask="{mask: '0000000000'}" placeholder="60">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <div class="fg-line">
-                                    <div class="select">
-                                        <select class="form-control">
-                                            <option>Minutes</option>
-                                            <option>Hours</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                <textarea class="form-control input-md description" placeholder="Write your description here..." data-ng-model="task.description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -140,7 +105,7 @@
                 <ul class="actions">
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project" data-ng-click="createProject()"><i class="zmdi zmdi-check"></i>Create Project</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project" data-ng-click="createTask()"><i class="zmdi zmdi-check"></i>Create Task</button>
                         </div>
                     </li>
                 </ul>
