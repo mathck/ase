@@ -37,7 +37,7 @@ public class ProjectController {
         Task testTask = new Task("testTask", "testDesc");
         Issue testIssue = new Issue("testIssue", "testIssue");
 
-        testProject.addUser(testUser.getEmail(), Role.ADMIN);
+        testProject.addUser(testUser, Role.ADMIN);
         testProject.addTask(testTask);
         testProject.addIssue(testIssue);
         return testProject;
@@ -51,10 +51,11 @@ public class ProjectController {
     }
 
     // @author Tomislav Nikic
-    @RequestMapping(value = "/workspace/projects", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/workspace/projects/{uID}", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public Project createProject(@RequestBody Project project) {
+    public Project createProject(@PathVariable("uID") String uID, @RequestParam(value = "role") Role role, @RequestBody Project project) {
         ps.writeProject(project);
+        ps.addUser(project.getId(), us.getByID(uID), role);
         return ps.getByID(project.getId());
     }
 

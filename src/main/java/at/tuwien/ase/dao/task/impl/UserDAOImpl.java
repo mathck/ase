@@ -26,24 +26,15 @@ public class UserDAOImpl implements UserDAO {
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    // @author Tomislav Nikic
     public User insertUser(User user) {
-        this.jdbcTemplate.update(
-                "INSERT INTO TASKIT_USER (ID, FIRSTNAME, LASTNAME, PASSWORD, MAIL) VALUES (?,?,?,?,?)",
-                user.getEmail(), user.getFirstName(), user.getLastName(),user.getPassword(), user.getEmail()
-        );
         return user;
     }
 
     public boolean removeUser(String uID) {
-        //TODO
         return false;
     }
 
     public User findByID(String uID) {
-        //this.jdbcTemplate.queryForObject(
-        //        "SELECT MAIL, FIRSTNAME, LASTNAME, PASSWORD"
-        //);
         return null;
     }
 
