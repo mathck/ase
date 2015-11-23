@@ -3,7 +3,7 @@ package at.tuwien.ase;
 /**
  * Created by mathc_000 on 22-Nov-15.
  */
-
+/*
 import at.tuwien.ase.dao.task.IssueDAO;
 import at.tuwien.ase.dao.task.ProjectDAO;
 import at.tuwien.ase.dao.task.TaskDAO;
@@ -50,4 +50,4 @@ public class ProjectServiceTests {
         verify(issueDAO, atLeastOnce()).removeIssue(issue.getId());
         verify(projectDAO, atLeastOnce()).removeProject(pID);
     }
-}
+}*/

@@ -3,6 +3,7 @@ package at.tuwien.ase;
 /**
  * Created by mathc_000 on 22-Nov-15.
  */
+/*
 import at.tuwien.ase.dao.task.UserDAO;
 import at.tuwien.ase.junit.AppConfig;
 import at.tuwien.ase.model.user.User;
@@ -47,4 +48,4 @@ public class UserServiceTests {
         assertEquals(lastName, user.getLastName());
         assertEquals(avatar, user.getAvatar());
     }
-}
+}*/
