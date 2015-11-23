@@ -4,6 +4,7 @@ import at.tuwien.ase.model.task.Issue;
 import at.tuwien.ase.model.task.Task;
 import at.tuwien.ase.model.user.User;
 
+import javax.sound.sampled.Line;
 import java.util.LinkedList;
 
 /**
@@ -78,6 +79,9 @@ public class Project {
         }
     }
 
+    public void setAllUser(LinkedList<UserRole> userList) {
+        this.userList = userList;
+    }
     // Reading lists
     // @author Tomislav Nikic
     public LinkedList<UserRole> getAllUser() {
@@ -101,6 +105,9 @@ public class Project {
                 taskList.remove(iterator);
     }
 
+    public void setAllTasks(LinkedList<Task> taskList) {
+        this.taskList = taskList;
+    }
     // Get list of all tasks
     // @author Tomislav Nikic
     public LinkedList<Task> getAllTasks() {
@@ -118,6 +125,9 @@ public class Project {
                 issueList.remove(iterator);
     }
 
+    public  void setAllIssues(LinkedList<Issue> issueList) {
+        this.issueList = issueList;
+    }
     // Get list of all issues
     // @author Tomislav Nikic
     public LinkedList<Issue> getAllIssues() {

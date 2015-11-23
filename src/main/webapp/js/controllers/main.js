@@ -328,19 +328,16 @@ materialAdmin
     // ISSUE CREATION
     //=================================================
 
-    .controller('createIssueCtrl', function ( ProjectsFactory, UsersFactory, $location, $window) {
+    .controller('createIssueCtrl', function ( IssuesFactory, UsersFactory, $location, $window) {
 
-            // callback for ng-click 'create Project':
+            // callback for ng-click 'create Issue':
         console.log("starting");
-        this.createProject = function () {
+        this.createIssue = function () {
             UserFactory.show("test").then(function(loggedUser){
-            var newProject = {
+            var newIssue = {
                 id: undefined,
                 title: $scope.issue.title,
-                description: $scope.issue.description,
-                userList: []
-                //taskList: [],
-                //issueList: [],
+                description: $scope.issue.description
             };
             //newProject.userList.push(loggedUser);
 
