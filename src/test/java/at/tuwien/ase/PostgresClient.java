@@ -24,7 +24,5 @@ public class PostgresClient {
         //read task from db
         Task task1 = taskDAO.findByID(1);
         System.out.println(task1);
-
     }
-
 }
