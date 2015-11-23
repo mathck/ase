@@ -7,27 +7,19 @@ package at.tuwien.ase;
 import at.tuwien.ase.dao.task.IssueDAO;
 import at.tuwien.ase.dao.task.ProjectDAO;
 import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.dao.task.UserDAO;
 import at.tuwien.ase.junit.AppConfig;
 import at.tuwien.ase.model.project.Project;
 import at.tuwien.ase.model.task.Issue;
 import at.tuwien.ase.model.task.Task;
-import at.tuwien.ase.model.user.User;
 import at.tuwien.ase.services.ProjectService;
-import at.tuwien.ase.services.UserService;
 import at.tuwien.ase.services.impl.ProjectServiceImpl;
-import at.tuwien.ase.services.impl.UserServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
