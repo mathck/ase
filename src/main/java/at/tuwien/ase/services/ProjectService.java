@@ -21,6 +21,6 @@ public interface ProjectService {
     LinkedList<Project> getAllProjects();
     LinkedList<Project> getAllProjectsFromUser(String uID);
 
-    User addUser(String pID, User user, Role role);
+    String addUser(String pID, String uID, Role role);
 
 }

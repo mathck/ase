@@ -68,13 +68,13 @@ public class Project {
 
     // Add/delete a user to/from the list
     // @author Tomislav Nikic
-    public void addUser(User user, Role role) {
-        UserRole newUser = new UserRole(user, this.id, role);
+    public void addUser(String uID, Role role) {
+        UserRole newUser = new UserRole(uID, this.id, role);
         userList.add(newUser);
     }
     public void deleteUser(String email) {
         for(UserRole iteration : userList) {
-            if(iteration.getUser().getEmail() == email)
+            if(iteration.getUser() == email)
                 userList.remove(iteration);
         }
     }
@@ -87,9 +87,9 @@ public class Project {
     public LinkedList<UserRole> getAllUser() {
         return userList;
     }
-    public UserRole getUserRole(User user) {
+    public UserRole getUserRole(String uID) {
         for(UserRole iterator : userList)
-            if(iterator.getUser() == user)
+            if(iterator.getUser() == uID)
                 return iterator;
         return null;
     }

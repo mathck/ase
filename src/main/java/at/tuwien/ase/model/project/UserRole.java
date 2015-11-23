@@ -8,15 +8,15 @@ import at.tuwien.ase.model.user.User;
 public class UserRole {
 
     private String projectID;
-    private User user;
+    private String uID;
     private Role role;
 
     //Default Constructor - necessary for REST POST Functionality!
     public UserRole() {}
 
     // @author Tomislav Nikic
-    public UserRole(User user, String projectID, Role role) {
-        this.user = user;
+    public UserRole(String uID, String projectID, Role role) {
+        this.uID = uID;
         this.projectID = projectID;
         this.role = role;
     }
@@ -32,11 +32,11 @@ public class UserRole {
 
     // Getter and setter for User
     // @author Tomislav Nikic
-    public User getUser() {
-        return user;
+    public String getUser() {
+        return uID;
     }
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(String uID) {
+        this.uID = uID;
     }
 
     // Getter and setter for Role

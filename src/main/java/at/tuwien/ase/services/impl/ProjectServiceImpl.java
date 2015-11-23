@@ -67,10 +67,10 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDAO.loadAllByUser(uID);
     }
 
-    public User addUser(String pID, User user, Role role) {
+    public String addUser(String pID, String uID, Role role) {
         Project project = projectDAO.findByID(pID);
-        project.addUser(user, role);
-        return user;
+        project.addUser(uID, role);
+        return uID;
     }
 
 }
