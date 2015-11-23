@@ -24,45 +24,5 @@ import javax.sql.DataSource;
 @Configuration
 public class AppConfig {
 
-    @Bean
-    @Qualifier("dataSource")
-    public DataSource getDataSource() {
-        return new DataSourceMock();
-    }
 
-    @Bean
-    @Qualifier("userDAO")
-    public UserDAO getUserDao() {
-        return new UserDAOImpl();
-    }
-
-    @Bean
-    @Qualifier("projectDAO")
-    public ProjectDAO getProjectDao() {
-        return new ProjectDAOImpl();
-    }
-
-    @Bean
-    @Qualifier("issueDAO")
-    public IssueDAO getIssueDao() {
-        return new IssueDAOImpl();
-    }
-
-    @Bean
-    @Qualifier("taskDAO")
-    public TaskDAO getTaskDao() {
-        return new TaskDAOImpl();
-    }
-
-    @Bean
-    @Qualifier("projectService")
-    public ProjectService getProjectService() {
-        return new ProjectServiceImpl();
-    }
-
-    @Bean
-    @Qualifier("userService")
-    public UserService getUserService() {
-        return new UserServiceImpl();
-    }
 }

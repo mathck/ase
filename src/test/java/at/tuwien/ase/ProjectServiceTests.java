@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -33,9 +34,6 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
 public class ProjectServiceTests {
 
-    @Autowired
-    private ProjectService projectService;
-
     @Test
     public void whenProjectIsDeleted_DeleteAllTasksAndIssuesToo() {
 
@@ -44,7 +42,7 @@ public class ProjectServiceTests {
         ProjectDAO projectDAO = Mockito.mock(ProjectDAO.class);
         IssueDAO issueDAO = Mockito.mock(IssueDAO.class);
         TaskDAO taskDAO = Mockito.mock(TaskDAO.class);
-        projectService = new ProjectServiceImpl(projectDAO, issueDAO, taskDAO);
+        ProjectService projectService = new ProjectServiceImpl(projectDAO, issueDAO, taskDAO);
         Project project = new Project("pika", "title", "desc");
         Issue issue = new Issue(); issue.setId(4);
         Task task = new Task(); task.setId(5);

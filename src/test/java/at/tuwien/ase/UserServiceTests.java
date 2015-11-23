@@ -15,7 +15,6 @@ import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -23,16 +22,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
 public class UserServiceTests {
-
-    @Autowired
-    private UserService userService;
-
-    @Test
-    public void testUserService() {
-        assertEquals(
-                "class at.tuwien.ase.services.impl.UserServiceImpl",
-                this.userService.getClass().toString());
-    }
 
     @Test
     public void updateUserUpdatesEveryParameter() {
