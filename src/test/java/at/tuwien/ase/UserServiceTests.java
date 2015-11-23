@@ -24,7 +24,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 public class UserServiceTests {
 
     @Test
-    public void updateUserUpdatesEveryParameter() {
+    public void whenUpdateUser_insertNewOneAndCheckAttributes() {
 
         // Arrange
         UserDAO userDAO = Mockito.mock(UserDAO.class);
