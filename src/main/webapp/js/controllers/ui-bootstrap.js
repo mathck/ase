@@ -86,10 +86,8 @@ materialAdmin
     //====================================
     // MODAL
     //====================================
-    .controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+    .controller('ModalCtrl', function ($scope, $modal, $log) {
 
-        $scope.modalContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sodales orci ante, sed ornare eros vestibulum ut. Ut accumsan vitae eros sit amet tristique. Nullam scelerisque nunc enim, non dignissim nibh faucibus ullamcorper. Fusce pulvinar libero vel ligula iaculis ullamcorper. Integer dapibus, mi ac tempor varius, purus nibh mattis erat, vitae porta nunc nisi non tellus. Vivamus mollis ante non massa egestas fringilla. Vestibulum egestas consectetur nunc at ultricies. Morbi quis consectetur nunc.';
-    
         //Create Modal
         function modalInstances(animation, size, backdrop, keyboard) {
             var modalInstance = $modal.open({
@@ -106,6 +104,7 @@ materialAdmin
                 }
             
             });
+
         }
         
         //Custom Sizes
@@ -133,12 +132,20 @@ materialAdmin
     // Please note that $modalInstance represents a modal window (instance) dependency.
     // It is not the same as the $modal service used above.
 
-    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, content) {
+    .controller('ModalInstanceCtrl', function ($scope, $rootScope, $modalInstance, content) {
 
           $scope.modalContent = content;
 
           $scope.ok = function () {
             $modalInstance.close();
+          };
+
+          $scope.changeAvatar = function(id){
+              $rootScope.avatar="img/avatars/"+id+".png";
+              console.log("AvatarView changed to img/avatars/"+id+".png");
+
+              console.log("Avatar changed to " + id);
+              $modalInstance.close();
           };
 
           $scope.cancel = function () {

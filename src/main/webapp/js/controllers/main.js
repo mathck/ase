@@ -274,20 +274,28 @@ materialAdmin
     // LOGIN & REGISTER
     //=================================================
 
-    .controller('loginCtrl', function ( LoginFactory, UsersFactory, $location, $window) {
+    .controller('loginCtrl', function ($rootScope, $scope, LoginFactory, UsersFactory, $location, $window) {
+
+
+            $rootScope.avatar="img/avatars/0.png";
+            //this.avatar=$rootScope.avatar;
+            console.log("Avatar initially changed to " + this.avatar);
 
             // callback for ng-click 'loginUser':
             this.loginUser = function () {
                 LoginFactory.create(this.login);
                 console.log("login is " + this.login.email );
                 $window.location.href='/taskit/main.html';
-            }
+            };
+
             // callback for ng-click 'saveUser':
             this.createUser = function () {
-                console.log("registration is " + this.user.email + this.user.password + this.user.firstName, + this.user.lastName);
+                this.user.avatar=$rootScope.avatar;
+                console.log("Root avatar: " + $rootScope.avatar)
+                console.log("registration is " + this.user.email + this.user.password + this.user.firstName, + this.user.lastName + this.user.avatar);
                 UsersFactory.create(this.user);
-                //$location.path('/user-list');
-            }
+                $window.location.href='/taskit/main.html';
+            };
 
             //Status
             this.loginStat = 1;
@@ -299,14 +307,14 @@ materialAdmin
     // PROJECT CREATION
     //=================================================
 
-    .controller('createProjectCtrl', function ( ProjectsFactory, UsersFactory, $location, $window) {
+    .controller('createProjectCtrl', function ( ProjectsFactory, UsersFactory, $scope, $location, $window) {
 
             // callback for ng-click 'create Project':
         console.log("starting");
-        this.createProject = function () {
-            UserFactory.show("test").then(function(loggedUser){
+        $scope.createProject = function () {
+            //UserFactory.show("test").then(function(loggedUser){
             var newProject = {
-                id: undefined,
+                id: "0",
                 title: $scope.project.title,
                 description: $scope.project.description,
                 userList: []
@@ -315,13 +323,13 @@ materialAdmin
             };
             //newProject.userList.push(loggedUser);
 
-            console.log(loggedUser);
+            //console.log(loggedUser);
             console.log(newProject);
             console.log("still here");
             ProjectsFactory.create(newProject);
             //$location.path('/project-list');
             console.log("and here");
-        });};
+        };//};
     })
 
     //=================================================
