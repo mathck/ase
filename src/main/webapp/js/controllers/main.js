@@ -319,16 +319,14 @@ materialAdmin
                 description: $scope.project.description,
                 userList: []
                 //taskList: [],
-                //issueList: [],
+                //issueList: []
             };
             //newProject.userList.push(loggedUser);
 
             //console.log(loggedUser);
             console.log(newProject);
-            console.log("still here");
             ProjectsFactory.create(newProject);
-            //$location.path('/project-list');
-            console.log("and here");
+            $location.path('/home');
         };//};
     })
 
@@ -336,26 +334,31 @@ materialAdmin
     // ISSUE CREATION
     //=================================================
 
-    .controller('createIssueCtrl', function ( IssuesFactory, UsersFactory, $location, $window) {
+    .controller('createIssueCtrl', function ( $scope, IssuesFactory, $location, $window) {
 
             // callback for ng-click 'create Issue':
         console.log("starting");
-        this.createIssue = function () {
-            UserFactory.show("test").then(function(loggedUser){
+        $scope.createIssue = function () {
+            //UserFactory.show("test").then(function(loggedUser){
             var newIssue = {
-                id: undefined,
-                title: $scope.issue.title,
-                description: $scope.issue.description
+                id: "1",
+                title: "hans",
+                description: "test",
+                taskType: "blah",
+                creationDate: "2015-12-31",
+                updateDate: "2016-01-12",
+                dslTemplateId: "1",
+                projectId: "1",
+                userMail:"test@test.com",
+                status:"leiwand"
             };
-            //newProject.userList.push(loggedUser);
 
-            console.log(loggedUser);
             console.log(newIssue);
             console.log("still here");
-            ProjectsFactory.create(newIssue);
-            //$location.path('/project-list');
+            IssuesFactory.create(newIssue);
+            $location.path('/home');
             console.log("and here");
-        });};
+        };
     })
 
     //=================================================
