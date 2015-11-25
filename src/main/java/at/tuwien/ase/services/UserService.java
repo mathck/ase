@@ -10,12 +10,14 @@ import java.util.LinkedList;
  */
 public interface UserService {
 
-    User writeUser(RegistrationUnit newUser);
+    void writeUser(RegistrationUnit newUser);
+
+    void deleteUser(String uID);
 
     User getByID(String uID);
     LinkedList<User> getAllUsers();
     LinkedList<User> getAllUsersFromProject(String pID);
 
-    User updateUser(String uID, String email, String password, String firstName, String lastName, String avatar);
+    void updateUser(String uID, String email, String password, String firstName, String lastName, String avatar);
 
 }

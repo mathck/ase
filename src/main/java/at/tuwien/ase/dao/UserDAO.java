@@ -1,4 +1,4 @@
-package at.tuwien.ase.dao.task;
+package at.tuwien.ase.dao;
 
 import at.tuwien.ase.model.user.User;
 
@@ -9,8 +9,9 @@ import java.util.LinkedList;
  */
 public interface UserDAO {
 
-    User insertUser(User user);
-    boolean removeUser(String uID);
+    void insertUser(User user);
+
+    void removeUser(String uID);
 
     User findByID(String uID);
     LinkedList<User> loadAll();

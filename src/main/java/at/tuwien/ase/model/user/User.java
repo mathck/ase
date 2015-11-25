@@ -81,10 +81,22 @@ public class User {
         this.password = PasswordEncryption.getEncryptedPassword(password, salt);
     }
 
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
+
     // Get all projects
     // @author Tomislav Nikic
-    public LinkedList<String> getAllProjects() {
+    public LinkedList<String> getProjectList() {
         return projectList;
+    }
+
+    public void setProjectList(LinkedList<String> projectList) {
+        this.projectList = projectList;
     }
 
     // Save to file for testing

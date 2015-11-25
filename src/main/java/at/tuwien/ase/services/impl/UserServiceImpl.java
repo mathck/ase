@@ -1,6 +1,6 @@
 package at.tuwien.ase.services.impl;
 
-import at.tuwien.ase.dao.task.UserDAO;
+import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.model.user.User;
 import at.tuwien.ase.model.user.RegistrationUnit;
 import at.tuwien.ase.services.UserService;
@@ -32,11 +32,14 @@ public class UserServiceImpl implements UserService {
         this.userDAO = userDAO;
     }
 
-    public User writeUser(RegistrationUnit ru) {
+    public void writeUser(RegistrationUnit ru) {
         User user = ru.createUser();
         user.toFile();
         userDAO.insertUser(user);
-        return user;
+    }
+
+    public void deleteUser(String uID) {
+        userDAO.removeUser(uID);
     }
 
     public User getByID(String uID) {
@@ -51,11 +54,11 @@ public class UserServiceImpl implements UserService {
         return userDAO.loadAllByProject(pID);
     }
 
-    public User updateUser(String uID, String email, String password, String firstName, String lastName, String avatar) {
+    public void updateUser(String uID, String email, String password, String firstName, String lastName, String avatar) {
         User user = userDAO.findByID(uID);
 
         if(user == null)
-            return null;
+            return;
 
         if(email != null)
             user.setEmail(email);
@@ -69,7 +72,6 @@ public class UserServiceImpl implements UserService {
             user.setAvatar(avatar);
 
         userDAO.removeUser(uID);
-        return userDAO.insertUser(user);
     }
 
 }
