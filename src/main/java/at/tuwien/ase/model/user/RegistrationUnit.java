@@ -34,7 +34,7 @@ public class RegistrationUnit implements Serializable {
 
     public User createUser() {
         User newUser = new User(email, password);
-        newUser.setName(firstName);
+        newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
         newUser.setAvatar(avatar);
         return newUser;

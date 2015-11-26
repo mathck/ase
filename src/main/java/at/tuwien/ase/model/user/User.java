@@ -9,110 +9,125 @@ import java.util.LinkedList;
 /**
  * Created by Tomislav Nikic on 05/11/2015.
  */
-public class User {
+public class User
+{
+	// Info
+	private String uID;
+	private String firstName;
+	private String lastName;
+	private String avatar;
 
-    // Info
-    private String firstName;
-    private String lastName;
-    private String email;
+	// Lists
+	private LinkedList<String> projectList;
 
-    // Front-end variable
-    private String avatar;
+	// Security
+	private byte[] password;
+	private byte[] salt;
 
-    // Lists
-    private LinkedList<String> projectList;
+	// Constructors
+	// @author Tomislav Nikic
+	public User()
+	{
+	}
 
-    // Security
-    private byte[] password;
-    private byte[] salt;
+	public User(String uID, String password)
+	{
+		this.uID = uID;
+		this.salt = PasswordEncryption.generateSalt();
+		this.password = PasswordEncryption.getEncryptedPassword(password, salt);
+	}
 
-    //Default Constructor - necessary for REST POST Functionality!
-    public User() {}
+	// Getter and setter for user ID (email)
+	// @author Tomislav Nikic
+	public String getUserID()
+	{
+		return uID;
+	}
 
-    // @author Tomislav Nikic
-    public User(String email, String password) {
-        this.email = email;
-        salt = PasswordEncryption.generateSalt();
-        this.password = PasswordEncryption.getEncryptedPassword(password, salt);
-    }
+	public void setUserID(String email)
+	{
+		this.uID = email;
+	}
 
-    // Getter and setter for Email
-    // @author Tomislav Nikic
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	// Getter and setter for first name
+	// @author Tomislav Nikic
+	public String getFirstName()
+	{
+		return firstName;
+	}
 
-    // Getter and setter for First Name
-    // @author Tomislav Nikic
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setName(String givenName) {
-        this.firstName = givenName;
-    }
+	public void setFirstName(String givenName)
+	{
+		this.firstName = givenName;
+	}
 
-    // Getter and setter for Last Name
-    // @author Tomislav Nikic
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	// Getter and setter for last name
+	// @author Tomislav Nikic
+	public String getLastName()
+	{
+		return lastName;
+	}
 
-    // Getter and setter for Avatar
-    // @author Tomislav Nikic
-    public String getAvatar() {
-        return avatar;
-    }
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
+	public void setLastName(String lastName)
+	{
+		this.lastName = lastName;
+	}
 
-    // Getter and setter for Password
-    // @author Tomislav Nikic
-    public byte[] getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = PasswordEncryption.getEncryptedPassword(password, salt);
-    }
+	// Getter and setter for avatar
+	// @author Tomislav Nikic
+	public String getAvatar()
+	{
+		return avatar;
+	}
 
-    public byte[] getSalt() {
-        return salt;
-    }
+	public void setAvatar(String avatar)
+	{
+		this.avatar = avatar;
+	}
 
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
-    }
+	// Getter and setter for password
+	// @author Tomislav Nikic
+	public byte[] getPassword()
+	{
+		return password;
+	}
 
-    // Get all projects
-    // @author Tomislav Nikic
-    public LinkedList<String> getProjectList() {
-        return projectList;
-    }
+	public void setPassword(String password)
+	{
+		if (salt == null)
+		{
+			salt = PasswordEncryption.generateSalt();
+		}
+		this.password = PasswordEncryption.getEncryptedPassword(password, salt);
+	}
 
-    public void setProjectList(LinkedList<String> projectList) {
-        this.projectList = projectList;
-    }
+	public void setPassword(byte[] password)
+	{
+		this.password = password;
+	}
 
-    // Save to file for testing
-    // @author Tomislav Nikic
-    public void toFile() {
-        try {
-            PrintWriter out = new PrintWriter(email + ".txt");
-            out.println("email: " + email);
-            out.println("firstName: " + firstName);
-            out.println("lastName: " + lastName);
-            out.println("encrypted password: " + password.toString());
-            if(projectList != null && !projectList.isEmpty())
-                    out.println("projects: " + projectList.toString());
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+	// Getter and setter for salt
+	// @author Tomislav Nikic
+	public byte[] getSalt()
+	{
+		return salt;
+	}
+
+	public void setSalt(byte[] salt)
+	{
+		this.salt = salt;
+	}
+
+	// Getter and setter for project list
+	// @author Tomislav Nikic
+	public LinkedList<String> getProjectList()
+	{
+		return projectList;
+	}
+
+	public void setProjectList(LinkedList<String> projectList)
+	{
+		this.projectList = projectList;
+	}
+
 }

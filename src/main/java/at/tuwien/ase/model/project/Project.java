@@ -4,7 +4,6 @@ import at.tuwien.ase.model.task.Issue;
 import at.tuwien.ase.model.task.Task;
 import at.tuwien.ase.model.user.User;
 
-import javax.sound.sampled.Line;
 import java.util.LinkedList;
 
 /**
@@ -74,7 +73,7 @@ public class Project {
     }
     public void deleteUser(String email) {
         for(UserRole iteration : userList) {
-            if(iteration.getUser().getEmail() == email)
+            if (iteration.getUser().getUserID() == email)
                 userList.remove(iteration);
         }
     }

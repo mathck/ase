@@ -7,14 +7,21 @@ import java.util.LinkedList;
 /**
  * Created by Daniel Hofer on 16.16.11.2015.
  */
-public interface UserDAO {
+public interface UserDAO
+{
 
-    void insertUser(User user);
+	void insertUser(User user);
 
-    void removeUser(String uID);
+	void removeUser(String uID);
 
-    User findByID(String uID);
-    LinkedList<User> loadAll();
-    LinkedList<User> loadAllByProject(String pID);
+	void updateUser(String uID, User user);
+
+	User findByID(String uID);
+
+	User authUser(String uID);
+
+	LinkedList<User> loadAll();
+
+	LinkedList<User> loadAllByProject(String pID);
 
 }
