@@ -1,11 +1,17 @@
 package at.tuwien.ase.services.impl;
-
-import at.tuwien.ase.model.user.Login;
-import at.tuwien.ase.model.user.LoginUnit;
+import at.tuwien.ase.controller.PasswordEncryption;
+import at.tuwien.ase.dao.LoginDAO;
+import at.tuwien.ase.dao.UserDAO;
+import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.security.TokenGenerator;
 import at.tuwien.ase.services.LoginService;
+import at.tuwien.ase.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * Created by DanielHofer on 16.16.11.2015.
@@ -14,14 +20,41 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    @Autowired
+    private LoginDAO loginDAO;
+
+    @Autowired
+    private UserDAO userDAO;
+
     private static final Logger logger = LogManager.getLogger(LoginServiceImpl.class);
 
-    public Login login(LoginUnit newLogin) {
-        Login login  = newLogin.createLogin();
-        login.toFile();
-        System.out.println("Received new login " + login.getEmail());
-        //TODO Authenticate user and send token
+    public String login(String email, String password) throws  Exception{
 
-        return login;
+        User user;
+        String token = "";
+
+        user = userDAO.authUser(email); System.out.println("00000"+password+" "+user.getPassword()+" "+user.getSalt()+" "+PasswordEncryption.getEncryptedPassword(password,user.getSalt()));
+
+        if (PasswordEncryption.authenticate(password, user.getPassword(), user.getSalt())){
+            System.out.println("11111");
+            token = TokenGenerator.createNewToken();
+
+            loginDAO.addUserToken(email, token, new Date());
+
+
+        }else{
+            throw new Exception ("Authentication failed! User mail or password incorrect!");
+        }
+
+        return token;
+
     }
+
+    public boolean checkLogin(String token){
+
+        return loginDAO.checkLoginValidity(token);
+
+    }
+
+
 }

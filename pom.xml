@@ -9,7 +9,8 @@
   <url>http://maven.apache.org</url>
 
   <properties>
-    <springframework.version>4.0.6.RELEASE</springframework.version>
+    <springframework.version>4.0.3.RELEASE</springframework.version>
+    <servlet.version>3.1.0</servlet.version>
   </properties>
 
   <repositories>
@@ -115,6 +116,15 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>-->
+
+    <!-- servlet -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>${servlet.version}</version>
+    </dependency>
+
+
 
   </dependencies>
   <build>

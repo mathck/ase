@@ -1,7 +1,7 @@
-<web-app id="WebApp_ID" version="2.4"
+<web-app id="WebApp_ID" version="3.1"
 		 xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
-	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	http://java.sun.com/xml/ns/j2ee/web-app_3_1.xsd">
 	<display-name>Restful Web Application</display-name>
 
 	<!-- Spring Web RESTService -->
@@ -15,6 +15,23 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
+
+	<!-- check login filter -->
+	<!-- @author Daniel Hofer -->
+	<filter>
+		<filter-name>checkLoginFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>checkLoginFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 
 	<!-- Spring Web RESTService -->
 	<!-- @author Tomislav Nikic -->

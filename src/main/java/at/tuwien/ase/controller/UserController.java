@@ -27,7 +27,7 @@ public class UserController
 	private GenericRestExceptionHandler genericRestExceptionHandler;
 
 	// @author Tomislav Nikic
-	@RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/user/register", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
 	public void createUser(@RequestBody User user) throws Exception
 	{
