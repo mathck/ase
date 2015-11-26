@@ -27,7 +27,7 @@ public class CheckLoginFilter extends GenericFilterBean {
         String userToken;
 
         String uri = ((HttpServletRequest)request).getRequestURI().toString();
-System.out.println(uri);
+
 
         //for register and for login the token validation is not necessary
         if (!uri.equalsIgnoreCase("/taskit/api/user/login") && !uri.equalsIgnoreCase("/taskit/api/user/register")){

@@ -33,10 +33,10 @@ public class LoginServiceImpl implements LoginService {
         User user;
         String token = "";
 
-        user = userDAO.authUser(email); System.out.println("00000"+password+" "+user.getPassword()+" "+user.getSalt()+" "+PasswordEncryption.getEncryptedPassword(password,user.getSalt()));
+        user = userDAO.authUser(email);
 
         if (PasswordEncryption.authenticate(password, user.getPassword(), user.getSalt())){
-            System.out.println("11111");
+
             token = TokenGenerator.createNewToken();
 
             loginDAO.addUserToken(email, token, new Date());
