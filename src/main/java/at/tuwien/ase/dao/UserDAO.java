@@ -1,5 +1,6 @@
 package at.tuwien.ase.dao;
 
+import at.tuwien.ase.model.project.UserRole;
 import at.tuwien.ase.model.user.User;
 
 import java.util.LinkedList;
@@ -22,6 +23,6 @@ public interface UserDAO
 
 	LinkedList<User> loadAll();
 
-	LinkedList<User> loadAllByProject(String pID);
+	LinkedList<UserRole> loadAllByProject(int pID);
 
 }

@@ -14,7 +14,8 @@ public interface TaskDAO {
 
     Task findByID(int tID);
     LinkedList<Task> loadAll();
-    LinkedList<Task> loadAllByProject(String pID);
+
+    LinkedList<Task> loadAllByProject(int pID);
     LinkedList<Task> loadAllByUser(String uID);
 
     void updateIssueToTask(int iID, String uID);

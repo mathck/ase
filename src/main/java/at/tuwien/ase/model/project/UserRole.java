@@ -1,50 +1,58 @@
 package at.tuwien.ase.model.project;
 
-import at.tuwien.ase.model.user.User;
-
 /**
  * Created by Tomislav Nikic on 16/11/2015.
  */
 public class UserRole {
 
-    private String projectID;
-    private User user;
-    private Role role;
+    private int pID;
+    private String uID;
+    private String role;
 
     //Default Constructor - necessary for REST POST Functionality!
     public UserRole() {}
 
     // @author Tomislav Nikic
-    public UserRole(User user, String projectID, Role role) {
-        this.user = user;
-        this.projectID = projectID;
+    public UserRole(String uID, int pID, String role)
+    {
+        this.uID = uID;
+        this.pID = pID;
         this.role = role;
     }
 
     // Getter and setter for Project
     // @author Tomislav Nikic
-    public String getProject() {
-        return projectID;
+    public int getProject()
+    {
+        return pID;
     }
-    public void setProject(String projectID) {
-        this.projectID = projectID;
+
+    public void setProject(int pID)
+    {
+        this.pID = pID;
     }
 
     // Getter and setter for User
     // @author Tomislav Nikic
-    public User getUser() {
-        return user;
+    public String getUser()
+    {
+        return uID;
     }
-    public void setUser(User user) {
-        this.user = user;
+
+    public void setUser(String uID)
+    {
+        this.uID = uID;
     }
 
     // Getter and setter for Role
     // @author Tomislav Nikic
-    public Role getRole() {
+    public String getRole()
+    {
         return role;
     }
-    public void setRole(Role role) {
+
+    public void setRole(String role)
+    {
         this.role = role;
     }
 

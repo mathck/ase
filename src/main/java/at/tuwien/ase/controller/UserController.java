@@ -50,12 +50,12 @@ public class UserController
 		return us.getAllUsers();
 	}
 
-	//@RequestMapping(value = "/user", method = RequestMethod.PATCH, consumes = "application/json")
-	//@ResponseBody
-	//public void updateUser(@RequestParam("uID") String uID, @RequestBody User user) throws Exception
-	//{
-	//	us.updateUser(uID, ru.getEmail(), ru.getPassword(), ru.getFirstName(), ru.getLastName(), ru.getAvatar());
-	//}
+	@RequestMapping(value = "/user", method = RequestMethod.PATCH, consumes = "application/json")
+	@ResponseBody
+	public void updateUser(@RequestParam("uID") String uID, @RequestBody User user) throws Exception
+	{
+		us.updateUser(uID, user);
+	}
 
 	@RequestMapping(value = "user", method = RequestMethod.DELETE)
 	@ResponseBody

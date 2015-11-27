@@ -1,16 +1,17 @@
 package at.tuwien.ase.services.impl;
 
+import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.dao.task.IssueDAO;
-import at.tuwien.ase.dao.task.ProjectDAO;
+import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.task.TaskDAO;
 import at.tuwien.ase.model.project.Project;
-import at.tuwien.ase.model.project.Role;
+import at.tuwien.ase.model.project.UserRole;
 import at.tuwien.ase.model.task.Issue;
 import at.tuwien.ase.model.task.Task;
-import at.tuwien.ase.model.user.User;
 import at.tuwien.ase.services.ProjectService;
 
 import java.util.LinkedList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,57 +21,93 @@ import org.springframework.stereotype.Service;
  * Created by Tomislav Nikic on 16/11/2015.
  */
 @Service
-public class ProjectServiceImpl implements ProjectService {
+public class ProjectServiceImpl implements ProjectService
+{
 
-    @Autowired
-    private ProjectDAO projectDAO;
-    @Autowired
-    private IssueDAO issueDAO;
-    @Autowired
-    private TaskDAO taskDAO;
+	@Autowired
+	private ProjectDAO projectDAO;
+	@Autowired
+	private IssueDAO issueDAO;
+	@Autowired
+	private TaskDAO taskDAO;
+	@Autowired
+	private UserDAO userDAO;
 
-    private static final Logger logger = LogManager.getLogger(ProjectServiceImpl.class);
+	private static final Logger logger = LogManager.getLogger(ProjectServiceImpl.class);
 
-    public ProjectServiceImpl() {
+	public ProjectServiceImpl()
+	{
 
-    }
+	}
 
-    public ProjectServiceImpl(ProjectDAO projectDAO, IssueDAO issueDAO, TaskDAO taskDAO) {
-        this.projectDAO = projectDAO;
-        this.issueDAO = issueDAO;
-        this.taskDAO = taskDAO;
-    }
+	public ProjectServiceImpl(ProjectDAO projectDAO, IssueDAO issueDAO, TaskDAO taskDAO, UserDAO userDAO)
+	{
+		this.projectDAO = projectDAO;
+		this.issueDAO = issueDAO;
+		this.taskDAO = taskDAO;
+		this.userDAO = userDAO;
+	}
 
-    public Project writeProject(Project project) {
-        logger.debug("create project with id " + project.getId());
-        return projectDAO.insertProject(project);
-    }
+	public int writeProject(Project project)
+	{
+		logger.debug("Creating project with id " + project.getProjectID());
+		int id = projectDAO.insertProject(project);
+		if (project.getAllUser() != null && !project.getAllUser().isEmpty())
+		{
+			for (UserRole user : project.getAllUser())
+			{
+				projectDAO.addUserToProject(user.getUser(), user.getProject(), user.getRole());
+			}
+		}
+		return id;
+	}
 
-    public boolean deleteProject(String pID) {
-        Project project = projectDAO.findByID(pID);
-        for(Task task : project.getAllTasks())
-            taskDAO.removeTask(task.getId());
-        for(Issue issue : project.getAllIssues())
-            issueDAO.removeIssue(issue.getId());
-        return projectDAO.removeProject(pID);
-    }
+	public void deleteProject(int pID)
+	{
+		Project project = projectDAO.findByID(pID);
+		for (Task task : project.getAllTasks())
+		{
+			taskDAO.removeTask(task.getId());
+		}
+		for (Issue issue : project.getAllIssues())
+		{
+			issueDAO.removeIssue(issue.getId());
+		}
+		for (UserRole user : project.getAllUser())
+		{
+			projectDAO.removeUserFromProject(user.getUser(), project.getProjectID());
+		}
+		projectDAO.removeProject(pID);
+	}
 
-    public Project getByID(String pID) {
-        return projectDAO.findByID(pID);
-    }
+	public void updateProject(int pID, Project project)
+	{
+		projectDAO.updateProject(pID, project);
+	}
 
-    public LinkedList<Project> getAllProjects() {
-        return projectDAO.loadAll();
-    }
+	public Project getByID(int pID)
+	{
+		return projectDAO.findByID(pID);
+	}
 
-    public LinkedList<Project> getAllProjectsFromUser(String uID) {
-        return projectDAO.loadAllByUser(uID);
-    }
+	public LinkedList<Project> getAllProjects()
+	{
+		LinkedList<Project> list = projectDAO.loadAll();
+		for (Project iteration : list)
+		{
+			iteration.setAllUser(userDAO.loadAllByProject(iteration.getProjectID()));
+		}
+		return list;
+	}
 
-    public User addUser(String pID, User user, Role role) {
-        Project project = projectDAO.findByID(pID);
-        project.addUser(user, role);
-        return user;
-    }
+	public LinkedList<Project> getAllProjectsFromUser(String uID)
+	{
+		return projectDAO.loadAllByUser(uID);
+	}
+
+	public void addUser(int pID, String uID, String role)
+	{
+		projectDAO.addUserToProject(uID, pID, role);
+	}
 
 }

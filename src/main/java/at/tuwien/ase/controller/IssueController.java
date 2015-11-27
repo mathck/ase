@@ -35,21 +35,24 @@ public class IssueController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/issues", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public int createIssue(@RequestBody Issue issue, @PathVariable("pID") String pID) throws Exception {
+    public int createIssue(@RequestBody Issue issue, @PathVariable("pID") int pID) throws Exception
+    {
         return is.writeIssue(pID, issue);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/issues/{iID}", method = RequestMethod.PATCH)
     @ResponseBody
-    public int updateIssueToTask(@PathVariable("pID") String pID, @PathVariable("iID") int iID, @RequestParam("userId") String uID) throws Exception {
+    public int updateIssueToTask(@PathVariable("pID") int pID, @PathVariable("iID") int iID, @RequestParam("userId") String uID) throws Exception
+    {
         return is.updateIssueToTask(pID, iID, uID);
     }
 
     // @author Tomislav Nikic
     @RequestMapping(value = "workspace/projects/{pID}/issues", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Issue> getAllIssuesFromProject(@PathVariable("pID") String pID) {
+    public LinkedList<Issue> getAllIssuesFromProject(@PathVariable("pID") int pID)
+    {
         return is.getAllIssuesFromProject(pID);
     }
 

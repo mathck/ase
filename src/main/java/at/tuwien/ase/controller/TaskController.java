@@ -37,7 +37,8 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public int createTask(@RequestBody Task task, @PathVariable("pID") String pID) throws Exception {
+    public int createTask(@RequestBody Task task, @PathVariable("pID") int pID) throws Exception
+    {
         return ts.writeTask(pID, task);
     }
 
@@ -51,7 +52,8 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Task> getAllTasksFromProject(@PathVariable("pID") String pID) {
+    public LinkedList<Task> getAllTasksFromProject(@PathVariable("pID") int pID)
+    {
         return ts.getAllTasksFromProject(pID);
     }
 

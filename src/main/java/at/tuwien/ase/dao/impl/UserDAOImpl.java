@@ -1,6 +1,8 @@
 package at.tuwien.ase.dao.impl;
 
 import at.tuwien.ase.dao.UserDAO;
+import at.tuwien.ase.model.project.Role;
+import at.tuwien.ase.model.project.UserRole;
 import at.tuwien.ase.model.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -104,7 +106,6 @@ public class UserDAOImpl implements UserDAO
 						user.setFirstName(resultSet.getString("firstname"));
 						user.setLastName(resultSet.getString("lastname"));
 						user.setAvatar(resultSet.getString("avatar_url"));
-						user.setProjectList(null);
 						logger.debug("Found " + user.getFirstName() + " " + user.getLastName() + "in DB");
 						return user;
 					}
@@ -159,29 +160,28 @@ public class UserDAOImpl implements UserDAO
 		return new LinkedList<User>(list);
 	}
 
-	public LinkedList<User> loadAllByProject(String pID)
+	public LinkedList<UserRole> loadAllByProject(int pID)
 	{
 		logger.debug("Loading all users of project <" + pID + "> from DB");
-		String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
-				"FROM taskit_user JOIN rel_user_project ON taskit_user.mail = rel_user_project.user_mail " +
+		String sqlQuery = "SELECT user_mail, project_id, role " +
+				"FROM rel_user_project " +
 				"WHERE project_id = ?";
-		List<User> list = this.jdbcTemplate.query(
+		List<UserRole> list = this.jdbcTemplate.query(
 				sqlQuery,
 				new Object[]{pID},
-				new RowMapper<User>()
+				new RowMapper<UserRole>()
 				{
-					public User mapRow(ResultSet resultSet, int i) throws SQLException
+					public UserRole mapRow(ResultSet resultSet, int i) throws SQLException
 					{
-						User user = new User();
-						user.setUserID(resultSet.getString("mail"));
-						user.setFirstName(resultSet.getString("firstname"));
-						user.setLastName(resultSet.getString("lastname"));
-						user.setAvatar(resultSet.getString("avatar_url"));
+						UserRole user = new UserRole();
+						user.setUser(resultSet.getString("user_mail"));
+						user.setProject(resultSet.getInt("project_id"));
+						user.setRole(resultSet.getString("role"));
 						return user;
 					}
 				}
 		);
-		return new LinkedList<User>(list);
+		return new LinkedList<UserRole>(list);
 	}
 
 }

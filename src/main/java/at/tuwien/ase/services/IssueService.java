@@ -12,16 +12,17 @@ import java.util.LinkedList;
  */
 public interface IssueService {
 
-    int writeIssue(String pID, Issue issue);
+    int writeIssue(int pID, Issue issue);
 
-    boolean deleteIssue(String pID, int iID);
+    boolean deleteIssue(int pID, int iID);
 
     Issue getByID(int iID);
     LinkedList<Issue> getAllIssues();
     LinkedList<Issue> getAllIssuesFromUser(String uID);
-    LinkedList<Issue> getAllIssuesFromProject(String pID);
 
-    int updateIssueToTask(String pID, int iID, String uID);
+    LinkedList<Issue> getAllIssuesFromProject(int pID);
+
+    int updateIssueToTask(int pID, int iID, String uID);
 
     int getNewID();
 

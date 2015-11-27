@@ -84,7 +84,8 @@ public class IssueDAOImpl implements IssueDAO {
         return null;
     }
 
-    public LinkedList<Issue> loadAllByProject(String pID) {
+    public LinkedList<Issue> loadAllByProject(int pID)
+    {
         return null;
     }
 

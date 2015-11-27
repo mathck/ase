@@ -11,14 +11,15 @@ import java.util.LinkedList;
  */
 public interface TaskService {
 
-    int writeTask(String pID, Task task);
+    int writeTask(int pID, Task task);
 
-    boolean deleteTask(String pID, int tID);
+    boolean deleteTask(int pID, int tID);
 
     Task getByID(int tID);
     LinkedList<Task> getAllTasks();
     LinkedList<Task> getAllTasksFromUser(String uID);
-    LinkedList<Task> getAllTasksFromProject(String pID);
+
+    LinkedList<Task> getAllTasksFromProject(int pID);
 
     int getNewID();
 

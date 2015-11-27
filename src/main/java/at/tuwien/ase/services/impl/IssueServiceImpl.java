@@ -1,8 +1,7 @@
 package at.tuwien.ase.services.impl;
 
-import at.tuwien.ase.controller.TaskController;
 import at.tuwien.ase.dao.task.IssueDAO;
-import at.tuwien.ase.dao.task.ProjectDAO;
+import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.task.TaskDAO;
 import at.tuwien.ase.model.project.Project;
 import at.tuwien.ase.model.task.Issue;
@@ -37,7 +36,8 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public int updateIssueToTask(String pID, int iID, String uID) {
+    public int updateIssueToTask(int pID, int iID, String uID)
+    {
         logger.debug("update issue with id="+iID+" to task");
 
         //update issue to task
@@ -66,7 +66,8 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.getNewID();
     }
 
-    public int writeIssue(String pID, Issue issue) {
+    public int writeIssue(int pID, Issue issue)
+    {
         int id;
 
         logger.debug("post new issue");
@@ -86,7 +87,8 @@ public class IssueServiceImpl implements IssueService {
         return id;
     }
 
-    public boolean deleteIssue(String pID, int iID) {
+    public boolean deleteIssue(int pID, int iID)
+    {
         logger.debug("delete issue with id="+iID);
         Project project = projectDAO.findByID(pID);
         project.deleteIssue(iID);
@@ -106,7 +108,8 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Issue> getAllIssuesFromProject(String pID) {
+    public LinkedList<Issue> getAllIssuesFromProject(int pID)
+    {
         logger.debug("get all issues from project " + pID);
         return issueDAO.loadAllByProject(pID);
     }

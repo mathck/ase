@@ -116,7 +116,8 @@ public class TaskDAOImpl implements TaskDAO {
         return tasks;
     }
 
-    public LinkedList<Task> loadAllByProject(String pID) {
+    public LinkedList<Task> loadAllByProject(int pID)
+    {
         String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
                 "FROM TASK " +
                 "WHERE TASK_TYPE = ? AND PROJECT_ID = ?";
