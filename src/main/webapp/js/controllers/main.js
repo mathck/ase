@@ -362,6 +362,53 @@ materialAdmin
     })
 
     //=================================================
+    // TASK CREATION
+    //=================================================
+
+    .controller('createTaskCtrl', function ( $scope, IssuesFactory, $location, $window) {
+
+          var counter = 0;
+          $scope.data = {
+            fields: []
+          }
+
+          $scope.days = ['Day', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+          $scope.addField = function() {
+            $scope.data.fields.push({
+              name: "test " + counter++
+            });
+          };
+        });
+
+        materialAdmin.directive('demoDisplay', function($compile) {
+          return {
+            scope: {
+              demoDisplay: "=", //import referenced model to our directives scope
+              demoDays: "="
+            },
+            templateUrl: '//template/stateSelect.html',
+            link: function(scope, elem, attr, ctrl) {
+              /*
+              scope.$watch('demoDisplay', function() { // watch for when model changes
+
+                elem.html("") //remove all elements
+
+                angular.forEach(scope.demoDisplay, function(d) { //iterate list
+                  var s = scope.$new(); //create a new scope
+                  angular.extend(s, d); //copy data onto it
+                  console.log(scope.demoDays);
+
+                  var template = '';
+                  elem.append($compile(template)(s)); // compile template & append
+                });
+              }, true) //look deep into object
+              */
+            }
+          }
+    })
+
+    //=================================================
     // CALENDAR
     //=================================================
     

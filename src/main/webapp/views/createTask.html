@@ -33,6 +33,67 @@
                                         <input type="text" class="form-control input-lg" placeholder="Title" data-ng-model="task.title">
                                 </div>
                             </div>
+                            <form id='example' name='example'>
+                                <button ng-click="addField()">Add Field</button>
+                                <div ng-repeat="field in data.fields">
+                                    <div demo-display="field" demo-days="days"></div>
+                                </div>
+                                <tt>{{data.fields}}</tt>
+                            </form>
+                        </div>
+
+                        <div class="col-sm-8 right">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-md" placeholder="Search Persons" data-ng-model="">
+                            </div>
+                            <div tabindex="9" style="overflow: hidden;" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>E-Mail</th>
+                                        <th>Project Level</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>AVATAR IMG</td>
+                                        <td>Alexandra</td>
+                                        <td>Christopher</td>
+                                        <td>@makinton</td>
+                                        <td>1</td>
+                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>AVATAR IMG</td>
+                                        <td>Madeleine</td>
+                                        <td>Hollaway</td>
+                                        <td>@hollway</td>
+                                        <td>5</td>
+                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>AVATAR IMG</td>
+                                        <td>Sebastian</td>
+                                        <td>Johnston</td>
+                                        <td>@sebastian</td>
+                                        <td>4</td>
+                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>AVATAR IMG</td>
+                                        <td>Mitchell</td>
+                                        <td>Christin</td>
+                                        <td>@mitchell4u</td>
+                                        <td>2</td>
+                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -48,65 +109,12 @@
                     </div>
                 </div>
             </div>
-<!--
-            <div class="card">
-                <div class="card-header">
-                    <h2>Add User/s <small>Add users in the role as contributor or manager...</small></h2>
-                </div>
-                <div class="card-body card-padding">
-                    <div class="row">
-                        <div class="col-sm-8 m-b-15">
-                            <p class="f-500 c-black m-b-15">Contributor/s</p>
-                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerContributor">
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4 m-b-15">
-                            <p class="f-500 c-black m-b-15">Manager/s</p>
-                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerManager">
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2>Add Reward/s <small>Add rewards to increase the performance of your contributor/s...</small></h2>
-                </div>
-                <div class="card-body card-padding">
-                    <div class="row">
-                        <div class="col-sm-9 m-b-15">
-                            <select  chosen multiple data-placeholder="Select a Reward..." class="w-100" data-ng-model="rewardPicker">
-                                <option value="Reward 1">Reward1 | Level 2</option>
-                                <option value="Reward 2">Reward1 | Level 4</option>
-                                <option value="Reward 3">Reward1 | Level 2</option>
-                                <option value="Reward 4">Reward1 | Level 1</option>
-                                <option value="Reward 5">Reward1 | Level 5</option>
-                                <option value="Reward 6">Reward1 | Level 6</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            -->
 
             <div class="block-header">
                 <ul class="actions">
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project" data-ng-click="createTask()"><i class="zmdi zmdi-check"></i>Create Task</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Task" data-ng-click="createTask()"><i class="zmdi zmdi-check"></i>Create Task</button>
                         </div>
                     </li>
                 </ul>

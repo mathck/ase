@@ -122,6 +122,9 @@ textarea {
 .description {
     height: 8em !important;
 }
+.right {
+    float:right !important;
+}
 button {
   overflow: visible;
 }
@@ -10617,7 +10620,8 @@ a.lv-footer:hover {
   border: 0 !important;
 }
 .table-hover > tbody > tr:hover {
-  background-color: #ECF9FF !important;
+  background-color: B3E5FC !important;
+  color: black; !important;
 }
 .table-bordered {
   border-bottom: 0;
