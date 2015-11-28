@@ -9075,7 +9075,7 @@ a.lv-footer:hover {
 .progress {
   box-shadow: none;
   border-radius: 0;
-  height: 5px;
+  height: 15px;
   margin-bottom: 0;
 }
 .progress .progress-bar {
