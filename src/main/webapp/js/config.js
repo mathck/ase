@@ -45,6 +45,11 @@ materialAdmin
                 templateUrl: 'views/createIssue.html',
             })
 
+            .state ('createTemplate', {
+                url: '/createTemplate',
+                templateUrl: 'views/createTemplate.html',
+            })
+
             //------------------------------
             // CREATE PROJECT
             //------------------------------
@@ -377,7 +382,11 @@ materialAdmin
                     }
                 }
             })
-        
+
+            .state ('templates', {
+                url: '/templates',
+                templateUrl: 'views/templates.html'
+            })
         
             //------------------------------
             // CALENDAR
