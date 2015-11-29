@@ -33,80 +33,106 @@
                                         <input type="text" class="form-control input-lg" placeholder="Title" data-ng-model="task.title">
                                 </div>
                             </div>
-                            <form id='example' name='example'>
-                                <button ng-click="addField()">Add Field</button>
-                                <div ng-repeat="field in data.fields">
-                                    <div demo-display="field" demo-days="days"></div>
-                                </div>
-                                <tt>{{data.fields}}</tt>
-                            </form>
-                        </div>
-
-                        <div class="col-sm-8 right">
-                            <div class="fg-line">
-                                <input type="text" class="form-control input-md" placeholder="Search Persons" data-ng-model="">
-                            </div>
-                            <div tabindex="9" style="overflow: hidden;" class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>E-Mail</th>
-                                        <th>Project Level</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Alexandra</td>
-                                        <td>Christopher</td>
-                                        <td>@makinton</td>
-                                        <td>1</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Madeleine</td>
-                                        <td>Hollaway</td>
-                                        <td>@hollway</td>
-                                        <td>5</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Sebastian</td>
-                                        <td>Johnston</td>
-                                        <td>@sebastian</td>
-                                        <td>4</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Mitchell</td>
-                                        <td>Christin</td>
-                                        <td>@mitchell4u</td>
-                                        <td>2</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
 
-                    <br/><br/>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="c-black f-500 m-b-20 m-t-20">Select States</p>
+                            <div class="form-group">
+                                <div class="fg-line">
+                                    <div class="select">
+                                        <select class="form-control">
+                                            <option value="New">New</option>
+                                            <option value="Open" selected="selected">Open</option>
+                                            <option value="Closed">Closed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="fg-line">
+                                    <div class="select">
+                                        <select class="form-control">
+                                            <option value="New">New</option>
+                                            <option value="Open">Open</option>
+                                            <option value="Closed" selected="selected">Closed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <form>
+                                <div data-ng-repeat="stateField in data.stateFields">
+                                    <div data-display-states="stateField" data-states="states"></div>
+                                </div>
+                                <button data-ng-click="addState()" class="btn bgm-teal waves-effect"><i class="zmdi zmdi-plus"></i></button>
+                                <button data-ng-click="removeState()" class="btn btn-danger waves-effect"><i class="zmdi zmdi-minus"></i></button>
+                                <!--<tt>{{data.fields}}</tt>-->
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="c-black f-500 m-b-20 m-t-20">Select Template</p>
+                            <div class="form-group">
+                                <div class="fg-line">
+                                    <div class="select">
+                                        <select class="form-control">
+                                            <option value="Template 1" selected="selected">Template 1</option>
+                                            <option value="Template 2">Template 2</option>
+                                            <option value="Template 3">Template 3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <form>
+                                <div data-ng-repeat="templateField in data.templateFields">
+                                    <div data-display-templates="templateField" data-templates="templates"></div>
+                                </div>
+                                <button data-ng-click="addTemplate()" class="btn bgm-teal waves-effect"><i class="zmdi zmdi-plus"></i></button>
+                                <button data-ng-click="removeTemplate()" class="btn btn-danger waves-effect"><i class="zmdi zmdi-minus"></i></button>
+                                <!--<tt>{{data.fields}}</tt>-->
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <p class="c-black f-500 m-b-20">Description</p>
+                            <p class="c-black f-500 m-b-20 m-t-20">Description</p>
                             <div class="fg-line">
                                 <textarea class="form-control input-md description" placeholder="Write your description here..." data-ng-model="task.description"></textarea>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                     <h2>Add User/s <small>Add users in the role as contributor or manager...</small></h2>
+                </div>
+                <div class="card-body card-padding">
+                     <div class="row">
+                         <div class="col-sm-8 m-b-15">
+                             <p class="f-500 c-black m-b-15">Contributor/s</p>
+                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerContributor">
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                             </select>
+                         </div>
+                         <div class="col-sm-4 m-b-15">
+                             <p class="f-500 c-black m-b-15">Manager/s</p>
+                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerManager">
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
+                             </select>
+                         </div>
+                     </div>
                 </div>
             </div>
 
