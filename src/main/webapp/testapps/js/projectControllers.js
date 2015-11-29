@@ -49,18 +49,18 @@ projectController.controller('restProjectCreateCtrl', ['$scope', 'UserFactory', 
 
         // callback for ng-click 'saveProject':
         $scope.createProject = function () {
-            var loggedUser=UserFactory.show("test");
+            //var loggedUser=UserFactory.show("test");
             var newProject = {
-                id: $scope.project.id,
+                //id: $scope.project.id,
                 title: $scope.project.title,
-                description: $scope.project.description
-                //userList: [],
-                //taskList: [],
-                //issueList: [],
+                description: $scope.project.description,
+                userList: [],
+                taskList: [],
+                issueList: [],
             };
             //newProject.userList.push(loggedUser);
 
-            console.log(loggedUser);
+            //console.log(loggedUser);
             console.log(newProject);
             console.log("still here");
             ProjectsFactory.create(newProject);
