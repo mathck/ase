@@ -1,8 +1,8 @@
 package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.UserDAO;
-import at.tuwien.ase.model.project.UserRole;
-import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.model.UserRole;
+import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

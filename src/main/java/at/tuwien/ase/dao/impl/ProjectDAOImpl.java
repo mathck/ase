@@ -1,7 +1,7 @@
 package at.tuwien.ase.dao.impl;
 
 import at.tuwien.ase.dao.ProjectDAO;
-import at.tuwien.ase.model.project.Project;
+import at.tuwien.ase.model.Project;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

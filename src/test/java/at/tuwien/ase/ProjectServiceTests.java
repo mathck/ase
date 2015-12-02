@@ -4,13 +4,13 @@ package at.tuwien.ase;
  * Created by mathc_000 on 22-Nov-15.
  */
 /*
-import at.tuwien.ase.dao.task.IssueDAO;
+import at.tuwien.ase.dao.IssueDAO;
 import at.tuwien.ase.dao.task.ProjectDAO;
-import at.tuwien.ase.dao.task.TaskDAO;
+import at.tuwien.ase.dao.TaskDAO;
 import at.tuwien.ase.junit.AppConfig;
-import at.tuwien.ase.model.project.Project;
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.Issue;
+import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.ProjectService;
 import at.tuwien.ase.services.impl.ProjectServiceImpl;
 import org.junit.Test;

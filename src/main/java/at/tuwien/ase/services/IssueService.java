@@ -1,8 +1,6 @@
 package at.tuwien.ase.services;
 
-import at.tuwien.ase.controller.TaskController;
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.model.Issue;
 
 import java.util.LinkedList;
 

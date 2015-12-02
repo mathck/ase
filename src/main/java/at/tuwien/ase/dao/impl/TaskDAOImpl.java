@@ -1,19 +1,16 @@
-package at.tuwien.ase.dao.task.impl;
+package at.tuwien.ase.dao.impl;
 
-import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.model.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;

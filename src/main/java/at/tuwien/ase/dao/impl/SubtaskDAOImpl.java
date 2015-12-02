@@ -1,8 +1,7 @@
-package at.tuwien.ase.dao.task.impl;
+package at.tuwien.ase.dao.impl;
 
-import at.tuwien.ase.dao.task.SubtaskDAO;
-import at.tuwien.ase.model.miscellaneous.Reward;
-import at.tuwien.ase.model.task.Subtask;
+import at.tuwien.ase.dao.SubtaskDAO;
+import at.tuwien.ase.model.Subtask;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,8 +1,8 @@
-package at.tuwien.ase.dao.task.impl;
+package at.tuwien.ase.dao.impl;
 
-import at.tuwien.ase.dao.task.IssueDAO;
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.dao.IssueDAO;
+import at.tuwien.ase.model.Issue;
+import at.tuwien.ase.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

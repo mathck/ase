@@ -1,4 +1,4 @@
-package at.tuwien.ase.model.project;
+package at.tuwien.ase.model;
 
 /**
  * Created by Tomislav Nikic on 16/11/2015.

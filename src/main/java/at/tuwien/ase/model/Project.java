@@ -1,7 +1,4 @@
-package at.tuwien.ase.model.project;
-
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
+package at.tuwien.ase.model;
 
 import java.sql.Timestamp;
 import java.util.Date;

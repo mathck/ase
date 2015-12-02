@@ -1,4 +1,4 @@
-package at.tuwien.ase.model.user;
+package at.tuwien.ase.model;
 
 /**
  * Created by Andreas on 13.11.2015.

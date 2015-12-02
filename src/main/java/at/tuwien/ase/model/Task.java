@@ -1,13 +1,11 @@
-package at.tuwien.ase.model.task;
-
-import at.tuwien.ase.model.user.User;
+package at.tuwien.ase.model;
 
 import java.util.Date;
 
 /**
- * Created by DanielHofer on 14.11.2015.
+ * Created by Daniel Hofer on 04.11.2015.
  */
-public class Issue {
+public class Task {
 
     private Integer id;
     private String title;
@@ -15,27 +13,30 @@ public class Issue {
     private String taskType;
     private Date creationDate;
     private Date updateDate;
+    private Integer dslTemplateId;
     private Integer projectId;
-    private String userId;
-    private User user; //creator of issue
+    private String userMail;
+    private String status;
 
     // Must have no-argument constructor
-    public Issue() {
+    public Task() {
 
     }
 
-    public Issue(String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userId) {
+    public Task(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer dslTemplateId, Integer projectId, String userMail) {
+        this.status = status;
         this.title = title;
         this.description = description;
         this.taskType = taskType;
         this.creationDate = creationDate;
         this.updateDate = updateDate;
+        this.dslTemplateId = dslTemplateId;
         this.projectId = projectId;
-        this.userId = userId;
+        this.userMail = userMail;
     }
 
-    public Issue(String title, String description) {
-        this(title, description, null, null, null, null, null);
+    public Task(String title, String description) {
+        this(null, title, description, null, null, null, null, null, null);
     }
 
     public Integer getId() {
@@ -86,6 +87,14 @@ public class Issue {
         this.updateDate = updateDate;
     }
 
+    public Integer getDslTemplateId() {
+        return dslTemplateId;
+    }
+
+    public void setDslTemplateId(Integer dslTemplateId) {
+        this.dslTemplateId = dslTemplateId;
+    }
+
     public Integer getProjectId() {
         return projectId;
     }
@@ -94,34 +103,35 @@ public class Issue {
         this.projectId = projectId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserMail() {
+        return userMail;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
     }
 
-    public User getUser() {
-        return user;
+    public String getStatus() {
+        return status;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "Issue{" +
+        return "Task{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", taskType='" + taskType + '\'' +
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +
+                ", dslTemplateId=" + dslTemplateId +
                 ", projectId=" + projectId +
-                ", userId='" + userId + '\'' +
-                ", user=" + user +
+                ", userMail='" + userMail + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

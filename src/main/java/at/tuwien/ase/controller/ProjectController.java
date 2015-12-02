@@ -1,8 +1,8 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
-import at.tuwien.ase.model.project.Project;
-import at.tuwien.ase.model.project.UserRole;
+import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.UserRole;
 import at.tuwien.ase.services.ProjectService;
 import at.tuwien.ase.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

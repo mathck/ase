@@ -1,4 +1,4 @@
-package at.tuwien.ase.model.user;
+package at.tuwien.ase.model;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

@@ -1,9 +1,8 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
-import at.tuwien.ase.dao.task.TaskDAO;
 
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,8 +1,8 @@
 package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.ProjectDAO;
-import at.tuwien.ase.dao.task.SubtaskDAO;
-import at.tuwien.ase.model.task.Subtask;
+import at.tuwien.ase.dao.SubtaskDAO;
+import at.tuwien.ase.model.Subtask;
 import at.tuwien.ase.services.SubtaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

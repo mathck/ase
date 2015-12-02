@@ -1,7 +1,7 @@
 package at.tuwien.ase;
 
-import at.tuwien.ase.model.task.Task;
-import at.tuwien.ase.dao.task.TaskDAO;
+import at.tuwien.ase.model.Task;
+import at.tuwien.ase.dao.TaskDAO;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

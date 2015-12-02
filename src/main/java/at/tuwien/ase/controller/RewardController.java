@@ -2,7 +2,7 @@ package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 
-import at.tuwien.ase.model.miscellaneous.Reward;
+import at.tuwien.ase.model.Reward;
 import at.tuwien.ase.services.RewardService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

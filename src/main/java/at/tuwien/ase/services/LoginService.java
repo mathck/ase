@@ -1,7 +1,7 @@
 package at.tuwien.ase.services;
 
-import at.tuwien.ase.model.user.LoginUnit;
-import at.tuwien.ase.model.user.Login;
+import at.tuwien.ase.model.LoginUnit;
+import at.tuwien.ase.model.Login;
 
 /**
  * Created by DanielHofer on 16.16.11.2015.

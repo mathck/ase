@@ -1,7 +1,7 @@
 package at.tuwien.ase.dao;
 
-import at.tuwien.ase.model.project.UserRole;
-import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.model.UserRole;
+import at.tuwien.ase.model.User;
 
 import java.util.LinkedList;
 

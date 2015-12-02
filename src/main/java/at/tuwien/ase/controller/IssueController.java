@@ -1,7 +1,7 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
-import at.tuwien.ase.model.task.Issue;
+import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.services.IssueService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

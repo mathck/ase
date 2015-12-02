@@ -1,4 +1,4 @@
-package at.tuwien.ase.model.user;
+package at.tuwien.ase.model;
 
 import at.tuwien.ase.controller.PasswordEncryption;
 import com.fasterxml.jackson.annotation.JsonIgnore;

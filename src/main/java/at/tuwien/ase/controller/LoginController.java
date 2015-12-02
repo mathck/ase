@@ -1,10 +1,8 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
-import at.tuwien.ase.model.user.Login;
-import at.tuwien.ase.model.user.LoginUnit;
-import at.tuwien.ase.model.user.RegistrationUnit;
-import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.model.Login;
+import at.tuwien.ase.model.LoginUnit;
 import at.tuwien.ase.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

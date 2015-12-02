@@ -1,8 +1,6 @@
 package at.tuwien.ase.services;
 
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
-import sun.awt.image.ImageWatched;
+import at.tuwien.ase.model.Task;
 
 import java.util.LinkedList;
 

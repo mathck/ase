@@ -1,6 +1,6 @@
 package at.tuwien.ase.services;
 
-import at.tuwien.ase.model.project.Project;
+import at.tuwien.ase.model.Project;
 
 import java.util.LinkedList;
 

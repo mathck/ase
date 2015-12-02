@@ -1,6 +1,6 @@
-package at.tuwien.ase.dao.task;
+package at.tuwien.ase.dao;
 
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.model.Task;
 
 import java.util.LinkedList;
 

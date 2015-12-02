@@ -1,13 +1,13 @@
 package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.UserDAO;
-import at.tuwien.ase.dao.task.IssueDAO;
+import at.tuwien.ase.dao.IssueDAO;
 import at.tuwien.ase.dao.ProjectDAO;
-import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.model.project.Project;
-import at.tuwien.ase.model.project.UserRole;
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.UserRole;
+import at.tuwien.ase.model.Issue;
+import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.ProjectService;
 
 import java.util.LinkedList;
