@@ -1,6 +1,7 @@
 package at.tuwien.ase.model.user;
 
 import at.tuwien.ase.controller.PasswordEncryption;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -92,6 +93,7 @@ public class User
 		return password;
 	}
 
+	@JsonIgnore
 	public void setPassword(String password)
 	{
 		if (salt == null)

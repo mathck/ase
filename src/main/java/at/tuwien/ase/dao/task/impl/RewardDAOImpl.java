@@ -38,7 +38,8 @@ public class RewardDAOImpl implements RewardDAO{
         logger.debug("insert into db: reward with id=" + reward.getId());
 
         this.jdbcTemplate.update(
-                "INSERT INTO REWARD (ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE) VALUES (?, ?, ?, ?, ?, ?, ? )",
+                "INSERT INTO REWARD (ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ? )",
                 reward.getId(), reward.getUserMail() ,reward.getName(), reward.getDescription(), reward.getXpbase(), reward.getImageLink(), reward.getCreationDate());
 
         return null;

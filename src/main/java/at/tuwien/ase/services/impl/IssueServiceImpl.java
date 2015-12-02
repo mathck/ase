@@ -36,19 +36,20 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public int updateIssueToTask(int pID, int iID, String uID)
+    public int updateIssueToTask(int iID)
     {
         logger.debug("update issue with id="+iID+" to task");
 
         //update issue to task
-        taskDAO.updateIssueToTask(iID, uID);
+        taskDAO.updateIssueToTask(iID);
 
-        //get project and delete issue
+       /* //get project and delete issue
         Project project = projectDAO.findByID(pID);
         project.deleteIssue(iID);
 
         //get updated task and add it to project
-        Task t = taskDAO.findByID(iID);
+ /      Task t = taskDAO.findByID(iID);
+
         project.addTask(t);
 
         //delete old project
@@ -56,6 +57,7 @@ public class IssueServiceImpl implements IssueService {
 
         //insert new project
         projectDAO.insertProject(project);
+*/
 
         return iID;
 
@@ -66,7 +68,7 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.getNewID();
     }
 
-    public int writeIssue(int pID, Issue issue)
+    public int writeIssue(Issue issue, int pID, String uID)
     {
         int id;
 
@@ -76,11 +78,13 @@ public class IssueServiceImpl implements IssueService {
         issue.setId(id);
         issue.setCreationDate(new Date());
         issue.setUpdateDate(new Date());
-
+        issue.setProjectId(pID);
+        issue.setUserId(uID);
+/*
         Project project = projectDAO.findByID(pID);
         project.addIssue(issue);
         projectDAO.removeProject(pID);
-        projectDAO.insertProject(project);
+        projectDAO.insertProject(project);*/
 
         issueDAO.insertIssue(issue);
 
