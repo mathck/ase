@@ -11,8 +11,10 @@ public interface LoginService {
      * @param email, password
      * @return created Login
      */
-    public String login(String email, String password) throws  Exception;
+    String login(String email, String password) throws  Exception;
 
-    public boolean checkLogin(String token) ;
+    void logout(String email) throws  Exception;
+
+    boolean checkLogin(String token) throws Exception;
 
 }

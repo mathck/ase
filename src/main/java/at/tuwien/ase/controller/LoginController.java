@@ -25,4 +25,11 @@ public class LoginController {
         return loginService.login(email, password);
     }
 
+    // @author Daniel Hofer
+    @RequestMapping(value = "/user/logout", method = RequestMethod.PATCH)
+    @ResponseBody
+    public void logout(@RequestParam String email) throws Exception {
+        loginService.logout(email);
+    }
+
 }

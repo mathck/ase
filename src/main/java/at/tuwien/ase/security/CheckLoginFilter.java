@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import at.tuwien.ase.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,19 +27,21 @@ public class CheckLoginFilter extends GenericFilterBean {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String userToken;
 
-        String uri = ((HttpServletRequest)request).getRequestURI().toString();
+        String uri = ((HttpServletRequest) request).getRequestURI().toString();
 
 
         //for register and for login the token validation is not necessary
-        if (!uri.equalsIgnoreCase("/taskit/api/user/login") && !uri.equalsIgnoreCase("/taskit/api/user/register")){
+        if (!uri.equalsIgnoreCase("/taskit/api/user/login")
+                && !uri.equalsIgnoreCase("/taskit/api/user/register")
+                && !uri.equalsIgnoreCase("/taskit/api/user/logout")) {
 
             //get user-token from request header
             userToken = httpRequest.getHeader("user-token");
 
-            if ((userToken == null) || (userToken.equals(""))){
+            if ((userToken == null) || (userToken.equals(""))) {
                 //auth token not found in http header
-                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,   "Unauthorized: Authentication token missing." );
-            }else {
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token missing.");
+            } else {
 
                 try {
                     //check validity of token in request header
@@ -56,7 +59,7 @@ public class CheckLoginFilter extends GenericFilterBean {
 
             }
 
-        }else{
+        } else {
             //no token validation necessary
             chain.doFilter(request, response);
         }

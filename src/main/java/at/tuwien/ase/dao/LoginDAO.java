@@ -7,10 +7,12 @@ import java.util.Date;
  */
 public interface LoginDAO {
 
-    boolean checkCredentials(String email, String password);
+    boolean checkCredentials(String email, String password) throws Exception;
 
-    void addUserToken(String email, String token, Date creationDate);
+    void addUserToken(String email, String token, Date creationDate) throws Exception;
 
-    boolean checkLoginValidity(String token);
+    void deleteUserToken(String email) throws Exception;
+
+    boolean checkLoginValidity(String token) throws Exception;
 
 }

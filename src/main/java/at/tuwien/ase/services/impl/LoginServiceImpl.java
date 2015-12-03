@@ -34,6 +34,7 @@ public class LoginServiceImpl implements LoginService {
         String token = "";
 
         user = userDAO.authUser(email);
+        System.out.println("!!!"+user.toString());
 
         if (PasswordEncryption.authenticate(password, user.getPassword(), user.getSalt())){
 
@@ -50,7 +51,11 @@ public class LoginServiceImpl implements LoginService {
 
     }
 
-    public boolean checkLogin(String token){
+    public void logout(String email) throws Exception {
+        loginDAO.deleteUserToken(email);
+    }
+
+    public boolean checkLogin(String token) throws Exception {
 
         return loginDAO.checkLoginValidity(token);
 

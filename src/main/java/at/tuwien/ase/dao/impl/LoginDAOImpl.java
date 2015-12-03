@@ -27,13 +27,13 @@ public class LoginDAOImpl implements LoginDAO{
     final int tokenValidityInMins = 10;
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
+    public void setDataSource(DataSource dataSource)  throws Exception {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.keyHolder = new GeneratedKeyHolder();
     }
 
 
-    public boolean checkCredentials(String email, String password) {
+    public boolean checkCredentials(String email, String password)  throws Exception {
 
         logger.debug("select from db: check login credentials for user mail="+email);
 
@@ -48,18 +48,28 @@ public class LoginDAOImpl implements LoginDAO{
 
     }
 
-    public void addUserToken(String email, String token, Date creationDate) {
+    public void addUserToken(String email, String token, Date creationDate)  throws Exception {
 
         logger.debug("insert into db: user token for user mail="+email);
 
         this.jdbcTemplate.update(
                 "UPDATE TASKIT_USER SET AUTH_TOKEN = ?, AUTH_TOKEN_CREATION_DATE = ? WHERE MAIL = ?",
                 token, creationDate, email);
+    }
 
+    public void deleteUserToken(String email) throws Exception {
+
+        logger.debug("update db: remove user token for user mail="+email);
+
+        String sqlQuery  = "UPDATE TASKIT_USER SET AUTH_TOKEN = ?, AUTH_TOKEN_CREATION_DATE = ? WHERE MAIL = ?";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                null, null, email);
 
     }
 
-    public boolean checkLoginValidity(String token) {
+    public boolean checkLoginValidity(String token)  throws Exception {
 
         logger.debug("select from db: check login validity");
 
