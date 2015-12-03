@@ -2,15 +2,33 @@ var projectServices = angular.module('taskit.projectServices', ['ngResource']);
 
 projectServices.factory('ProjectsFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects/', {}, {
-        query: { method: 'GET', isArray: true },
-        create: { method: 'POST'}
+        query: {
+            method: 'GET',
+            isArray: true,
+            headers: { 'auth-token': '@token' }
+        },
+        create: {
+            method: 'POST',
+            headers: { 'auth-token': '@token' }
+        }
     })
 });
 
 projectServices.factory('ProjectFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects/:pid/', {}, {
-        show: { method: 'GET' },
-        update: { method: 'PUT', params: {pid: '@pid'} },
-        delete: { method: 'DELETE', params: {pid: '@pid'} }
+        show: {
+            method: 'GET',
+            headers: { 'auth-token': '@token' }
+        },
+        update: {
+            method: 'PUT',
+            params: {pid: '@pid'},
+            headers: { 'auth-token': '@token' }
+        },
+        delete: {
+            method: 'DELETE',
+            params: {pid: '@pid'},
+            headers: { 'auth-token': '@token' }
+        }
     })
 });

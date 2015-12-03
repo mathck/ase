@@ -2,21 +2,49 @@ var userServices = angular.module('taskit.userServices', ['ngResource']);
 
 userServices.factory('UsersFactory', function ($resource) {
     return $resource('/taskit/api/user/', {}, {
-        query: { method: 'GET', isArray: true },
-        create: { method: 'POST' }
+        query: {
+            method: 'GET',
+            isArray: true,
+            headers: { 'auth-token': '@token' }
+        },
+        create: {
+            method: 'POST'
+        },
     })
 });
 
 userServices.factory('UserFactory', function ($resource) {
     return $resource('/taskit/api/user/:id', {}, {
-        show: { method: 'GET' },
-        update: { method: 'PUT', params: {id: '@id'} },
-        delete: { method: 'DELETE', params: {id: '@id'} }
+        show: {
+            method: 'GET',
+            headers: { 'auth-token': '@token' }
+        },
+        update: {
+            method: 'PUT',
+            params: {id: '@id'},
+            headers: { 'auth-token': '@token' }
+        },
+        delete: {
+            method: 'DELETE',
+            params: {id: '@id'},
+            headers: { 'auth-token': '@token' }},
     })
 });
 
 userServices.factory('LoginFactory', function ($resource) {
     return $resource('/taskit/api/user/login', {}, {
-        create: { method: 'POST' }
+        create: {
+            method: 'GET',
+            params: {email: '@email', password: '@password'}
+        },
     })
 });
+
+userServices.factory('TokenService', [function() {
+  var token = {
+    isLogged: false,
+    token: '',
+    username: ''
+  };
+  return token;
+}]);
