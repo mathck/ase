@@ -17,6 +17,8 @@ public interface UserService
 
 	User getByID(String uID);
 
+	User authUser(String uID);
+
 	LinkedList<User> getAllUsers();
 
 	LinkedList<UserRole> getAllUsersFromProject(int pID);
