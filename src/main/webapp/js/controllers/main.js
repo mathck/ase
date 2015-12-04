@@ -274,7 +274,7 @@ materialAdmin
     // LOGIN & REGISTER
     //=================================================
 
-    .controller('loginCtrl', function ($rootScope, $scope, LoginFactory, UsersFactory, $location, $window) {
+    .controller('loginCtrl', function ($rootScope, $scope, LoginFactory, UsersFactory, $location, $window, $q, $http) {
 
 
             $rootScope.avatar="img/avatars/0.png";
@@ -283,10 +283,24 @@ materialAdmin
 
             // callback for ng-click 'loginUser':
             this.loginUser = function () {
-                LoginFactory.create(this.login);
-                console.log("login is " + this.login.email );
-                $window.location.href='/taskit/main.html';
+                 $http.get("/taskit/api/user/login?email=" + this.login.email + "&password=" + this.login.password)
+                 .success(function(data){
+                    console.log("Token is:" + data);
+                 })
+                 .error(function(response, status){
+                    console.log("Request failed. Responses: " + response + "; Status: " + status);
+                 });
+
+
+                /*LoginFactory.create(this.login).$promise.then(function(response){
+                    console.log("Successs; " + response.data);
+                    $window.location.href='/taskit/main.html';
+                };*/
+
             };
+
+                //$window.location.href='/taskit/main.html';
+
 
             // callback for ng-click 'saveUser':
             this.createUser = function () {
@@ -294,7 +308,7 @@ materialAdmin
                 console.log("Root avatar: " + $rootScope.avatar)
                 console.log("registration is " + this.user.email + this.user.password + this.user.firstName, + this.user.lastName + this.user.avatar);
                 UsersFactory.create(this.user);
-                $window.location.href='/taskit/main.html';
+                //$window.location.href='/taskit/main.html';
             };
 
             //Status
