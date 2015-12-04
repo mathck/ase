@@ -34,7 +34,6 @@ public class LoginServiceImpl implements LoginService {
         String token = "";
 
         user = userDAO.authUser(email);
-        System.out.println("!!!"+user.toString());
 
         if (PasswordEncryption.authenticate(password, user.getPassword(), user.getSalt())){
 

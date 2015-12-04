@@ -20,24 +20,22 @@ import java.util.List;
 /**
  * Created by Tomislav Nikic on 20/11/2015.
  */
+
 @Repository
-public class UserDAOImpl implements UserDAO
-{
+public class UserDAOImpl implements UserDAO {
 	private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
 
 	private JdbcTemplate jdbcTemplate;
 	KeyHolder keyHolder;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource)
-	{
+	public void setDataSource(DataSource dataSource) {
 		logger.debug("Creating JDBC template");
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		this.keyHolder = new GeneratedKeyHolder();
 	}
 
-	public void insertUser(User user)
-	{
+	public void insertUser(User user) {
 		logger.debug("Inserting user <" + user.getUserID() + "> into DB");
 		String sqlQuery = "INSERT INTO taskit_user (mail, firstname, lastname, password, avatar_url, salt) " +
 				"VALUES (?,?,?,?,?,?)";
@@ -52,8 +50,7 @@ public class UserDAOImpl implements UserDAO
 		);
 	}
 
-	public void removeUser(String uID)
-	{
+	public void removeUser(String uID) {
 		logger.debug("Removing user <" + uID + "> from DB");
 		String sqlQuery = "DELETE " +
 				"FROM taskit_user " +
@@ -64,8 +61,7 @@ public class UserDAOImpl implements UserDAO
 		);
 	}
 
-	public void updateUser(String uID, User user)
-	{
+	public void updateUser(String uID, User user) {
 		logger.debug("Updating user <" + uID + "> on DB");
 		String sqlQuery = "UPDATE taskit_user " +
 				"SET " +
@@ -86,8 +82,7 @@ public class UserDAOImpl implements UserDAO
 		);
 	}
 
-	public User findByID(String uID)
-	{
+	public User findByID(String uID) {
 		logger.debug("Searching for user <" + uID + "> in DB");
 		String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
 				"FROM taskit_user " +
@@ -95,16 +90,13 @@ public class UserDAOImpl implements UserDAO
 		return this.jdbcTemplate.queryForObject(
 				sqlQuery,
 				new String[]{uID},
-				new RowMapper<User>()
-				{
-					public User mapRow(ResultSet resultSet, int i) throws SQLException
-					{
+				new RowMapper<User>() {
+					public User mapRow(ResultSet resultSet, int i) throws SQLException {
 						User user = new User();
 						user.setUserID(resultSet.getString("mail"));
 						user.setFirstName(resultSet.getString("firstname"));
 						user.setLastName(resultSet.getString("lastname"));
 						user.setAvatar(resultSet.getString("avatar_url"));
-						user.setProjectList(null);
 						logger.debug("Found " + user.getFirstName() + " " + user.getLastName() + "in DB");
 						return user;
 					}
@@ -112,8 +104,7 @@ public class UserDAOImpl implements UserDAO
 		);
 	}
 
-	public User authUser(String uID)
-	{
+	public User authUser(String uID) {
 		logger.debug("Searching for user <" + uID + "> in DB to authenticate");
 		String sqlQuery = "SELECT mail, password, salt " +
 				"FROM taskit_user " +
@@ -121,13 +112,11 @@ public class UserDAOImpl implements UserDAO
 		return this.jdbcTemplate.queryForObject(
 				sqlQuery,
 				new String[]{uID},
-				new RowMapper<User>()
-				{
-					public User mapRow(ResultSet resultSet, int i) throws SQLException
-					{
+				new RowMapper<User>() {
+					public User mapRow(ResultSet resultSet, int i) throws SQLException {
 						User user = new User();
 						user.setUserID(resultSet.getString("mail"));
-						user.setPassword(resultSet.getBytes("password"));
+						user.setPasswordEnc(resultSet.getBytes("password"));
 						user.setSalt(resultSet.getBytes("salt"));
 						logger.debug("Found <" + user.getUserID() + "> in DB");
 						return user;
@@ -136,17 +125,14 @@ public class UserDAOImpl implements UserDAO
 		);
 	}
 
-	public LinkedList<User> loadAll()
-	{
+	public LinkedList<User> loadAll() {
 		logger.debug("Loading all users from DB");
 		String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
 				"FROM taskit_user";
 		List<User> list = this.jdbcTemplate.query(
 				sqlQuery,
-				new RowMapper<User>()
-				{
-					public User mapRow(ResultSet resultSet, int i) throws SQLException
-					{
+				new RowMapper<User>() {
+					public User mapRow(ResultSet resultSet, int i) throws SQLException {
 						User user = new User();
 						user.setUserID(resultSet.getString("mail"));
 						user.setFirstName(resultSet.getString("firstname"));
@@ -183,5 +169,6 @@ public class UserDAOImpl implements UserDAO
 		);
 		return new LinkedList<User>(list);
 	}
+
 
 }

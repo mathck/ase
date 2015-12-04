@@ -44,6 +44,10 @@ public class UserServiceImpl implements UserService
 
 	public User getByID(String uID)
 	{
+		return userDAO.findByID(uID);
+	}
+
+	public User authUser(String uID) {
 		return userDAO.authUser(uID);
 	}
 
