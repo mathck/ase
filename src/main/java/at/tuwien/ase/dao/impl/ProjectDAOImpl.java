@@ -60,24 +60,18 @@ public class ProjectDAOImpl implements ProjectDAO
 	public int insertProject(final Project project)
 	{
 		logger.debug("Inserting project <" + project.getProjectID() + ":" + project.getTitle() + "> into DB");
-		final String sqlQuery = "INSERT INTO project (description, name, creation_date, update_date) " +
-				"VALUES (?,?,?,?)";
+		int id = this.getNewProjectID();
+		final String sqlQuery = "INSERT INTO project (id, description, name, creation_date, update_date) " +
+				"VALUES (?,?,?,?,?)";
 		this.jdbcTemplate.update(
-				new PreparedStatementCreator()
-				{
-					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException
-					{
-						PreparedStatement ps =
-								connection.prepareStatement(sqlQuery, new String[]{"id"});
-						ps.setString(1, project.getDescription());
-						ps.setString(2, project.getTitle());
-						ps.setTimestamp(3, project.getCreationTime());
-						ps.setTimestamp(4, project.getUpdateTime());
-						return ps;
-					}
-				},
-				keyHolder);
-		return (Integer) keyHolder.getKey();
+				sqlQuery,
+				id,
+				project.getDescription(),
+				project.getTitle(),
+				project.getCreationTime(),
+				project.getUpdateTime()
+		);
+		return id;
 	}
 
 	public void removeProject(int pID)
