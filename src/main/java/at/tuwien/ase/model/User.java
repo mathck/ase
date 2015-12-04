@@ -82,10 +82,15 @@ public class User {
     }
 
     public void setPassword(String password) {
-        if (salt == null) {
-            salt = PasswordEncryption.generateSalt();
+        if(password != null) {
+            if (salt == null) {
+                salt = PasswordEncryption.generateSalt();
+            }
+            this.password = PasswordEncryption.getEncryptedPassword(password, salt);
+        } else {
+            this.password = null;
+            this.salt = null;
         }
-        this.password = PasswordEncryption.getEncryptedPassword(password, salt);
     }
 
     public void setPasswordEnc(byte[] password) {

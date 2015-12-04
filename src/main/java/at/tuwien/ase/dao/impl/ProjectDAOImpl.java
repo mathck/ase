@@ -39,6 +39,24 @@ public class ProjectDAOImpl implements ProjectDAO
 		this.keyHolder = new GeneratedKeyHolder();
 	}
 
+	public int getNewProjectID() {
+
+		Integer id = this.jdbcTemplate.queryForObject(
+				"SELECT nextval('seq_project_id')",
+				Integer.class);
+
+		return id;
+	}
+
+	public int getNewRelationID() {
+
+		Integer id = this.jdbcTemplate.queryForObject(
+				"SELECT nextval('rel_user_project_id_seq')",
+				Integer.class);
+
+		return id;
+	}
+
 	public int insertProject(final Project project)
 	{
 		logger.debug("Inserting project <" + project.getProjectID() + ":" + project.getTitle() + "> into DB");
@@ -99,10 +117,11 @@ public class ProjectDAOImpl implements ProjectDAO
 	public void addUserToProject(String uID, int pID, String role)
 	{
 		logger.debug("Inserting user <" + uID + "> into project <" + pID + "> and storing on DB");
-		String sqlQuery = "INSERT INTO rel_user_project (user_mail, project_id, role) " +
-				"VALUES (?,?,?)";
+		String sqlQuery = "INSERT INTO rel_user_project (id, user_mail, project_id, role) " +
+				"VALUES (?,?,?,?)";
 		this.jdbcTemplate.update(
 				sqlQuery,
+				this.getNewRelationID(),
 				uID,
 				pID,
 				role.toString()
