@@ -9,7 +9,7 @@ userServices.factory('UsersFactory', function ($resource) {
         },
         create: {
             method: 'POST'
-        },
+        }
     })
 });
 
@@ -21,13 +21,14 @@ userServices.factory('UserFactory', function ($resource) {
         },
         update: {
             method: 'PUT',
-            params: {id: '@id'},
+            params: {email: '@email'},
             headers: { 'auth-token': '@token' }
         },
         delete: {
             method: 'DELETE',
-            params: {id: '@id'},
-            headers: { 'auth-token': '@token' }},
+            params: {email: '@email'},
+            headers: { 'auth-token': '@token' }
+        }
     })
 });
 
@@ -37,6 +38,10 @@ userServices.factory('LoginFactory', function ($resource) {
             method: 'GET',
             params: {email: '@email', password: '@password'}
         },
+        logout: {
+            method: 'PUT',
+            params: {email: '@email'}
+        }
     })
 });
 

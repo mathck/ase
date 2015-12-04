@@ -1,6 +1,7 @@
 var materialAdmin = angular.module('materialAdmin', [
     'ngAnimate',
     'ngResource',
+    'ngCookies',
     'ui.router',
     'ui.bootstrap',
     'angular-loading-bar',

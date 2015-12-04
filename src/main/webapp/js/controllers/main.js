@@ -3,11 +3,18 @@ materialAdmin
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function($timeout, $state, growlService){
+    .controller('materialadminCtrl', function($timeout, $state, $http, $cookies, growlService, LoginFactory, TokenService){
         //Welcome Message
-        growlService.growl('Welcome back Michi :D', 'inverse')
-        
-        
+
+        TokenService.username = $cookies.email;
+        TokenService.token = $cookies.token;
+        TokenService.isLogged=true;
+        $http.defaults.headers.common['user-token'] = TokenService.token;
+        console.log("Token is:" + TokenService.token);
+        console.log("Token Service: username: " + TokenService.username);
+
+        growlService.growl('Welcome back ' + TokenService.username +' :D', 'inverse')
+
         // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
            angular.element('html').addClass('ismobile');
@@ -24,14 +31,28 @@ materialAdmin
         
         // For Mainmenu Active Class
         this.$state = $state;    
-        
+
+        /*
+        this.logoutUser() = function () {
+            console.log("click");
+            LoginFactory.logout(TokenService.username);
+            TokenService.username='';
+            TokenService.token='';
+            TokenService.isLogged=false;
+            $cookies.email='';
+            $cookies.token='';
+            growlService.growl('Logging out...');
+            $window.location.href='/taskit/index.html';
+        };*/
+
         //Close sidebar on click
         this.sidebarStat = function(event) {
+            console.log(event);
             if (!angular.element(event.target).parent().hasClass('active')) {
                 this.sidebarToggle.left = false;
             }
         }
-        
+
         //Listview Search (Check listview pages)
         this.listviewSearchStat = false;
         
@@ -230,9 +251,9 @@ materialAdmin
         //User
         this.profileSummary = "Sed eu est vulputate, fringilla ligula ac, maximus arcu. Donec sed felis vel magna mattis ornare ut non turpis. Sed id arcu elit. Sed nec sagittis tortor. Mauris ante urna, ornare sit amet mollis eu, aliquet ac ligula. Nullam dolor metus, suscipit ac imperdiet nec, consectetur sed ex. Sed cursus porttitor leo.";
     
-        this.fullName = "Mallinda Hollaway";
-        this.gender = "female";
-        this.birthDay = "23/06/1988";
+        this.user.firstName = "Mallinda Hollaway";
+        this.user.lastName = "female";
+        this.email = "23/06/1988";
         this.martialStatus = "Single";
         this.mobileNumber = "00971123456789";
         this.emailAddress = "malinda.h@gmail.com";
@@ -274,29 +295,33 @@ materialAdmin
     // LOGIN & REGISTER
     //=================================================
 
-    .controller('loginCtrl', function ($rootScope, $scope, LoginFactory, UsersFactory, $location, $window, $q, $http) {
+    .controller('loginCtrl', function ($rootScope, LoginFactory, UsersFactory, $cookies, $window, $q, $http) {
 
 
             $rootScope.avatar="img/avatars/0.png";
-            //this.avatar=$rootScope.avatar;
-            console.log("Avatar initially changed to " + this.avatar);
+            //console.log("Avatar initially changed to " + this.avatar);
 
             // callback for ng-click 'loginUser':
             this.loginUser = function () {
-                 $http.get("/taskit/api/user/login?email=" + this.login.email + "&password=" + this.login.password)
-                 .success(function(data){
-                    console.log("Token is:" + data);
+                 var email = this.login.email;
+                 var password = this.login.password;
+                 console.log("/taskit/api/user/login?email=" + email + "&password=" + password);
+                 $http({
+                    url:"/taskit/api/user/login?email=" + email + "&password=" + password,
+                    method:'GET',
+                    transformResponse: undefined
+                 })
+                 .success(function(token){
+                    $http.defaults.headers.common['user-token'] = token;
+                    console.log("Token is:" + token);
+                    $cookies.email=email;
+                    $cookies.token=token;
+                    $window.location.href='/taskit/main.html';
+
                  })
                  .error(function(response, status){
                     console.log("Request failed. Responses: " + response + "; Status: " + status);
                  });
-
-
-                /*LoginFactory.create(this.login).$promise.then(function(response){
-                    console.log("Successs; " + response.data);
-                    $window.location.href='/taskit/main.html';
-                };*/
-
             };
 
                 //$window.location.href='/taskit/main.html';
