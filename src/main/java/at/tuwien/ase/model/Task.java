@@ -1,4 +1,4 @@
-package at.tuwien.ase.model.task;
+package at.tuwien.ase.model;
 
 import java.util.Date;
 

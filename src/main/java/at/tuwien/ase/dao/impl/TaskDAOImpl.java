@@ -1,19 +1,16 @@
-package at.tuwien.ase.dao.task.impl;
+package at.tuwien.ase.dao.impl;
 
-import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.model.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -48,8 +45,11 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: task with id=" + task.getId());
 
+        String sqlQuery = "INSERT INTO TASK (ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
         this.jdbcTemplate.update(
-                "INSERT INTO TASK (ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE) VALUES (?, ?, ?, ?, ?, ?)",
+                sqlQuery,
                 task.getId(), task.getTitle(), task.getDescription(), this.taskType, task.getCreationDate(), task.getUpdateDate());
 
     }
@@ -64,11 +64,13 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: task with id=" + taskId);
 
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+                "FROM TASK " +
+                "WHERE ID = ? AND TASK_TYPE = ?";
+
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
-                        "FROM TASK " +
-                        "WHERE ID = ?",
-                new Object[]{taskId},
+                sqlQuery,
+                new Object[]{taskId, this.taskType},
                 new RowMapper<Task>() {
                     public Task mapRow(ResultSet rs, int taskId) throws SQLException {
                         Task task = new Task();
@@ -89,13 +91,16 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     public LinkedList<Task> loadAll() {
-        String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+
+        logger.debug("retrieve from db: all tasks");
+
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
                 "FROM TASK " +
                 "WHERE TASK_TYPE = ?";
 
         LinkedList<Task> tasks = new LinkedList<Task>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql, this.taskType);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType);
         for (Map<String,Object> row : rows) {
 
             Task task = new Task();
@@ -116,14 +121,18 @@ public class TaskDAOImpl implements TaskDAO {
         return tasks;
     }
 
-    public LinkedList<Task> loadAllByProject(String pID) {
-        String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+    public LinkedList<Task> loadAllByProject(int pID) {
+
+        logger.debug("retrieve from db: all tasks by project with id="+pID);
+
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
                 "FROM TASK " +
-                "WHERE TASK_TYPE = ? AND PROJECT_ID = ?";
+                "WHERE TASK_TYPE = ? " +
+                    "AND PROJECT_ID = ?";
 
         LinkedList<Task> tasks = new LinkedList<Task>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql, this.taskType, Integer.valueOf(pID));
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, Integer.valueOf(pID));
         for (Map<String,Object> row : rows) {
 
             Task task = new Task();
@@ -145,14 +154,20 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     public LinkedList<Task> loadAllByUser(String uID) {
-        String sql = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.DSL_TEMPLATE_ID, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS " +
+
+        logger.debug("retrieve from db: all tasks by user with id="+uID);
+
+        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.DSL_TEMPLATE_ID, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS " +
                 "FROM TASK, REL_USER_TASK, TASKIT_USER " +
-                "WHERE TASK_TYPE = ? AND REL_USER_TASK.USER_MAIL = ? AND REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL AND REL_USER_TASK.TASK_ID = TASK.ID";
+                "WHERE TASK_TYPE = ? " +
+                    "AND REL_USER_TASK.USER_MAIL = ? " +
+                    "AND REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL " +
+                    "AND REL_USER_TASK.TASK_ID = TASK.ID";
 
 
         LinkedList<Task> tasks = new LinkedList<Task>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql, this.taskType, uID);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, uID);
         for (Map<String,Object> row : rows) {
 
             Task task = new Task();
@@ -173,12 +188,17 @@ public class TaskDAOImpl implements TaskDAO {
         return tasks;
     }
 
-    public void updateIssueToTask(int iID, String uID) {
+    public void updateIssueToTask(int iID) {
 
-       this.jdbcTemplate.update(
-                "UPDATE TASK SET TASK_TYPE = ?, UPDATE_DATE = ?, USER_MAIL = ? " +
-                        "WHERE ID = ?",
-                this.taskType, new Date(), uID, iID);
+        logger.debug("update issue with id="+iID+" to task");
+
+        String sqlQuery = "UPDATE TASK " +
+                "SET TASK_TYPE = ?, UPDATE_DATE = ?, STATUS = ? " +
+                "WHERE ID = ?";
+
+                this.jdbcTemplate.update(
+                        sqlQuery,
+                this.taskType, new Date(), new String("open"), iID);
 
     }
 

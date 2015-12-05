@@ -343,6 +343,33 @@ materialAdmin
     })
 
     //=================================================
+    // REWARD CREATION
+    //=================================================
+
+    .controller('createRewardCtrl', function ( ProjectsFactory, UsersFactory, $scope, $location, $window) {
+
+            // callback for ng-click 'create Project':
+        /*console.log("starting");
+        $scope.createProject = function () {
+            //UserFactory.show("test").then(function(loggedUser){
+            var newProject = {
+                id: "0",
+                title: $scope.project.title,
+                description: $scope.project.description,
+                userList: []
+                //taskList: [],
+                //issueList: []
+            };
+            //newProject.userList.push(loggedUser);
+
+            //console.log(loggedUser);
+            console.log(newProject);
+            ProjectsFactory.create(newProject);
+            $location.path('/home');
+        };//};*/
+    })
+
+    //=================================================
     // PROJECT CREATION
     //=================================================
 
@@ -367,6 +394,33 @@ materialAdmin
             ProjectsFactory.create(newProject);
             $location.path('/home');
         };//};
+    })
+
+    //=================================================
+    // PROJECT UPDATE
+    //=================================================
+
+    .controller('updateProjectCtrl', function ( ProjectsFactory, UsersFactory, $scope, $location, $window) {
+
+            // callback for ng-click 'create Project':
+        /*console.log("starting");
+        $scope.createProject = function () {
+            //UserFactory.show("test").then(function(loggedUser){
+            var newProject = {
+                id: "0",
+                title: $scope.project.title,
+                description: $scope.project.description,
+                userList: []
+                //taskList: [],
+                //issueList: []
+            };
+            //newProject.userList.push(loggedUser);
+
+            //console.log(loggedUser);
+            console.log(newProject);
+            ProjectsFactory.create(newProject);
+            $location.path('/home');
+        };//};*/
     })
 
     //=================================================
@@ -398,6 +452,75 @@ materialAdmin
             $location.path('/home');
             console.log("and here");
         };
+    })
+
+    //=================================================
+    // TASK CREATION
+    //=================================================
+
+    .controller('createTaskCtrl', function ( $scope, IssuesFactory, $location, $window) {
+
+          var counter = 0;
+          $scope.data = {
+            stateFields: [],
+            templateFields: []
+          }
+
+          $scope.states = ['New', 'Open', 'Closed'];
+          $scope.templates = ['Template 1', 'Template 2', 'Template 3'];
+
+          $scope.addState = function() {
+            $scope.data.stateFields.push({
+              name: "test " + counter++
+            });
+          };
+          $scope.addTemplate = function() {
+            $scope.data.templateFields.push({
+              name: "test " + counter++
+            });
+          };
+          $scope.removeTemplate = function() {
+            $scope.data.templateFields.pop();
+          };
+          $scope.removeState = function() {
+            $scope.data.stateFields.pop();
+          };
+
+          $scope.createTask = function() {
+
+          };
+    })
+
+    //=================================================
+    // TASK UPDATE
+    //=================================================
+
+    .controller('updateTaskCtrl', function ( $scope, IssuesFactory, $location, $window) {
+
+    })
+
+    .directive('displayStates', function($compile) {
+      return {
+        scope: {
+          display: "=", //import referenced model to our directives scope
+          states: "="
+        },
+        templateUrl: 'template/stateSelect.html',
+        link: function(scope, elem, attr, ctrl) {
+        }
+      }
+    })
+
+    .directive('displayTemplates', function($compile) {
+      return {
+        scope: {
+          display: "=", //import referenced model to our directives scope
+          templates: "="
+        },
+        templateUrl: 'template/templateSelect.html',
+        link: function(scope, elem, attr, ctrl) {
+        }
+      }
     })
 
     //=================================================

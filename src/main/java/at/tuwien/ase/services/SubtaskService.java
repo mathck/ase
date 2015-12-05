@@ -1,8 +1,7 @@
 package at.tuwien.ase.services;
 
 
-import at.tuwien.ase.model.task.Subtask;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.model.Subtask;
 
 
 import java.util.LinkedList;

@@ -1,8 +1,6 @@
 package at.tuwien.ase.services;
 
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
-import sun.awt.image.ImageWatched;
+import at.tuwien.ase.model.Task;
 
 import java.util.LinkedList;
 
@@ -11,14 +9,15 @@ import java.util.LinkedList;
  */
 public interface TaskService {
 
-    int writeTask(String pID, Task task);
+    int writeTask(int pID, Task task);
 
-    boolean deleteTask(String pID, int tID);
+    boolean deleteTask(int pID, int tID);
 
     Task getByID(int tID);
     LinkedList<Task> getAllTasks();
     LinkedList<Task> getAllTasksFromUser(String uID);
-    LinkedList<Task> getAllTasksFromProject(String pID);
+
+    LinkedList<Task> getAllTasksFromProject(int pID);
 
     int getNewID();
 

@@ -122,6 +122,22 @@ textarea {
 .description {
     height: 8em !important;
 }
+
+.description-lg {
+    height: 12em !important;
+}
+.code {
+    tab-size: 4 !important;
+    -moz-tab-size: 4 !important;
+    -o-tab-size: 4 !important;
+    white-space: pre-wrap !important;
+    font-size: 24px !important;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
+}
+.rightElement {
+    float:right !important;
+}
 button {
   overflow: visible;
 }
@@ -7781,6 +7797,15 @@ a.waves-effect .waves-ripple {
 .bgm-white {
   background-color: #ffffff !important;
 }
+.bgm-project {
+  background-color: #00a5bb !important;
+}
+.bgm-task {
+  background-color: #00bcd4 !important;
+}
+.bgm-issue {
+  background-color: #00d3ee !important;
+}
 .c-white {
   color: #ffffff !important;
 }
@@ -9075,7 +9100,7 @@ a.lv-footer:hover {
 .progress {
   box-shadow: none;
   border-radius: 0;
-  height: 5px;
+  height: 15px;
   margin-bottom: 0;
 }
 .progress .progress-bar {
@@ -9296,9 +9321,18 @@ a.lv-footer:hover {
   background: #fff;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
   margin-bottom: 30px;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+.floatEffect:hover {
+  -webkit-transform: translateY(-8px);
+  transform: translateY(-8px);
 }
 .card-header {
   position: relative;
+}
+.card-header h2 {
+  cursor:pointer;
 }
 @media screen and (min-width: 768px) {
   .card-header:not(.ch-alt) {
@@ -10617,7 +10651,8 @@ a.lv-footer:hover {
   border: 0 !important;
 }
 .table-hover > tbody > tr:hover {
-  background-color: #ECF9FF !important;
+  background-color: B3E5FC !important;
+  color: black; !important;
 }
 .table-bordered {
   border-bottom: 0;
@@ -11365,6 +11400,9 @@ html:not(.ie9) .select.fg-line:before {
 }
 .form-group {
   margin-bottom: 30px;
+}
+.noMargin {
+  margin-bottom: 0px;
 }
 /*
  * Validation

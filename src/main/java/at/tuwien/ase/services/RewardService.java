@@ -1,6 +1,6 @@
 package at.tuwien.ase.services;
 
-import at.tuwien.ase.model.miscellaneous.Reward;
+import at.tuwien.ase.model.Reward;
 
 import java.util.LinkedList;
 

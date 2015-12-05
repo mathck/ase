@@ -1,7 +1,7 @@
-package at.tuwien.ase.dao.task.impl;
+package at.tuwien.ase.dao.impl;
 
-import at.tuwien.ase.dao.task.RewardDAO;
-import at.tuwien.ase.model.miscellaneous.Reward;
+import at.tuwien.ase.dao.RewardDAO;
+import at.tuwien.ase.model.Reward;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,8 @@ public class RewardDAOImpl implements RewardDAO{
         logger.debug("insert into db: reward with id=" + reward.getId());
 
         this.jdbcTemplate.update(
-                "INSERT INTO REWARD (ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE) VALUES (?, ?, ?, ?, ?, ?, ? )",
+                "INSERT INTO REWARD (ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ? )",
                 reward.getId(), reward.getUserMail() ,reward.getName(), reward.getDescription(), reward.getXpbase(), reward.getImageLink(), reward.getCreationDate());
 
         return null;

@@ -1,4 +1,4 @@
-package at.tuwien.ase.model.miscellaneous;
+package at.tuwien.ase.model;
 
 import java.util.Date;
 

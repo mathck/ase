@@ -44,7 +44,7 @@ userController.controller('restUserRegistrationCtrl', ['$scope', 'UsersFactory',
 
         // callback for ng-click 'saveUser':
         $scope.saveUser = function () {
-            console.log("User:" + $scope.user);
+            console.log($scope.user);
             UsersFactory.create($scope.user);
             console.log($scope.user);
             $location.path('/user-list');

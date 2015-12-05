@@ -1,6 +1,7 @@
 package at.tuwien.ase.services;
 
-import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.model.UserRole;
+import at.tuwien.ase.model.User;
 
 import java.util.LinkedList;
 
@@ -20,7 +21,7 @@ public interface UserService
 
 	LinkedList<User> getAllUsers();
 
-	LinkedList<User> getAllUsersFromProject(String pID);
+	LinkedList<UserRole> getAllUsersFromProject(int pID);
 
 	void updateUser(String uID, User user);
 

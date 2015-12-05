@@ -1,12 +1,10 @@
 package at.tuwien.ase.services.impl;
 
-import at.tuwien.ase.controller.TaskController;
-import at.tuwien.ase.dao.task.IssueDAO;
-import at.tuwien.ase.dao.task.ProjectDAO;
-import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.model.project.Project;
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.dao.IssueDAO;
+import at.tuwien.ase.dao.ProjectDAO;
+import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.services.IssueService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,18 +35,20 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public int updateIssueToTask(String pID, int iID, String uID) {
+    public int updateIssueToTask(int iID)
+    {
         logger.debug("update issue with id="+iID+" to task");
 
         //update issue to task
-        taskDAO.updateIssueToTask(iID, uID);
+        taskDAO.updateIssueToTask(iID);
 
-        //get project and delete issue
+       /* //get project and delete issue
         Project project = projectDAO.findByID(pID);
         project.deleteIssue(iID);
 
         //get updated task and add it to project
-        Task t = taskDAO.findByID(iID);
+ /      Task t = taskDAO.findByID(iID);
+
         project.addTask(t);
 
         //delete old project
@@ -56,6 +56,7 @@ public class IssueServiceImpl implements IssueService {
 
         //insert new project
         projectDAO.insertProject(project);
+*/
 
         return iID;
 
@@ -66,7 +67,8 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.getNewID();
     }
 
-    public int writeIssue(String pID, Issue issue) {
+    public int writeIssue(Issue issue, int pID, String uID)
+    {
         int id;
 
         logger.debug("post new issue");
@@ -75,18 +77,21 @@ public class IssueServiceImpl implements IssueService {
         issue.setId(id);
         issue.setCreationDate(new Date());
         issue.setUpdateDate(new Date());
-
+        issue.setProjectId(pID);
+        issue.setUserId(uID);
+/*
         Project project = projectDAO.findByID(pID);
         project.addIssue(issue);
         projectDAO.removeProject(pID);
-        projectDAO.insertProject(project);
+        projectDAO.insertProject(project);*/
 
         issueDAO.insertIssue(issue);
 
         return id;
     }
 
-    public boolean deleteIssue(String pID, int iID) {
+    public boolean deleteIssue(int pID, int iID)
+    {
         logger.debug("delete issue with id="+iID);
         Project project = projectDAO.findByID(pID);
         project.deleteIssue(iID);
@@ -106,7 +111,8 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Issue> getAllIssuesFromProject(String pID) {
+    public LinkedList<Issue> getAllIssuesFromProject(int pID)
+    {
         logger.debug("get all issues from project " + pID);
         return issueDAO.loadAllByProject(pID);
     }

@@ -1,10 +1,9 @@
 package at.tuwien.ase.services.impl;
 
-import at.tuwien.ase.dao.task.ProjectDAO;
-import at.tuwien.ase.dao.task.TaskDAO;
-import at.tuwien.ase.model.project.Project;
-import at.tuwien.ase.model.task.Issue;
-import at.tuwien.ase.model.task.Task;
+import at.tuwien.ase.dao.ProjectDAO;
+import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +32,8 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.findByID(tID);
     }
 
-    public int writeTask(String pID, Task task) {
+    public int writeTask(int pID, Task task)
+    {
         int id;
 
         logger.debug("post new task");
@@ -53,7 +53,8 @@ public class TaskServiceImpl implements TaskService {
         return id;
     }
 
-    public boolean deleteTask(String pID, int tID) {
+    public boolean deleteTask(int pID, int tID)
+    {
         logger.debug("delete task with id="+tID);
         Project project = projectDAO.findByID(pID);
         project.deleteTask(tID);
@@ -72,7 +73,8 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Task> getAllTasksFromProject(String pID) {
+    public LinkedList<Task> getAllTasksFromProject(int pID)
+    {
         logger.debug("get all tasks from project");
         return taskDAO.loadAllByProject(pID);
     }

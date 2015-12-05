@@ -46,7 +46,7 @@
 
     <ul class="login-navigation">
         <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.loginStat = 0; lctrl.register = 1">Register</li>
-        <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.loginStat = 0; lctrl.forgot = 1">Forgot Password?</li>
+        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.loginStat = 0; lctrl.forgot = 1">Forgot Password?</li>-->
     </ul>
 </div>
 
@@ -279,11 +279,12 @@
 
     <ul class="login-navigation">
         <li data-block="#l-login" class="bgm-cyan" data-ng-click="lctrl.register = 0; lctrl.loginStat = 1">Login</li>
-        <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">Forgot Password?</li>
+        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">Forgot Password?</li>-->
     </ul>
 </div>
 
 <!-- Forgot Password -->
+<!--
 <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }" data-ng-if="lctrl.forgot === 1">
     <p class="text-left">Please enter your E-Mail address. You will recieve a message with a new password.</p>
 
@@ -301,6 +302,7 @@
         <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Register</li>
     </ul>
 </div>
+-->
 
 <!-- Older IE warning message -->
 <!--[if lt IE 9]>
@@ -343,7 +345,7 @@
     </div>
     <p>Sorry for the inconvenience!</p>
 </div>
-    <![endif]-->
+<![endif]-->
 
 
 <!-- Core -->
@@ -385,15 +387,9 @@
 
 <!-- TaskIt Scripts -->
 <!--<script src="js/taskit/app.js"></script>-->
-<script src="js/taskit/directives.js"></script>
-<script src="js/taskit/filters.js"></script>
-<script src="js/taskit/taskControllers.js"></script>
 <script src="js/taskit/taskServices.js"></script>
-<script src="js/taskit/userControllers.js"></script>
 <script src="js/taskit/userServices.js"></script>
-<script src="js/taskit/projectControllers.js"></script>
 <script src="js/taskit/projectServices.js"></script>
-<script src="js/taskit/issueControllers.js"></script>
 <script src="js/taskit/issueServices.js"></script>
 
 

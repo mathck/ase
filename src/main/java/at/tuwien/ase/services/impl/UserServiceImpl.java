@@ -1,7 +1,8 @@
 package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.UserDAO;
-import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.model.UserRole;
+import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService
 		return userDAO.loadAll();
 	}
 
-	public LinkedList<User> getAllUsersFromProject(String pID)
+	public LinkedList<UserRole> getAllUsersFromProject(int pID)
 	{
 		return userDAO.loadAllByProject(pID);
 	}

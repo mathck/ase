@@ -1,0 +1,86 @@
+<script>
+$(document).delegate('#textbox', 'keydown', function(e) {
+  var keyCode = e.keyCode || e.which;
+
+  if (keyCode == 9) {
+    e.preventDefault();
+    var start = $(this).get(0).selectionStart;
+    var end = $(this).get(0).selectionEnd;
+
+    // set textarea value to: text before caret + tab + text after caret
+    $(this).val($(this).val().substring(0, start)
+                + "\t"
+                + $(this).val().substring(end));
+
+    // put caret at right position again
+    $(this).get(0).selectionStart =
+    $(this).get(0).selectionEnd = start + 1;
+  }
+});
+</script>
+
+<header id="header" data-ng-include="'template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
+
+<section id="main">
+    <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+
+    <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
+
+    <section id="content">
+        <div class="container" data-ng-controller="createIssueCtrl">
+            <div class="block-header">
+                <h2>Create Template</h2>
+
+                <ul class="actions">
+                    <li>
+                        <div class="col-sm-3">
+                            <button class="btn btn-danger waves-effect" data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-arrow-back"></i>&nbsp;Cancel</button>
+                        </div>
+                    </li><!--
+            <li>
+                <div class="col-sm-3">
+                    <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project"><i class="zmdi zmdi-check"></i>Create Project</button>
+                </div>
+            </li>-->
+                </ul>
+            </div>
+
+            <div class="card">
+
+                <div class="card-body card-padding">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control input-lg" placeholder="Title" value="TestIssue" data-ng-model="issue.title">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/><br/>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="fg-line">
+                                <textarea id="textbox" class="form-control input-md description code" placeholder="insert your code ..." data-ng-model="template.code"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="block-header">
+                <ul class="actions">
+                    <li>
+                        <div class="col-sm-3">
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Template" data-ng-click="createTemplate()"><i class="zmdi zmdi-check"></i>Create Template</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</section>

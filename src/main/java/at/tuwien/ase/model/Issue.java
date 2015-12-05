@@ -1,4 +1,4 @@
-package at.tuwien.ase.model.task;
+package at.tuwien.ase.model;
 
 import java.util.Date;
 
@@ -13,30 +13,27 @@ public class Issue {
     private String taskType;
     private Date creationDate;
     private Date updateDate;
-    private Integer dslTemplateId;
     private Integer projectId;
-    private String userMail;
-    private String status;
+    private String userId;
+    private User user; //creator of issue
 
     // Must have no-argument constructor
     public Issue() {
 
     }
 
-    public Issue(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer dslTemplateId, Integer projectId, String userMail) {
-        this.status = status;
+    public Issue(String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userId) {
         this.title = title;
         this.description = description;
         this.taskType = taskType;
         this.creationDate = creationDate;
         this.updateDate = updateDate;
-        this.dslTemplateId = dslTemplateId;
         this.projectId = projectId;
-        this.userMail = userMail;
+        this.userId = userId;
     }
 
     public Issue(String title, String description) {
-        this(null, title, description, null, null, null, null, null, null);
+        this(title, description, null, null, null, null, null);
     }
 
     public Integer getId() {
@@ -87,14 +84,6 @@ public class Issue {
         this.updateDate = updateDate;
     }
 
-    public Integer getDslTemplateId() {
-        return dslTemplateId;
-    }
-
-    public void setDslTemplateId(Integer dslTemplateId) {
-        this.dslTemplateId = dslTemplateId;
-    }
-
     public Integer getProjectId() {
         return projectId;
     }
@@ -103,20 +92,20 @@ public class Issue {
         this.projectId = projectId;
     }
 
-    public String getUserMail() {
-        return userMail;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserMail(String userMail) {
-        this.userMail = userMail;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getStatus() {
-        return status;
+    public User getUser() {
+        return user;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -128,10 +117,9 @@ public class Issue {
                 ", taskType='" + taskType + '\'' +
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +
-                ", dslTemplateId=" + dslTemplateId +
                 ", projectId=" + projectId +
-                ", userMail='" + userMail + '\'' +
-                ", status='" + status + '\'' +
+                ", userId='" + userId + '\'' +
+                ", user=" + user +
                 '}';
     }
 }

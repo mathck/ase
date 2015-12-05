@@ -1,6 +1,6 @@
-package at.tuwien.ase.dao.task;
+package at.tuwien.ase.dao;
 
-import at.tuwien.ase.model.task.Issue;
+import at.tuwien.ase.model.Issue;
 
 import java.util.LinkedList;
 
@@ -15,7 +15,8 @@ public interface IssueDAO {
 
     Issue findByID(int iID);
     LinkedList<Issue> loadAll();
-    LinkedList<Issue> loadAllByProject(String pID);
+
+    LinkedList<Issue> loadAllByProject(int pID);
     LinkedList<Issue> loadAllByUser(String uID);
 
     int getNewID();
