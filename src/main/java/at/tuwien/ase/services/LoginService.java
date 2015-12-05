@@ -1,5 +1,7 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.model.LoginToken;
+
 /**
  * Created by DanielHofer on 16.16.11.2015.
  */
@@ -11,7 +13,7 @@ public interface LoginService {
      * @param email, password
      * @return created Login
      */
-    String login(String email, String password) throws  Exception;
+    LoginToken login(String email, String password) throws  Exception;
 
     void logout(String email) throws  Exception;
 

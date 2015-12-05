@@ -38,7 +38,7 @@ public class UserController {
      *                                 		lastname, password, avatar, and mail
      * @throws 		Exception
      */
-    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/user/register", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public void createUser(@RequestBody User user) throws Exception {
         us.writeUser(user);
