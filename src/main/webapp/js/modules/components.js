@@ -84,6 +84,25 @@ materialAdmin
         }
     })
 
+    //Deleted Message
+        .directive('swalDeleted', function(){
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    element.click(function(){
+
+                        swal({
+                            title: "Issue Discarded!",
+                            type: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+
+                    });
+                }
+            }
+        })
+
     //Warning Message
     .directive('swalWarning', function(){
         return {

@@ -43,7 +43,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-project">
-                                <h2 data-ui-sref="createProject">Create Project</h2>
+                                <div class="input-group" data-ui-sref="createProject">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-folder-outline c-white"></i></span>
+                                    <h2>Create Project</h2>
+                                </div>
                                 <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createProject" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
@@ -56,7 +59,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)">
                             <div class="card-header bgm-project">
-                                <h2 data-ui-sref="viewProject">Project1 <small></small></h2>
+                                <div class="input-group" data-ui-sref="viewProject">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-folder-outline c-white"></i></span>
+                                    <h2>Project1 <small></small></h2>
+                                </div>
                                 <ul class="actions actions-alt" data-ui-sref="">
                                     <li class="dropdown" dropdown>
                                         <a href="" dropdown-toggle aria-expanded="false">
@@ -65,9 +71,6 @@
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li>
                                                 <a data-ui-sref="viewProject" data-ng-click="mactrl.sidebarStat($event)">View Project</a>
-                                            </li>
-                                            <li>
-                                                <a href="">View Contributors</a>
                                             </li>
                                             <li>
                                                 <a data-ui-sref="createIssue" data-ng-click="mactrl.sidebarStat($event)">Create Issue</a>
@@ -87,7 +90,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-project">
-                                <h2>Project2 <small></small></h2>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-folder-outline c-white"></i></span>
+                                    <h2>Project2 <small></small></h2>
+                                </div>
                                 <ul class="actions actions-alt">
                                     <li class="dropdown" dropdown>
                                         <a href="" dropdown-toggle aria-expanded="false">
@@ -96,9 +102,6 @@
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li>
                                                 <a href="">View Project</a>
-                                            </li>
-                                            <li>
-                                                <a href="">View Contributors</a>
                                             </li>
                                             <li>
                                                 <a href="">Create Issue</a>
@@ -118,7 +121,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-project">
-                                <h2>Project3 <small></small></h2>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-folder-outline c-white"></i></span>
+                                    <h2>Project3 <small></small></h2>
+                                </div>
                                 <ul class="actions actions-alt">
                                     <li class="dropdown" dropdown>
                                         <a href="" dropdown-toggle aria-expanded="false">
@@ -127,9 +133,6 @@
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li>
                                                 <a href="">View Project</a>
-                                            </li>
-                                            <li>
-                                                <a href="">View Contributors</a>
                                             </li>
                                             <li>
                                                 <a href="">Create Issue</a>

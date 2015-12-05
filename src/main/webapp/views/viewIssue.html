@@ -1,0 +1,76 @@
+<header id="header" data-ng-include="'template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
+
+<section id="main">
+    <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+
+    <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
+
+    <section id="content">
+        <div class="container" data-ng-controller="createTaskCtrl">
+            <div class="block-header">
+                <h2>View Issue</h2>
+
+                <ul class="actions">
+                    <li>
+                        <div class="col-sm-3">
+                            <button class="btn btn-danger waves-effect" data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-arrow-back"></i>&nbsp;Cancel</button>
+                        </div>
+                    </li><!--
+            <li>
+                <div class="col-sm-3">
+                    <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project"><i class="zmdi zmdi-check"></i>Create Project</button>
+                </div>
+            </li>-->
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Related to Project1
+                        <small>Discard an issue or convert it to a task.</small></h2>
+                </div>
+
+
+                <div class="card-body card-padding">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control input-lg" value="" data-ng-model="issueToTask.title" disabled="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/><br/>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="c-black f-500 m-b-20">Description</p>
+                            <div class="fg-line">
+                                <textarea class="form-control input-md description" data-ng-model="issueToTask.description" disabled=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="block-header">
+                <ul class="actions">
+                    <li>
+                        <div class="col-sm-3">
+                            <button class="btn btn-danger btn-icon-text waves-effect waves-effect" data-swal-deleted data-ui-sref="home" title="Discard Issue" data-ng-click="discardIssue()"><i class="zmdi zmdi-close"></i>Discard</button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-sm-3">
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Create Task" data-ng-click="issueToTask()" data-ui-sref="createTask"><i class="zmdi zmdi-check"></i>Create Task</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</section>

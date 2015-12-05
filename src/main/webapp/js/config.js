@@ -37,6 +37,15 @@ materialAdmin
             })
 
             //------------------------------
+            // VIEW ISSUE
+            //------------------------------
+
+            .state ('viewIssue', {
+                url: '/viewIssue',
+                templateUrl: 'views/viewIssue.html'
+            })
+
+            //------------------------------
             // VIEW TASK
             //------------------------------
 
@@ -51,7 +60,26 @@ materialAdmin
 
             .state ('viewProject', {
                 url: '/viewProject',
-                templateUrl: 'views/viewProject.html'
+                templateUrl: 'views/viewProject.html',
+                resolve: {
+                    loadPlugin: function($ocLazyLoad) {
+                        return $ocLazyLoad.load ([
+                            {
+                                name: 'css',
+                                insertBefore: '#app-level',
+                                files: [
+                                    'vendors/bower_components/lightgallery/light-gallery/css/lightGallery.css'
+                                ]
+                            },
+                            {
+                                name: 'vendors',
+                                files: [
+                                    'vendors/bower_components/lightgallery/light-gallery/js/lightGallery.min.js'
+                                ]
+                            }
+                        ])
+                    }
+                }
             })
 
             //------------------------------
@@ -398,7 +426,7 @@ materialAdmin
                                 name: 'vendors',
                                 files: [
                                     'vendors/bower_components/mediaelement/build/mediaelement-and-player.js',
-                                    'vendors/bower_components/lightgallery/light-gallery/js/lightGallery.min.js'
+                                    'vendors/bower_components/lightgallery/light-gallery/js/lightGallery.min.js',
                                 ]
                             }
                         ])
@@ -546,12 +574,12 @@ materialAdmin
         
             .state ('pages.profile', {
                 url: '/profile',
-                templateUrl: 'views/profile.html'
+                templateUrl: 'views/profile.html',
             })
         
             .state ('pages.profile.profile-about', {
                 url: '/profile-about',
-                templateUrl: 'views/profile-about.html'
+                templateUrl: 'views/profile-about.html',
             })
         
             .state ('pages.profile.profile-timeline', {

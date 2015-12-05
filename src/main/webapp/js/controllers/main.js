@@ -256,6 +256,8 @@ materialAdmin
         this.email = "23/06/1988";
         this.martialStatus = "Single";
         this.mobileNumber = "00971123456789";
+        this.firstName = "Mallinda";
+        this.lastName = "Hollaway";
         this.emailAddress = "malinda.h@gmail.com";
         this.twitter = "@malinda";
         this.twitterUrl = "twitter.com/malinda";
@@ -485,7 +487,6 @@ materialAdmin
           $scope.removeState = function() {
             $scope.data.stateFields.pop();
           };
-
           $scope.createTask = function() {
 
           };

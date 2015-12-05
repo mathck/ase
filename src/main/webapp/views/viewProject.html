@@ -128,25 +128,41 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>REWARD IMG</td>
+                                        <td class="col-xs-2">
+                                            <div class="thumbnail noHeader">
+                                                <img src="media/gallery/thumbs/6.jpg" alt="">
+                                            </div>
+                                        </td>
                                         <td>Reward1</td>
                                         <td>1</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>REWARD IMG</td>
+                                        <td class="col-xs-2">
+                                            <div class="thumbnail noHeader">
+                                                <img src="media/gallery/thumbs/6.jpg" alt="">
+                                            </div>
+                                        </td>
                                         <td>Reward2</td>
                                         <td>5</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>REWARD IMG</td>
+                                        <td class="col-xs-2">
+                                            <div class="thumbnail noHeader">
+                                                <img src="media/gallery/thumbs/6.jpg" alt="">
+                                            </div>
+                                        </td>
                                         <td>Reward3</td>
                                         <td>4</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>REWARD IMG</td>
+                                        <td class="col-xs-2 noHeader">
+                                            <div class="thumbnail noHeader">
+                                                <img src="media/gallery/thumbs/6.jpg" alt="">
+                                            </div>
+                                        </td>
                                         <td>Reward4</td>
                                         <td>2</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
@@ -164,7 +180,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-task">
-                                <h2 data-ui-sref="createTask">Create Task</h2>
+                                <div class="input-group" data-ui-sref="createTask">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
+                                    <h2>Create Task</h2>
+                                </div>
                                 <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTask" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
@@ -177,7 +196,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-issue">
-                                <h2 data-ui-sref="createIssue">Create Issue</h2>
+                                <div class="input-group" data-ui-sref="createIssue">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
+                                    <h2>Create Issue</h2>
+                                </div>
                                 <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createIssue" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
@@ -190,7 +212,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask">
                             <div class="card-header bgm-task">
-                                <h2>Task1 <small></small></h2>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
+                                    <h2>Task1 <small></small></h2>
+                                </div>
                             </div>
                             <div class="card-body card-padding">
                                 The Description goes in here.
@@ -200,7 +225,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-task">
-                                <h2>Task2 <small></small></h2>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
+                                    <h2>Task2 <small></small></h2>
+                                </div>
                             </div>
                             <div class="card-body card-padding">
                                 The Description goes in here.
@@ -210,7 +238,10 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-task">
-                                <h2>Task3 <small></small></h2>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
+                                    <h2>Task3 <small></small></h2>
+                                </div>
                             </div>
                             <div class="card-body card-padding">
                                 The Description goes in here.
