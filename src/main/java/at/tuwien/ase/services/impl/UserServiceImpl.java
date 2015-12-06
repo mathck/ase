@@ -1,8 +1,10 @@
 package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.ProjectDAO;
+import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.Subtask;
 import at.tuwien.ase.model.UserRole;
 import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.UserService;
@@ -26,15 +28,18 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     @Autowired
     private ProjectDAO projectDAO;
+    @Autowired
+    private SubtaskDAO subtaskDAO;
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl() {
     }
 
-    public UserServiceImpl(UserDAO userDAO, ProjectDAO projectDAO) {
+    public UserServiceImpl(UserDAO userDAO, ProjectDAO projectDAO, SubtaskDAO subtaskDAO) {
         this.userDAO = userDAO;
         this.projectDAO = projectDAO;
+        this.subtaskDAO = subtaskDAO;
     }
 
     public void writeUser(User user) {
@@ -52,7 +57,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getByID(String uID) throws EmptyResultDataAccessException {
-        return userDAO.findByID(uID);
+        User user = userDAO.findByID(uID);
+        user.setXp(0);
+        for(Subtask subtask : subtaskDAO.loadAllByUser(uID)) {
+            user.setXp(user.getXp() + subtask.getXp());
+        }
+        return user;
     }
 
     public User authUser(String uID) throws EmptyResultDataAccessException {

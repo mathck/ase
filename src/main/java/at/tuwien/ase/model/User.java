@@ -16,6 +16,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String avatar;
+    private int xp;
 
     // Lists
     private LinkedList<String> projectList = null;
@@ -117,4 +118,11 @@ public class User {
         this.projectList = projectList;
     }
 
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
 }
