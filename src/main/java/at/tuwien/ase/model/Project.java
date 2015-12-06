@@ -14,6 +14,7 @@ public class Project
 	private int pID;
 	private String title;
 	private String description;
+	private int xp;
 
 	// Time
 	private Timestamp creationTime;
@@ -188,5 +189,13 @@ public class Project
 	public void setUpdateTime(Timestamp updateTime)
 	{
 		this.updateTime = updateTime;
+	}
+
+	public int getXp() {
+		return xp;
+	}
+
+	public void setXp(int xp) {
+		this.xp = xp;
 	}
 }

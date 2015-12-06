@@ -18,5 +18,4 @@ public interface RewardService {
     LinkedList<Reward> getAllRewardsFromUser(String uID);
     LinkedList<Reward> getAllRewardsFromProject(String pID);
 
-    int getNewID();
 }

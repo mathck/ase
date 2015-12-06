@@ -20,8 +20,8 @@ public interface IssueService {
 
     LinkedList<Issue> getAllIssuesFromProject(int pID);
 
-    int updateIssueToTask(int iID);
+    LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID);
 
-    int getNewID();
+    int updateIssueToTask(int iID);
 
 }

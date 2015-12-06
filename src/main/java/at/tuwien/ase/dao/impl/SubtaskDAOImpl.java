@@ -42,7 +42,8 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         logger.debug("insert into db: subtask with id=" + subtask.getId());
 
         this.jdbcTemplate.update(
-                "INSERT INTO SUBTASK (ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO SUBTASK (ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 subtask.getId(), subtask.getTitle(), subtask.getDescription(), subtask.getTaskId(), subtask.getStatus(), subtask.getXp(), subtask.getCreationDate(), subtask.getUpdateDate());
     }
 
@@ -55,7 +56,8 @@ public class SubtaskDAOImpl implements SubtaskDAO {
     public Subtask findByID(int tID) {
         return this.jdbcTemplate.queryForObject(
                 "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
-                        "FROM SUBTASK WHERE ID = ?",
+                        "FROM SUBTASK " +
+                        "WHERE ID = ?",
                 new Object[]{tID},
                 new RowMapper<Subtask>() {
                     public Subtask mapRow(ResultSet rs, int subtaskId) throws SQLException {

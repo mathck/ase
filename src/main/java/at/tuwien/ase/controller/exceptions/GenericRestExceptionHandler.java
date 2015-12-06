@@ -3,22 +3,18 @@ package at.tuwien.ase.controller.exceptions;
 import java.lang.invoke.MethodHandles;
 
 import org.apache.logging.log4j.*;
-import org.apache.logging.log4j.core.impl.Log4jContextFactory;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.ServletWebRequest;
 
 /**
- * Created by DanielHofer on 16.15.11.2015.
+ * Created by Daniel Hofer on 16.15.11.2015.
  */
 
 @ControllerAdvice
 public class GenericRestExceptionHandler {
 
     private static final Logger logger = LogManager.getLogger(MethodHandles.lookup().lookupClass());
-
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
@@ -28,6 +24,12 @@ public class GenericRestExceptionHandler {
         return exception.getMessage();
     }
 
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    @ResponseBody
+    protected String handleEmptyResult(final EmptyResultDataAccessException exception) {
+        logger.warn("No entry available");
+        return null;
+    }
 
     //Add more exceptions handling methods as needed
     //...

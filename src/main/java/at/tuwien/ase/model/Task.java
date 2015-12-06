@@ -1,6 +1,7 @@
 package at.tuwien.ase.model;
 
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * Created by Daniel Hofer on 04.11.2015.
@@ -17,10 +18,15 @@ public class Task {
     private Integer projectId;
     private String userMail;
     private String status;
+    private User user;
+
+    private LinkedList<Subtask> subtaskList;
+    private LinkedList<User> userList;
 
     // Must have no-argument constructor
     public Task() {
-
+        subtaskList = new LinkedList<Subtask>();
+        userList = new LinkedList<User>();
     }
 
     public Task(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer dslTemplateId, Integer projectId, String userMail) {
@@ -33,6 +39,8 @@ public class Task {
         this.dslTemplateId = dslTemplateId;
         this.projectId = projectId;
         this.userMail = userMail;
+        subtaskList = new LinkedList<Subtask>();
+        userList = new LinkedList<User>();
     }
 
     public Task(String title, String description) {
@@ -119,6 +127,38 @@ public class Task {
         this.status = status;
     }
 
+    public LinkedList<Subtask> getSubtaskList() {
+        return subtaskList;
+    }
+
+    public void setSubtaskList(LinkedList<Subtask> subtaskList) {
+        this.subtaskList = subtaskList;
+    }
+
+    public void addSubtask(Subtask subtask){
+        this.subtaskList.add(subtask);
+    }
+
+    public void addUser(User user){
+        this.userList.add(user);
+    }
+
+    public LinkedList<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(LinkedList<User> userList) {
+        this.userList = userList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -132,6 +172,9 @@ public class Task {
                 ", projectId=" + projectId +
                 ", userMail='" + userMail + '\'' +
                 ", status='" + status + '\'' +
+                ", user=" + user +
+                ", subtaskList=" + subtaskList +
+                ", userList=" + userList +
                 '}';
     }
 }

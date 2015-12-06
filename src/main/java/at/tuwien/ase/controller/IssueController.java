@@ -35,8 +35,15 @@ public class IssueController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/issues", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Issue> getIssue(@RequestParam("uID") String uID) throws Exception {
+    public LinkedList<Issue> getIssuesByUserMail(@RequestParam("uID") String uID) throws Exception {
         return is.getAllIssuesFromUser(uID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/{pID}/users/{uID}/issues", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Issue> getIssuesByProjectAndUserMail(@PathVariable("pID") int pID, @PathVariable("uID") String uID) throws Exception {
+        return is.getAllIssuesFromProjectAndUser(pID, uID);
     }
 
     // @author Daniel Hofer

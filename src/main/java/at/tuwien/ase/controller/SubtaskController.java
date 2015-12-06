@@ -34,37 +34,37 @@ public class SubtaskController {
     }
 
     // @author Daniel Hofer
-    @RequestMapping(value = "workspace/tasks/{tID}/subtasks", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "workspace/tasks/subtasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public int createSubtask(@RequestBody Subtask subtask, @PathVariable("tID") String tID) throws Exception {
-        return ts.writeSubtask(tID, subtask);
+    public int createSubtask(@RequestBody Subtask subtask) throws Exception {
+        return ts.writeSubtask(subtask);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Subtask> getAllSubtasks() {
+    public LinkedList<Subtask> getAllSubtasks() throws Exception {
         return ts.getAllSubtasks();
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/{tID}/subtasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Subtask> getAllSubtasksFromTask(@PathVariable("tID") String tID) {
+    public LinkedList<Subtask> getAllSubtasksFromTask(@PathVariable("tID") String tID) throws Exception {
         return ts.getAllSubtasksFromTask(tID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/subtasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Subtask> getAllSubtasksFromProject(@PathVariable("pID") String pID) {
+    public LinkedList<Subtask> getAllSubtasksFromProject(@PathVariable("pID") String pID) throws Exception {
         return ts.getAllSubtasksFromProject(pID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/subtasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Subtask> getAllSubtasksFromUser(@PathVariable("uID") String uID) {
+    public LinkedList<Subtask> getAllSubtasksFromUser(@PathVariable("uID") String uID) throws Exception {
         return ts.getAllSubtasksFromUser(uID);
     }
 

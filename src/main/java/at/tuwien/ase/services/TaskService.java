@@ -19,7 +19,8 @@ public interface TaskService {
 
     LinkedList<Task> getAllTasksFromProject(int pID);
 
-    int getNewID();
+    LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID);
+
 
 }
 

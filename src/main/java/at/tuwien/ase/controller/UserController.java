@@ -6,6 +6,7 @@ import at.tuwien.ase.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -56,7 +57,7 @@ public class UserController {
      */
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
-    public User getUser(@RequestParam("uID") String uID) throws Exception {
+    public User getUser(@RequestParam("uID") String uID) throws EmptyResultDataAccessException {
         logger.debug("get user with id " + uID);
         return us.getByID(uID);
     }
@@ -88,7 +89,7 @@ public class UserController {
      */
     @RequestMapping(value = "/user", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
-    public void updateUser(@RequestParam("uID") String uID, @RequestBody User user) throws Exception {
+    public void updateUser(@RequestParam("uID") String uID, @RequestBody User user) throws EmptyResultDataAccessException {
         us.updateUser(uID, user);
     }
 
