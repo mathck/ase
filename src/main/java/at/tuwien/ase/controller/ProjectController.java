@@ -5,6 +5,7 @@ import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.UserRole;
 import at.tuwien.ase.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -27,7 +28,7 @@ public class ProjectController {
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.GET)
     @ResponseBody
-    public Project getProject(@RequestParam("pID") int pID) {
+    public Project getProject(@RequestParam("pID") int pID) throws EmptyResultDataAccessException {
         return ps.getByID(pID);
     }
 
@@ -50,14 +51,14 @@ public class ProjectController {
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects/user", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Project> getProjectsFromUser(@RequestParam("uID") String uID) {
+    public LinkedList<Project> getProjectsFromUser(@RequestParam("uID") String uID) throws EmptyResultDataAccessException {
         return ps.getAllProjectsFromUser(uID);
     }
 
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects/all", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Project> getAllProjects() {
+    public LinkedList<Project> getAllProjects() throws EmptyResultDataAccessException {
         return ps.getAllProjects();
     }
 
@@ -66,6 +67,12 @@ public class ProjectController {
     @ResponseBody
     public void addUserToProject(@RequestBody UserRole user) {
         ps.addUser(user.getProject(), user.getUser(), user.getRole());
+    }
+
+    @RequestMapping(value = "/workspace/projects/remove", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void removeUserFromProject(@RequestParam("uID") String uID, @RequestParam("pID") int pID) {
+        ps.removeUser(pID, uID);
     }
 
 }

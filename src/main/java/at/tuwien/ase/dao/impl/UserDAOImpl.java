@@ -6,6 +6,8 @@ import at.tuwien.ase.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -31,13 +33,13 @@ public class UserDAOImpl implements UserDAO {
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
-        logger.debug("Creating JDBC template");
+        logger.info("Creating JDBC template");
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.keyHolder = new GeneratedKeyHolder();
     }
 
     public void insertUser(User user) {
-        logger.debug("Inserting user <" + user.getUserID() + "> into DB");
+        logger.info("Inserting user <" + user.getUserID() + "> into DB");
         String sqlQuery = "INSERT INTO taskit_user (mail, firstname, lastname, password, avatar_url, salt) " +
                 "VALUES (?,?,?,?,?,?)";
         this.jdbcTemplate.update(
@@ -52,7 +54,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void removeUser(String uID) {
-        logger.debug("Removing user <" + uID + "> from DB");
+        logger.info("Removing user <" + uID + "> from DB");
         String sqlQuery = "DELETE " +
                 "FROM taskit_user " +
                 "WHERE mail = ?";
@@ -63,14 +65,14 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void updateUser(String uID, User user) {
-        logger.debug("Updating user <" + uID + "> on DB");
+        logger.info("Updating user <" + uID + "> on DB");
         String sqlQuery = "UPDATE taskit_user " +
                 "SET " +
-                "firstname = COALESCE (?, firstname), " +
-                "lastname = COALESCE (?, lastname), " +
-                "mail = COALESCE (?, mail), " +
-                "password = COALESCE (?, password), " +
-                "avatar_url = COALESCE (?, avatar_url) " +
+                    "firstname = COALESCE (?, firstname), " +
+                    "lastname = COALESCE (?, lastname), " +
+                    "mail = COALESCE (?, mail), " +
+                    "password = COALESCE (?, password), " +
+                    "avatar_url = COALESCE (?, avatar_url) " +
                 "WHERE mail = ?";
         this.jdbcTemplate.update(
                 sqlQuery,
@@ -83,8 +85,8 @@ public class UserDAOImpl implements UserDAO {
         );
     }
 
-    public User findByID(String uID) {
-        logger.debug("Searching for user <" + uID + "> in DB");
+    public User findByID(String uID) throws EmptyResultDataAccessException {
+        logger.info("Searching for user <" + uID + "> in DB");
         String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
                 "FROM taskit_user " +
                 "WHERE mail = ?";
@@ -98,15 +100,15 @@ public class UserDAOImpl implements UserDAO {
                         user.setFirstName(resultSet.getString("firstname"));
                         user.setLastName(resultSet.getString("lastname"));
                         user.setAvatar(resultSet.getString("avatar_url"));
-                        logger.debug("Found " + user.getFirstName() + " " + user.getLastName() + "in DB");
+                        logger.info("Found " + user.getFirstName() + " " + user.getLastName() + "in DB");
                         return user;
                     }
                 }
         );
     }
 
-    public User authUser(String uID) {
-        logger.debug("Searching for user <" + uID + "> in DB to authenticate");
+    public User authUser(String uID) throws EmptyResultDataAccessException {
+        logger.info("Searching for user <" + uID + "> in DB to authenticate");
         String sqlQuery = "SELECT mail, password, salt " +
                 "FROM taskit_user " +
                 "WHERE mail = ?";
@@ -119,7 +121,7 @@ public class UserDAOImpl implements UserDAO {
                         user.setUserID(resultSet.getString("mail"));
                         user.setPasswordEnc(resultSet.getBytes("password"));
                         user.setSalt(resultSet.getBytes("salt"));
-                        logger.debug("Found <" + user.getUserID() + "> in DB");
+                        logger.info("Found <" + user.getUserID() + "> in DB");
                         return user;
                     }
                 }
@@ -127,7 +129,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public LinkedList<User> loadAll() {
-        logger.debug("Loading all users from DB");
+        logger.info("Loading all users from DB");
         String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
                 "FROM taskit_user";
         List<User> list = this.jdbcTemplate.query(
@@ -146,8 +148,8 @@ public class UserDAOImpl implements UserDAO {
         return new LinkedList<User>(list);
     }
 
-    public LinkedList<UserRole> loadAllByProject(int pID) {
-        logger.debug("Loading all users of project <" + pID + "> from DB");
+    public LinkedList<UserRole> loadAllByProject(int pID) throws EmptyResultDataAccessException {
+        logger.info("Loading all users of project <" + pID + "> from DB");
         String sqlQuery = "SELECT user_mail, project_id, role " +
                 "FROM rel_user_project " +
                 "WHERE project_id = ?";
