@@ -23,8 +23,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskDAO taskDAO;
-    @Autowired
-    private ProjectDAO projectDAO;
 
     private static final Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
@@ -33,8 +31,7 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.findByID(tID);
     }
 
-    public int writeTask(int pID, Task task)
-    {
+    public int writeTask(int pID, Task task) {
         int id;
 
         logger.debug("post new task to project with id="+pID);
@@ -60,13 +57,8 @@ public class TaskServiceImpl implements TaskService {
         return id;
     }
 
-    public boolean deleteTask(int pID, int tID)
-    {
+    public boolean deleteTask(int pID, int tID) {
         logger.debug("delete task with id="+tID);
-        Project project = projectDAO.findByID(pID);
-        project.deleteTask(tID);
-        projectDAO.removeProject(pID);
-        projectDAO.insertProject(project);
         return taskDAO.removeTask(tID);
     }
 
@@ -80,8 +72,7 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Task> getAllTasksFromProject(int pID)
-    {
+    public LinkedList<Task> getAllTasksFromProject(int pID) {
         logger.debug("get all tasks from project");
         return taskDAO.loadAllByProject(pID);
     }
