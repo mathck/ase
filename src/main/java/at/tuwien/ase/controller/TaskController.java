@@ -34,32 +34,37 @@ public class TaskController {
     }
 
     // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/{pID}/users/{uID}/tasks", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Task> getTasksByProjectAndUserMail(@PathVariable("pID") int pID, @PathVariable("uID") String uID) throws Exception {
+        return ts.getAllTasksFromProjectAndUser(pID, uID);
+    }
+
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public int createTask(@RequestBody Task task, @PathVariable("pID") int pID) throws Exception
-    {
+    public int createTask(@RequestBody Task task, @PathVariable("pID") int pID) throws Exception {
         return ts.writeTask(pID, task);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Task> getAllTasks() {
+    public LinkedList<Task> getAllTasks()  throws Exception {
         return ts.getAllTasks();
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Task> getAllTasksFromProject(@PathVariable("pID") int pID)
-    {
+    public LinkedList<Task> getAllTasksFromProject(@PathVariable("pID") int pID)  throws Exception {
         return ts.getAllTasksFromProject(pID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/tasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Task> getAllTasksFromUser(@PathVariable("uID") String uID) {
+    public LinkedList<Task> getAllTasksFromUser(@PathVariable("uID") String uID)  throws Exception {
         return ts.getAllTasksFromUser(uID);
     }
 

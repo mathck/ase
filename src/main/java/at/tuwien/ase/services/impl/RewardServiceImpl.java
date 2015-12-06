@@ -26,7 +26,7 @@ public class RewardServiceImpl implements RewardService {
         logger.debug("create new reward");
         int id;
 
-        id = this.getNewID();
+        id = rewardDAO.getNewID();
         reward.setId(id);
         reward.setCreationDate(new Date());
 
@@ -60,7 +60,4 @@ public class RewardServiceImpl implements RewardService {
         return rewardDAO.loadAllByProject(pID);
     }
 
-    public int getNewID() {
-        return rewardDAO.getNewID();
-    }
 }

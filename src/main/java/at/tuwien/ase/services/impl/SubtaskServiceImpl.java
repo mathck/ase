@@ -26,11 +26,11 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     private static final Logger logger = LogManager.getLogger(SubtaskServiceImpl.class);
 
-    public int writeSubtask(String pID, Subtask subtask) {
+    public int writeSubtask(Subtask subtask) {
         logger.debug("create new subtask");
         int id;
 
-        id = this.getNewID();
+        id = subtaskDAO.getNewID();
         subtask.setId(id);
         subtask.setCreationDate(new Date());
         subtask.setUpdateDate(new Date());
@@ -70,7 +70,5 @@ public class SubtaskServiceImpl implements SubtaskService {
         return subtaskDAO.loadAllByProject(pID);
     }
 
-    public int getNewID() {
-        return subtaskDAO.getNewID();
-    }
+
 }

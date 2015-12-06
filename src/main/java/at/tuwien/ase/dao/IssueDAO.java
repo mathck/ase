@@ -18,6 +18,7 @@ public interface IssueDAO {
 
     LinkedList<Issue> loadAllByProject(int pID);
     LinkedList<Issue> loadAllByUser(String uID);
+    LinkedList<Issue> loadAllByProjectAndUser(int pID, String uID);
 
     int getNewID();
 

@@ -1,6 +1,7 @@
 package at.tuwien.ase.dao;
 
 import at.tuwien.ase.model.Task;
+import at.tuwien.ase.model.User;
 
 import java.util.LinkedList;
 
@@ -20,6 +21,12 @@ public interface TaskDAO {
 
     void updateIssueToTask(int iID);
 
+    //assign user to task
+    void addUserToTask(String uID, int tID);
+
+    LinkedList<Task> loadAllByProjectAndUser(int pID, String uID);
+
     int getNewID();
+    int getNewIDForRelTaskUser();
 
 }

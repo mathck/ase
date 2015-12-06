@@ -11,7 +11,7 @@ import java.util.LinkedList;
  */
 public interface SubtaskService {
 
-    int writeSubtask(String pID, Subtask subtask);
+    int writeSubtask(Subtask subtask);
 
     boolean deleteSubtask(String pID, int sID);
 
@@ -21,7 +21,6 @@ public interface SubtaskService {
     LinkedList<Subtask> getAllSubtasksFromUser(String uID);
     LinkedList<Subtask> getAllSubtasksFromProject(String pID);
 
-    int getNewID();
 
 }
 
