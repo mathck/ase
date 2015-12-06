@@ -6,7 +6,7 @@
     <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
 
     <section id="content">
-        <div class="container" data-ng-controller="updateProjectCtrl"><!---->
+        <div class="container" data-ng-controller="updateProjectCtrl as uProjCtrl"><!---->
             <div class="block-header">
                 <h2>View Project</h2>
 
@@ -35,14 +35,14 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
                                 <div class="fg-line">
-                                        <input type="text" class="form-control input-lg" placeholder="<<Title>>" data-ng-model="project.title">
+                                        <input type="text" class="form-control input-lg" placeholder="<<Title>>" data-ng-model="selectedProject.title">
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <p class="c-black f-500 m-b-20 m-t-20">Description</p>
                             <div class="fg-line">
-                                <textarea class="form-control input-md description" placeholder="<<Your description...>>" data-ng-model="project.description"></textarea>
+                                <textarea class="form-control input-md description" placeholder="<<Your description...>>" data-ng-model="selectedProject.description"></textarea>
                             </div>
                         </div>
                     </div>

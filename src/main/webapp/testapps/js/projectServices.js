@@ -1,7 +1,7 @@
 var projectServices = angular.module('taskit.projectServices', ['ngResource']);
 
 projectServices.factory('ProjectsFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects', {}, {
+    return $resource('/taskit/api/workspace/projects/all', {}, {
         query: { method: 'GET', isArray: true },
         create: { method: 'POST'}
     })

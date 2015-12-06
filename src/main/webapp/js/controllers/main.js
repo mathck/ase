@@ -7,9 +7,9 @@ materialAdmin
         //Welcome Message
 
         TokenService.username = $cookies.email;
-        TokenService.token = $cookies.token;
+        TokenService.token = ($cookies.token).valueOf();
         TokenService.isLogged=true;
-        $http.defaults.headers.common['user-token'] = TokenService.token;
+        $http.defaults.headers.common['user-token'] = String(TokenService.token);
         console.log("Token is:" + TokenService.token);
         console.log("Token Service: username: " + TokenService.username);
 
@@ -297,7 +297,7 @@ materialAdmin
     // LOGIN & REGISTER
     //=================================================
 
-    .controller('loginCtrl', function ($rootScope, LoginFactory, UsersFactory, $cookies, $window, $q, $http) {
+    .controller('loginCtrl', function ($rootScope, $cookies, $window, $q, $http, LoginFactory, UsersFactory) {
 
 
             $rootScope.avatar="img/avatars/0.png";
@@ -307,17 +307,17 @@ materialAdmin
             this.loginUser = function () {
                  var email = this.login.email;
                  var password = this.login.password;
-                 console.log("/taskit/api/user/login?email=" + email + "&password=" + password);
+
                  $http({
                     url:"/taskit/api/user/login?email=" + email + "&password=" + password,
-                    method:'GET',
-                    transformResponse: undefined
+                    method:'GET'
+                    //transformResponse: undefined
                  })
                  .success(function(token){
-                    $http.defaults.headers.common['user-token'] = token;
+                    $http.defaults.headers.common['user-token'] = token.token;
                     console.log("Token is:" + token);
                     $cookies.email=email;
-                    $cookies.token=token;
+                    $cookies.token=token.token;
                     $window.location.href='/taskit/main.html';
 
                  })
@@ -325,9 +325,6 @@ materialAdmin
                     console.log("Request failed. Responses: " + response + "; Status: " + status);
                  });
             };
-
-                //$window.location.href='/taskit/main.html';
-
 
             // callback for ng-click 'saveUser':
             this.createUser = function () {
@@ -342,6 +339,34 @@ materialAdmin
             this.loginStat = 1;
             this.register = 0;
             this.forgot = 0;
+    })
+
+
+    //=================================================
+    // MAIN VIEW
+    //=================================================
+
+    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory){
+        ProjectsFactory.query().$promise.then(function(response){
+            $scope.userProjects=response;
+            /*$scope.userProjects.forEach(function(entry){
+                console.log(entry.projectID);
+            });*/
+        });
+
+        $scope.viewProject=function(currentID){
+            console.log("Click on viewProject with ID " + currentID);
+        }
+
+        $scope.createIssueForProject=function(currentID){
+            console.log("Click on create Issue for Project with ID " + currentID);
+        }
+
+
+        $scope.createTaskForProject=function(currentID){
+            console.log("Click on Create Task for Project with ID " + currentID);
+        }
+
     })
 
     //=================================================
@@ -402,27 +427,18 @@ materialAdmin
     // PROJECT UPDATE
     //=================================================
 
-    .controller('updateProjectCtrl', function ( ProjectsFactory, UsersFactory, $scope, $location, $window) {
+    .controller('updateProjectCtrl', function ($scope, $location, $stateParams, $window, ProjectFactory, UsersFactory) {
 
-            // callback for ng-click 'create Project':
-        /*console.log("starting");
-        $scope.createProject = function () {
-            //UserFactory.show("test").then(function(loggedUser){
-            var newProject = {
-                id: "0",
-                title: $scope.project.title,
-                description: $scope.project.description,
-                userList: []
-                //taskList: [],
-                //issueList: []
-            };
-            //newProject.userList.push(loggedUser);
-
-            //console.log(loggedUser);
-            console.log(newProject);
-            ProjectsFactory.create(newProject);
-            $location.path('/home');
-        };//};*/
+       console.log("View Project Controller initialized");
+       $scope.projectId = $stateParams.projectId;
+       console.log("pid:" + $scope.projectId);
+       ProjectFactory.query($scope.projectId).$promise.then(function(response){
+            $scope.selectedProject=response;
+            console.log(response);
+            /*$scope.userProjects.forEach(function(entry){
+                console.log(entry.projectID);
+            });*/
+        });
     })
 
     //=================================================

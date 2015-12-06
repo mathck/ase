@@ -5,13 +5,13 @@ issueServices.factory('IssuesFactory', function ($resource) {
         query: {
             method: 'GET',
             params: {pid: '@pid'},
-            isArray: true,
-            headers: { 'auth-token': '@token' }
+            isArray: true
+            //headers: { 'auth-token': '@token' }
         },
         create: {
             method: 'POST',
-            params: {pid: '@pid'},
-            headers: { 'auth-token': '@token' }
+            params: {pid: '@pid'}
+            //headers: { 'auth-token': '@token' }
         }
     })
 });
@@ -19,18 +19,18 @@ issueServices.factory('IssuesFactory', function ($resource) {
 issueServices.factory('IssueFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects/:pid/issues/:id', {}, {
         show: {
-            method: 'GET',
-            headers: { 'auth-token': '@token' }
+            method: 'GET'
+            //headers: { 'auth-token': '@token' }
         },
         update: {
             method: 'PUT',
-            params: {pid: '@pid', id: '@id'},
-            headers: { 'auth-token': '@token' }
+            params: {pid: '@pid', id: '@id'}
+            //headers: { 'auth-token': '@token' }
         },
         delete: {
             method: 'DELETE',
-            params: {pid: '@pid', id: '@id'},
-            headers: { 'auth-token': '@token' }
+            params: {pid: '@pid', id: '@id'}
+            //headers: { 'auth-token': '@token' }
         }
     })
 });

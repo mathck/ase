@@ -4,8 +4,8 @@ userServices.factory('UsersFactory', function ($resource) {
     return $resource('/taskit/api/user/', {}, {
         query: {
             method: 'GET',
-            isArray: true,
-            headers: { 'auth-token': '@token' }
+            isArray: true
+            //headers: { 'auth-token': '@token' }
         },
         create: {
             method: 'POST'
@@ -16,18 +16,18 @@ userServices.factory('UsersFactory', function ($resource) {
 userServices.factory('UserFactory', function ($resource) {
     return $resource('/taskit/api/user/:id', {}, {
         show: {
-            method: 'GET',
-            headers: { 'auth-token': '@token' }
+            method: 'GET'
+            //headers: { 'auth-token': '@token' }
         },
         update: {
             method: 'PUT',
-            params: {email: '@email'},
-            headers: { 'auth-token': '@token' }
+            params: {email: '@email'}
+            //headers: { 'auth-token': '@token' }
         },
         delete: {
             method: 'DELETE',
-            params: {email: '@email'},
-            headers: { 'auth-token': '@token' }
+            params: {email: '@email'}
+            //headers: { 'auth-token': '@token' }
         }
     })
 });
