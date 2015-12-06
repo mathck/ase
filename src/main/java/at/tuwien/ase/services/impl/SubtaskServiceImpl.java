@@ -21,9 +21,6 @@ public class SubtaskServiceImpl implements SubtaskService {
     @Autowired
     private SubtaskDAO subtaskDAO;
 
-    @Autowired
-    private ProjectDAO projectDAO;
-
     private static final Logger logger = LogManager.getLogger(SubtaskServiceImpl.class);
 
     public int writeSubtask(Subtask subtask) {
