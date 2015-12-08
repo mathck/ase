@@ -41,7 +41,7 @@ materialAdmin
             //------------------------------
 
             .state ('viewIssue', {
-                url: '/viewIssue:issueId',
+                url: '/viewIssue/:issueId',
                 templateUrl: 'views/viewIssue.html?iid=:issueID'
             })
 
@@ -50,8 +50,8 @@ materialAdmin
             //------------------------------
 
             .state ('viewTask', {
-                url: '/viewTask:taskId',
-                templateUrl: 'views/viewTask.html?tid=:taskId',
+                url: '/viewTask/:taskId',
+                templateUrl: 'views/viewTask.html?tID=:taskId',
             })
 
             //------------------------------
@@ -59,8 +59,8 @@ materialAdmin
             //------------------------------
 
             .state ('viewProject', {
-                url: '/viewProject/:projectID',
-                templateUrl: 'views/viewProject.html?pid=:projectId',
+                url: '/viewProject/:pID',
+                templateUrl: 'views/viewProject.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
                         return $ocLazyLoad.load ([
@@ -126,7 +126,7 @@ materialAdmin
             //------------------------------
 
             .state ('createIssue', {
-                url: '/createIssue',
+                url: '/createIssue/:pID',
                 templateUrl: 'views/createIssue.html',
             })
 
@@ -135,7 +135,7 @@ materialAdmin
             //------------------------------
 
             .state ('createTemplate', {
-                url: '/createTemplate',
+                url: '/createTemplate/',
                 templateUrl: 'views/createTemplate.html',
             })
 
@@ -184,8 +184,8 @@ materialAdmin
             //------------------------------
 
             .state ('createTask', {
-                url: '/createTask',
-                templateUrl: 'views/createTask.html',
+                url: '/createTask/:pID',
+                templateUrl: 'views/createTask.html?pID=:pID',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
                         return $ocLazyLoad.load ([

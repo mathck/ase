@@ -63,22 +63,22 @@
                             <div class="card-header bgm-project">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-folder-outline c-white"></i></span>
-                                    <h2>{{project.title}}<small></small></h2>
+                                    <h2>{{project.title}},<small>{{project.projectID}}</small></h2>
                                 </div>
                                 <ul class="actions actions-alt">
                                     <li class="dropdown" dropdown>
-                                        <a data-ui-sref="viewProject/{{project.projectID}}" dropdown-toggle aria-expanded="false" data-ng-click="viewProject(project.projectID)">>
+                                        <a data-ui-sref="viewProject({pID: project.projectID})" dropdown-toggle aria-expanded="false" data-ng-click="viewProject(project.projectID)">>
                                             <i class="zmdi zmdi-more-vert"></i>
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li>
-                                                <a data-ui-sref="viewProject/{{project.projectID}}" data-ng-click="viewProject(project.projectID)">View Project</a>
+                                                <a href="">View Project</a>
                                             </li>
                                             <li>
-                                                <a href="" data-ng-click="createIssueForProject(project.projectID)">Create Issue</a>
+                                                <a data-ui-sref="createIssue({pID: project.projectID})" data-ng-click="createIssueForProject(project.projectID)">Create Issue</a>
                                             </li>
                                             <li>
-                                                <a href="" data-ng-click="createTaskForProject(project.projectID)">Create Task</a>
+                                                <a data-ui-sref="createIssue({pID: project.projectID})" data-ng-click="createTaskForProject(project.projectID)">Create Task</a>
                                             </li>
                                         </ul>
                                     </li>

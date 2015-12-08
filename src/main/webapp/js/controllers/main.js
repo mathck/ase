@@ -366,8 +366,6 @@ materialAdmin
     //=================================================
 
     .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory){
-        console.log("username for project is: ")
-        console.log(TokenService.username);
         //ProjectsFactory.query({uID: TokenService.username}).$promise.then(function(response){ //TODO - change after project creation works
         AdminProjectsFactory.query().$promise.then(function(response){
             $scope.userProjects=response;
@@ -425,7 +423,7 @@ materialAdmin
     .controller('createProjectCtrl', function (TokenService, ProjectsFactory, UsersFactory, $scope, $location, $window) {
 
             // callback for ng-click 'create Project':
-        console.log("starting");
+        console.log("starting Project Creation");
         $scope.createProject = function () {
             //UserFactory.show("test").then(function(loggedUser){
             var newProject = {
@@ -449,12 +447,13 @@ materialAdmin
     // PROJECT UPDATE
     //=================================================
 
-    .controller('updateProjectCtrl', function ($scope, $location, $stateParams, $window, ProjectFactory, UsersFactory) {
+    .controller('updateProjectCtrl', function ($scope, $state, ProjectFactory, UsersFactory) {
 
        console.log("View Project Controller initialized");
-       $scope.projectId = $stateParams.projectId;
-       console.log("pid:" + $scope.projectId);
-       ProjectFactory.query($scope.projectId).$promise.then(function(response){
+       console.log($state.params.pID);
+       var currentPID = $state.params.pID;
+       console.log("pid:" + currentPID);
+       ProjectFactory.query(currentPID).$promise.then(function(response){
             $scope.selectedProject=response;
             console.log(response);
             /*$scope.userProjects.forEach(function(entry){
