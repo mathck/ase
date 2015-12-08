@@ -59,8 +59,11 @@ public class UserServiceImpl implements UserService {
     public User getByID(String uID) throws EmptyResultDataAccessException {
         User user = userDAO.findByID(uID);
         user.setXp(0);
-        for(Subtask subtask : subtaskDAO.loadAllByUser(uID)) {
-            user.setXp(user.getXp() + subtask.getXp());
+        LinkedList<Subtask> listOfSubtasks = subtaskDAO.loadAllByUser(uID);
+        if(listOfSubtasks != null && !listOfSubtasks.isEmpty()) {
+            for (Subtask subtask : listOfSubtasks) {
+                user.setXp(user.getXp() + subtask.getXp());
+            }
         }
         return user;
     }
