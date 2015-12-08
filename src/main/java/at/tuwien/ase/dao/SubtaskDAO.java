@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public interface SubtaskDAO {
 
     void insertSubtask(Subtask subtask);
-    boolean removeSubtask(int tID);
+    void removeSubtaskByID(int tID);
 
     Subtask findByID(int tID);
     LinkedList<Subtask> loadAll();

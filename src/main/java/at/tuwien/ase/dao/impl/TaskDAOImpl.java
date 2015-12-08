@@ -57,10 +57,16 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public boolean removeTask(int tID) {
-        // TODO
-
-        return false;
+    public void removeTaskByID(int tID) {
+        logger.debug("delete from db: task with id=" + tID);
+        String sqlQuery = "DELETE " +
+                "FROM task " +
+                "WHERE id = ? AND TASK_TYPE = ? ";
+        this.jdbcTemplate.update(
+                sqlQuery,
+                tID,
+                this.taskType
+        );
     }
 
     public Task findByID(int taskId) {

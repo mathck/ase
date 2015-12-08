@@ -12,7 +12,7 @@ public interface IssueService {
 
     int writeIssue(Issue issue, int pID, String uID);
 
-    boolean deleteIssue(int pID, int iID);
+    void deleteIssueByID(int iID);
 
     Issue getByID(int iID);
     LinkedList<Issue> getAllIssues();

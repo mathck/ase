@@ -11,7 +11,7 @@ public interface TaskService {
 
     int writeTask(int pID, Task task);
 
-    boolean deleteTask(int pID, int tID);
+    void deleteTaskByID(int tID);
 
     Task getByID(int tID);
     LinkedList<Task> getAllTasks();

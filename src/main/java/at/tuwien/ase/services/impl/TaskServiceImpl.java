@@ -57,9 +57,9 @@ public class TaskServiceImpl implements TaskService {
         return id;
     }
 
-    public boolean deleteTask(int pID, int tID) {
+    public void deleteTaskByID(int tID) {
         logger.debug("delete task with id="+tID);
-        return taskDAO.removeTask(tID);
+        taskDAO.removeTaskByID(tID);
     }
 
     public LinkedList<Task> getAllTasks() {

@@ -76,10 +76,10 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteProject(int pID) {
         Project project = projectDAO.findByID(pID);
         for (Task task : project.getAllTasks()) {
-            taskDAO.removeTask(task.getId());
+            taskDAO.removeTaskByID(task.getId());
         }
         for (Issue issue : project.getAllIssues()) {
-            issueDAO.removeIssue(issue.getId());
+            issueDAO.removeIssueByID(issue.getId());
         }
         for (UserRole user : project.getAllUser()) {
             projectDAO.removeUserFromProject(user.getUser(), project.getProjectID());
@@ -125,10 +125,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     public void removeUser(int pID, String uID) {
         for(Task task : taskDAO.loadAllByProjectAndUser(pID, uID)) {
-            taskDAO.removeTask(task.getId());
+            taskDAO.removeTaskByID(task.getId());
         }
         for(Issue issue : issueDAO.loadAllByProjectAndUser(pID, uID)) {
-            issueDAO.removeIssue(issue.getId());
+            issueDAO.removeIssueByID(issue.getId());
         }
         projectDAO.removeUserFromProject(uID, pID);
     }

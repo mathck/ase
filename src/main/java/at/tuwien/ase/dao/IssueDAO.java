@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public interface IssueDAO {
 
     void insertIssue(Issue issue);
-    boolean removeIssue(int iID);
+    void removeIssueByID(int iID);
 
     Issue findByID(int iID);
     LinkedList<Issue> loadAll();

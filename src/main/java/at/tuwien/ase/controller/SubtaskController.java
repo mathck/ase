@@ -29,7 +29,7 @@ public class SubtaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks/{sID}", method = RequestMethod.GET)
     @ResponseBody
-    public Subtask getSubtask(@PathVariable("sID") int sID) throws Exception {
+    public Subtask getSubtaskByID(@PathVariable("sID") int sID) throws Exception {
         return ts.getByID(sID);
     }
 

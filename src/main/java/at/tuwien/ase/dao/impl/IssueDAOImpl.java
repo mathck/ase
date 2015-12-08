@@ -51,9 +51,16 @@ public class IssueDAOImpl implements IssueDAO {
 
     }
 
-    public boolean removeIssue(int iID) {
-        //TODO
-        return false;
+    public void removeIssueByID(int iID) {
+        logger.debug("delete from db: issue with id=" + iID);
+        String sqlQuery = "DELETE " +
+                "FROM task " +
+                "WHERE id = ? AND TASK_TYPE = ? ";
+        this.jdbcTemplate.update(
+                sqlQuery,
+                iID,
+                this.taskType
+        );
     }
 
     public Issue findByID(int issueId) {

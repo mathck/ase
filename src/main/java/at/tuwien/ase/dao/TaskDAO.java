@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public interface TaskDAO {
 
     void insertTask(Task task);
-    boolean removeTask(int tID);
+    void removeTaskByID(int tID);
 
     Task findByID(int tID);
     LinkedList<Task> loadAll();

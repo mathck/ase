@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public interface RewardDAO {
 
     Reward insertReward(Reward reward);
-    boolean removeReward(String rID);
+    void removeRewardByID(String rID);
 
     Reward findByID(int rID);
     LinkedList<Reward> loadAll();

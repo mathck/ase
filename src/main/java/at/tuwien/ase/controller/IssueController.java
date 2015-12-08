@@ -28,7 +28,7 @@ public class IssueController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/issues/{iID}", method = RequestMethod.GET)
     @ResponseBody
-    public Issue getIssue(@PathVariable("iID") int iID) throws Exception {
+    public Issue getIssueByID(@PathVariable("iID") int iID) throws Exception {
         return is.getByID(iID);
     }
 
@@ -67,5 +67,11 @@ public class IssueController {
         return is.getAllIssuesFromProject(pID);
     }
 
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/issues/{iID}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteIssueByID(@PathVariable("iID") int iID)  throws Exception {
+        is.deleteIssueByID(iID);
+    }
 
 }

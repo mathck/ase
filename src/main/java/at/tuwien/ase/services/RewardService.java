@@ -11,7 +11,7 @@ public interface RewardService {
 
     int writeReward(Reward reward);
 
-    boolean deleteReward(String rID);
+    void deleteRewardByID(String rID);
 
     Reward getByID(int rID);
     LinkedList<Reward> getAllRewards();

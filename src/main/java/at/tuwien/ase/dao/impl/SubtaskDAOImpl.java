@@ -47,10 +47,10 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 subtask.getId(), subtask.getTitle(), subtask.getDescription(), subtask.getTaskId(), subtask.getStatus(), subtask.getXp(), subtask.getCreationDate(), subtask.getUpdateDate());
     }
 
-    public boolean removeSubtask(int tID) {
+    public void removeSubtaskByID(int tID) {
         // TODO
 
-        return false;
+
     }
 
     public Subtask findByID(int tID) {

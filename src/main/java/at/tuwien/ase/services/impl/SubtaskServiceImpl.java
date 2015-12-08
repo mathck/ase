@@ -37,9 +37,9 @@ public class SubtaskServiceImpl implements SubtaskService {
         return id;
     }
 
-    public boolean deleteSubtask(String pID, int sID) {
+    public void deleteSubtaskByID(String pID, int sID) {
         logger.debug("delete subtask with id=" + sID);
-        return subtaskDAO.removeSubtask(sID);
+        subtaskDAO.removeSubtaskByID(sID);
     }
 
     public Subtask getByID(int sID) {

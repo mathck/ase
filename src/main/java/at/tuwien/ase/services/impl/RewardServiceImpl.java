@@ -35,9 +35,9 @@ public class RewardServiceImpl implements RewardService {
         return id;
     }
 
-    public boolean deleteReward(String rID) {
+    public void deleteRewardByID(String rID) {
         logger.debug("delete reward with id="+rID);
-        return rewardDAO.removeReward(rID);
+        rewardDAO.removeRewardByID(rID);
     }
 
     public Reward getByID(int rID) {

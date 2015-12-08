@@ -62,9 +62,9 @@ public class IssueServiceImpl implements IssueService {
         return id;
     }
 
-    public boolean deleteIssue(int pID, int iID)  {
+    public void deleteIssueByID(int iID)  {
         logger.debug("delete issue with id="+iID);
-        return issueDAO.removeIssue(iID);
+        issueDAO.removeIssueByID(iID);
     }
 
     public LinkedList<Issue> getAllIssues() {

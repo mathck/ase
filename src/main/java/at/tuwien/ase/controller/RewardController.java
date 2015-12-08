@@ -29,7 +29,7 @@ public class RewardController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/rewards/{rID}", method = RequestMethod.GET)
     @ResponseBody
-    public Reward getReward(@PathVariable("rID") int rID) throws Exception {
+    public Reward getRewardByID(@PathVariable("rID") int rID) throws Exception {
         return rs.getByID(rID);
     }
 

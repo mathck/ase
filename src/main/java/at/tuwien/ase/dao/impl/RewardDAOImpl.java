@@ -45,10 +45,10 @@ public class RewardDAOImpl implements RewardDAO{
         return null;
     }
 
-    public boolean removeReward(String rID) {
+    public void removeRewardByID(String rID) {
         // TODO
 
-        return false;
+
     }
 
     public Reward findByID(int rID) {
