@@ -37,7 +37,7 @@ public class SubtaskServiceImpl implements SubtaskService {
         return id;
     }
 
-    public void deleteSubtaskByID(String pID, int sID) {
+    public void deleteSubtaskByID(int sID) {
         logger.debug("delete subtask with id=" + sID);
         subtaskDAO.removeSubtaskByID(sID);
     }
@@ -52,7 +52,7 @@ public class SubtaskServiceImpl implements SubtaskService {
         return subtaskDAO.loadAll();
     }
 
-    public LinkedList<Subtask> getAllSubtasksFromTask(String tID) {
+    public LinkedList<Subtask> getAllSubtasksFromTask(int tID) {
         logger.debug("get all subtasks from task with id="+tID);
         return subtaskDAO.loadAllByTask(tID);
     }
@@ -62,7 +62,7 @@ public class SubtaskServiceImpl implements SubtaskService {
         return subtaskDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Subtask> getAllSubtasksFromProject(String pID) {
+    public LinkedList<Subtask> getAllSubtasksFromProject(int pID) {
         logger.debug("get all subtasks from project with id="+pID);
         return subtaskDAO.loadAllByProject(pID);
     }

@@ -53,15 +53,26 @@ public class TaskDAOImpl implements TaskDAO {
 
         this.jdbcTemplate.update(
                 sqlQuery,
-                task.getId(), task.getDslTemplateId(), task.getProjectId(), task.getTitle(), task.getDescription(), task.getStatus(), this.taskType, task.getCreationDate(), task.getUpdateDate());
+                task.getId(),
+                task.getDslTemplateId(),
+                task.getProjectId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                this.taskType,
+                task.getCreationDate(),
+                task.getUpdateDate());
 
     }
 
     public void removeTaskByID(int tID) {
+
         logger.debug("delete from db: task with id=" + tID);
+
         String sqlQuery = "DELETE " +
                 "FROM task " +
                 "WHERE id = ? AND TASK_TYPE = ? ";
+
         this.jdbcTemplate.update(
                 sqlQuery,
                 tID,
@@ -82,7 +93,10 @@ public class TaskDAOImpl implements TaskDAO {
         LinkedList<Subtask> subtaskList;
         Task task = new Task();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, taskId, this.taskType);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                taskId,
+                this.taskType);
         for (Map<String,Object> row : rows) {
 
             //set task information only in first iteration
@@ -129,7 +143,10 @@ public class TaskDAOImpl implements TaskDAO {
 
         LinkedList<Task> tasks = new LinkedList<Task>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType);
+
         for (Map<String,Object> row : rows) {
 
             Task task = new Task();
@@ -137,8 +154,8 @@ public class TaskDAOImpl implements TaskDAO {
             task.setTitle((String)row.get("title"));
             task.setDescription((String)row.get("description"));
             task.setTaskType((String)row.get("task_type"));
-            task.setCreationDate((Date)row.get("creation_date"));
-            task.setUpdateDate((Date)row.get("update_date"));
+            task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
             task.setDslTemplateId((Integer)row.get("dsl_template_id"));
             task.setProjectId((Integer)row.get("project_id"));
             task.setUserMail((String)row.get("user_mail"));
@@ -161,7 +178,11 @@ public class TaskDAOImpl implements TaskDAO {
 
         LinkedList<Task> tasks = new LinkedList<Task>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, Integer.valueOf(pID));
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType,
+                Integer.valueOf(pID));
+
         for (Map<String,Object> row : rows) {
 
             Task task = new Task();
@@ -169,8 +190,8 @@ public class TaskDAOImpl implements TaskDAO {
             task.setTitle((String)row.get("title"));
             task.setDescription((String)row.get("description"));
             task.setTaskType((String)row.get("task_type"));
-            task.setCreationDate((Date)row.get("creation_date"));
-            task.setUpdateDate((Date)row.get("update_date"));
+            task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
             task.setDslTemplateId((Integer)row.get("dsl_template_id"));
             task.setProjectId((Integer)row.get("project_id"));
             task.setUserMail((String)row.get("user_mail"));
@@ -196,7 +217,11 @@ public class TaskDAOImpl implements TaskDAO {
 
         LinkedList<Task> tasks = new LinkedList<Task>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, uID);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType,
+                uID);
+
         for (Map<String,Object> row : rows) {
 
             Task task = new Task();
@@ -204,8 +229,8 @@ public class TaskDAOImpl implements TaskDAO {
             task.setTitle((String)row.get("title"));
             task.setDescription((String)row.get("description"));
             task.setTaskType((String)row.get("task_type"));
-            task.setCreationDate((Date)row.get("creation_date"));
-            task.setUpdateDate((Date)row.get("update_date"));
+            task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
             task.setDslTemplateId((Integer)row.get("dsl_template_id"));
             task.setProjectId((Integer)row.get("project_id"));
             task.setUserMail((String)row.get("user_mail"));
@@ -227,7 +252,10 @@ public class TaskDAOImpl implements TaskDAO {
 
                 this.jdbcTemplate.update(
                         sqlQuery,
-                this.taskType, new Date(), new String("open"), iID);
+                        this.taskType,
+                        new Date(),
+                        new String("open"),
+                        iID);
 
     }
 
@@ -248,6 +276,7 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     public LinkedList<Task> loadAllByProjectAndUser(int pID, String uID) {
+
         logger.debug("retrieve from db: all tasks from user with id="+uID+" and project with id="+pID);
 
         String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.DSL_TEMPLATE_ID, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
@@ -260,7 +289,12 @@ public class TaskDAOImpl implements TaskDAO {
         LinkedList<Task> tasks = new LinkedList<Task>();
         User user;
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, uID, pID);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType,
+                uID,
+                pID);
+
         for (Map<String,Object> row : rows) {
 
             Task task = new Task();

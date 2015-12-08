@@ -35,7 +35,7 @@ public class RewardServiceImpl implements RewardService {
         return id;
     }
 
-    public void deleteRewardByID(String rID) {
+    public void deleteRewardByID(int rID) {
         logger.debug("delete reward with id="+rID);
         rewardDAO.removeRewardByID(rID);
     }
@@ -50,14 +50,29 @@ public class RewardServiceImpl implements RewardService {
         return rewardDAO.loadAll();
     }
 
-    public LinkedList<Reward> getAllRewardsFromUser(String uID) {
-        logger.debug("get all rewards from user with id="+uID);
-        return rewardDAO.loadAllByUser(uID);
+    public LinkedList<Reward> getAllRewardsCreatedByUser(String uID) {
+        logger.debug("get all rewards created from user with id="+uID);
+        return rewardDAO.loadAllRewardsCreatedByUser(uID);
     }
 
-    public LinkedList<Reward> getAllRewardsFromProject(String pID) {
+    public LinkedList<Reward> getAllRewardsAwardedToUser(String uID) {
+        logger.debug("get all rewards awarded to user with id="+uID);
+        return rewardDAO.loadAllRewardsAwardedToUser(uID);
+    }
+
+    public LinkedList<Reward> getAllRewardsFromProject(int pID) {
         logger.debug("get all rewards from project with id="+pID);
         return rewardDAO.loadAllByProject(pID);
+    }
+
+    public LinkedList<Reward> getAllRewardsFromProjectAndUser(int pID, String uID) {
+        logger.debug("get all rewards from project " + pID + " and from user " + uID);
+        return rewardDAO.loadAllByProjectAndUser(pID, uID);
+    }
+
+    public void assignAwardToUser(int pID, String uID, int rID) {
+        logger.debug("assign reward with id="+rID+" to user with id="+uID+" in project with id="+pID);
+        rewardDAO.assignAwardToUser(pID, uID, rID);
     }
 
 }

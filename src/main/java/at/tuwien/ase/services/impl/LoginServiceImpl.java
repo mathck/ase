@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 /**
- * Created by DanielHofer on 16.16.11.2015.
+ * Created by DanielHofer on 16.11.2015.
  */
 
 @Service

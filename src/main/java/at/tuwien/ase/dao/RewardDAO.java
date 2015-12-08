@@ -9,13 +9,18 @@ import java.util.LinkedList;
  */
 public interface RewardDAO {
 
-    Reward insertReward(Reward reward);
-    void removeRewardByID(String rID);
+    void insertReward(Reward reward);
+    void removeRewardByID(int rID);
 
     Reward findByID(int rID);
     LinkedList<Reward> loadAll();
-    LinkedList<Reward> loadAllByUser(String uID);
-    LinkedList<Reward> loadAllByProject(String pID);
+    LinkedList<Reward> loadAllRewardsCreatedByUser(String uID);
+    LinkedList<Reward> loadAllRewardsAwardedToUser(String uID);
+    LinkedList<Reward> loadAllByProject(int pID);
+    LinkedList<Reward> loadAllByProjectAndUser(int pID, String uID);
+
+    void assignAwardToUser(int pID, String uID, int rID);
 
     int getNewID();
+    int getNewIDForRelRewardProjectUser();
 }

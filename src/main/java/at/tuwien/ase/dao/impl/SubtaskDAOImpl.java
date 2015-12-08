@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,25 +40,48 @@ public class SubtaskDAOImpl implements SubtaskDAO {
     }
 
     public void insertSubtask(Subtask subtask) {
+
         logger.debug("insert into db: subtask with id=" + subtask.getId());
 
+        String sqlQuery = "INSERT INTO SUBTASK (ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         this.jdbcTemplate.update(
-                "INSERT INTO SUBTASK (ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                subtask.getId(), subtask.getTitle(), subtask.getDescription(), subtask.getTaskId(), subtask.getStatus(), subtask.getXp(), subtask.getCreationDate(), subtask.getUpdateDate());
+                sqlQuery,
+                subtask.getId(),
+                subtask.getTitle(),
+                subtask.getDescription(),
+                subtask.getTaskId(),
+                subtask.getStatus(),
+                subtask.getXp(),
+                subtask.getCreationDate(),
+                subtask.getUpdateDate());
     }
 
     public void removeSubtaskByID(int tID) {
-        // TODO
 
+        logger.debug("delete from db: subtask with id=" + tID);
 
+        String sqlQuery = "DELETE " +
+                "FROM subtask " +
+                "WHERE id = ? ";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                tID
+        );
     }
 
     public Subtask findByID(int tID) {
+
+        logger.debug("retrieve from db: subtask with id=" + tID);
+
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+                "FROM SUBTASK " +
+                "WHERE ID = ?";
+
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
-                        "FROM SUBTASK " +
-                        "WHERE ID = ?",
+                sqlQuery,
                 new Object[]{tID},
                 new RowMapper<Subtask>() {
                     public Subtask mapRow(ResultSet rs, int subtaskId) throws SQLException {
@@ -77,12 +101,16 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     public LinkedList<Subtask> loadAll() {
 
-        String sql = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+        logger.debug("retrieve from db: all subtasks");
+
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
                 "FROM SUBTASK";
 
         LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery);
+
         for (Map<String,Object> row : rows) {
 
             Subtask subtask = new Subtask();
@@ -92,8 +120,8 @@ public class SubtaskDAOImpl implements SubtaskDAO {
             subtask.setTaskId((Integer)row.get("task_id"));
             subtask.setStatus((String)row.get("status"));
             subtask.setXp((Integer) row.get("xp"));
-            subtask.setCreationDate((Date)row.get("creation_date"));
-            subtask.setUpdateDate((Date)row.get("update_date"));
+            subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
 
             subtasks.add(subtask);
         }
@@ -102,22 +130,105 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public LinkedList<Subtask> loadAllByTask(String tID) {
-        // TODO
+    public LinkedList<Subtask> loadAllByTask(int tID) {
 
-        return null;
+        logger.debug("retrieve from db: all subtasks by task with id="+tID);
+
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+                "FROM SUBTASK " +
+                "WHERE TASK_ID = ?";
+
+        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                tID);
+
+        for (Map<String,Object> row : rows) {
+
+            Subtask subtask = new Subtask();
+            subtask.setId((Integer)row.get("id"));
+            subtask.setTitle((String)row.get("title"));
+            subtask.setDescription((String)row.get("description"));
+            subtask.setTaskId((Integer)row.get("task_id"));
+            subtask.setStatus((String)row.get("status"));
+            subtask.setXp((Integer) row.get("xp"));
+            subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
+
+            subtasks.add(subtask);
+        }
+
+        return subtasks;
+
     }
 
-    public LinkedList<Subtask> loadAllByProject(String pID) {
-        // TODO
+    public LinkedList<Subtask> loadAllByProject(int pID) {
 
-        return null;
+        logger.debug("retrieve from db: all subtasks by project with id="+pID);
+
+        String sqlQuery = "SELECT SUBTASK.ID, SUBTASK.TITLE, SUBTASK.DESCRIPTION, SUBTASK.TASK_ID, SUBTASK.STATUS, SUBTASK.XP, SUBTASK.CREATION_DATE, SUBTASK.UPDATE_DATE " +
+                "FROM SUBTASK, TASK " +
+                "WHERE TASK.ID = SUBTASK.TASK_ID " +
+                "AND TASK.PROJECT_ID = ? ";
+
+        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                pID);
+
+        for (Map<String,Object> row : rows) {
+
+            Subtask subtask = new Subtask();
+            subtask.setId((Integer)row.get("id"));
+            subtask.setTitle((String)row.get("title"));
+            subtask.setDescription((String)row.get("description"));
+            subtask.setTaskId((Integer)row.get("task_id"));
+            subtask.setStatus((String)row.get("status"));
+            subtask.setXp((Integer) row.get("xp"));
+            subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
+
+            subtasks.add(subtask);
+        }
+
+        return subtasks;
+
     }
 
     public LinkedList<Subtask> loadAllByUser(String uID) {
-        // TODO
 
-        return null;
+        logger.debug("retrieve from db: all subtasks by user with id="+uID);
+
+        String sqlQuery = "SELECT SUBTASK.ID, SUBTASK.TITLE, SUBTASK.DESCRIPTION, SUBTASK.TASK_ID, SUBTASK.STATUS, SUBTASK.XP, SUBTASK.CREATION_DATE, SUBTASK.UPDATE_DATE " +
+                "FROM SUBTASK, TASK " +
+                "WHERE TASK.ID = SUBTASK.TASK_ID " +
+                "AND TASK.USER_MAIL = ? ";
+
+        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                uID);
+
+        for (Map<String,Object> row : rows) {
+
+            Subtask subtask = new Subtask();
+            subtask.setId((Integer)row.get("id"));
+            subtask.setTitle((String)row.get("title"));
+            subtask.setDescription((String)row.get("description"));
+            subtask.setTaskId((Integer)row.get("task_id"));
+            subtask.setStatus((String)row.get("status"));
+            subtask.setXp((Integer) row.get("xp"));
+            subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
+
+            subtasks.add(subtask);
+        }
+
+        return subtasks;
+
     }
 
     public int getNewID() {

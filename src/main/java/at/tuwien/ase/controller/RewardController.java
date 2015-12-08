@@ -41,6 +41,13 @@ public class RewardController {
     }
 
     // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/{pID}/users/{uID}/rewards/{rID}", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    public void assignAwardToUser(@PathVariable("pID") int pID, @PathVariable("uID") String uID, @PathVariable("rID") int rID) throws Exception {
+        rs.assignAwardToUser(pID, uID, rID);
+    }
+
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/rewards", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Reward> getAllRewards() {
@@ -50,15 +57,36 @@ public class RewardController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/rewards", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Reward> getAllRewardsFromProject(@PathVariable("pID") String pID) {
+    public LinkedList<Reward> getAllRewardsFromProject(@PathVariable("pID") int pID) {
         return rs.getAllRewardsFromProject(pID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/rewards", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Reward> getAllRewardsCreatedByUser(@RequestParam("uID") String uID) {
+        return rs.getAllRewardsCreatedByUser(uID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/rewards", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Reward> getAllRewardsFromUser(@PathVariable("uID") String uID) {
-        return rs.getAllRewardsFromUser(uID);
+    public LinkedList<Reward> getAllRewardsAwardedToUser(@PathVariable("uID") String uID) {
+        return rs.getAllRewardsAwardedToUser(uID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/{pID}/users/{uID}/rewards", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Reward> getRewardsByProjectAndUser(@PathVariable("pID") int pID, @PathVariable("uID") String uID) throws Exception {
+        return rs.getAllRewardsFromProjectAndUser(pID, uID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/rewards/{rID}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteRewardByID(@PathVariable("rID") int rID)  throws Exception {
+        rs.deleteRewardByID(rID);
     }
 
 }

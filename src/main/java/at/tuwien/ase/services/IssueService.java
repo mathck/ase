@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 
 /**
- * Created by DanielHofer on 16.16.11.2015.
+ * Created by DanielHofer on 16.11.2015.
  */
 public interface IssueService {
 

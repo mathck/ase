@@ -3,7 +3,7 @@ package at.tuwien.ase.services;
 import at.tuwien.ase.model.LoginToken;
 
 /**
- * Created by DanielHofer on 16.16.11.2015.
+ * Created by DanielHofer on 16.11.2015.
  */
 public interface LoginService {
 

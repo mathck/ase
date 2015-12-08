@@ -14,8 +14,8 @@ public interface SubtaskDAO {
 
     Subtask findByID(int tID);
     LinkedList<Subtask> loadAll();
-    LinkedList<Subtask> loadAllByTask(String tID);
-    LinkedList<Subtask> loadAllByProject(String pID);
+    LinkedList<Subtask> loadAllByTask(int tID);
+    LinkedList<Subtask> loadAllByProject(int pID);
     LinkedList<Subtask> loadAllByUser(String uID);
 
     int getNewID();

@@ -13,13 +13,13 @@ public interface SubtaskService {
 
     int writeSubtask(Subtask subtask);
 
-    void deleteSubtaskByID(String pID, int sID);
+    void deleteSubtaskByID(int sID);
 
     Subtask getByID(int sID);
     LinkedList<Subtask> getAllSubtasks();
-    LinkedList<Subtask> getAllSubtasksFromTask(String tID);
+    LinkedList<Subtask> getAllSubtasksFromTask(int tID);
     LinkedList<Subtask> getAllSubtasksFromUser(String uID);
-    LinkedList<Subtask> getAllSubtasksFromProject(String pID);
+    LinkedList<Subtask> getAllSubtasksFromProject(int pID);
 
 
 }

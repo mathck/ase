@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -33,30 +34,49 @@ public class RewardDAOImpl implements RewardDAO{
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public Reward insertReward(Reward reward) {
+    public void insertReward(Reward reward) {
 
         logger.debug("insert into db: reward with id=" + reward.getId());
 
-        this.jdbcTemplate.update(
-                "INSERT INTO REWARD (ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ? )",
-                reward.getId(), reward.getUserMail() ,reward.getName(), reward.getDescription(), reward.getXpbase(), reward.getImageLink(), reward.getCreationDate());
+        String sqlQuery = "INSERT INTO REWARD (ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ? )";
 
-        return null;
+        this.jdbcTemplate.update(
+                sqlQuery,
+                reward.getId(),
+                reward.getUserMail(),
+                reward.getName(),
+                reward.getDescription(),
+                reward.getXpbase(),
+                reward.getImageLink(),
+                reward.getCreationDate());
+
     }
 
-    public void removeRewardByID(String rID) {
-        // TODO
+    public void removeRewardByID(int rID) {
 
+        logger.debug("delete from db: reward with id=" + rID);
 
+        String sqlQuery = "DELETE " +
+                "FROM REWARD " +
+                "WHERE id = ? ";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                rID
+        );
     }
 
     public Reward findByID(int rID) {
 
+        logger.debug("retrieve from db: reward with id=" + rID);
+
+        String sqlQuery = "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
+                "FROM REWARD " +
+                "WHERE ID = ?";
+
         return this.jdbcTemplate.queryForObject(
-                "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
-                        "FROM REWARD " +
-                        "WHERE ID = ?",
+                sqlQuery,
                 new Object[]{rID},
                 new RowMapper<Reward>() {
                     public Reward mapRow(ResultSet rs, int rewardId) throws SQLException {
@@ -76,12 +96,15 @@ public class RewardDAOImpl implements RewardDAO{
 
     public LinkedList<Reward> loadAll() {
 
-        String sql = "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
+        logger.debug("retrieve from db: all rewards");
+
+        String sqlQuery = "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
                 "FROM REWARD";
 
         LinkedList<Reward> rewards = new LinkedList<Reward>();
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sql);
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery);
         for (Map<String,Object> row : rows) {
 
             Reward reward = new Reward();
@@ -91,7 +114,7 @@ public class RewardDAOImpl implements RewardDAO{
             reward.setDescription((String)row.get("description"));
             reward.setXpbase((Integer)row.get("xpbase"));
             reward.setImageLink((String)row.get("image_link"));
-            reward.setCreationDate((Date)row.get("creation_date"));
+            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
 
             rewards.add(reward);
         }
@@ -100,16 +123,153 @@ public class RewardDAOImpl implements RewardDAO{
 
     }
 
-    public LinkedList<Reward> loadAllByUser(String uID) {
-        // TODO
+    public LinkedList<Reward> loadAllRewardsCreatedByUser(String uID) {
 
-        return null;
+        logger.debug("retrieve from db: all rewards by user with id="+uID);
+
+        String sqlQuery = "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
+                "FROM REWARD " +
+                "WHERE USER_MAIL = ? ";
+
+        LinkedList<Reward> rewards = new LinkedList<Reward>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                uID);
+
+        for (Map<String,Object> row : rows) {
+
+            Reward reward = new Reward();
+            reward.setId((Integer)row.get("id"));
+            reward.setUserMail((String)row.get("user_mail"));
+            reward.setName((String)row.get("name"));
+            reward.setDescription((String)row.get("description"));
+            reward.setXpbase((Integer)row.get("xpbase"));
+            reward.setImageLink((String)row.get("image_link"));
+            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+
+            rewards.add(reward);
+        }
+
+        return rewards;
+
     }
 
-    public LinkedList<Reward> loadAllByProject(String pID) {
-        // TODO
+    public LinkedList<Reward> loadAllRewardsAwardedToUser(String uID) {
 
-        return null;
+        logger.debug("retrieve from db: all rewards awarded to user with id="+uID);
+
+        String sqlQuery = "SELECT REWARD.ID, REWARD.USER_MAIL, REWARD.NAME, REWARD.DESCRIPTION, REWARD.XPBASE, REWARD.IMAGE_LINK, REWARD.CREATION_DATE " +
+                "FROM REWARD, REL_USER_REWARD_PROJECT " +
+                "WHERE REL_USER_REWARD_PROJECT.USER_MAIL = ? " +
+                "AND REL_USER_REWARD_PROJECT.REWARD_ID = REWARD.ID";
+
+
+        LinkedList<Reward> rewards = new LinkedList<Reward>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                uID);
+
+        for (Map<String,Object> row : rows) {
+
+            Reward reward = new Reward();
+            reward.setId((Integer)row.get("id"));
+            reward.setUserMail((String)row.get("user_mail"));
+            reward.setName((String)row.get("name"));
+            reward.setDescription((String)row.get("description"));
+            reward.setXpbase((Integer)row.get("xpbase"));
+            reward.setImageLink((String)row.get("image_link"));
+            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+
+            rewards.add(reward);
+        }
+
+        return rewards;
+    }
+
+    public LinkedList<Reward> loadAllByProject(int pID) {
+
+        logger.debug("retrieve from db: all rewards by project with id="+pID);
+
+        String sqlQuery = "SELECT REWARD.ID, REWARD.USER_MAIL, REWARD.NAME, REWARD.DESCRIPTION, REWARD.XPBASE, REWARD.IMAGE_LINK, REWARD.CREATION_DATE " +
+                "FROM REWARD, REL_USER_REWARD_PROJECT " +
+                "WHERE REL_USER_REWARD_PROJECT.PROJECT_ID = ? " +
+                "AND REL_USER_REWARD_PROJECT.REWARD_ID = REWARD.ID";
+
+
+        LinkedList<Reward> rewards = new LinkedList<Reward>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                pID);
+
+        for (Map<String,Object> row : rows) {
+
+            Reward reward = new Reward();
+            reward.setId((Integer)row.get("id"));
+            reward.setUserMail((String)row.get("user_mail"));
+            reward.setName((String)row.get("name"));
+            reward.setDescription((String)row.get("description"));
+            reward.setXpbase((Integer)row.get("xpbase"));
+            reward.setImageLink((String)row.get("image_link"));
+            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+
+            rewards.add(reward);
+        }
+
+        return rewards;
+    }
+
+    public LinkedList<Reward> loadAllByProjectAndUser(int pID, String uID) {
+
+        logger.debug("retrieve from db: all rewards from user with id="+uID+" and project with id="+pID);
+
+        String sqlQuery = "SELECT REWARD.ID, REWARD.USER_MAIL, REWARD.NAME, REWARD.DESCRIPTION, REWARD.XPBASE, REWARD.IMAGE_LINK, REWARD.CREATION_DATE " +
+                "FROM REWARD, REL_USER_REWARD_PROJECT " +
+                "WHERE REL_USER_REWARD_PROJECT.PROJECT_ID = ? " +
+                "AND REL_USER_REWARD_PROJECT.USER_MAIL = ? " +
+                "AND REL_USER_REWARD_PROJECT.REWARD_ID = REWARD.ID";
+
+
+        LinkedList<Reward> rewards = new LinkedList<Reward>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                pID,
+                uID);
+
+        for (Map<String,Object> row : rows) {
+
+            Reward reward = new Reward();
+            reward.setId((Integer)row.get("id"));
+            reward.setUserMail((String)row.get("user_mail"));
+            reward.setName((String)row.get("name"));
+            reward.setDescription((String)row.get("description"));
+            reward.setXpbase((Integer)row.get("xpbase"));
+            reward.setImageLink((String)row.get("image_link"));
+            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+
+            rewards.add(reward);
+        }
+
+        return rewards;
+    }
+
+    public void assignAwardToUser(int pID, String uID, int rID) {
+
+        logger.debug("insert into db: add reward with id="+rID+" to user with id="+uID+" in project with id="+pID);
+
+        String sqlQuery = "INSERT INTO REL_USER_REWARD_PROJECT (ID, USER_MAIL, REWARD_ID, PROJECT_ID) " +
+                "VALUES (?, ?, ?, ?)";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                this.getNewIDForRelRewardProjectUser(),
+                uID,
+                rID,
+                pID
+        );
     }
 
     public int getNewID() {
@@ -120,4 +280,13 @@ public class RewardDAOImpl implements RewardDAO{
 
         return id;
     }
+
+    public int getNewIDForRelRewardProjectUser() {
+        Integer id = this.jdbcTemplate.queryForObject(
+                "SELECT nextval('seq_user_reward_project_id')",
+                Integer.class);
+
+        return id;
+    }
+
 }

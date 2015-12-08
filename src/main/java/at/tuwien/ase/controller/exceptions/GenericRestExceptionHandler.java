@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Created by Daniel Hofer on 16.15.11.2015.
+ * Created by Daniel Hofer on 15.11.2015.
  */
 
 @ControllerAdvice

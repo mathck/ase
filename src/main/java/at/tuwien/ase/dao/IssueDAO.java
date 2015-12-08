@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 
 /**
- * Created by Daniel Hofer on 14.14.11.2015.
+ * Created by Daniel Hofer on 14.11.2015.
  */
 public interface IssueDAO {
 

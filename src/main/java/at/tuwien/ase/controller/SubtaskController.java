@@ -50,14 +50,14 @@ public class SubtaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/{tID}/subtasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Subtask> getAllSubtasksFromTask(@PathVariable("tID") String tID) throws Exception {
+    public LinkedList<Subtask> getAllSubtasksFromTask(@PathVariable("tID") int tID) throws Exception {
         return ts.getAllSubtasksFromTask(tID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/subtasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Subtask> getAllSubtasksFromProject(@PathVariable("pID") String pID) throws Exception {
+    public LinkedList<Subtask> getAllSubtasksFromProject(@PathVariable("pID") int pID) throws Exception {
         return ts.getAllSubtasksFromProject(pID);
     }
 
@@ -66,6 +66,13 @@ public class SubtaskController {
     @ResponseBody
     public LinkedList<Subtask> getAllSubtasksFromUser(@PathVariable("uID") String uID) throws Exception {
         return ts.getAllSubtasksFromUser(uID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/subtasks/{tID}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteSubtasksByID(@PathVariable("tID") int tID)  throws Exception {
+        ts.deleteSubtaskByID(tID);
     }
 
 }

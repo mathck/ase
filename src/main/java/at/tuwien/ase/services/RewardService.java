@@ -11,11 +11,15 @@ public interface RewardService {
 
     int writeReward(Reward reward);
 
-    void deleteRewardByID(String rID);
+    void deleteRewardByID(int rID);
 
     Reward getByID(int rID);
     LinkedList<Reward> getAllRewards();
-    LinkedList<Reward> getAllRewardsFromUser(String uID);
-    LinkedList<Reward> getAllRewardsFromProject(String pID);
+    LinkedList<Reward> getAllRewardsCreatedByUser(String uID);
+    LinkedList<Reward> getAllRewardsAwardedToUser(String uID);
+    LinkedList<Reward> getAllRewardsFromProject(int pID);
+    LinkedList<Reward> getAllRewardsFromProjectAndUser(int pID, String uID);
+
+    void assignAwardToUser(int pID, String uID, int rID);
 
 }
