@@ -13,7 +13,7 @@ materialAdmin
         console.log("Token is:" + TokenService.token);
         console.log("Token Service: username: " + TokenService.username);
 
-        growlService.growl('Welcome back ' + TokenService.username +' :D', 'inverse')
+        growlService.growl('Welcome back ' + TokenService.username +' :D', 'inverse');
 
         // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -297,12 +297,10 @@ materialAdmin
     // LOGIN & REGISTER
     //=================================================
 
-    .controller('loginCtrl', function ($rootScope, $cookies, $window, $q, $http, LoginFactory, UsersFactory) {
+    .controller('loginCtrl', function ($rootScope, $cookies, $window, $q, $http, growlService, LoginFactory, UserRegistrationFactory) {
 
 
             $rootScope.avatar="img/avatars/0.png";
-            //console.log("Avatar initially changed to " + this.avatar);
-
             // callback for ng-click 'loginUser':
             this.loginUser = function () {
                  var email = this.login.email;
@@ -322,17 +320,38 @@ materialAdmin
 
                  })
                  .error(function(response, status){
-                    console.log("Request failed. Responses: " + response + "; Status: " + status);
+                    growlService.growl("Login failed. Responses: " + response + "; Status: " + status);
                  });
             };
 
             // callback for ng-click 'saveUser':
             this.createUser = function () {
-                this.user.avatar=$rootScope.avatar;
-                console.log("Root avatar: " + $rootScope.avatar)
-                console.log("registration is " + this.user.email + this.user.password + this.user.firstName, + this.user.lastName + this.user.avatar);
-                UsersFactory.create(this.user);
-                //$window.location.href='/taskit/main.html';
+                userToRegister={userID: this.user.userID, password: this.user.password,
+                    firstName: this.user.firstName, lastName: this.user.lastName, avatar: "img/avatars/0.png"};
+                if (userToRegister.password===this.passwordCheck){
+                    if(userToRegister.password.length>7){
+                        userToRegister.avatar=$rootScope.avatar;
+                        //console.log("Root avatar: " + $rootScope.avatar);
+                        //console.log("registration is " + userToRegister.userID + userToRegister.password + userToRegister.firstName, + userToRegister.lastName + userToRegister.avatar);
+
+                        UserRegistrationFactory.create(userToRegister).$promise.then(function(response){
+                            var loginRegisteredUser = {email: userToRegister.userID, password: userToRegister.password};
+                            //growlService.growl("Registration successful, logging in...");
+                            LoginFactory.create(loginRegisteredUser).$promise.then(function(token){
+                                $http.defaults.headers.common['user-token'] = token.token;
+                                $cookies.email=loginRegisteredUser.email;
+                                $cookies.token=token.token;
+                                $window.location.href='/taskit/main.html';
+                            });
+                        });
+                    }else{
+                        //growlService.growl("Password has to be longer than 7 characters. Please try again.");
+                        console.log("Password has to be longer than 7 characters. Please try again.");
+                    }
+                }else{
+                    //growlService.growl("Passwords did not match. Please try again.");
+                    console.log("Passwords did not match. Please try again.");
+                }
             };
 
             //Status
@@ -346,8 +365,11 @@ materialAdmin
     // MAIN VIEW
     //=================================================
 
-    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory){
-        ProjectsFactory.query().$promise.then(function(response){
+    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory){
+        console.log("username for project is: ")
+        console.log(TokenService.username);
+        //ProjectsFactory.query({uID: TokenService.username}).$promise.then(function(response){ //TODO - change after project creation works
+        AdminProjectsFactory.query().$promise.then(function(response){
             $scope.userProjects=response;
             /*$scope.userProjects.forEach(function(entry){
                 console.log(entry.projectID);
@@ -400,7 +422,7 @@ materialAdmin
     // PROJECT CREATION
     //=================================================
 
-    .controller('createProjectCtrl', function ( ProjectsFactory, UsersFactory, $scope, $location, $window) {
+    .controller('createProjectCtrl', function (TokenService, ProjectsFactory, UsersFactory, $scope, $location, $window) {
 
             // callback for ng-click 'create Project':
         console.log("starting");

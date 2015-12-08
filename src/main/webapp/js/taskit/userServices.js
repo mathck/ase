@@ -13,6 +13,14 @@ userServices.factory('UsersFactory', function ($resource) {
     })
 });
 
+userServices.factory('UserRegistrationFactory', function ($resource) {
+    return $resource('/taskit/api/user/register', {}, {
+        create: {
+            method: 'POST'
+        }
+    })
+});
+
 userServices.factory('UserFactory', function ($resource) {
     return $resource('/taskit/api/user/:id', {}, {
         show: {
