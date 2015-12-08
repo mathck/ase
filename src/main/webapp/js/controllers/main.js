@@ -466,10 +466,34 @@ materialAdmin
     // PROJECT UPDATE
     //=================================================
 
-    .controller('updateProjectCtrl', function ($scope, $state, ProjectFactory, UsersFactory) {
+    .service('sharedProperties', function () {
+         var projectId = {
+            data: 'test object value'
+            };
+         var taskId = '2';
+
+         return {
+             getProjectId: function () {
+                 return projectId;
+             },
+             setProjectId: function(value) {
+                 projectId = value;
+             },
+             getTaskId: function () {
+                 return taskId;
+             },
+             setTaskId: function(value) {
+                 taskId = value;
+             }
+         };
+     })
+
+    .controller('updateProjectCtrl', function ($scope, $state, ProjectFactory, UsersFactory, sharedProperties) {
 
        console.log("View Project Controller initialized");
-       console.log($state.params.pID);
+       //console.log($state.params.pID);
+       console.log(sharedProperties.getProjectId().data);
+
        var currentPID = $state.params.pID;
        console.log("pid:" + currentPID);
        ProjectFactory.query(currentPID).$promise.then(function(response){
