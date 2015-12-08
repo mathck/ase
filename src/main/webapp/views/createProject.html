@@ -63,7 +63,7 @@
                         <div class="col-sm-8 m-b-15">
                             <p class="f-500 c-black m-b-15">Contributor/s</p>
                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerContributor">
-                                <option data-ng-repeat="cUser in cPCtrl.contributableUsers" value={{cUser.userID}}>({{cUser.firstName}} {{cUser.lastName}} ({cUser.userID}})</option>
+                                <option data-ng-repeat="cUser in cPCtrl.contributableUsers" value={{cUser.userID}}>({{ cUser.firstName }} {{ cUser.lastName }} ({ cUser.userID }})</option>
                                 <!--<option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
@@ -74,7 +74,7 @@
                         <div class="col-sm-4 m-b-15">
                             <p class="f-500 c-black m-b-15">Manager/s</p>
                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerManager">
-                                <option data-ng-repeat="mUser in cPCtrl.managementableUsers" value={{mUser.userID}}>{{mUser.firstName}} {{mUser.lastName}} ({mUser.userID}})</option>
+                                <option data-ng-repeat="mUser in cPCtrl.managementableUsers" value={{mUser.userID}}>{{ mUser.firstName }} {{ mUser.lastName }} ({ mUser.userID }})</option>
                                 <!--<option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
@@ -109,7 +109,7 @@
             <div class="block-header">
                 <ul class="actions">
                     <li>
-                        <div class="col-sm-3" data-ng-controller="createProjectCtrl">
+                        <div class="col-sm-3">
                             <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project" data-ng-click="createProject()"><i class="zmdi zmdi-check"></i>Create Project</button>
                         </div>
                     </li>

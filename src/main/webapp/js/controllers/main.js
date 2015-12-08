@@ -250,13 +250,12 @@ materialAdmin
     .controller('profileCtrl', function($scope, growlService, TokenService){
         
         //Get Profile Information from User Service
-        
+
         //User
-        this.profile=TokenService.user;
-        this.avatar=TokenService.user.avatar;
-        this.firstName=TokenService.user.firstName;
-        this.lastName=TokenService.user.lastName;
-        this.userID=TokenService.user.userID;
+        $scope.avatar=TokenService.user.avatar;
+        $scope.firstName=TokenService.user.firstName;
+        $scope.lastName=TokenService.user.lastName;
+        $scope.userID=TokenService.user.userID;
         /*this.profile.firstName = "Mallinda Hollaway";
         this.profile.lastName = "female";
         this.profile.avatar = "23/06/1988";
@@ -305,8 +304,8 @@ materialAdmin
 
     .controller('loginCtrl', function ($rootScope, $cookies, $window, $q, $http, growlService, LoginFactory, UserRegistrationFactory) {
 
-
             $rootScope.avatar="img/avatars/0.png";
+
             // callback for ng-click 'loginUser':
             this.loginUser = function () {
                  var email = this.login.email;
