@@ -3,7 +3,7 @@ materialAdmin
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function($timeout, $state, $http, $cookies, growlService, LoginFactory, UserFactory, TokenService){
+    .controller('materialadminCtrl', function($timeout, $state, $http, $cookies, $scope, growlService, LoginFactory, UserFactory, TokenService){
         //Welcome Message
 
         TokenService.username = $cookies.email;
@@ -12,9 +12,14 @@ materialAdmin
         $http.defaults.headers.common['user-token'] = String(TokenService.token);
         UserFactory.show({uID: TokenService.username}).$promise.then(function(response){
                 TokenService.user=response; //set persistent UserInformation
-                this.user=TokenService.user; //update User Information for left Sidebar
-                console.log("Token is:" + TokenService.token);
-                growlService.growl('Welcome back ' + this.user.firstName +' :D', 'inverse');
+                //console.log("Token is:" + TokenService.token);
+                growlService.growl('Welcome back ' + TokenService.user.firstName +' :D', 'inverse');
+
+                //initialize Variables for Menubar
+                $scope.avatar=TokenService.user.avatar;
+                $scope.firstName=TokenService.user.firstName;
+                $scope.lastName=TokenService.user.lastName;
+                $scope.userID=TokenService.user.userID;
         });
 
 
@@ -256,22 +261,7 @@ materialAdmin
         $scope.firstName=TokenService.user.firstName;
         $scope.lastName=TokenService.user.lastName;
         $scope.userID=TokenService.user.userID;
-        /*this.profile.firstName = "Mallinda Hollaway";
-        this.profile.lastName = "female";
-        this.profile.avatar = "23/06/1988";
-        this.martialStatus = "Single";
-        this.mobileNumber = "00971123456789";
-        this.firstName = "Mallinda";
-        this.lastName = "Hollaway";
-        this.emailAddress = "malinda.h@gmail.com";
-        this.twitter = "@malinda";
-        this.twitterUrl = "twitter.com/malinda";
-        this.skype = "malinda.hollaway";
-        this.addressSuite = "10098 ABC Towers";
-        this.addressCity = "Dubai Silicon Oasis, Dubai";
-        this.addressCountry = "United Arab Emirates";*/
-    
-    
+
         //Edit
         this.editSummary = 0;
         this.editInfo = 0;
@@ -370,7 +360,7 @@ materialAdmin
     // MAIN VIEW
     //=================================================
 
-    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory){
+    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory, SharedProperties){
         //ProjectsFactory.query({uID: TokenService.user.userID}).$promise.then(function(response){ //TODO - change after project creation works
         AdminProjectsFactory.query().$promise.then(function(response){
             $scope.userProjects=response;
@@ -380,6 +370,7 @@ materialAdmin
         });
 
         $scope.viewProject=function(currentID){
+            SharedProperties.setProjectId(currentID);
             console.log("Click on viewProject with ID " + currentID);
         }
 
@@ -398,7 +389,7 @@ materialAdmin
     // REWARD CREATION
     //=================================================
 
-    .controller('createRewardCtrl', function ( ProjectsFactory, UsersFactory, $scope, $location, $window) {
+    .controller('createRewardCtrl', function (ProjectsFactory, UsersFactory, $scope, $location, $window) {
 
             // callback for ng-click 'create Project':
         /*console.log("starting");
@@ -466,10 +457,8 @@ materialAdmin
     // PROJECT UPDATE
     //=================================================
 
-    .service('sharedProperties', function () {
-         var projectId = {
-            data: 'test object value'
-            };
+    .service('SharedProperties', function () {
+         var projectId
          var taskId = '2';
 
          return {
@@ -488,13 +477,15 @@ materialAdmin
          };
      })
 
-    .controller('updateProjectCtrl', function ($scope, $state, ProjectFactory, UsersFactory, sharedProperties) {
+    .controller('updateProjectCtrl', function ($scope, $stateParams, ProjectFactory, UsersFactory, SharedProperties) {
 
        console.log("View Project Controller initialized");
-       //console.log($state.params.pID);
-       console.log(sharedProperties.getProjectId().data);
+       console.log($stateParams.pIDParam);
+       $scope.currentPID = $stateParams.pIDParam;
+       console.log($scope.currentPID);
 
-       var currentPID = $state.params.pID;
+       console.log(SharedProperties.getProjectId().data);
+       var currentPID=SharedProperties.getProjectId();
        console.log("pid:" + currentPID);
        ProjectFactory.query(currentPID).$promise.then(function(response){
             $scope.selectedProject=response;

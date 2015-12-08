@@ -2,13 +2,13 @@
     <div class="profile-menu">
         <a href="" toggle-submenu>
             <div class="profile-pic">
-                <img src="{{mactrl.user.avatar}}" alt="profile picture"/>
+                <img src="{{this.avatar}}" alt="profile picture"/>
                 <span class="level">
                     Level 1 <!-- TODO Binding general level -->
                 </span>
             </div>
             <div class="profile-info">
-                {{mactrl.user.userID}}
+                {{this.userID}}
 
                 <i class="zmdi zmdi-caret-down"></i>
             </div>
@@ -26,7 +26,7 @@
             </li>
             -->
             <li>
-                <a href="" data-ng-click="mactrl.logoutUser()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
+                <a href="" data-ng-click="this.logoutUser()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
             </li>
         </ul>
     </div>
