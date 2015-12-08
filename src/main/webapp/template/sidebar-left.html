@@ -2,13 +2,13 @@
     <div class="profile-menu">
         <a href="" toggle-submenu>
             <div class="profile-pic">
-                <img src="img/avatars/actor.png" alt="profile picture"/>
+                <img src="{{mactrl.user.avatar}}" alt="profile picture"/>
                 <span class="level">
                     Level 1 <!-- TODO Binding general level -->
                 </span>
             </div>
-            <div class="profile-info"> <!-- TODO Binding email -->
-                mathck@gmail.com
+            <div class="profile-info">
+                {{mactrl.user.userID}}
 
                 <i class="zmdi zmdi-caret-down"></i>
             </div>

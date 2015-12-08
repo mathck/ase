@@ -29,7 +29,7 @@
             <div class="pmo-pic">
                 <div class="p-relative">
                     <a href="">
-                        <img class="img-responsive" src="img/avatars/actor.png" alt="">
+                        <img class="img-responsive" src="{{this.profile.avatar}}" alt="Profile Picture">
                     </a>
 
                     <!--
@@ -63,8 +63,8 @@
 
                 <ul>
                     <!--<li><i class="zmdi zmdi-phone"></i> {{ pctrl.mobileNumber }}</li>-->
-                    <li><i class="zmdi zmdi-account"></i> {{ pctrl.firstName }} {{ pctrl.lastName }}</li>
-                    <li><i class="zmdi zmdi-email"></i> {{ pctrl.emailAddress }}</li>
+                    <li><i class="zmdi zmdi-account"></i> {{ this.profile.firstName }} {{ this.profile.lastName }}</li>
+                    <li><i class="zmdi zmdi-email"></i> {{ this.profile.userID }}</li>
                     <!--<li><i class="zmdi zmdi-facebook-box"></i> {{ pctrl.skype }}</li>
                     <li><i class="zmdi zmdi-twitter"></i> {{ pctrl.twitter }} (twitter.com/malinda)</li>
                     <li>

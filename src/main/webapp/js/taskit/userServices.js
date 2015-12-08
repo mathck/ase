@@ -1,14 +1,10 @@
 var userServices = angular.module('taskit.userServices', ['ngResource']);
 
 userServices.factory('UsersFactory', function ($resource) {
-    return $resource('/taskit/api/user/', {}, {
+    return $resource('/taskit/api/user/all', {}, {
         query: {
             method: 'GET',
             isArray: true
-            //headers: { 'auth-token': '@token' }
-        },
-        create: {
-            method: 'POST'
         }
     })
 });
@@ -22,20 +18,18 @@ userServices.factory('UserRegistrationFactory', function ($resource) {
 });
 
 userServices.factory('UserFactory', function ($resource) {
-    return $resource('/taskit/api/user/:id', {}, {
+    return $resource('/taskit/api/user/', {}, {
         show: {
-            method: 'GET'
-            //headers: { 'auth-token': '@token' }
+            method: 'GET',
+            params: {uID: '@uID'}
         },
         update: {
             method: 'PUT',
-            params: {email: '@email'}
-            //headers: { 'auth-token': '@token' }
+            params: {uID: '@uID'}
         },
         delete: {
             method: 'DELETE',
-            params: {email: '@email'}
-            //headers: { 'auth-token': '@token' }
+            params: {uID: '@uID'}
         }
     })
 });
@@ -57,7 +51,8 @@ userServices.factory('TokenService', [function() {
   var token = {
     isLogged: false,
     token: '',
-    username: ''
+    username: '',
+    user:{}
   };
   return token;
 }]);

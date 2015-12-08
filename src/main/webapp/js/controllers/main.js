@@ -3,17 +3,20 @@ materialAdmin
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function($timeout, $state, $http, $cookies, growlService, LoginFactory, TokenService){
+    .controller('materialadminCtrl', function($timeout, $state, $http, $cookies, growlService, LoginFactory, UserFactory, TokenService){
         //Welcome Message
 
         TokenService.username = $cookies.email;
         TokenService.token = ($cookies.token).valueOf();
         TokenService.isLogged=true;
         $http.defaults.headers.common['user-token'] = String(TokenService.token);
-        console.log("Token is:" + TokenService.token);
-        console.log("Token Service: username: " + TokenService.username);
+        UserFactory.show({uID: TokenService.username}).$promise.then(function(response){
+                TokenService.user=response; //set persistent UserInformation
+                this.user=TokenService.user; //update User Information for left Sidebar
+                console.log("Token is:" + TokenService.token);
+                growlService.growl('Welcome back ' + this.user.firstName +' :D', 'inverse');
+        });
 
-        growlService.growl('Welcome back ' + TokenService.username +' :D', 'inverse');
 
         // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -35,8 +38,8 @@ materialAdmin
         /*
         this.logoutUser() = function () {
             console.log("click");
-            LoginFactory.logout(TokenService.username);
-            TokenService.username='';
+            LoginFactory.logout(TokenService.user.userID);
+            TokenService.user={}
             TokenService.token='';
             TokenService.isLogged=false;
             $cookies.email='';
@@ -244,16 +247,19 @@ materialAdmin
     // Profile
     //=================================================
 
-    .controller('profileCtrl', function(growlService){
+    .controller('profileCtrl', function($scope, growlService, TokenService){
         
-        //Get Profile Information from profileService Service
+        //Get Profile Information from User Service
         
         //User
-        this.profileSummary = "Sed eu est vulputate, fringilla ligula ac, maximus arcu. Donec sed felis vel magna mattis ornare ut non turpis. Sed id arcu elit. Sed nec sagittis tortor. Mauris ante urna, ornare sit amet mollis eu, aliquet ac ligula. Nullam dolor metus, suscipit ac imperdiet nec, consectetur sed ex. Sed cursus porttitor leo.";
-    
-        this.user.firstName = "Mallinda Hollaway";
-        this.user.lastName = "female";
-        this.email = "23/06/1988";
+        this.profile=TokenService.user;
+        this.avatar=TokenService.user.avatar;
+        this.firstName=TokenService.user.firstName;
+        this.lastName=TokenService.user.lastName;
+        this.userID=TokenService.user.userID;
+        /*this.profile.firstName = "Mallinda Hollaway";
+        this.profile.lastName = "female";
+        this.profile.avatar = "23/06/1988";
         this.martialStatus = "Single";
         this.mobileNumber = "00971123456789";
         this.firstName = "Mallinda";
@@ -264,7 +270,7 @@ materialAdmin
         this.skype = "malinda.hollaway";
         this.addressSuite = "10098 ABC Towers";
         this.addressCity = "Dubai Silicon Oasis, Dubai";
-        this.addressCountry = "United Arab Emirates";
+        this.addressCountry = "United Arab Emirates";*/
     
     
         //Edit
@@ -366,7 +372,7 @@ materialAdmin
     //=================================================
 
     .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory){
-        //ProjectsFactory.query({uID: TokenService.username}).$promise.then(function(response){ //TODO - change after project creation works
+        //ProjectsFactory.query({uID: TokenService.user.userID}).$promise.then(function(response){ //TODO - change after project creation works
         AdminProjectsFactory.query().$promise.then(function(response){
             $scope.userProjects=response;
             /*$scope.userProjects.forEach(function(entry){
@@ -422,8 +428,22 @@ materialAdmin
 
     .controller('createProjectCtrl', function (TokenService, ProjectsFactory, UsersFactory, $scope, $location, $window) {
 
-            // callback for ng-click 'create Project':
+        // callback for ng-click 'create Project':
         console.log("starting Project Creation");
+
+        UsersFactory.query().$promise.then(function(response){
+            /*consoleLog(response);
+            consoleLog(TokenService.user);
+            arrayRemove(response, TokenService.user);
+            console.log(response);*/
+            this.contributableUsers=response;
+            this.managementableUsers=this.contributableUsers;
+
+            /*$scope.managementableUsers.forEach(function(entry){
+                console.log(entry);
+            });*/
+        });
+
         $scope.createProject = function () {
             //UserFactory.show("test").then(function(loggedUser){
             var newProject = {

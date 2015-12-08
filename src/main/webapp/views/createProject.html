@@ -5,8 +5,8 @@
 
     <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
 
-    <section id="content">
-        <div class="container" data-ng-controller="createProjectCtrl as cPCtrl"><!---->
+    <section id="content" data-ng-controller="createProjectCtrl as cPCtrl">
+        <div class="container"><!---->
             <div class="block-header">
                 <h2>Create Project</h2>
 
@@ -63,7 +63,7 @@
                         <div class="col-sm-8 m-b-15">
                             <p class="f-500 c-black m-b-15">Contributor/s</p>
                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerContributor">
-                                <option data-ng-repeat="user in contributableUsers" value={{user.email}}>{{user.firstName}} {{user.lastName}} ({user.email}})</option>
+                                <option data-ng-repeat="cUser in cPCtrl.contributableUsers" value={{cUser.userID}}>({{cUser.firstName}} {{cUser.lastName}} ({cUser.userID}})</option>
                                 <!--<option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
@@ -74,7 +74,7 @@
                         <div class="col-sm-4 m-b-15">
                             <p class="f-500 c-black m-b-15">Manager/s</p>
                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerManager">
-                                <option data-ng-repeat="user in managementableUsers" value={{user.email}}>{{user.firstName}} {{user.lastName}} ({user.email}})</option>
+                                <option data-ng-repeat="mUser in cPCtrl.managementableUsers" value={{mUser.userID}}>{{mUser.firstName}} {{mUser.lastName}} ({mUser.userID}})</option>
                                 <!--<option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
