@@ -67,7 +67,7 @@
                                     <tbody>
                                     <!--NG Repeat for User starts here -->
                                     <tr data-ng-repeat="user in selectedProject.userList">
-                                        <td>{{user.avatar}}</td>
+                                        <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
                                         <td>{{user.firstName}}</td>
                                         <td>{{user.lastName}}</td>
                                         <td>{{user.userID}}</td>

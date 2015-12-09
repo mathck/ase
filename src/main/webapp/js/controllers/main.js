@@ -416,7 +416,7 @@ materialAdmin
     // PROJECT CREATION
     //=================================================
 
-    .controller('createProjectCtrl', function (TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory, $scope, $location, $window) {
+    .controller('createProjectCtrl', function ($scope, $location, $window, $state, TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
 
         console.log("starting Project Creation");
 
@@ -446,12 +446,13 @@ materialAdmin
         $scope.createProject = function () {
             console.log($scope.users.userPickerContributor);
             ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
-                console.log("Response:")
-                console.log(response);
-                $scope.pID=response.id;
+                console.log("Item:")
+                console.log(response.item);
+
+                $scope.pID=response.item;
                 console.log("pId of new Project: " + $scope.pID);
 
-                /*AddUserToProjectFactory.add({project: $scope.pID, user: TokenService.username, role: "ADMIN"});
+                AddUserToProjectFactory.add({project: $scope.pID, user: TokenService.username, role: "ADMIN"});
                 $scope.users.userPickerContributor.forEach(function(contributor){
                     AddUserToProjectFactory.add({project: $scope.pID, user: contributor, role: "CONTRIBUTOR"});
                 });
@@ -459,8 +460,8 @@ materialAdmin
                     AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
                 });
 
-                state.go(/viewProject/,{pID:$scope.pID});
-                */
+                $state.go("viewProject",{pID:$scope.pID});
+
             });
 
         };
