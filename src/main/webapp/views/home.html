@@ -59,7 +59,7 @@
 
                     <!-- NG Repeat starts HERE -->
                     <div class="col-sm-3" data-ng-repeat="project in userProjects">
-                        <div class="card floatEffect" data-ui-sref="viewProject">
+                        <div class="card floatEffect" data-ui-sref="viewProject({pID: project.projectID})">
                             <div class="card-header bgm-project">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-folder-outline c-white"></i></span>
@@ -67,18 +67,18 @@
                                 </div>
                                 <ul class="actions actions-alt">
                                     <li class="dropdown" dropdown>
-                                        <a  data-ui-sref="viewProject({pIDParam: project.projectID})" dropdown-toggle aria-expanded="false">>
+                                        <a dropdown-toggle aria-expanded="false">>
                                             <i class="zmdi zmdi-more-vert"></i>
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li>
-                                                <a href="">View Project</a>
+                                                <a data-ui-sref="viewProject({pID: project.projectID})">View Project</a>
                                             </li>
                                             <li>
-                                                <a data-ui-sref="createIssue({pID: project.projectID})" data-ng-click="createIssueForProject(project.projectID)">Create Issue</a>
+                                                <a data-ui-sref="createIssue({pID: project.projectID})">Create Issue</a>
                                             </li>
                                             <li>
-                                                <a data-ui-sref="createIssue({pID: project.projectID})" data-ng-click="createTaskForProject(project.projectID)">Create Task</a>
+                                                <a data-ui-sref="createTask({pID: project.projectID})">Create Task</a>
                                             </li>
                                         </ul>
                                     </li>

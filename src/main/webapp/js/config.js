@@ -59,7 +59,7 @@ materialAdmin
             //------------------------------
 
             .state ('viewProject', {
-                url: '/viewProject/:pIDParam',
+                url: '/viewProject/:pID',
                 templateUrl: 'views/viewProject.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
@@ -185,7 +185,7 @@ materialAdmin
 
             .state ('createTask', {
                 url: '/createTask/:pID',
-                templateUrl: 'views/createTask.html?pID=:pID',
+                templateUrl: 'views/createTask.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
                         return $ocLazyLoad.load ([

@@ -18,7 +18,7 @@
                     </li>
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Project" data-ng-click="updateProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Project" data-ng-click="saveProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
                         </div>
                     </li>
                 </ul>
@@ -65,38 +65,16 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Alexandra</td>
-                                        <td>Christopher</td>
-                                        <td>@makinton</td>
-                                        <td>1</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                    <!--NG Repeat for User starts here -->
+                                    <tr data-ng-repeat="user in selectedProject.userList">
+                                        <td>{{user.avatar}}</td>
+                                        <td>{{user.firstName}}</td>
+                                        <td>{{user.lastName}}</td>
+                                        <td>{{user.userID}}</td>
+                                        <td>1</td><!--TODO Level to be implemented -->
+                                        <td><button data-ng-click="deleteUserFromProject(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Madeleine</td>
-                                        <td>Hollaway</td>
-                                        <td>@hollway</td>
-                                        <td>5</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Sebastian</td>
-                                        <td>Johnston</td>
-                                        <td>@sebastian</td>
-                                        <td>4</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>AVATAR IMG</td>
-                                        <td>Mitchell</td>
-                                        <td>Christin</td>
-                                        <td>@mitchell4u</td>
-                                        <td>2</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
+                                    <!--NG Repeat for User ends here -->
                                     </tbody>
                                 </table>
                             </div>
@@ -122,22 +100,27 @@
                                     <tr>
                                         <th></th>
                                         <th>Name</th>
-                                        <th>Level</th>
+                                        <th>Description</th>
+                                        <th>XP Base</th>
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
+
+                                    <!--NG Repeat for Reward starts here -->
+                                    <tr data-ng-repeat="reward in selectedProject.rewards">
                                         <td class="col-xs-2">
                                             <div class="thumbnail noHeader">
-                                                <img src="media/gallery/thumbs/6.jpg" alt="">
+                                                <img src="{{reward.imageLink}}" alt="Image of {{reward.name}}">
                                             </div>
                                         </td>
-                                        <td>Reward1</td>
-                                        <td>1</td>
+                                        <td>{{reward.name}}</td>
+                                        <td>{{reward.description}}</td>
+                                        <td>{{reward.xpbase}}</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
-                                    <tr>
+                                    <!--NG Repeat for Reward ends  here -->
+                                   <!--<tr>
                                         <td class="col-xs-2">
                                             <div class="thumbnail noHeader">
                                                 <img src="media/gallery/thumbs/6.jpg" alt="">
@@ -166,7 +149,7 @@
                                         <td>Reward4</td>
                                         <td>2</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
+                                    </tr>-->
                                     </tbody>
                                 </table>
                             </div>
@@ -184,7 +167,7 @@
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
                                     <h2>Create Task</h2>
                                 </div>
-                                <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTask" data-ng-click="mactrl.sidebarStat($event)">
+                                <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTask({pID: selectedProject})" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
                             </div>
@@ -196,7 +179,7 @@
                     <div class="col-sm-3">
                         <div class="card floatEffect">
                             <div class="card-header bgm-issue">
-                                <div class="input-group" data-ui-sref="createIssue">
+                                <div class="input-group" data-ui-sref="createIssue({pID: selectedProject})">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
                                     <h2>Create Issue</h2>
                                 </div>
@@ -209,45 +192,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+
+                    <!-- NG Repeat for Tasks starts here -->
+                    <div class="col-sm-3" data-ng-repeat="task in selectedProject.allTasks">
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask">
                             <div class="card-header bgm-task">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <h2>Task1 <small></small></h2>
+                                    <h2>{{task.title}}<small>{{task.status}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">
-                                The Description goes in here.
+                                {{task.description}}
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="card floatEffect">
-                            <div class="card-header bgm-task">
+                    <!-- NG Repeat for Tasks ends here-->
+
+                    <!-- NG Repeat for Issues starts here -->
+                    <div class="col-sm-3" data-ng-repeat="issue in selectedProject.allIssues">
+                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask">
+                            <div class="card-header bgm-issue">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <h2>Task2 <small></small></h2>
+                                    <h2>{{issue.title}}<small>{{issue.user.firstName}} {{issue.user.lastName}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">
-                                The Description goes in here.
+                                {{issue.description}}
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="card floatEffect">
-                            <div class="card-header bgm-task">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <h2>Task3 <small></small></h2>
-                                </div>
-                            </div>
-                            <div class="card-body card-padding">
-                                The Description goes in here.
-                            </div>
-                        </div>
-                    </div>
+                    <!-- NG Repeat for Issues ends here-->
+
                 </div>
             </div>
         </div>

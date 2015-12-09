@@ -26,13 +26,13 @@ projectServices.factory('AdminProjectsFactory', function ($resource) {
 });
 
 projectServices.factory('ProjectFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects/:pid', {}, {
+    return $resource('/taskit/api/workspace/projects', {}, {
         show: {
             method: 'GET',
             params: {pID: '@pID'}
         },
         update: {
-            method: 'PUT',
+            method: 'PATCH',
             params: {pID: '@pID'}
         },
         delete: {

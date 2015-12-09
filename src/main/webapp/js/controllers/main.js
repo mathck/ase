@@ -12,7 +12,7 @@ materialAdmin
         $http.defaults.headers.common['user-token'] = String(TokenService.token);
         UserFactory.show({uID: TokenService.username}).$promise.then(function(response){
                 TokenService.user=response; //set persistent UserInformation
-                //console.log("Token is:" + TokenService.token);
+                console.log("Token is:" + TokenService.token);
                 growlService.growl('Welcome back ' + TokenService.user.firstName +' :D', 'inverse');
 
                 //initialize Variables for Menubar
@@ -360,7 +360,7 @@ materialAdmin
     // MAIN VIEW
     //=================================================
 
-    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory, SharedProperties){
+    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory){
         //ProjectsFactory.query({uID: TokenService.user.userID}).$promise.then(function(response){ //TODO - change after project creation works
         AdminProjectsFactory.query().$promise.then(function(response){
             $scope.userProjects=response;
@@ -370,8 +370,8 @@ materialAdmin
         });
 
         $scope.viewProject=function(currentID){
-            SharedProperties.setProjectId(currentID);
             console.log("Click on viewProject with ID " + currentID);
+            //state.go("viewProject", {pID: currentID});
         }
 
         $scope.createIssueForProject=function(currentID){
@@ -457,43 +457,53 @@ materialAdmin
     // PROJECT UPDATE
     //=================================================
 
-    .service('SharedProperties', function () {
-         var projectId
-         var taskId = '2';
+    .controller('updateProjectCtrl', function ($scope, $stateParams, growlService, TokenService, ProjectFactory, UserFactory, RewardsByProjectFactory) {
 
-         return {
-             getProjectId: function () {
-                 return projectId;
-             },
-             setProjectId: function(value) {
-                 projectId = value;
-             },
-             getTaskId: function () {
-                 return taskId;
-             },
-             setTaskId: function(value) {
-                 taskId = value;
-             }
-         };
-     })
+       growlService.growl('Fetching project information...');
 
-    .controller('updateProjectCtrl', function ($scope, $stateParams, ProjectFactory, UsersFactory, SharedProperties) {
+       //Set project ID according to parameter
+       $scope.currentPID = $stateParams.pID;
+       console.log("pid:" + $scope.currentPID);
 
-       console.log("View Project Controller initialized");
-       console.log($stateParams.pIDParam);
-       $scope.currentPID = $stateParams.pIDParam;
-       console.log($scope.currentPID);
+       $scope.selectedProject={};
 
-       console.log(SharedProperties.getProjectId().data);
-       var currentPID=SharedProperties.getProjectId();
-       console.log("pid:" + currentPID);
-       ProjectFactory.query(currentPID).$promise.then(function(response){
+       //Get project information
+       ProjectFactory.show({pID: $scope.currentPID}).$promise.then(function(response){
             $scope.selectedProject=response;
             console.log(response);
-            /*$scope.userProjects.forEach(function(entry){
-                console.log(entry.projectID);
-            });*/
+
+            //get user information for all users of the current project
+            $scope.selectedProject.userList=[];
+            console.log("getting users...");
+            $scope.selectedProject.allUser.forEach(function(participant){
+                console.log("getting user: " + participant.user);
+                UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                    console.log("setting role to: " + participant.role);
+                    //add role of the current user for the project
+                    user.role=participant.role;
+                    console.log(user);
+                    $scope.selectedProject.userList.push(user);
+                });
+                console.log("Resulting user list:");
+                console.log($scope.selectedProject.userList);
+            });
         });
+
+        //Get all rewards for the current project and user
+        console.log("getting rewards... for "+ TokenService.username);
+        RewardsByProjectFactory.query({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(rewards){
+            $scope.selectedProject.rewards=rewards;
+            console.log("rewards:");
+            console.log($scope.selectedProject.rewards);
+        });
+
+        //Save changes after button is clicked
+        $scope.saveProject=function(){
+            ProjectFactory.update({pID: $scope.currentPID}, {
+                title: $scope.selectedProject.title,
+                description: $scope.selectedProject.description
+            });
+        };
     })
 
     //=================================================
