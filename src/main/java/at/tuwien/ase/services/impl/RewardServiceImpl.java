@@ -1,6 +1,7 @@
 package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.RewardDAO;
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Reward;
 import at.tuwien.ase.services.RewardService;
 
@@ -22,7 +23,7 @@ public class RewardServiceImpl implements RewardService {
 
     private static final Logger logger = LogManager.getLogger(IssueServiceImpl.class);
 
-    public int writeReward(Reward reward) {
+    public JsonStringWrapper writeReward(Reward reward) {
         logger.debug("create new reward");
         int id;
 
@@ -32,7 +33,7 @@ public class RewardServiceImpl implements RewardService {
 
         rewardDAO.insertReward(reward);
 
-        return id;
+        return new JsonStringWrapper(id);
     }
 
     public void deleteRewardByID(int rID) {

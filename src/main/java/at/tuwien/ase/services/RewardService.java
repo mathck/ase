@@ -1,5 +1,6 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Reward;
 
 import java.util.LinkedList;
@@ -9,7 +10,7 @@ import java.util.LinkedList;
  */
 public interface RewardService {
 
-    int writeReward(Reward reward);
+    JsonStringWrapper writeReward(Reward reward);
 
     void deleteRewardByID(int rID);
 

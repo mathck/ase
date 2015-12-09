@@ -1,6 +1,7 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.UserRole;
 import at.tuwien.ase.services.ProjectService;
@@ -35,7 +36,7 @@ public class ProjectController {
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public int createProject(@RequestBody Project project) {
+    public JsonStringWrapper createProject(@RequestBody Project project) {
         project.setCreationTime(new Timestamp(new Date().getTime()));
         project.setUpdateTime(project.getCreationTime());
         return ps.writeProject(project);

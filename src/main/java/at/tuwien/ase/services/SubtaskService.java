@@ -1,6 +1,7 @@
 package at.tuwien.ase.services;
 
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Subtask;
 
 
@@ -11,7 +12,7 @@ import java.util.LinkedList;
  */
 public interface SubtaskService {
 
-    int writeSubtask(Subtask subtask);
+    JsonStringWrapper writeSubtask(Subtask subtask);
 
     void deleteSubtaskByID(int sID);
 

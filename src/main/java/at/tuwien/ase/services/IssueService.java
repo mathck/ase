@@ -1,6 +1,7 @@
 package at.tuwien.ase.services;
 
 import at.tuwien.ase.model.Issue;
+import at.tuwien.ase.model.JsonStringWrapper;
 
 import java.util.LinkedList;
 
@@ -10,7 +11,7 @@ import java.util.LinkedList;
  */
 public interface IssueService {
 
-    int writeIssue(Issue issue, int pID, String uID);
+    JsonStringWrapper writeIssue(Issue issue, int pID, String uID);
 
     void deleteIssueByID(int iID);
 
@@ -22,6 +23,6 @@ public interface IssueService {
 
     LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID);
 
-    int updateIssueToTask(int iID);
+    JsonStringWrapper updateIssueToTask(int iID);
 
 }

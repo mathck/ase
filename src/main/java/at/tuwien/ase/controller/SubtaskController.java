@@ -2,6 +2,7 @@ package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Subtask;
 import at.tuwien.ase.services.SubtaskService;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +37,7 @@ public class SubtaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public int createSubtask(@RequestBody Subtask subtask) throws Exception {
+    public JsonStringWrapper createSubtask(@RequestBody Subtask subtask) throws Exception {
         return ts.writeSubtask(subtask);
     }
 

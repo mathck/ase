@@ -3,6 +3,7 @@ package at.tuwien.ase.services.impl;
 import at.tuwien.ase.dao.IssueDAO;
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.services.IssueService;
@@ -35,17 +36,17 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public int updateIssueToTask(int iID) {
+    public JsonStringWrapper updateIssueToTask(int iID) {
         logger.debug("update issue with id="+iID+" to task");
 
         //update issue to task
         taskDAO.updateIssueToTask(iID);
 
-        return iID;
+        return new JsonStringWrapper(iID);
 
     }
 
-    public int writeIssue(Issue issue, int pID, String uID) {
+    public JsonStringWrapper writeIssue(Issue issue, int pID, String uID) {
         int id;
 
         logger.debug("post new issue");
@@ -59,7 +60,7 @@ public class IssueServiceImpl implements IssueService {
 
         issueDAO.insertIssue(issue);
 
-        return id;
+        return new JsonStringWrapper(id);
     }
 
     public void deleteIssueByID(int iID)  {

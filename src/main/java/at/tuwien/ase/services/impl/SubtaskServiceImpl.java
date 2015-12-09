@@ -2,6 +2,7 @@ package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.SubtaskDAO;
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Subtask;
 import at.tuwien.ase.services.SubtaskService;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +24,7 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     private static final Logger logger = LogManager.getLogger(SubtaskServiceImpl.class);
 
-    public int writeSubtask(Subtask subtask) {
+    public JsonStringWrapper writeSubtask(Subtask subtask) {
         logger.debug("create new subtask");
         int id;
 
@@ -34,7 +35,7 @@ public class SubtaskServiceImpl implements SubtaskService {
 
         subtaskDAO.insertSubtask(subtask);
 
-        return id;
+        return new JsonStringWrapper(id);
     }
 
     public void deleteSubtaskByID(int sID) {

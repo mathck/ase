@@ -2,6 +2,7 @@ package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Reward;
 import at.tuwien.ase.services.RewardService;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +37,7 @@ public class RewardController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/rewards", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public int createReward(@RequestBody Reward reward) throws Exception {
+    public JsonStringWrapper createReward(@RequestBody Reward reward) throws Exception {
         return rs.writeReward(reward);
     }
 

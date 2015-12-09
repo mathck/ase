@@ -2,6 +2,7 @@ package at.tuwien.ase.services.impl;
 
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.Task;
 import at.tuwien.ase.model.User;
@@ -31,7 +32,7 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.findByID(tID);
     }
 
-    public int writeTask(int pID, Task task) {
+    public JsonStringWrapper writeTask(int pID, Task task) {
         int id;
 
         logger.debug("post new task to project with id="+pID);
@@ -54,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
 
-        return id;
+        return new JsonStringWrapper(id);
     }
 
     public void deleteTaskByID(int tID) {

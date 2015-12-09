@@ -4,10 +4,7 @@ import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.dao.IssueDAO;
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.TaskDAO;
-import at.tuwien.ase.model.Project;
-import at.tuwien.ase.model.UserRole;
-import at.tuwien.ase.model.Issue;
-import at.tuwien.ase.model.Task;
+import at.tuwien.ase.model.*;
 import at.tuwien.ase.services.IssueService;
 import at.tuwien.ase.services.ProjectService;
 
@@ -53,7 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
         this.userDAO = userDAO;
     }
 
-    public int writeProject(Project project) {
+    public JsonStringWrapper writeProject(Project project) {
         int id = projectDAO.insertProject(project);
         if (project.getAllUser() != null && !project.getAllUser().isEmpty()) {
             for (UserRole user : project.getAllUser()) {
@@ -70,7 +67,7 @@ public class ProjectServiceImpl implements ProjectService {
                 taskService.writeTask(project.getProjectID(), task);
             }
         }
-        return id;
+        return new JsonStringWrapper(id);
     }
 
     public void deleteProject(int pID) {

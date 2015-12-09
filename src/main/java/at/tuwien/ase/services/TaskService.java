@@ -1,5 +1,6 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
 
 import java.util.LinkedList;
@@ -9,7 +10,7 @@ import java.util.LinkedList;
  */
 public interface TaskService {
 
-    int writeTask(int pID, Task task);
+    JsonStringWrapper writeTask(int pID, Task task);
 
     void deleteTaskByID(int tID);
 

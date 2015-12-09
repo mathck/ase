@@ -1,5 +1,6 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 
 import java.util.LinkedList;
@@ -9,7 +10,7 @@ import java.util.LinkedList;
  */
 public interface ProjectService {
 
-    int writeProject(Project project);
+    JsonStringWrapper writeProject(Project project);
 
     void deleteProject(int pID);
 
