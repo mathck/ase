@@ -21,10 +21,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+// Bei Problemen bitte pom.xml Rechtsklick -> Maven -> Reimport
+// Im Notfall auskommentieren und ruhig pushen
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
 public class UserServiceTests {
 
+    // @author: Mateusz Czernecki
     @Test
     public void whenUpdateUser_insertNewOneAndCheckAttributes() {
 

@@ -22,10 +22,14 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.mockito.Mockito.*;
 
+// Bei Problemen bitte pom.xml Rechtsklick -> Maven -> Reimport
+// Im Notfall auskommentieren und ruhig pushen
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
 public class ProjectServiceTests {
 
+    // @author: Mateusz Czernecki
     @Test
     public void whenProjectIsDeleted_DeleteAllTasksAndIssuesToo() {
 
