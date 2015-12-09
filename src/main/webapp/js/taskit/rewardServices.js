@@ -16,7 +16,7 @@ rewardServices.factory('RewardsByProjectFactory', function ($resource) {
 
 
 rewardServices.factory('RewardsByUserFactory', function ($resource) {
-    return $resource('workspace/projects/rewards', {}, {
+    return $resource('/taskit/api/workspace/projects/rewards', {}, {
         query: {
             method: 'GET',
             params: {uID: '@uID'},
@@ -26,7 +26,7 @@ rewardServices.factory('RewardsByUserFactory', function ($resource) {
 });
 
 rewardServices.factory('RewardsFactory', function ($resource) {
-    return $resource('/taskit/workspace/rewards', {}, {
+    return $resource('/taskit/api/workspace/rewards', {}, {
         create: {
             method: 'POST'
         }
@@ -34,7 +34,7 @@ rewardServices.factory('RewardsFactory', function ($resource) {
 });
 
 rewardServices.factory('RewardFactory', function ($resource) {
-    return $resource('/taskit/workspace/rewards/:rID', {}, {
+    return $resource('/taskit/api/workspace/rewards/:rID', {}, {
         show: {
             method: 'GET',
             params: {pID: '@rID'}

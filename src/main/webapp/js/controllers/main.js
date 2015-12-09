@@ -439,8 +439,8 @@ materialAdmin
         //Get all created rewards for the current user
         RewardsByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
             $scope.rewardList=rewards;
-            console.log("rewards:");
-            console.log($scope.selectedProject.rewards);
+            //console.log("rewards:");
+            //console.log($scope.rewardList);
         });
 
         $scope.createProject = function () {
@@ -448,16 +448,19 @@ materialAdmin
             ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
                 console.log("Response:")
                 console.log(response);
-                console.log(response.id);
-                console.log("sss: " + response.id);
+                $scope.pID=response.id;
+                console.log("pId of new Project: " + $scope.pID);
 
-                /*AddUserToProjectFactory.add({project: response, user: TokenService.username, role: "ADMIN"});
+                /*AddUserToProjectFactory.add({project: $scope.pID, user: TokenService.username, role: "ADMIN"});
                 $scope.users.userPickerContributor.forEach(function(contributor){
-                    AddUserToProjectFactory.add({project: response, user: contributor, role: "CONTRIBUTOR"});
+                    AddUserToProjectFactory.add({project: $scope.pID, user: contributor, role: "CONTRIBUTOR"});
                 });
                 $scope.users.userPickerManager.forEach(function(manager){
-                    AddUserToProjectFactory.add({project: response, user: manager, role: "ADMIN"});
-                });*/
+                    AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
+                });
+
+                state.go(/viewProject/,{pID:$scope.pID});
+                */
             });
 
         };
@@ -480,7 +483,7 @@ materialAdmin
        //Get project information
        ProjectFactory.show({pID: $scope.currentPID}).$promise.then(function(response){
             $scope.selectedProject=response;
-            console.log(response);
+            //console.log(response);
 
             //get user information for all users of the current project
             $scope.selectedProject.userList=[];
@@ -488,23 +491,15 @@ materialAdmin
             $scope.selectedProject.allUser.forEach(function(participant){
                 console.log("getting user: " + participant.user);
                 UserFactory.get({uID: participant.user}).$promise.then(function(user){
-                    console.log("setting role to: " + participant.role);
-                    //add role of the current user for the project
                     user.role=participant.role;
-                    console.log(user);
                     $scope.selectedProject.userList.push(user);
                 });
-                console.log("Resulting user list:");
-                console.log($scope.selectedProject.userList);
             });
         });
 
         //Get all rewards for the current project and user
-        console.log("getting rewards... for "+ TokenService.username);
         RewardsByProjectFactory.query({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(rewards){
             $scope.selectedProject.rewards=rewards;
-            console.log("rewards:");
-            console.log($scope.selectedProject.rewards);
         });
 
         //Save changes after button is clicked
@@ -512,6 +507,10 @@ materialAdmin
             ProjectFactory.update({pID: $scope.currentPID}, {
                 title: $scope.selectedProject.title,
                 description: $scope.selectedProject.description
+                //TODO save newly added users to project:
+                /*$scope.users.userPickerContributor.forEach(function(contributor){
+                      AddUserToProjectFactory.add({project: $scope.currentPID, user: contributor, role: "CONTRIBUTOR"});
+                });*/
             });
         };
     })
