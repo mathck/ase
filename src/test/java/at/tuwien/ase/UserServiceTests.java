@@ -3,10 +3,11 @@ package at.tuwien.ase;
 /**
  * Created by mathc_000 on 22-Nov-15.
  */
-/*
-import at.tuwien.ase.dao.task.UserDAO;
+import at.tuwien.ase.dao.ProjectDAO;
+import at.tuwien.ase.dao.SubtaskDAO;
+import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.junit.AppConfig;
-import at.tuwien.ase.model.user.User;
+import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.UserService;
 import at.tuwien.ase.services.impl.UserServiceImpl;
 import org.junit.Test;
@@ -20,32 +21,39 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+// Bei Problemen bitte pom.xml Rechtsklick -> Maven -> Reimport
+// Im Notfall auskommentieren und ruhig pushen
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
 public class UserServiceTests {
 
+    // @author: Mateusz Czernecki
     @Test
     public void whenUpdateUser_insertNewOneAndCheckAttributes() {
 
         // Arrange
         UserDAO userDAO = Mockito.mock(UserDAO.class);
-        UserService userService = new UserServiceImpl(userDAO);
-        String uID = "0", email = "1", password = "2", firstName = "3", lastName = "4", avatar = "5";
+        ProjectDAO projectDAO = Mockito.mock(ProjectDAO.class);
+        SubtaskDAO subtaskDAO = Mockito.mock(SubtaskDAO.class);
+        UserService userService = new UserServiceImpl(userDAO, projectDAO, subtaskDAO);
+        String uID = "0", email = "1", password = "2";
         User oUser = new User("zergling", "garados");
         when(userDAO.findByID(uID)).thenReturn(oUser);
-        when(userDAO.insertUser(Mockito.any(User.class))).thenReturn(oUser);
+        when(userDAO.findByID(email)).thenReturn(new User(email, password));
+        //when(userDAO.insertUser(Mockito.any(User.class))).thenReturn(oUser);
 
         // Act
-        User user = userService.updateUser(uID, email, password, firstName, lastName, avatar);
+        userService.writeUser(oUser);
+        userService.updateUser(uID, new User(email, password));
 
         // Assert
-        verify(userDAO, atLeastOnce()).findByID(uID);
+        User user = userService.getByID(email);
+
+        verify(userDAO, atLeastOnce()).findByID(email);
         verify(userDAO, atLeastOnce()).insertUser(Mockito.any(User.class));
 
-        assertEquals(email, user.getEmail());
+        assertNotNull(user);
         assertNotEquals(password, user.getPassword());
-        assertEquals(firstName, user.getFirstName());
-        assertEquals(lastName, user.getLastName());
-        assertEquals(avatar, user.getAvatar());
     }
-}*/
+}

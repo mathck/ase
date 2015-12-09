@@ -3,10 +3,10 @@ package at.tuwien.ase;
 /**
  * Created by mathc_000 on 22-Nov-15.
  */
-/*
 import at.tuwien.ase.dao.IssueDAO;
-import at.tuwien.ase.dao.task.ProjectDAO;
+import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.junit.AppConfig;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.Issue;
@@ -22,20 +22,25 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.mockito.Mockito.*;
 
+// Bei Problemen bitte pom.xml Rechtsklick -> Maven -> Reimport
+// Im Notfall auskommentieren und ruhig pushen
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
 public class ProjectServiceTests {
 
+    // @author: Mateusz Czernecki
     @Test
     public void whenProjectIsDeleted_DeleteAllTasksAndIssuesToo() {
 
         // Arrange
-        String pID = "coole id";
+        int pID = 0;
         ProjectDAO projectDAO = Mockito.mock(ProjectDAO.class);
         IssueDAO issueDAO = Mockito.mock(IssueDAO.class);
         TaskDAO taskDAO = Mockito.mock(TaskDAO.class);
-        ProjectService projectService = new ProjectServiceImpl(projectDAO, issueDAO, taskDAO);
-        Project project = new Project("pika", "title", "desc");
+        UserDAO userDAO = Mockito.mock(UserDAO.class);
+        ProjectService projectService = new ProjectServiceImpl(projectDAO, issueDAO, taskDAO, userDAO);
+        Project project = new Project(0, "title", "desc");
         Issue issue = new Issue(); issue.setId(4);
         Task task = new Task(); task.setId(5);
         project.addIssue(issue);
@@ -46,8 +51,8 @@ public class ProjectServiceTests {
         projectService.deleteProject(pID);
 
         // Assert
-        verify(taskDAO, atLeastOnce()).removeTask(task.getId());
-        verify(issueDAO, atLeastOnce()).removeIssue(issue.getId());
+        verify(taskDAO, atLeastOnce()).removeTaskByID(task.getId());
+        verify(issueDAO, atLeastOnce()).removeIssueByID(issue.getId());
         verify(projectDAO, atLeastOnce()).removeProject(pID);
     }
-}*/
+}
