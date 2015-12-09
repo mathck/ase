@@ -416,41 +416,51 @@ materialAdmin
     // PROJECT CREATION
     //=================================================
 
-    .controller('createProjectCtrl', function (TokenService, ProjectsFactory, UsersFactory, $scope, $location, $window) {
+    .controller('createProjectCtrl', function (TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory, $scope, $location, $window) {
 
-        // callback for ng-click 'create Project':
         console.log("starting Project Creation");
 
+        // get all users (for adding users to the project)
         UsersFactory.query().$promise.then(function(response){
-            /*consoleLog(response);
-            consoleLog(TokenService.user);
-            arrayRemove(response, TokenService.user);
-            console.log(response);*/
-            this.contributableUsers=response;
-            this.managementableUsers=this.contributableUsers;
+            $scope.users={};
+            $scope.users.contributableUsers=[];
 
-            /*$scope.managementableUsers.forEach(function(entry){
-                console.log(entry);
-            });*/
+            //add a field containing a readable caption for the users
+            response.forEach(function(user){
+                user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                //copy user list into one list for contributors
+                $scope.users.contributableUsers.push(user);
+            });
+
+            //create a second list for managers
+            $scope.users.managementableUsers=$scope.users.contributableUsers;
+        });
+
+        //Get all created rewards for the current user
+        RewardsByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+            $scope.rewardList=rewards;
+            console.log("rewards:");
+            console.log($scope.selectedProject.rewards);
         });
 
         $scope.createProject = function () {
-            //UserFactory.show("test").then(function(loggedUser){
-            var newProject = {
-                id: "0",
-                title: $scope.project.title,
-                description: $scope.project.description,
-                userList: []
-                //taskList: [],
-                //issueList: []
-            };
-            //newProject.userList.push(loggedUser);
+            console.log($scope.users.userPickerContributor);
+            ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
+                console.log("Response:")
+                console.log(response);
+                console.log(response.id);
+                console.log("sss: " + response.id);
 
-            //console.log(loggedUser);
-            console.log(newProject);
-            ProjectsFactory.create(newProject);
-            $location.path('/home');
-        };//};
+                /*AddUserToProjectFactory.add({project: response, user: TokenService.username, role: "ADMIN"});
+                $scope.users.userPickerContributor.forEach(function(contributor){
+                    AddUserToProjectFactory.add({project: response, user: contributor, role: "CONTRIBUTOR"});
+                });
+                $scope.users.userPickerManager.forEach(function(manager){
+                    AddUserToProjectFactory.add({project: response, user: manager, role: "ADMIN"});
+                });*/
+            });
+
+        };
     })
 
     //=================================================

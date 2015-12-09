@@ -6,9 +6,6 @@ projectServices.factory('ProjectsFactory', function ($resource) {
             method: 'GET',
             params: {uID: '@uID'},
             isArray: true
-        },
-        create: {
-            method: 'POST'
         }
     })
 });
@@ -20,7 +17,8 @@ projectServices.factory('AdminProjectsFactory', function ($resource) {
             isArray: true
         },
         create: {
-            method: 'POST'
+            method: 'POST',
+            responseType: 'text'
         }
     })
 });
@@ -38,6 +36,17 @@ projectServices.factory('ProjectFactory', function ($resource) {
         delete: {
             method: 'DELETE',
             params: {pID: '@pID'}
+        },
+        create: {
+            method: 'POST'
+        }
+    })
+});
+
+projectServices.factory('AddUserToProjectFactory', function ($resource) {
+    return $resource('/taskit/api/workspace/projects/add', {}, {
+        add: {
+            method: 'PUT'
         }
     })
 });
