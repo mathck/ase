@@ -41,8 +41,8 @@ materialAdmin
             //------------------------------
 
             .state ('viewIssue', {
-                url: '/viewIssue/:issueId',
-                templateUrl: 'views/viewIssue.html?iid=:issueID'
+                url: '/viewIssue/:iID',
+                templateUrl: 'views/viewIssue.html'
             })
 
             //------------------------------
@@ -50,8 +50,8 @@ materialAdmin
             //------------------------------
 
             .state ('viewTask', {
-                url: '/viewTask/:taskId',
-                templateUrl: 'views/viewTask.html?tID=:taskId',
+                url: '/viewTask/:tID',
+                templateUrl: 'views/viewTask.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
                         return $ocLazyLoad.load ([

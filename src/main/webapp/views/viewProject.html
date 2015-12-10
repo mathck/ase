@@ -211,7 +211,7 @@
 
                     <!-- NG Repeat for Tasks starts here -->
                     <div class="col-sm-3" data-ng-repeat="task in selectedProject.allTasks">
-                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask">
+                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask({tID:task.id})">
                             <div class="card-header bgm-task">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
@@ -227,7 +227,7 @@
 
                     <!-- NG Repeat for Issues starts here -->
                     <div class="col-sm-3" data-ng-repeat="issue in selectedProject.allIssues">
-                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask">
+                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewIssue({iID:issue.ID})">
                             <div class="card-header bgm-issue">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>

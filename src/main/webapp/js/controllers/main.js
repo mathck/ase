@@ -371,7 +371,6 @@ materialAdmin
 
         $scope.viewProject=function(currentID){
             console.log("Click on viewProject with ID " + currentID);
-            //state.go("viewProject", {pID: currentID});
         }
 
         $scope.createIssueForProject=function(currentID){
