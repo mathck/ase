@@ -106,50 +106,19 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
-                                    <!--NG Repeat for Reward starts here -->
-                                    <tr data-ng-repeat="reward in selectedProject.rewards">
-                                        <td class="col-xs-2">
-                                            <div class="thumbnail noHeader">
-                                                <img src="{{reward.imageLink}}" alt="Image of {{reward.name}}">
-                                            </div>
-                                        </td>
-                                        <td>{{reward.name}}</td>
-                                        <td>{{reward.description}}</td>
-                                        <td>{{reward.xpbase}}</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <!--NG Repeat for Reward ends  here -->
-                                   <!--<tr>
-                                        <td class="col-xs-2">
-                                            <div class="thumbnail noHeader">
-                                                <img src="media/gallery/thumbs/6.jpg" alt="">
-                                            </div>
-                                        </td>
-                                        <td>Reward2</td>
-                                        <td>5</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-2">
-                                            <div class="thumbnail noHeader">
-                                                <img src="media/gallery/thumbs/6.jpg" alt="">
-                                            </div>
-                                        </td>
-                                        <td>Reward3</td>
-                                        <td>4</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-xs-2 noHeader">
-                                            <div class="thumbnail noHeader">
-                                                <img src="media/gallery/thumbs/6.jpg" alt="">
-                                            </div>
-                                        </td>
-                                        <td>Reward4</td>
-                                        <td>2</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>-->
+                                        <!--NG Repeat for Reward starts here -->
+                                        <tr data-ng-repeat="reward in selectedProject.rewards">
+                                            <td class="col-xs-2">
+                                                <div class="thumbnail noHeader">
+                                                    <img src="{{reward.imageLink}}" alt="Image of {{reward.name}}">
+                                                </div>
+                                            </td>
+                                            <td>{{reward.name}}</td>
+                                            <td>{{reward.description}}</td>
+                                            <td>{{reward.xpbase}}</td>
+                                            <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                        </tr>
+                                        <!--NG Repeat for Reward ends  here -->
                                     </tbody>
                                 </table>
                             </div>
@@ -167,7 +136,7 @@
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
                                     <h2>Create Task</h2>
                                 </div>
-                                <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTask({pID: selectedProject})" data-ng-click="mactrl.sidebarStat($event)">
+                                <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTask({pID: currentPID})" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
                             </div>
@@ -183,7 +152,7 @@
                                     <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
                                     <h2>Create Issue</h2>
                                 </div>
-                                <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createIssue" data-ng-click="mactrl.sidebarStat($event)">
+                                <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createIssue({pID: currentPID})" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
                             </div>

@@ -520,30 +520,24 @@ materialAdmin
     // ISSUE CREATION
     //=================================================
 
-    .controller('createIssueCtrl', function ( $scope, IssuesFactory, $location, $window) {
+    .controller('createIssueCtrl', function ( $scope, $stateParams, $state, growlService, IssueFactory, ProjectFactory, TokenService) {
 
-            // callback for ng-click 'create Issue':
-        console.log("starting");
+        // callback for ng-click 'create Issue':
+        console.log("starting issue creation");
+        $scope.currentPID = $stateParams.pID;
+        console.log("pid:");
+        console.log($scope.currentPID);
+
+        ProjectFactory.show({pID: $scope.currentPID}).$promise.then(function(response){
+            $scope.selectedProject=response;
+        });
+
+
         $scope.createIssue = function () {
-            //UserFactory.show("test").then(function(loggedUser){
-            var newIssue = {
-                id: "1",
-                title: "hans",
-                description: "test",
-                taskType: "blah",
-                creationDate: "2015-12-31",
-                updateDate: "2016-01-12",
-                dslTemplateId: "1",
-                projectId: "1",
-                userMail:"test@test.com",
-                status:"leiwand"
-            };
-
-            console.log(newIssue);
-            console.log("still here");
-            IssuesFactory.create(newIssue);
-            $location.path('/home');
-            console.log("and here");
+            IssueFactory.create({pID: $scope.currentPID}, {uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
+                growlService.growl("Issue created.");
+                state.go("viewProject", {pID:$scope.pID});
+            });
         };
     })
 
