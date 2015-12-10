@@ -7839,7 +7839,7 @@ a.waves-effect .waves-ripple {
   color: #f44336 !important;
 }
 .bgm-blue {
-  background-color: #2196f3 !important;
+  background-color: #0288D1 !important;
 }
 .c-blue {
   color: #2196f3 !important;
@@ -12889,27 +12889,31 @@ a.thumbnail.active {
   transition-duration: 150ms;
   cursor: pointer;
   vertical-align: top;
-  color: #000;
-  line-height: 18px;
-  min-width: 18px;
-  min-height: 18px;
-  text-transform: uppercase;
+  color: #fff;
+  font-weight: bold;
+  line-height: 25px;
+  min-width: 26px;
+  min-height: 26px;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
+  border-radius: 100%;
+  border-radius: 10px;
+  padding: 0 8px;
+  text-transform: uppercase;
 }
 .login-navigation > li > span {
   opacity: 0;
   filter: alpha(opacity=0);
 }
-.login-navigation > li:not(:hover) {
+/*.login-navigation > li:not(:hover) {
   font-size: 0px;
   border-radius: 100%;
-}
+}*/
 .login-navigation > li:hover {
   border-radius: 10px;
-  padding: 0 5px;
-  font-size: 10px;
+  padding: 0 25px;
+  background: #00838F !important;
 }
 .login-navigation > li:hover > span {
   opacity: 1;

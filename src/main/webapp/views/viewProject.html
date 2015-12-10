@@ -46,11 +46,15 @@
                             </div>
                         </div>
                     </div>
-                    <br>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body card-padding">
                     <div class="row">
-                        <div class="col-sm-7">
+                        <div class="col-sm-6">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-md" placeholder="Search Persons">
+                                <p class="f-500 c-black m-b-15">Contributor/s</p>
+                                <select chosen multiple data-placeholder="Add a User..." class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers"></select>
                             </div>
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
                                 <table class="table table-hover">
@@ -79,20 +83,64 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <p class="f-500 c-black m-b-15">Manager/s</p>
+                                <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers"></select>
+                            </div>
+                            <div tabindex="9" style="overflow: hidden;" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>E-Mail</th>
+                                        <th>Project Level</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--NG Repeat for User starts here -->
+                                    <tr data-ng-repeat="user in selectedProject.userList">
+                                        <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
+                                        <td>{{user.firstName}}</td>
+                                        <td>{{user.lastName}}</td>
+                                        <td>{{user.userID}}</td>
+                                        <td>1</td><!--TODO Level to be implemented -->
+                                        <td><button data-ng-click="deleteUserFromProject(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                    </tr>
+                                    <!--NG Repeat for User ends here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body card-padding">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="fg-line">
+                                <p class="f-500 c-black m-b-15">Reward/s</p>
+                                <select chosen multiple data-placeholder="Add a Reward..." class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers"></select>
+                            </div>
 
-                            <div class="form-group noMargin">
-                                <div class="fg-line">
-                                    <div class="select">
-                                        <select class="form-control">
-                                            <option value="" selected="selected">Choose Reward (Name | Level)</option>
-                                            <option value="Reward 5 | Level 5">Reward 5 | Level 5</option>
-                                            <option value="Reward 6 | Level 6">Reward 6 | Level 6</option>
-                                            <option value="Reward 7 | Level 7">Reward 7 | Level 7</option>
-                                        </select>
-                                    </div>
+                        <!--
+                        <div class="form-group noMargin">
+                            <div class="fg-line">
+                                <div class="select">
+                                    <select class="form-control">
+                                        <option value="" selected="selected">Choose Reward (Name | Level)</option>
+                                        <option value="Reward 5 | Level 5">Reward 5 | Level 5</option>
+                                        <option value="Reward 6 | Level 6">Reward 6 | Level 6</option>
+                                        <option value="Reward 7 | Level 7">Reward 7 | Level 7</option>
+                                    </select>
                                 </div>
                             </div>
+                        </div>
+                        -->
 
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
                                 <table class="table table-hover">
@@ -126,7 +174,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="dash-widgets">
                 <div class="row">
                     <div class="col-sm-3">
@@ -193,7 +240,6 @@
                         </div>
                     </div>
                     <!-- NG Repeat for Issues ends here-->
-
                 </div>
             </div>
         </div>
