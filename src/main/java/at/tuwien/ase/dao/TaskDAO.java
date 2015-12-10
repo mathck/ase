@@ -29,4 +29,8 @@ public interface TaskDAO {
     int getNewID();
     int getNewIDForRelTaskUser();
 
+    void assignUserToTask(int tID, String uID);
+    void removeUserFromTask(int tID, String uID);
+
+
 }

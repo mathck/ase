@@ -70,8 +70,8 @@ public class TaskDAOImpl implements TaskDAO {
         logger.debug("delete from db: task with id=" + tID);
 
         String sqlQuery = "DELETE " +
-                "FROM task " +
-                "WHERE id = ? AND TASK_TYPE = ? ";
+                "FROM TASK " +
+                "WHERE ID = ? AND TASK_TYPE = ? ";
 
         this.jdbcTemplate.update(
                 sqlQuery,
@@ -325,11 +325,42 @@ public class TaskDAOImpl implements TaskDAO {
         return tasks;
     }
 
+    public void assignUserToTask(int tID, String uID) {
+
+        logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);
+
+        String sqlQuery = "INSERT INTO REL_USER_TASK (ID, USER_MAIL, TASK_ID) " +
+                "VALUES (?, ?, ?)";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                this.getNewIDForRelTaskUser(),
+                uID,
+                tID
+        );
+    }
+
+    public void removeUserFromTask(int tID, String uID) {
+
+        logger.debug("delete from db: remove user with id="+uID+" from task with id="+tID);
+
+        String sqlQuery = "DELETE " +
+                "FROM REL_USER_TASK " +
+                "WHERE USER_MAIL = ? AND TASK_ID = ?";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                uID,
+                tID
+        );
+
+    }
+
     public int getNewID() {
 
         Integer id = this.jdbcTemplate.queryForObject(
                 "SELECT nextval('seq_task_id')",
-                 Integer.class);
+                Integer.class);
 
         return id;
     }
@@ -342,4 +373,5 @@ public class TaskDAOImpl implements TaskDAO {
 
         return id;
     }
+
 }

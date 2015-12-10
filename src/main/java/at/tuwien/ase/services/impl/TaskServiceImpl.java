@@ -83,5 +83,15 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.loadAllByProjectAndUser(pID, uID);
     }
 
+    public void assignUserToTask(int tID, String uID) {
+        logger.debug("assign user with id="+uID+" to task with id="+tID);
+        taskDAO.assignUserToTask(tID, uID);
+    }
+
+    public void removeUserFromTask(int tID, String uID) {
+        logger.debug("remove user with id="+uID+" from task with id="+tID);
+        taskDAO.removeUserFromTask(tID, uID);
+    }
+
 
 }

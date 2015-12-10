@@ -22,6 +22,9 @@ public interface TaskService {
 
     LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID);
 
+    void assignUserToTask(int tID, String uID);
+    void removeUserFromTask(int tID, String uID);
+
 
 }
 

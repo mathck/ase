@@ -70,6 +70,20 @@ public class TaskController {
     }
 
     // @author Daniel Hofer
+    @RequestMapping(value = "workspace/users/{uID}/tasks/{tID}", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    public void assignUserToTask(@PathVariable("tID") int tID, @PathVariable("uID") String uID) throws Exception {
+        ts.assignUserToTask(tID, uID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/users/{uID}/tasks/{tID}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void reomveUserFromTask(@PathVariable("tID") int tID, @PathVariable("uID") String uID) throws Exception {
+        ts.removeUserFromTask(tID, uID);
+    }
+
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/tasks/{tID}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteTasksByID(@PathVariable("tID") int tID)  throws Exception {
