@@ -520,7 +520,7 @@ materialAdmin
     // ISSUE CREATION
     //=================================================
 
-    .controller('createIssueCtrl', function ( $scope, $stateParams, $state, growlService, IssueFactory, ProjectFactory, TokenService) {
+    .controller('createIssueCtrl', function ( $scope, $state, $stateParams, $state, growlService, IssueFactory, ProjectFactory, TokenService) {
 
         // callback for ng-click 'create Issue':
         console.log("starting issue creation");
@@ -534,9 +534,9 @@ materialAdmin
 
 
         $scope.createIssue = function () {
-            IssueFactory.create({pID: $scope.currentPID}, {uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
+            IssueFactory.create({pID: $scope.currentPID, uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
                 growlService.growl("Issue created.");
-                state.go("viewProject", {pID:$scope.pID});
+                $state.go("viewProject", {pID:$scope.pID});
             });
         };
     })
