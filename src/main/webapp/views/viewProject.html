@@ -215,11 +215,11 @@
                             <div class="card-header bgm-task">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
-                                    <h2>{{task.title}}<small>{{task.status}}</small></h2>
+                                    <h2>{{task.title|limitTo:20}}<small>{{task.status|limitTo:30}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">
-                                {{task.description}}
+                                {{task.description|limitTo:30}}
                             </div>
                         </div>
                     </div>
@@ -231,11 +231,11 @@
                             <div class="card-header bgm-issue">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <h2>{{issue.title}}<small>{{issue.user.firstName}} {{issue.user.lastName}}</small></h2>
+                                    <h2>{{issue.title|limitTo:20}}<small>{{issue.user.firstName|limitTo:20}} {{issue.user.lastName|limitTo:20}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">
-                                {{issue.description}}
+                                {{issue.description|limitTo:30}}
                             </div>
                         </div>
                     </div>

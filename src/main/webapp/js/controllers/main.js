@@ -361,8 +361,11 @@ materialAdmin
     //=================================================
 
     .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory){
-        //ProjectsFactory.query({uID: TokenService.user.userID}).$promise.then(function(response){ //TODO - change after project creation works
-        AdminProjectsFactory.query().$promise.then(function(response){
+
+        $scope.sort="";
+        $scope.filter="";
+        ProjectsFactory.query({uID: TokenService.username}).$promise.then(function(response){ //TODO - change after project creation works
+        //AdminProjectsFactory.query().$promise.then(function(response){
             $scope.userProjects=response;
             /*$scope.userProjects.forEach(function(entry){
                 console.log(entry.projectID);
