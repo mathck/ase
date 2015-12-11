@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 @Repository
 public class IssueDAOImpl implements IssueDAO {
 
-    private static final Logger logger = LogManager.getLogger(TaskDAOImpl.class);
+    private static final Logger logger = LogManager.getLogger(IssueDAOImpl.class);
 
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
@@ -89,6 +89,7 @@ public class IssueDAOImpl implements IssueDAO {
                         issue.setId(Integer.valueOf(rs.getString("id")));
                         issue.setTitle(rs.getString("title"));
                         issue.setDescription(rs.getString("description"));
+                        issue.setTaskType(rs.getString("task_type"));
                         issue.setCreationDate(rs.getDate("creation_date"));
                         issue.setUpdateDate(rs.getDate("update_date"));
                         issue.setProjectId(rs.getInt("project_id"));
@@ -103,7 +104,7 @@ public class IssueDAOImpl implements IssueDAO {
 
         logger.debug("retrieve from db: all issues");
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
+        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
                 "FROM TASK, TASKIT_USER " +
                 "WHERE TASK_TYPE = ? " +
                 "AND TASK.USER_MAIL = TASKIT_USER.MAIL";
@@ -118,6 +119,7 @@ public class IssueDAOImpl implements IssueDAO {
             issue.setId((Integer)row.get("id"));
             issue.setTitle((String)row.get("title"));
             issue.setDescription((String)row.get("description"));
+            issue.setTaskType((String)row.get("task_type"));
             issue.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             issue.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
             issue.setProjectId((Integer)row.get("project_id"));
@@ -144,7 +146,7 @@ public class IssueDAOImpl implements IssueDAO {
 
         logger.debug("retrieve from db: all issues by project with id="+pID);
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
+        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
                 "FROM TASK, TASKIT_USER " +
                 "WHERE TASK_TYPE = ? " +
                 "AND TASK.PROJECT_ID = ? " +
@@ -160,6 +162,7 @@ public class IssueDAOImpl implements IssueDAO {
             issue.setId((Integer)row.get("id"));
             issue.setTitle((String)row.get("title"));
             issue.setDescription((String)row.get("description"));
+            issue.setTaskType((String)row.get("task_type"));
             issue.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             issue.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
             issue.setProjectId((Integer)row.get("project_id"));
@@ -186,7 +189,7 @@ public class IssueDAOImpl implements IssueDAO {
 
         logger.debug("retrieve from db: all issues by user with id="+uID);
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
+        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
                 "FROM TASK, TASKIT_USER " +
                 "WHERE TASK_TYPE = ? " +
                 "AND TASK.USER_MAIL = ? " +
@@ -202,6 +205,7 @@ public class IssueDAOImpl implements IssueDAO {
             issue.setId((Integer)row.get("id"));
             issue.setTitle((String)row.get("title"));
             issue.setDescription((String)row.get("description"));
+            issue.setTaskType((String)row.get("task_type"));
             issue.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             issue.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
             issue.setProjectId((Integer)row.get("project_id"));
@@ -227,7 +231,7 @@ public class IssueDAOImpl implements IssueDAO {
 
         logger.debug("retrieve from db: all issues from user with id="+uID+" and project with id="+pID);
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
+        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
                 "FROM TASK, TASKIT_USER " +
                 "WHERE TASK_TYPE = ? " +
                 "AND TASK.USER_MAIL = ? " +
@@ -244,6 +248,7 @@ public class IssueDAOImpl implements IssueDAO {
             issue.setId((Integer)row.get("id"));
             issue.setTitle((String)row.get("title"));
             issue.setDescription((String)row.get("description"));
+            issue.setTaskType((String)row.get("task_type"));
             issue.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             issue.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
             issue.setProjectId((Integer)row.get("project_id"));

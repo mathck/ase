@@ -36,7 +36,7 @@ public class IssueController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/issues", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Issue> getIssuesByUserMail(@RequestParam("uID") String uID) throws Exception {
+    public LinkedList<Issue> getIssuesByUser(@RequestParam("uID") String uID) throws Exception {
         return is.getAllIssuesFromUser(uID);
     }
 

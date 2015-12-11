@@ -37,7 +37,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/users/{uID}/tasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Task> getTasksByProjectAndUserMail(@PathVariable("pID") int pID, @PathVariable("uID") String uID) throws Exception {
+    public LinkedList<Task> getTasksByProjectAndUser(@PathVariable("pID") int pID, @PathVariable("uID") String uID) throws Exception {
         return ts.getAllTasksFromProjectAndUser(pID, uID);
     }
 
@@ -49,7 +49,7 @@ public class TaskController {
     }
 
     // @author Daniel Hofer
-    @RequestMapping(value = "workspace/tasks", method = RequestMethod.GET)
+    @RequestMapping(value = "workspace/projects/tasks", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Task> getAllTasks()  throws Exception {
         return ts.getAllTasks();
@@ -65,7 +65,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/tasks", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Task> getAllTasksFromUser(@PathVariable("uID") String uID)  throws Exception {
+    public LinkedList<Task> getAllTasksAssignedToUser(@PathVariable("uID") String uID)  throws Exception {
         return ts.getAllTasksFromUser(uID);
     }
 
