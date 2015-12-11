@@ -15,8 +15,9 @@ public interface LevelService
 	/**
 	 * @author Mateusz Czernecki
 	 * Provide xp and receive Level Object that should be sent to Frontend
+     * @param levelSource for what is the level computed?: use "+ProjectId+" or "OverallUserLevel"
 	 * @param xp
 	 * @return
      */
-	Level getLevelByXp(int xp);
+	Level getLevelByXp(String levelSource, int xp);
 }
