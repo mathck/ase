@@ -13,25 +13,25 @@
                 <h2>Projects</h2>
 
                 <ul class="actions">
-                    <li>
-                        <a href="">
+                    <!--<li>
+                        <a href="" data-ng-click="sort='createDate'">
                             <i class="zmdi zmdi-chevron-up" title="Date"></i>
                             <i class="zmdi zmdi-watch" title="Date"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="" data-ng-click="sort='-createDate'">
                             <i class="zmdi zmdi-chevron-down" title="Date"></i>
                             <i class="zmdi zmdi-watch" title="Date"></i>
                         </a>
-                    </li>
+                    </li>-->
                     <li>
-                        <a href="">
+                        <a href="" data-ng-click="sort='title'">
                             <i class="zmdi zmdi-sort-asc"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="" data-ng-click="sort='-title'">
                             <i class="zmdi zmdi-sort-desc"></i>
                         </a>
                     </li>
@@ -58,12 +58,13 @@
                     </div>
 
                     <!-- NG Repeat starts HERE -->
-                    <div class="col-sm-3" data-ng-repeat="project in userProjects">
+                    <div class="col-sm-3" data-ng-repeat="project in userProjects | filter:search | orderBy:sort">
+                        <div ng-if="$index % 3 == 0" class="row"></div>
                         <div class="card floatEffect" data-ui-sref="viewProject({pID: project.projectID})">
                             <div class="card-header bgm-project">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-folder-outline c-white"></i></span>
-                                    <h2>{{project.title}}<small>{{project.projectID}}</small></h2>
+                                    <h2>{{project.title|limitTo:20 }}<small>{{project.projectID}}</small></h2>
                                 </div>
                                 <ul class="actions actions-alt">
                                     <li class="dropdown" dropdown>
@@ -85,7 +86,7 @@
                                 </ul>
                             </div>
                             <div class="card-body card-padding">
-                                {{project.description}}
+                                {{project.description|limitTo:30}}
                             </div>
                         </div>
                     </div>
