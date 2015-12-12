@@ -300,9 +300,15 @@ materialAdmin
 
             // callback for ng-click 'loginUser':
             this.loginUser = function () {
-                 var email = this.login.email;
-                 var password = this.login.password;
-                 var passwordCheck = this.login.passwordCheck;
+                var email = "";
+                var password = "";
+                var passwordCheck = "";
+
+                if(this.login){
+                    var email = this.login.email;
+                    var password = this.login.password;
+                    var passwordCheck = this.login.passwordCheck;
+                }
 
                 //request token
                 LoginFactory.receive(this.login).$promise.then(function(data){
