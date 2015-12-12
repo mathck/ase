@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -29,16 +27,14 @@ public class ProjectController {
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.GET)
     @ResponseBody
-    public Project getProject(@RequestParam("pID") int pID) throws EmptyResultDataAccessException {
-        return ps.getByID(pID);
+    public Project getProject(@RequestParam("pID") int pID, @RequestParam("uID") String uID) throws EmptyResultDataAccessException {
+        return ps.getByID(pID, uID);
     }
 
     // @author Tomislav Nikic
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public JsonStringWrapper createProject(@RequestBody Project project) {
-        project.setCreationTime(new Timestamp(new Date().getTime()));
-        project.setUpdateTime(project.getCreationTime());
         return ps.writeProject(project);
     }
 

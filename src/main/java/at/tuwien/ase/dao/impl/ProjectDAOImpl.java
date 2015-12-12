@@ -2,21 +2,17 @@ package at.tuwien.ase.dao.impl;
 
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.model.Project;
-import at.tuwien.ase.model.UserRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -63,8 +59,8 @@ public class ProjectDAOImpl implements ProjectDAO {
                 id,
                 project.getDescription(),
                 project.getTitle(),
-                project.getCreationTime(),
-                project.getUpdateTime()
+                project.getCreationTimeDB(),
+                project.getUpdateTimeDB()
         );
         return id;
     }
@@ -95,8 +91,8 @@ public class ProjectDAOImpl implements ProjectDAO {
                 project.getProjectID(),
                 project.getDescription(),
                 project.getTitle(),
-                project.getCreationTime(),
-                project.getUpdateTime(),
+                project.getCreationTimeDB(),
+                project.getUpdateTimeDB(),
                 pID
         );
     }
@@ -140,8 +136,8 @@ public class ProjectDAOImpl implements ProjectDAO {
                         project.setProjectID(resultSet.getInt("id"));
                         project.setDescription(resultSet.getString("description"));
                         project.setTitle(resultSet.getString("name"));
-                        project.setCreationTime(resultSet.getTimestamp("creation_date"));
-                        project.setUpdateTime(resultSet.getTimestamp("update_date"));
+                        project.setCreationTimeDB(resultSet.getTimestamp("creation_date"));
+                        project.setUpdateTimeDB(resultSet.getTimestamp("update_date"));
                         logger.debug("Found " + project.getProjectID() + ":" + project.getTitle() + "in DB");
                         return project;
                     }
@@ -161,8 +157,8 @@ public class ProjectDAOImpl implements ProjectDAO {
                         project.setProjectID(resultSet.getInt("id"));
                         project.setDescription(resultSet.getString("description"));
                         project.setTitle(resultSet.getString("name"));
-                        project.setCreationTime(resultSet.getTimestamp("creation_date"));
-                        project.setUpdateTime(resultSet.getTimestamp("update_date"));
+                        project.setCreationTimeDB(resultSet.getTimestamp("creation_date"));
+                        project.setUpdateTimeDB(resultSet.getTimestamp("update_date"));
                         return project;
                     }
                 }
@@ -184,8 +180,8 @@ public class ProjectDAOImpl implements ProjectDAO {
                         project.setProjectID(resultSet.getInt("project_id"));
                         project.setDescription(resultSet.getString("description"));
                         project.setTitle(resultSet.getString("name"));
-                        project.setCreationTime(resultSet.getTimestamp("creation_date"));
-                        project.setUpdateTime(resultSet.getTimestamp("update_date"));
+                        project.setCreationTimeDB(resultSet.getTimestamp("creation_date"));
+                        project.setUpdateTimeDB(resultSet.getTimestamp("update_date"));
                         return project;
                     }
                 }

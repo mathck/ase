@@ -1,5 +1,7 @@
 package at.tuwien.ase.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedList;
@@ -7,195 +9,190 @@ import java.util.LinkedList;
 /**
  * Created by Tomislav Nikic on 16/11/2015.
  */
-public class Project
-{
+public class Project {
 
-	// Info
-	private int pID;
-	private String title;
-	private String description;
-	private int xp;
+    // Info
+    private int pID;
+    private String title;
+    private String description;
+    private Level level;
 
-	// Time
-	private Timestamp creationTime;
-	private Timestamp updateTime;
+    // Time
+    @JsonIgnore
+    private Timestamp creationTimeDB;
+    @JsonIgnore
+    private Timestamp updateTimeDB;
+    private String creationTime;
+    private String updateTime;
 
-	// Lists
-	private LinkedList<UserRole> userList;
-	private LinkedList<Task> taskList;
-	private LinkedList<Issue> issueList;
+    // Lists
+    private LinkedList<UserRole> userList;
+    private LinkedList<Task> taskList;
+    private LinkedList<Issue> issueList;
 
-	// Constructors
-	// @author Tomislav Nikic
-	public Project()
-	{
-	}
+    // Constructors
+    // @author Tomislav Nikic
+    public Project() {
+    }
 
-	public Project(int pID, String title, String description)
-	{
-		this.pID = pID;
-		this.title = title;
-		this.description = description;
+    public Project(int pID, String title, String description) {
+        this.pID = pID;
+        this.title = title;
+        this.description = description;
 
-		Date time = new Date();
-		creationTime = new Timestamp(time.getTime());
-		updateTime = creationTime;
+        Date time = new Date();
+        creationTimeDB = new Timestamp(time.getTime());
+        updateTimeDB = creationTimeDB;
 
-		userList = new LinkedList<UserRole>();
-		taskList = new LinkedList<Task>();
-		issueList = new LinkedList<Issue>();
-	}
+        userList = new LinkedList<UserRole>();
+        taskList = new LinkedList<Task>();
+        issueList = new LinkedList<Issue>();
+    }
 
-	// Getter and setter for project ID
-	// @author Tomislav Nikic
-	public int getProjectID()
-	{
-		return pID;
-	}
+    // Getter and setter for project ID
+    // @author Tomislav Nikic
+    public int getProjectID() {
+        return pID;
+    }
 
-	public void setProjectID(int pID)
-	{
-		this.pID = pID;
-	}
+    public void setProjectID(int pID) {
+        this.pID = pID;
+    }
 
-	// Getter and setter for title
-	// @author Tomislav Nikic
-	public String getTitle()
-	{
-		return title;
-	}
+    // Getter and setter for title
+    // @author Tomislav Nikic
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title)
-	{
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	// Getter and setter for description
-	// @author Tomislav Nikic
-	public String getDescription()
-	{
-		return description;
-	}
+    // Getter and setter for description
+    // @author Tomislav Nikic
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	// Add/delete a user to/from the list
-	// @author Tomislav Nikic
-	public void addUser(String uID, String role)
-	{
-		UserRole newUser = new UserRole(uID, this.pID, role);
-		userList.add(newUser);
-	}
+    // Add/delete a user to/from the list
+    // @author Tomislav Nikic
+    public void addUser(String uID, String role) {
+        UserRole newUser = new UserRole(uID, this.pID, role);
+        userList.add(newUser);
+    }
 
-	public void deleteUser(String uID)
-	{
-		for (UserRole iteration : userList)
-		{
-			if (iteration.getUser() == uID)
-				userList.remove(iteration);
-		}
-	}
+    public void deleteUser(String uID) {
+        for (UserRole iteration : userList) {
+            if (iteration.getUser() == uID)
+                userList.remove(iteration);
+        }
+    }
 
-	public void setAllUser(LinkedList<UserRole> userList)
-	{
-		this.userList = userList;
-	}
+    public void setAllUser(LinkedList<UserRole> userList) {
+        this.userList = userList;
+    }
 
-	// Reading lists
-	// @author Tomislav Nikic
-	public LinkedList<UserRole> getAllUser()
-	{
-		return userList;
-	}
+    // Reading lists
+    // @author Tomislav Nikic
+    public LinkedList<UserRole> getAllUser() {
+        return userList;
+    }
 
-	public UserRole getUserRole(String uID)
-	{
-		for (UserRole iterator : userList)
-			if (iterator.getUser() == uID)
-				return iterator;
-		return null;
-	}
+    public UserRole getUserRole(String uID) {
+        for (UserRole iterator : userList)
+            if (iterator.getUser() == uID)
+                return iterator;
+        return null;
+    }
 
-	// Add/delete a task to/from the list
-	// @author Tomislav Nikic
-	public void addTask(Task task)
-	{
-		taskList.add(task);
-	}
+    // Add/delete a task to/from the list
+    // @author Tomislav Nikic
+    public void addTask(Task task) {
+        taskList.add(task);
+    }
 
-	public void deleteTask(int id)
-	{
-		for (Task iterator : taskList)
-			if (iterator.getId() == id)
-				taskList.remove(iterator);
-	}
+    public void deleteTask(int id) {
+        for (Task iterator : taskList)
+            if (iterator.getId() == id)
+                taskList.remove(iterator);
+    }
 
-	public void setAllTasks(LinkedList<Task> taskList)
-	{
-		this.taskList = taskList;
-	}
+    public void setAllTasks(LinkedList<Task> taskList) {
+        this.taskList = taskList;
+    }
 
-	// Get list of all tasks
-	// @author Tomislav Nikic
-	public LinkedList<Task> getAllTasks()
-	{
-		return taskList;
-	}
+    // Get list of all tasks
+    // @author Tomislav Nikic
+    public LinkedList<Task> getAllTasks() {
+        return taskList;
+    }
 
-	// Add/delete a issue to/from the list
-	// @author Tomislav Nikic
-	public void addIssue(Issue issue)
-	{
-		issueList.add(issue);
-	}
+    // Add/delete a issue to/from the list
+    // @author Tomislav Nikic
+    public void addIssue(Issue issue) {
+        issueList.add(issue);
+    }
 
-	public void deleteIssue(int id)
-	{
-		for (Issue iterator : issueList)
-			if (iterator.getId() == id)
-				issueList.remove(iterator);
-	}
+    public void deleteIssue(int id) {
+        for (Issue iterator : issueList)
+            if (iterator.getId() == id)
+                issueList.remove(iterator);
+    }
 
-	public void setAllIssues(LinkedList<Issue> issueList)
-	{
-		this.issueList = issueList;
-	}
+    public void setAllIssues(LinkedList<Issue> issueList) {
+        this.issueList = issueList;
+    }
 
-	// Get list of all issues
-	// @author Tomislav Nikic
-	public LinkedList<Issue> getAllIssues()
-	{
-		return issueList;
-	}
+    // Get list of all issues
+    // @author Tomislav Nikic
+    public LinkedList<Issue> getAllIssues() {
+        return issueList;
+    }
 
-	public Timestamp getCreationTime()
-	{
-		return creationTime;
-	}
+    public Timestamp getCreationTimeDB() {
+        return creationTimeDB;
+    }
 
-	public void setCreationTime(Timestamp creationTime)
-	{
-		this.creationTime = creationTime;
-	}
+    public void setCreationTimeDB(Timestamp creationTimeDB) {
+        this.creationTimeDB = creationTimeDB;
+        creationTime = creationTimeDB.toString();
+    }
 
-	public Timestamp getUpdateTime()
-	{
-		return updateTime;
-	}
+    public Timestamp getUpdateTimeDB() {
+        return updateTimeDB;
+    }
 
-	public void setUpdateTime(Timestamp updateTime)
-	{
-		this.updateTime = updateTime;
-	}
+    public void setUpdateTimeDB(Timestamp updateTimeDB) {
+        this.updateTimeDB = updateTimeDB;
+        updateTime = updateTimeDB.toString();
+    }
 
-	public int getXp() {
-		return xp;
-	}
+    public Level getLevel() {
+        return level;
+    }
 
-	public void setXp(int xp) {
-		this.xp = xp;
-	}
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public String getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(String creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
 }

@@ -20,6 +20,46 @@ public class Level {
         this.nextLevel = nextLevel;
     }
 
+    public String getLevelSource() {
+        return levelSource;
+    }
+
+    public void setLevelSource(String levelSource) {
+        this.levelSource = levelSource;
+    }
+
+    public int getCurrentXp() {
+        return currentXp;
+    }
+
+    public void setCurrentXp(int currentXp) {
+        this.currentXp = currentXp;
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
+
+    public double getXpBar() {
+        return xpBar;
+    }
+
+    public void setXpBar(double xpBar) {
+        this.xpBar = xpBar;
+    }
+
+    public int getNextLevel() {
+        return nextLevel;
+    }
+
+    public void setNextLevel(int nextLevel) {
+        this.nextLevel = nextLevel;
+    }
+
     @Override
     public String toString() {
         return "Level{" +

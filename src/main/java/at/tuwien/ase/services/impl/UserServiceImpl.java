@@ -3,10 +3,8 @@ package at.tuwien.ase.services.impl;
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.UserDAO;
-import at.tuwien.ase.model.Project;
-import at.tuwien.ase.model.Subtask;
-import at.tuwien.ase.model.UserRole;
-import at.tuwien.ase.model.User;
+import at.tuwien.ase.model.*;
+import at.tuwien.ase.services.LevelService;
 import at.tuwien.ase.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +28,9 @@ public class UserServiceImpl implements UserService {
     private ProjectDAO projectDAO;
     @Autowired
     private SubtaskDAO subtaskDAO;
+
+    @Autowired
+    private LevelService levelService;
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
@@ -58,13 +59,14 @@ public class UserServiceImpl implements UserService {
 
     public User getByID(String uID) throws EmptyResultDataAccessException {
         User user = userDAO.findByID(uID);
-        user.setXp(0);
+        int xp = 0;
         LinkedList<Subtask> listOfSubtasks = subtaskDAO.loadAllByUser(uID);
         if(listOfSubtasks != null && !listOfSubtasks.isEmpty()) {
             for (Subtask subtask : listOfSubtasks) {
-                user.setXp(user.getXp() + subtask.getXp());
+                xp += subtask.getXp();
             }
         }
+        user.setLevel(levelService.getLevelByXp("User", xp));
         return user;
     }
 

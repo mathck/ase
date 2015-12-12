@@ -16,7 +16,7 @@ public interface ProjectService {
 
     void updateProject(int pID, Project project);
 
-    Project getByID(int pID);
+    Project getByID(int pID, String uID);
     LinkedList<Project> getAllProjects();
     LinkedList<Project> getAllProjectsFromUser(String uID);
 
