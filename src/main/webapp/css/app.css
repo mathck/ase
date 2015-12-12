@@ -8479,6 +8479,13 @@ body #content {
   opacity: 1;
   filter: alpha(opacity=100);
 }
+.text-search {
+    position: relative;
+    top: -12px;
+}
+.background-grey {
+    background: #EDECEC !important;
+}
 /*
  * Full Width Layout
  */
