@@ -80,7 +80,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         logger.debug("Updating project <" + pID + "> on DB");
         String sqlQuery = "UPDATE project " +
                 "SET " +
-                "id = COALESCE (?, id), " +
                 "description = COALESCE (?, description), " +
                 "name = COALESCE (?, name), " +
                 "creation_date = COALESCE (?, creation_date), " +
@@ -88,7 +87,6 @@ public class ProjectDAOImpl implements ProjectDAO {
                 "WHERE id = ?";
         this.jdbcTemplate.update(
                 sqlQuery,
-                project.getProjectID(),
                 project.getDescription(),
                 project.getTitle(),
                 project.getCreationTimeDB(),
