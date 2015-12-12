@@ -3,7 +3,7 @@ materialAdmin
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function($timeout, $state, $window, $http, $cookies, $scope, growlService, LoginFactory, UserFactory, TokenService){
+    .controller('materialadminCtrl', function($timeout, $state, $window, $http, $cookies, $scope, growlService, LogoutFactory, UserFactory, TokenService){
         //Welcome Message
 
         TokenService.username = $cookies.email;
@@ -43,9 +43,9 @@ materialAdmin
         this.$state = $state;    
 
 
-        /*$scope.logoutUser() = function () {
+        $scope.logoutUser = function () {
             console.log("click");
-            LoginFactory.logout(TokenService.user.userID);
+            LogoutFactory.logout({email:TokenService.username});
             TokenService.user={}
             TokenService.token='';
             TokenService.isLogged=false;
@@ -53,7 +53,7 @@ materialAdmin
             $cookies.token='';
             growlService.growl('Logging out...');
             $window.location.href='/taskit/index.html';
-        };*/
+        };
 
         //Close sidebar on click
         this.sidebarStat = function(event) {

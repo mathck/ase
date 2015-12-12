@@ -39,9 +39,15 @@ userServices.factory('LoginFactory', function ($resource) {
         receive: {
             method: 'GET',
             params: {email: '@email', password: '@password'}
-        },
+        }
+    })
+});
+
+
+userServices.factory('LogoutFactory', function ($resource) {
+    return $resource('/taskit/api/user/logout', {}, {
         logout: {
-            method: 'PUT',
+            method: 'PATCH',
             params: {email: '@email'}
         }
     })
