@@ -294,7 +294,7 @@ materialAdmin
     // LOGIN & REGISTER
     //=================================================
 
-    .controller('loginCtrl', function ($rootScope, $cookies, $window, $q, $http, growlService, LoginFactory, UserRegistrationFactory) {
+    .controller('loginCtrl', function ($rootScope, $cookies, $window, $timeout, $q, $http, growlService, LoginFactory, UserRegistrationFactory) {
 
             $rootScope.avatar="img/avatars/0.png";
 
@@ -302,6 +302,10 @@ materialAdmin
             this.loginUser = function () {
                  var email = this.login.email;
                  var password = this.login.password;
+                 var passwordCheck = this.login.passwordCheck;
+
+
+
 
                 //request token
                 LoginFactory.receive(this.login).$promise.then(function(data){
@@ -341,35 +345,63 @@ materialAdmin
 
             // callback for ng-click 'saveUser':
             this.createUser = function () {
-                userToRegister={userID: this.user.userID, password: this.user.password,
-                    firstName: this.user.firstName, lastName: this.user.lastName, avatar: "img/avatars/0.png"};
-                if (userToRegister.password===this.passwordCheck){
-                    if(userToRegister.password.length>7){
-                        userToRegister.avatar=$rootScope.avatar;
+                $rootScope.firstNameFail = false;
+                $rootScope.lastNameFail = false;
+                $rootScope.emailFail = false;
+                $rootScope.passwordMatchFail = false;
+                $rootScope.passwordFail = false;
 
-                        UserRegistrationFactory.create(userToRegister).$promise.then(function(response){
-                            var loginRegisteredUser = {email: userToRegister.userID, password: userToRegister.password};
-                            //growlService.growl("Registration successful, logging in...");
-                            LoginFactory.create(loginRegisteredUser).$promise.then(function(token){
-                                $http.defaults.headers.common['user-token'] = token.token;
-                                $cookies.email=loginRegisteredUser.email;
-                                $cookies.token=token.token;
-                                $window.location.href='/taskit/main.html';
-                            }, function(error){
-                                console.log("Could access server. Please try again.");
-                                console.log(error);
+                if(!this.user){
+                    $timeout(function(){document.getElementById('firstName').focus();});
+                    console.log("FirstName cannot be empty!");
+                    $rootScope.firstNameFail = true;
+                } else {
+                    userToRegister={userID: this.user.userID, password: this.user.password,
+                        firstName: this.user.firstName, lastName: this.user.lastName, avatar: "img/avatars/0.png"};
+
+                    if(!userToRegister.firstName){
+                        $timeout(function(){document.getElementById('firstName').focus();});
+                        console.log("FirstName cannot be empty!");
+                        $rootScope.firstNameFail = true;
+                    } else
+                    if(!userToRegister.lastName){
+                        $timeout(function(){document.getElementById('lastName').focus();});
+                        console.log("LastName cannot be empty!");
+                        $rootScope.lastNameFail = true;
+                    } else
+                    if(!userToRegister.userID){
+                        $timeout(function(){document.getElementById('email').focus();});
+                        console.log("LastName cannot be empty!");
+                        $rootScope.emailFail = true;
+                    } else
+                    if (userToRegister.password && userToRegister.password.length>7){
+                        if(this.passwordCheck && userToRegister.password===this.passwordCheck){
+                            userToRegister.avatar=$rootScope.avatar;
+                            //console.log("Root avatar: " + $rootScope.avatar);
+                            //console.log("registration is " + userToRegister.userID + userToRegister.password + userToRegister.firstName, + userToRegister.lastName + userToRegister.avatar);
+
+                            UserRegistrationFactory.create(userToRegister).$promise.then(function(response){
+                                var loginRegisteredUser = {email: userToRegister.userID, password: userToRegister.password};
+                                //growlService.growl("Registration successful, logging in...");
+                                LoginFactory.create(loginRegisteredUser).$promise.then(function(token){
+                                    $http.defaults.headers.common['user-token'] = token.token;
+                                    $cookies.email=loginRegisteredUser.email;
+                                    $cookies.token=token.token;
+                                    $window.location.href='/taskit/main.html';
+                                });
                             });
-                        }, function(error){
-                             console.log("Could not access server. Please try again.");
-                             console.log(error);
-                        });
+                        }else{
+                            //growlService.growl("Password has to be longer than 7 characters. Please try again.");
+                            $timeout(function(){document.getElementById('passwordRepeat').focus();});
+                            console.log("Passwords did not match. Please try again.");
+                            $rootScope.passwordMatchFail = true;
+                        }
                     }else{
-                        //growlService.growl("Password has to be longer than 7 characters. Please try again.");
+                        //growlService.growl("Passwords did not match. Please try again.");
+                        $timeout(function(){document.getElementById('password').focus();});
                         console.log("Password has to be longer than 7 characters. Please try again.");
+                        $rootScope.passwordFail = true;
                     }
-                }else{
-                    //growlService.growl("Passwords did not match. Please try again.");
-                    console.log("Passwords did not match. Please try again.");
                 }
             };
 
