@@ -69,13 +69,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <!--NG Repeat for User starts here -->
-                                    <tr data-ng-repeat="user in selectedProject.userList">
+                                    <!--NG Repeat for User starts here ng-if="user.role=='CONTRIBUTOR'-->
+                                    <tr data-ng-repeat="user in selectedProject.userList" ng-if="user.role.trim()=='CONTRIBUTOR'">
                                         <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
                                         <td>{{user.firstName}}</td>
                                         <td>{{user.lastName}}</td>
                                         <td>{{user.userID}}</td>
-                                        <td>1</td><!--TODO Level to be implemented -->
+                                        <td>{{user.role}}</td><!--TODO Level to be implemented -->
                                         <td><button data-ng-click="deleteUserFromProject(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <!--NG Repeat for User ends here -->
@@ -102,12 +102,12 @@
                                     </thead>
                                     <tbody>
                                     <!--NG Repeat for User starts here -->
-                                    <tr data-ng-repeat="user in selectedProject.userList">
+                                    <tr data-ng-repeat="user in selectedProject.userList" ng-if="user.role.trim()=='ADMIN'">
                                         <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
                                         <td>{{user.firstName}}</td>
                                         <td>{{user.lastName}}</td>
                                         <td>{{user.userID}}</td>
-                                        <td>1</td><!--TODO Level to be implemented -->
+                                        <td>{{user.role}}</td><!--TODO Level to be implemented -->
                                         <td><button data-ng-click="deleteUserFromProject(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <!--NG Repeat for User ends here -->
@@ -215,11 +215,11 @@
                             <div class="card-header bgm-task">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
-                                    <h2>{{task.title|limitTo:20}}<small>{{task.status|limitTo:30}}</small></h2>
+                                    <h2>{{task.title|limitTo:20}}{{task.title > 30 ? '...' : ''}}<small>{{task.status|limitTo:30}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">
-                                {{task.description|limitTo:30}}
+                                {{task.description|limitTo:30}}{{task.description > 30 ? '...' : ''}}
                             </div>
                         </div>
                     </div>
@@ -231,11 +231,11 @@
                             <div class="card-header bgm-issue">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <h2>{{issue.title|limitTo:20}}<small>{{issue.user.firstName|limitTo:20}} {{issue.user.lastName|limitTo:20}}</small></h2>
+                                    <h2>{{issue.title|limitTo:20}}{{issue.title.length > 20 ? '...' : ''}}<small>{{issue.user.firstName|limitTo:20}} {{issue.user.lastName|limitTo:20}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">
-                                {{issue.description|limitTo:30}}
+                                {{issue.description|limitTo:30}}{{issue.description.length > 30 ? '...' : ''}}
                             </div>
                         </div>
                     </div>

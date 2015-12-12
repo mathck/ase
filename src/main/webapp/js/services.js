@@ -287,3 +287,17 @@ materialAdmin
         
         return gs;
     })
+
+
+    //==============================================
+    // ERROR HANDLER
+    //==============================================
+
+    .service('ErrorHandler', function(growlService){
+        var eh={}
+        eh.handle=function(message, error){
+            growlService("Oops. We ran into a mistake.<br>"+message+"<br>"+error.message + "<br>" + error.status);
+        };
+
+        return eh;
+    })

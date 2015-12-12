@@ -36,7 +36,7 @@ userServices.factory('UserFactory', function ($resource) {
 
 userServices.factory('LoginFactory', function ($resource) {
     return $resource('/taskit/api/user/login', {}, {
-        create: {
+        receive: {
             method: 'GET',
             params: {email: '@email', password: '@password'}
         },

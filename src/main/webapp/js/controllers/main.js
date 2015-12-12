@@ -8,13 +8,15 @@ materialAdmin
 
         TokenService.username = $cookies.email;
         TokenService.token = ($cookies.token).valueOf();
+        if ( (TokenService.token == '') || (typeof TokenService.token === 'undefined') ){
+            $window.location.href='/taskit/index.html';
+        }
         TokenService.isLogged=true;
         $http.defaults.headers.common['user-token'] = String(TokenService.token);
         UserFactory.show({uID: TokenService.username}).$promise.then(function(response){
                 TokenService.user=response; //set persistent UserInformation
                 console.log("Token is:" + TokenService.token);
                 growlService.growl('Welcome back ' + TokenService.user.firstName +' :D', 'inverse');
-
                 //initialize Variables for Menubar
                 $scope.avatar=TokenService.user.avatar;
                 $scope.firstName=TokenService.user.firstName;
@@ -40,8 +42,8 @@ materialAdmin
         // For Mainmenu Active Class
         this.$state = $state;    
 
-        /*
-        this.logoutUser() = function () {
+
+        /*$scope.logoutUser() = function () {
             console.log("click");
             LoginFactory.logout(TokenService.user.userID);
             TokenService.user={}
@@ -301,7 +303,26 @@ materialAdmin
                  var email = this.login.email;
                  var password = this.login.password;
 
-                 $http({
+                //request token
+                LoginFactory.receive(this.login).$promise.then(function(data){
+                    //workaround to evaluate successful login (currently server returns 200 even if login failed)
+                    if(typeof data.token === 'undefined'){
+                        console.log("Could not log in. Wrong username or password?");
+                        console.log(data);
+                    }else{
+                        //otherwise log in by setting auth header, rerouting and setting the cookie
+                        $http.defaults.headers.common['user-token'] = data.token;
+                        console.log("Token is:" + data.token);
+                        $cookies.email=email;
+                        $cookies.token=data.token;
+                        $window.location.href='/taskit/main.html';
+                    }
+                }, function(error){
+                    console.log("Could not log in. Wrong username or password?");
+                    console.log(error);
+                });
+
+                 /*$http({
                     url:"/taskit/api/user/login?email=" + email + "&password=" + password,
                     method:'GET'
                     //transformResponse: undefined
@@ -312,11 +333,10 @@ materialAdmin
                     $cookies.email=email;
                     $cookies.token=token.token;
                     $window.location.href='/taskit/main.html';
-
                  })
                  .error(function(response, status){
                     growlService.growl("Login failed. Responses: " + response + "; Status: " + status);
-                 });
+                 });*/
             };
 
             // callback for ng-click 'saveUser':
@@ -326,8 +346,6 @@ materialAdmin
                 if (userToRegister.password===this.passwordCheck){
                     if(userToRegister.password.length>7){
                         userToRegister.avatar=$rootScope.avatar;
-                        //console.log("Root avatar: " + $rootScope.avatar);
-                        //console.log("registration is " + userToRegister.userID + userToRegister.password + userToRegister.firstName, + userToRegister.lastName + userToRegister.avatar);
 
                         UserRegistrationFactory.create(userToRegister).$promise.then(function(response){
                             var loginRegisteredUser = {email: userToRegister.userID, password: userToRegister.password};
@@ -337,7 +355,13 @@ materialAdmin
                                 $cookies.email=loginRegisteredUser.email;
                                 $cookies.token=token.token;
                                 $window.location.href='/taskit/main.html';
+                            }, function(error){
+                                console.log("Could access server. Please try again.");
+                                console.log(error);
                             });
+                        }, function(error){
+                             console.log("Could not access server. Please try again.");
+                             console.log(error);
                         });
                     }else{
                         //growlService.growl("Password has to be longer than 7 characters. Please try again.");
@@ -360,30 +384,16 @@ materialAdmin
     // MAIN VIEW
     //=================================================
 
-    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ProjectsFactory, TokenService, AdminProjectsFactory){
+    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ErrorHandler, ProjectsFactory, TokenService, AdminProjectsFactory){
 
         $scope.sort="";
         $scope.filter="";
         ProjectsFactory.query({uID: TokenService.username}).$promise.then(function(response){ //TODO - change after project creation works
         //AdminProjectsFactory.query().$promise.then(function(response){
             $scope.userProjects=response;
-            /*$scope.userProjects.forEach(function(entry){
-                console.log(entry.projectID);
-            });*/
+        }, function(error){
+           ErrorHandler.handle("Could not fetch projects.", error);
         });
-
-        $scope.viewProject=function(currentID){
-            console.log("Click on viewProject with ID " + currentID);
-        }
-
-        $scope.createIssueForProject=function(currentID){
-            console.log("Click on create Issue for Project with ID " + currentID);
-        }
-
-
-        $scope.createTaskForProject=function(currentID){
-            console.log("Click on Create Task for Project with ID " + currentID);
-        }
 
     })
 
@@ -418,7 +428,7 @@ materialAdmin
     // PROJECT CREATION
     //=================================================
 
-    .controller('createProjectCtrl', function ($scope, $location, $window, $state, TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
+    .controller('createProjectCtrl', function ($scope, $location, $window, $state, ErrorHandler, TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
 
         console.log("starting Project Creation");
 
@@ -436,6 +446,8 @@ materialAdmin
 
             //create a second list for managers
             $scope.users.managementableUsers=$scope.users.contributableUsers;
+        }, function(error){
+           ErrorHandler.handle("Could not fetch users from project.", error);
         });
 
         //Get all created rewards for the current user
@@ -443,6 +455,8 @@ materialAdmin
             $scope.rewardList=rewards;
             //console.log("rewards:");
             //console.log($scope.rewardList);
+        }, function(error){
+           ErrorHandler.handle("Could not fetch your rewards from server.", error);
         });
 
         $scope.createProject = function () {
@@ -462,8 +476,11 @@ materialAdmin
                     AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
                 });
 
+                growlService.growl("Project created!")
                 $state.go("viewProject",{pID:$scope.pID});
 
+            }, function(error){
+               ErrorHandler.handle("Could not save your project.", error);
             });
 
         };
@@ -473,7 +490,8 @@ materialAdmin
     // PROJECT UPDATE
     //=================================================
 
-    .controller('updateProjectCtrl', function ($scope, $stateParams, growlService, TokenService, ProjectFactory, UserFactory, RewardsByProjectFactory) {
+    .controller('updateProjectCtrl', function ($scope, $stateParams, growlService, ErrorHandler, TokenService,
+        ProjectFactory, UserFactory, RewardsByProjectFactory, RemoveUserFromProjectFactory) {
 
        growlService.growl('Fetching project information...');
 
@@ -482,28 +500,41 @@ materialAdmin
        console.log("pid:" + $scope.currentPID);
 
        $scope.selectedProject={};
+       $scope.selectedProject.userList=[];
 
-       //Get project information
-       ProjectFactory.show({pID: $scope.currentPID}).$promise.then(function(response){
-            $scope.selectedProject=response;
-            //console.log(response);
-
-            //get user information for all users of the current project
-            $scope.selectedProject.userList=[];
-            console.log("getting users...");
-            $scope.selectedProject.allUser.forEach(function(participant){
-                console.log("getting user: " + participant.user);
-                UserFactory.get({uID: participant.user}).$promise.then(function(user){
-                    user.role=participant.role;
-                    $scope.selectedProject.userList.push(user);
-                });
-            });
-        });
+       //get user information for all users of the current project
+       $scope.updateProjectInformation=function(){
+              //Get project information
+              ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
+                   $scope.selectedProject=response;
+                   $scope.selectedProject.userList=[];
+                   console.log("getting users...");
+                   $scope.selectedProject.allUser.forEach(function(participant){
+                       UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                           user.role=participant.role;
+                           $scope.selectedProject.userList.push(user);
+                       }, function(error){
+                          ErrorHandler.handle("Could not fetch users from server.", error);
+                       });
+                   }, function(error){
+                      ErrorHandler.handle("Could not fetch user information from server.", error);
+                   });            //console.log(response);
+              }, function(error){
+                  ErrorHandler.handle("Could not fetch project information from server.", error);
+              });
+       }
+       $scope.updateProjectInformation();
 
         //Get all rewards for the current project and user
         RewardsByProjectFactory.query({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(rewards){
             $scope.selectedProject.rewards=rewards;
         });
+
+        $scope.deleteUserFromProject=function(userID){
+            console.log(userID);
+            RemoveUserFromProjectFactory.delete({pID:$scope.currentPID, uID:userID});
+            $scope.updateProjectInformation();
+        }
 
         //Save changes after button is clicked
         $scope.saveProject=function(){
@@ -522,7 +553,7 @@ materialAdmin
     // ISSUE CREATION
     //=================================================
 
-    .controller('createIssueCtrl', function ( $scope, $state, $stateParams, $state, growlService, IssueFactory, ProjectFactory, TokenService) {
+    .controller('createIssueCtrl', function ( $scope, $state, $stateParams, $state, growlService, ErrorHandler, IssueFactory, ProjectFactory, TokenService) {
 
         // callback for ng-click 'create Issue':
         console.log("starting issue creation");
@@ -530,7 +561,7 @@ materialAdmin
         console.log("pid:");
         console.log($scope.currentPID);
 
-        ProjectFactory.show({pID: $scope.currentPID}).$promise.then(function(response){
+        ProjectFactory.show({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(response){
             $scope.selectedProject=response;
         });
 
@@ -538,7 +569,9 @@ materialAdmin
         $scope.createIssue = function () {
             IssueFactory.create({pID: $scope.currentPID, uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
                 growlService.growl("Issue created.");
-                $state.go("viewProject", {pID:$scope.pID});
+                $state.go("viewProject", {pID:$scope.currentPID});
+            }, function(error){
+                ErrorHandler.handle("Could not create Issue.", error);
             });
         };
     })

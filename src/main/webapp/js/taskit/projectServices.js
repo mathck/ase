@@ -27,7 +27,7 @@ projectServices.factory('ProjectFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects', {}, {
         show: {
             method: 'GET',
-            params: {pID: '@pID'}
+            params: {pID: '@pID', uID: '@uID'}
         },
         update: {
             method: 'PATCH',
@@ -47,6 +47,15 @@ projectServices.factory('AddUserToProjectFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects/add', {}, {
         add: {
             method: 'PUT'
+        }
+    })
+});
+
+projectServices.factory('RemoveUserFromProjectFactory', function ($resource) {
+    return $resource('/taskit/api/workspace/projects/remove/:pID', {}, {
+        delete: {
+            method: 'DELETE',
+            params: {uID: '@uID'}
         }
     })
 });
