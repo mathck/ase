@@ -7872,7 +7872,7 @@ a.waves-effect .waves-ripple {
   background-color: #00838F !important;
 }
 .c-teal {
-  color: #009688 !important;
+  color: #00838F !important;
 }
 .bgm-green {
   background-color: #4caf50 !important;
@@ -9279,7 +9279,7 @@ a.lv-footer:hover {
   background: #f44336;
 }
 .tab-nav:not(.tn-vertical)[data-tab-color="teal"] > li > a:after {
-  background: #009688;
+  background: #00838F;
 }
 .tab-nav:not(.tn-vertical)[data-tab-color="amber"] > li > a:after {
   background: #ffc107;
@@ -12103,7 +12103,7 @@ a.thumbnail.active {
   background: #ffc107;
 }
 .modal[data-modal-color="teal"] .modal-content {
-  background: #009688;
+  background: #00838F;
 }
 .modal[data-modal-color="orange"] .modal-content {
   background: #ff9800;
@@ -12229,7 +12229,7 @@ a.thumbnail.active {
   background: #ffc107;
 }
 .panel-group[data-collapse-color="teal"] .panel-collapse .panel-heading.active .panel-title > a:after {
-  background: #009688;
+  background: #00838F;
 }
 .panel-group[data-collapse-color="black"] .panel-collapse .panel-heading.active .panel-title > a:after {
   background: #000000;
@@ -12305,31 +12305,31 @@ a.thumbnail.active {
   border-bottom-color: #9c27b0;
 }
 .tooltip.tooltip-blue .tooltip-inner {
-  background-color: #2196f3;
+  background-color: #0288D1;
 }
 .tooltip.tooltip-blue.top .tooltip-arrow {
-  border-top-color: #2196f3;
+  border-top-color: #0288D1;
 }
 .tooltip.tooltip-blue.top-left .tooltip-arrow {
-  border-top-color: #2196f3;
+  border-top-color: #0288D1;
 }
 .tooltip.tooltip-blue.top-right .tooltip-arrow {
-  border-top-color: #2196f3;
+  border-top-color: #0288D1;
 }
 .tooltip.tooltip-blue.right .tooltip-arrow {
-  border-right-color: #2196f3;
+  border-right-color: #0288D1;
 }
 .tooltip.tooltip-blue.left .tooltip-arrow {
-  border-left-color: #2196f3;
+  border-left-color: #0288D1;
 }
 .tooltip.tooltip-blue.bottom .tooltip-arrow {
-  border-bottom-color: #2196f3;
+  border-bottom-color: #0288D1;
 }
 .tooltip.tooltip-blue.bottom-left .tooltip-arrow {
-  border-bottom-color: #2196f3;
+  border-bottom-color: #0288D1;
 }
 .tooltip.tooltip-blue.bottom-right .tooltip-arrow {
-  border-bottom-color: #2196f3;
+  border-bottom-color: #0288D1;
 }
 .tooltip.tooltip-cyan .tooltip-inner {
   background-color: #00bcd4;
@@ -12359,31 +12359,31 @@ a.thumbnail.active {
   border-bottom-color: #00bcd4;
 }
 .tooltip.tooltip-teal .tooltip-inner {
-  background-color: #009688;
+  background-color: #00838F;
 }
 .tooltip.tooltip-teal.top .tooltip-arrow {
-  border-top-color: #009688;
+  border-top-color: #00838F;
 }
 .tooltip.tooltip-teal.top-left .tooltip-arrow {
-  border-top-color: #009688;
+  border-top-color: #00838F;
 }
 .tooltip.tooltip-teal.top-right .tooltip-arrow {
-  border-top-color: #009688;
+  border-top-color: #00838F;
 }
 .tooltip.tooltip-teal.right .tooltip-arrow {
-  border-right-color: #009688;
+  border-right-color: #00838F;
 }
 .tooltip.tooltip-teal.left .tooltip-arrow {
-  border-left-color: #009688;
+  border-left-color: #00838F;
 }
 .tooltip.tooltip-teal.bottom .tooltip-arrow {
-  border-bottom-color: #009688;
+  border-bottom-color: #00838F;
 }
 .tooltip.tooltip-teal.bottom-left .tooltip-arrow {
-  border-bottom-color: #009688;
+  border-bottom-color: #00838F;
 }
 .tooltip.tooltip-teal.bottom-right .tooltip-arrow {
-  border-bottom-color: #009688;
+  border-bottom-color: #00838F;
 }
 .tooltip.tooltip-green .tooltip-inner {
   background-color: #4caf50;
