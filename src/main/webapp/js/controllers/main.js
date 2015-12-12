@@ -3,7 +3,7 @@ materialAdmin
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function($timeout, $state, $http, $cookies, $scope, growlService, LoginFactory, UserFactory, TokenService){
+    .controller('materialadminCtrl', function($timeout, $state, $window, $http, $cookies, $scope, growlService, LoginFactory, UserFactory, TokenService){
         //Welcome Message
 
         TokenService.username = $cookies.email;
@@ -304,9 +304,6 @@ materialAdmin
                  var password = this.login.password;
                  var passwordCheck = this.login.passwordCheck;
 
-
-
-
                 //request token
                 LoginFactory.receive(this.login).$promise.then(function(data){
                     //workaround to evaluate successful login (currently server returns 200 even if login failed)
@@ -468,6 +465,8 @@ materialAdmin
         UsersFactory.query().$promise.then(function(response){
             $scope.users={};
             $scope.users.contributableUsers=[];
+            $scope.users.userPickerContributor=[];
+            $scope.users.userPickerManager=[];
 
             //add a field containing a readable caption for the users
             response.forEach(function(user){
@@ -485,8 +484,7 @@ materialAdmin
         //Get all created rewards for the current user
         RewardsByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
             $scope.rewardList=rewards;
-            //console.log("rewards:");
-            //console.log($scope.rewardList);
+
         }, function(error){
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
         });

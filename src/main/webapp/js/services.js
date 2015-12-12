@@ -293,11 +293,23 @@ materialAdmin
     // ERROR HANDLER
     //==============================================
 
-    .service('ErrorHandler', function(growlService){
+    .service('ErrorHandler', function($window, $cookies, TokenService, growlService){
         var eh={}
         eh.handle=function(message, error){
-            growlService("Oops. We ran into a mistake.<br>"+message+"<br>"+error.message + "<br>" + error.status);
-        };
+            //growlService("Oops. We ran into a mistake.<br>"+message+"<br>"+error.message + "<br>" + error.status);
+
+            if (error.status==401){
+                if (typeof(TokenService.user.username) != "undefined"){
+                    LoginFactory.logout(TokenService.user.username);
+                    TokenService.user={}
+                    TokenService.token='';
+                    TokenService.isLogged=false;
+                }
+                $cookies.email='';
+                $cookies.token='';
+                $window.location.href='/taskit/index.html';
+            }
+        }
 
         return eh;
     })
