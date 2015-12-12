@@ -66,9 +66,9 @@ public class ProjectController {
         ps.addUser(user.getProject(), user.getUser(), user.getRole());
     }
 
-    @RequestMapping(value = "/workspace/projects/remove", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/workspace/projects/remove/{pID}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void removeUserFromProject(@RequestParam("uID") String uID, @RequestParam("pID") int pID) {
+    public void removeUserFromProject(@RequestParam("uID") String uID, @PathVariable("pID") int pID) {
         ps.removeUser(pID, uID);
     }
 
