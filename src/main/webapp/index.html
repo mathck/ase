@@ -234,44 +234,56 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-info waves-effect" data-swal-warning="" ng-click="open('lg')">Select Avatar</button>
+        <button class="btn bgm-teal waves-effect" data-swal-warning="" ng-click="open('lg')">Select Avatar</button>
 
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-        <div class="fg-line">
-            <input type="text" class="form-control" placeholder="First Name" data-ng-model="lctrl.user.firstName">
+        <div ng-class="!firstNameFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+            <input type="text" id="firstName" class="form-control" placeholder="First Name" data-ng-model="lctrl.user.firstName">
         </div>
+        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="firstNameFail"></span>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-        <div class="fg-line">
-            <input type="text" class="form-control" placeholder="Last Name" data-ng-model="lctrl.user.lastName">
+        <div ng-class="!lastNameFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+            <input type="text" id="lastName" class="form-control" placeholder="Last Name" data-ng-model="lctrl.user.lastName">
         </div>
+        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="lastNameFail"></span>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
-        <div class="fg-line">
-            <input type="text" class="form-control" placeholder="Email Address" data-ng-model="lctrl.user.userID">
+        <div ng-class="!emailFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+            <input type="text" id="email" class="form-control" placeholder="Email Address" data-ng-model="lctrl.user.userID">
         </div>
+        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="emailFail"></span>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
-        <div class="fg-line">
-            <input type="password" class="form-control" placeholder="Password" data-ng-model="lctrl.user.password">
+        <div ng-class="!passwordFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+            <input type="password" id="password" class="form-control" placeholder="Password" data-ng-model="lctrl.user.password" tooltip-class="tooltip-blue" tooltip-trigger="focus" tooltip="At least 8 Characters" tooltip-placement="right">
         </div>
+        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="passwordFail"></span>
     </div>
 
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
-        <div class="fg-line">
-            <input type="password" class="form-control" placeholder="Re-Enter Password" data-ng-model="lctrl.passwordCheck">
+        <div ng-class="!passwordMatchFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+            <input type="password" id="passwordRepeat" class="form-control" placeholder="Re-Enter Password" data-ng-model="lctrl.passwordCheck" tooltip-class="tooltip-blue" tooltip-trigger="focus" tooltip="Repeat Password" tooltip-placement="right" ng-blur="passwordMatch()">
         </div>
+        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="passwordMatchFail"></span>
     </div>
+
+    <!-- Error Messages -->
+    <small class="help-block c-red" ng-show="firstNameFail">First Name is Empty!</small>
+    <small class="help-block c-red" ng-show="lastNameFail">Last Name is Empty!</small>
+    <small class="help-block c-red" ng-show="emailFail">Email Address is Empty!</small>
+    <small class="help-block c-red" ng-show="passwordFail">Password is too short!</small>
+    <small class="help-block c-red" ng-show="passwordMatchFail">Passwords do not match!</small>
 
     <div class="clearfix"></div>
 
