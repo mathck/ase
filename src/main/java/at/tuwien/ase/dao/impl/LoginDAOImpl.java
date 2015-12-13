@@ -4,6 +4,9 @@ import at.tuwien.ase.dao.LoginDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -16,6 +19,7 @@ import java.util.Date;
  * Created by DanielHofer on 26.11.2015.
  */
 
+
 @Repository
 public class LoginDAOImpl implements LoginDAO{
 
@@ -24,8 +28,6 @@ public class LoginDAOImpl implements LoginDAO{
     private JdbcTemplate jdbcTemplate;
     private KeyHolder keyHolder;
 
-    final int tokenValidityInMins = 10;
-
     @Autowired
     public void setDataSource(DataSource dataSource)  throws Exception {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -33,7 +35,7 @@ public class LoginDAOImpl implements LoginDAO{
     }
 
 
-    public boolean checkCredentials(String email, String password)  throws Exception {
+/*    public boolean checkCredentials(String email, String password)  throws Exception {
 
         logger.debug("select from db: check login credentials for user mail="+email);
 
@@ -46,15 +48,19 @@ public class LoginDAOImpl implements LoginDAO{
             return false;
         }
 
-    }
+    }*/
 
     public void addUserToken(String email, String token, Date creationDate)  throws Exception {
 
-        logger.debug("insert into db: user token for user mail="+email);
+        logger.debug("update db: user token for user mail="+email);
+
+        String sqlQuery  = "UPDATE TASKIT_USER SET AUTH_TOKEN = ?, AUTH_TOKEN_CREATION_DATE = ? WHERE MAIL = ?";
 
         this.jdbcTemplate.update(
-                "UPDATE TASKIT_USER SET AUTH_TOKEN = ?, AUTH_TOKEN_CREATION_DATE = ? WHERE MAIL = ?",
-                token, creationDate, email);
+                sqlQuery,
+                token,
+                creationDate,
+                email);
     }
 
     public void deleteUserToken(String email) throws Exception {
@@ -69,12 +75,16 @@ public class LoginDAOImpl implements LoginDAO{
 
     }
 
-    public boolean checkLoginValidity(String token)  throws Exception {
+    public boolean checkLoginValidity(String token, Integer tokenValidityInMins)  throws Exception {
 
         logger.debug("select from db: check login validity");
 
+        String sqlQuery  = "SELECT COUNT(*) FROM TASKIT_USER WHERE AUTH_TOKEN = ? AND AUTH_TOKEN_CREATION_DATE > (NOW() - INTERVAL '"+tokenValidityInMins+" mins')";
+
         int count = this.jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM TASKIT_USER WHERE AUTH_TOKEN = ? AND AUTH_TOKEN_CREATION_DATE > (NOW() - INTERVAL '"+this.tokenValidityInMins+" mins')", Integer.class, token);
+                sqlQuery,
+                Integer.class,
+                token);
 
         if (count > 0){
             return true;
@@ -84,6 +94,55 @@ public class LoginDAOImpl implements LoginDAO{
 
     }
 
+    public int getCountLoginFailsWithinCooldown(String email, Integer loginCooldownInMins) throws Exception {
+
+        logger.debug("select from db: get count login fails within cooldown");
+
+        String sqlQuery  = "SELECT LOGIN_CURRENT_FAILS FROM TASKIT_USER WHERE LOGIN_LAST_LOGIN_ATTEMPT > (NOW() - INTERVAL '"+loginCooldownInMins+" mins') AND MAIL = ? ";
+
+        int countLoginFails = this.jdbcTemplate.queryForObject(
+                sqlQuery,
+                Integer.class,
+                email);
+
+        return countLoginFails;
+    }
+
+    public void resetCurrentLoginFails(String email) throws Exception {
+
+        logger.debug("update db: reset login counter");
+
+        String sqlQuery  = "UPDATE TASKIT_USER SET LOGIN_CURRENT_FAILS = ? WHERE MAIL = ?";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                new Integer(0),
+                email);
+    }
+
+    public void incrementCurrentLoginFails(String email) throws Exception {
+
+        logger.debug("update db: increment login counter");
+
+        String sqlQuery  = "UPDATE TASKIT_USER SET LOGIN_CURRENT_FAILS = LOGIN_CURRENT_FAILS + 1 WHERE MAIL = ?";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                email);
+    }
+
+    public void updateLastLoginAttempt(String email) throws Exception {
+
+        logger.debug("update db: update lastLoginAttempt");
+
+        String sqlQuery  = "UPDATE TASKIT_USER SET LOGIN_LAST_LOGIN_ATTEMPT = ? WHERE MAIL = ?";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                new Date(),
+                email);
+
+    }
 
 
 }

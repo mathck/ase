@@ -2,6 +2,7 @@ package at.tuwien.ase.controller.exceptions;
 
 import java.lang.invoke.MethodHandles;
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import org.apache.logging.log4j.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,16 +20,17 @@ public class GenericRestExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public String handleGenericException(final Exception exception) {
+    public JsonStringWrapper handleGenericException(final Exception exception) {
         logException(exception);
-        return exception.getMessage();
+        return new JsonStringWrapper(exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseBody
-    protected String handleEmptyResult(final EmptyResultDataAccessException exception) {
+    protected JsonStringWrapper handleEmptyResult(final EmptyResultDataAccessException exception) {
         logger.warn("No entry available");
-        return null;
+        return new JsonStringWrapper("No entry available");
     }
 
     //Add more exceptions handling methods as needed
