@@ -296,7 +296,8 @@ materialAdmin
     .service('ErrorHandler', function($window, $cookies, TokenService, growlService){
         var eh={}
         eh.handle=function(message, error){
-            //growlService("Oops. We ran into a mistake.<br>"+message+"<br>"+error.message + "<br>" + error.status);
+            growlService.growl("Oops. We ran into a mistake.<br>"+message+"<br>"+error.value+"<br>"+ error.status +": " + error.message);
+            console.log("Oops. We ran into a mistake.<br>"+message+"<br>"+error.value+"<br>"+ error.status +": " + error.message);
 
             if (error.status==401){
                 if (typeof(TokenService.user.username) != "undefined"){

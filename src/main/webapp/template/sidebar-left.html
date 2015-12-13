@@ -2,13 +2,13 @@
     <div class="profile-menu">
         <a href="" toggle-submenu>
             <div class="profile-pic">
-                <img src="{{this.avatar}}" alt="profile picture"/>
+                <img src="{{this.loggedUser.avatar}}" alt="profile picture"/>
                 <span class="level">
-                    Level 1 <!-- TODO Binding general level -->
+                    Level {{this.loggedUser.userLevel}}
                 </span>
             </div>
             <div class="profile-info">
-                {{this.userID}}
+                {{this.loggedUser.userID}}
 
                 <i class="zmdi zmdi-caret-down"></i>
             </div>

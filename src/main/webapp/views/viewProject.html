@@ -18,14 +18,14 @@
                     </li>
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Project" data-ng-click="saveProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Project" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="saveProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
                         </div>
                     </li>
                 </ul>
             </div>
 
             <div class="card">
-                <div class="card-header">
+                <div class="card-header" data-ng-show="currentUserRole=='ADMIN'">
                     <h2><small>Edit the provided fields in order to modify your project.</small></h2>
                 </div>
 
@@ -54,7 +54,9 @@
                         <div class="col-sm-6">
                             <div class="fg-line">
                                 <p class="f-500 c-black m-b-15">Contributor/s</p>
-                                <select chosen multiple data-placeholder="Add a User..." class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers"></select>
+                                <div data-ng-show="currentUserRole=='ADMIN'">
+                                <select chosen multiple data-placeholder="Add a User..."  class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers"></select>
+                                </div>
                             </div>
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
                                 <table class="table table-hover">
@@ -75,7 +77,7 @@
                                         <td>{{user.firstName}}</td>
                                         <td>{{user.lastName}}</td>
                                         <td>{{user.userID}}</td>
-                                        <td>{{user.role}}</td><!--TODO Level to be implemented -->
+                                        <td>{{user.level}}</td><!--TODO Level to be implemented -->
                                         <td><button data-ng-click="deleteUserFromProject(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <!--NG Repeat for User ends here -->
@@ -86,7 +88,9 @@
                         <div class="col-sm-6">
                             <div class="fg-line">
                                 <p class="f-500 c-black m-b-15">Manager/s</p>
-                                <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers"></select>
+                                <div data-ng-show="currentUserRole=='ADMIN'">
+                                    <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers"></select>
+                                </div>
                             </div>
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
                                 <table class="table table-hover">
@@ -107,7 +111,7 @@
                                         <td>{{user.firstName}}</td>
                                         <td>{{user.lastName}}</td>
                                         <td>{{user.userID}}</td>
-                                        <td>{{user.role}}</td><!--TODO Level to be implemented -->
+                                        <td>{{user.level}}</td><!--TODO Level to be implemented -->
                                         <td><button data-ng-click="deleteUserFromProject(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <!--NG Repeat for User ends here -->
@@ -122,9 +126,9 @@
                 <div class="card-body card-padding">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="fg-line">
+                            <div class="fg-line" data-ng-show="currentUserRole=='ADMIN'">
                                 <p class="f-500 c-black m-b-15">Reward/s</p>
-                                <select chosen multiple data-placeholder="Add a Reward..." class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers"></select>
+                                <select chosen multiple data-placeholder="Add a Reward..." class="w-100" data-ng-model="users.rewardPicker" data-ng-options="reward.rewardID as reward.title for reward in rewards"></select>
                             </div>
 
                         <!--
@@ -208,7 +212,7 @@
             </div>
             <div class="dash-widgets">
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-3" data-ng-show="currentUserRole=='ADMIN'">
                         <div class="card floatEffect">
                             <div class="card-header bgm-task">
                                 <div class="input-group" data-ui-sref="createTask">
@@ -243,7 +247,7 @@
 
                     <!-- NG Repeat for Tasks starts here -->
                     <div class="col-sm-3" data-ng-repeat="task in selectedProject.allTasks | filter:search | orderBy:sort">
-                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask({tID:task.id})">
+                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask({tID:task.id, pID: currentPID})">
                             <div class="card-header bgm-task">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
@@ -258,8 +262,8 @@
                     <!-- NG Repeat for Tasks ends here-->
 
                     <!-- NG Repeat for Issues starts here -->
-                    <div class="col-sm-3" data-ng-repeat="issue in selectedProject.allIssues | filter:search | orderBy:sort">
-                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewIssue({iID:issue.ID})">
+                    <div class="col-sm-3" data-ng-show="currentUserRole=='ADMIN'" data-ng-repeat="issue in selectedProject.allIssues | filter:search | orderBy:sort">
+                        <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewIssue({iID:issue.id, pID: currentPID})">
                             <div class="card-header bgm-issue">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>

@@ -10,22 +10,24 @@ issueServices.factory('IssuesFactory', function ($resource) {
     })
 });
 
-issueServices.factory('IssueFactory', function ($resource) {
+issueServices.factory('IssuePostFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects/:pID/issues', {}, {
-        show: {
-            method: 'GET'
-        },
-        update: {
-            method: 'PUT',
-            params: {pid: '@pID', id: '@id'}
-        },
-        delete: {
-            method: 'DELETE',
-            params: {pID: '@pID', uID: '@id'}
-        },
         create: {
             method: 'POST',
             params: {pID: '@pID', uID: '@uID'}
+        }
+    })
+});
+
+issueServices.factory('IssueRetrieveFactory', function ($resource) {
+    return $resource('taskit/api/workspace/projects/issues/:issueID', {}, {
+        show: {
+            method: 'GET',
+            params: {issueID: '@iID'}
+        },
+        delete: {
+            method: 'DELETE',
+            params: {issueID: '@iID'}
         }
     })
 });
