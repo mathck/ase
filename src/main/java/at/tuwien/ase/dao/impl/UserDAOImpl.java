@@ -40,8 +40,8 @@ public class UserDAOImpl implements UserDAO {
 
     public void insertUser(User user) {
         logger.info("Inserting user <" + user.getUserID() + "> into DB");
-        String sqlQuery = "INSERT INTO taskit_user (mail, firstname, lastname, password, avatar_url, salt) " +
-                "VALUES (?,?,?,?,?,?)";
+        String sqlQuery = "INSERT INTO taskit_user (mail, firstname, lastname, password, avatar_url, salt, login_current_fails) " +
+                "VALUES (?,?,?,?,?,?,?)";
         this.jdbcTemplate.update(
                 sqlQuery,
                 user.getUserID(),
@@ -49,7 +49,8 @@ public class UserDAOImpl implements UserDAO {
                 user.getLastName(),
                 user.getPassword(),
                 user.getAvatar(),
-                user.getSalt()
+                user.getSalt(),
+                new Integer(0)
         );
     }
 

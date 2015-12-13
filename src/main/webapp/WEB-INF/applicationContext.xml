@@ -19,4 +19,7 @@
         <property name="password" value="8aPhUxdS"/>
     </bean>
 
+    <!-- @author Daniel Hofer -->
+    <context:property-placeholder location="classpath:app.properties"/>
+
 </beans>
