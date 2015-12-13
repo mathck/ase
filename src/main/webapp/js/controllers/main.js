@@ -15,7 +15,6 @@ materialAdmin
         $http.defaults.headers.common['user-token'] = String(TokenService.token);
         UserFactory.show({uID: TokenService.username}).$promise.then(function(response){
                 TokenService.user=response; //set persistent UserInformation
-                console.log("Token is:" + TokenService.token);
                 growlService.growl('Welcome back ' + TokenService.user.firstName +' :D', 'inverse');
                 //initialize Variables for Menubar
                 $scope.avatar=TokenService.user.avatar;
@@ -419,13 +418,23 @@ materialAdmin
     // MAIN VIEW
     //=================================================
 
-    .controller('mainViewCtrl', function($timeout, $q, $scope, $location, ErrorHandler, ProjectsFactory, TokenService, AdminProjectsFactory){
+    .controller('mainViewCtrl', function($filter, $scope, ErrorHandler, ProjectsFactory, TokenService){
 
         $scope.sort="";
         $scope.filter="";
-        ProjectsFactory.query({uID: TokenService.username}).$promise.then(function(response){ //TODO - change after project creation works
+        ProjectsFactory.query({uID: TokenService.username}).$promise.then(function(response){
         //AdminProjectsFactory.query().$promise.then(function(response){
+        //edit project information so it can easily be displayed (trim returned variables and identify user role for each project
+            response.forEach(function(project){
+                project.title=project.title.trim();
+                project.description=project.description.trim();
+                userInProject=project.allUser.filter(function(user){
+                    return(user.user.trim()==TokenService.username);
+                });
+                project.role=userInProject[0].role.trim();
+            });
             $scope.userProjects=response;
+            $scope.userProjects.forEach
         }, function(error){
            ErrorHandler.handle("Could not fetch projects.", error);
         });
