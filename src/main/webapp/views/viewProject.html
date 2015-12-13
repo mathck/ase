@@ -69,7 +69,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <!--NG Repeat for User starts here ng-if="user.role=='CONTRIBUTOR'-->
+                                    <!--NG Repeat for User starts here -->
                                     <tr data-ng-repeat="user in selectedProject.userList" ng-if="user.role.trim()=='CONTRIBUTOR'">
                                         <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
                                         <td>{{user.firstName}}</td>
@@ -179,9 +179,21 @@
                 <ul class="actions">
                     <li>
                         <div class="fg-line text-search">
-                            <input kl_virtual_keyboard_secure_input="on" class="form-control background-grey" placeholder="Search..." type="text">
+                            <input kl_virtual_keyboard_secure_input="on" data-ng-model="search" class="form-control background-grey" placeholder="Search..." type="text">
                         </div>
                     </li>
+                    <!--<li>
+                        <a href="" data-ng-click="sort='updateTime'">
+                            <i class="zmdi zmdi-chevron-up" title="Date"></i>
+                            <i class="zmdi zmdi-watch" title="Date"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" data-ng-click="sort='-updateTime'">
+                            <i class="zmdi zmdi-chevron-down" title="Date"></i>
+                            <i class="zmdi zmdi-watch" title="Date"></i>
+                        </a>
+                    </li>-->
                     <li>
                         <a href="" data-ng-click="sort='title'">
                             <i class="zmdi zmdi-sort-asc"></i>
@@ -230,7 +242,7 @@
                     </div>
 
                     <!-- NG Repeat for Tasks starts here -->
-                    <div class="col-sm-3" data-ng-repeat="task in selectedProject.allTasks">
+                    <div class="col-sm-3" data-ng-repeat="task in selectedProject.allTasks | filter:search | orderBy:sort">
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask({tID:task.id})">
                             <div class="card-header bgm-task">
                                 <div class="input-group">
@@ -246,7 +258,7 @@
                     <!-- NG Repeat for Tasks ends here-->
 
                     <!-- NG Repeat for Issues starts here -->
-                    <div class="col-sm-3" data-ng-repeat="issue in selectedProject.allIssues">
+                    <div class="col-sm-3" data-ng-repeat="issue in selectedProject.allIssues | filter:search | orderBy:sort">
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewIssue({iID:issue.ID})">
                             <div class="card-header bgm-issue">
                                 <div class="input-group">
