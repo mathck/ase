@@ -1,7 +1,15 @@
-<div class="container">
+<header id="header" data-ng-include="'template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
+
+<section id="main">
+    <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+
+    <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
+
+    <section id="content">
+        <div class="container">
 
     <div class="block-header">
-        <h2>Projects</h2>
+        <h2>Templates</h2>
 
         <ul class="actions">
             <li>
@@ -34,7 +42,7 @@
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-header bgm-cyan">
-                        <h2>Create Project</h2>
+                        <h2>Create Template</h2>
                         <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTemplate" data-ng-click="mactrl.sidebarStat($event)">
                             <i class="zmdi zmdi-plus"></i>
                         </button>
@@ -47,28 +55,7 @@
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-header bgm-cyan">
-                        <h2>Project1 <small></small></h2>
-                        <ul class="actions actions-alt">
-                            <li class="dropdown" dropdown>
-                                <a href="" dropdown-toggle aria-expanded="false">
-                                    <i class="zmdi zmdi-more-vert"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                        <a href="">View Project</a>
-                                    </li>
-                                    <li>
-                                        <a href="">View Contributors</a>
-                                    </li>
-                                    <li>
-                                        <a data-ui-sref="createIssue" data-ng-click="mactrl.sidebarStat($event)">Create Issue</a>
-                                    </li>
-                                    <li>
-                                        <a data-ui-sref="createTask" data-ng-click="mactrl.sidebarStat($event)">Create Task</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <h2>Template 1 <small></small></h2>
                     </div>
                     <div class="card-body card-padding">
                         The Description goes in here.
@@ -78,28 +65,7 @@
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-header bgm-cyan">
-                        <h2>Project2 <small></small></h2>
-                        <ul class="actions actions-alt">
-                            <li class="dropdown" dropdown>
-                                <a href="" dropdown-toggle aria-expanded="false">
-                                    <i class="zmdi zmdi-more-vert"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                        <a href="">View Project</a>
-                                    </li>
-                                    <li>
-                                        <a href="">View Contributors</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Create Issue</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Create Task</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <h2>Template 2 <small></small></h2>
                     </div>
                     <div class="card-body card-padding">
                         The Description goes in here.
@@ -109,28 +75,7 @@
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-header bgm-cyan">
-                        <h2>Project3 <small></small></h2>
-                        <ul class="actions actions-alt">
-                            <li class="dropdown" dropdown>
-                                <a href="" dropdown-toggle aria-expanded="false">
-                                    <i class="zmdi zmdi-more-vert"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                        <a href="">View Project</a>
-                                    </li>
-                                    <li>
-                                        <a href="">View Contributors</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Create Issue</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Create Task</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <h2>Template 3 <small></small></h2>
                     </div>
                     <div class="card-body card-padding">
                         The Description goes in here.
@@ -140,3 +85,5 @@
         </div>
     </div>
 </div>
+    </section>
+</section>
