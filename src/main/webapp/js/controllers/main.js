@@ -635,7 +635,7 @@ materialAdmin
 
 
         $scope.createIssue = function () {
-            IssueFactory.create({pID: $scope.currentPID, uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
+            IssuePostFactory.create({pID: $scope.currentPID, uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
                 growlService.growl("Issue created.");
                 $state.go("viewProject", {pID:$scope.currentPID});
             }, function(error){
