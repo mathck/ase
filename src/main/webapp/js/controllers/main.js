@@ -469,25 +469,123 @@ materialAdmin
 
     .controller('createProjectCtrl', function ($scope, $location, $window, $state, growlService, ErrorHandler,
         TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
-
         console.log("starting Project Creation");
-
         // get all users (for adding users to the project)
         UsersFactory.query().$promise.then(function(response){
             $scope.users={};
             $scope.users.contributableUsers=[];
             $scope.users.userPickerContributor=[];
             $scope.users.userPickerManager=[];
-
             //add a field containing a readable caption for the users
             response.forEach(function(user){
                 user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
                 //copy user list into one list for contributors
                 $scope.users.contributableUsers.push(user);
             });
-
             //create a second list for managers
             $scope.users.managementableUsers=$scope.users.contributableUsers;
+        }, function(error){
+           ErrorHandler.handle("Could not fetch users from server.", error);
+        });
+        //Get all created rewards for the current user
+        RewardsByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+            $scope.rewardList=rewards;
+        }, function(error){
+           ErrorHandler.handle("Could not fetch your rewards from server.", error);
+        });
+        $scope.createProject = function () {
+            console.log($scope.users.userPickerContributor);
+            ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
+                $scope.pID=response.item;
+                AddUserToProjectFactory.add({project: $scope.pID, user: TokenService.username, role: "ADMIN"});
+                $scope.users.userPickerContributor.forEach(function(contributor){
+                    AddUserToProjectFactory.add({project: $scope.pID, user: contributor, role: "CONTRIBUTOR"});
+                });
+                $scope.users.userPickerManager.forEach(function(manager){
+                    AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
+                });
+                growlService.growl("Project created!")
+                $state.go("viewProject",{pID:$scope.pID});
+            }, function(error){
+               ErrorHandler.handle("Could not save your project.", error);
+            });
+        };
+    })
+
+
+/*     ------ Contributors & Manager dürfen nicht doppelt gewählt werden. 1ster Ansatz. Funktioniert einseitig,
+            d.h. wenn ein manager ausgewählt wurde, kann dieser nicht mehr als contributor gewählt werden. anders herum klappt es nicht!
+
+    .controller('createProjectCtrl', function ($scope, $location, $window, $state, growlService, ErrorHandler,
+        TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
+
+        console.log("starting Project Creation");
+
+        $scope.users={};
+        $scope.users.allUsers=[];
+        $scope.users.allUsersTemp=[];
+        $scope.users.contributableUsers=[];
+        $scope.users.managementableUsers=[];
+        $scope.users.userPickerContributor=[];
+        $scope.users.userPickerManager=[];
+
+        // Update Users after selecting a Contributor or Manager
+        $scope.updateUsers=function(){
+            if($scope.users.userPickerManager.length != 0){
+
+                $scope.users.contributableUsers = [];
+                //$scope.users.managementableUsers = [];
+
+                $scope.users.allUsersTemp = $scope.users.allUsers;
+                [].forEach.call($scope.users.userPickerManager,function(name){
+                    $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+                });
+                $scope.users.allUsersTemp.forEach(function(user){
+                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+
+                    $scope.users.contributableUsers.push(user);
+                    //$scope.users.managementableUsers.push(user);
+                });
+
+                console.log("Geändert" + $scope.users.userPickerManager + "  --------     und   -------   " + $scope.users.userPickerContributor);
+            }
+        };
+
+
+        --- Klappt nicht! ---
+        $scope.updateManagerList=function(){
+            if($scope.users.userPickerManager.length != 0){
+
+                $scope.users.managementableUsers = [];
+
+                $scope.users.allUsersTemp = $scope.users.allUsers;
+                [].forEach.call($scope.users.userPickerManager,function(name){
+                    $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+                });
+                $scope.users.allUsersTemp.forEach(function(user){
+                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                    //copy user list into one list for contributors
+                    $scope.users.managementableUsers.push(user);
+                });
+
+                //$scope.users.managementableUsers=$scope.users.allUsers - $scope.users.userPickerContributor - $scope.users.userPickerManager;
+                //$scope.users.contributableUsers=$scope.users.allUsers - $scope.users.userPickerContributor - $scope.users.userPickerManager;
+                //$scope.$apply();
+                console.log("Geändert" + $scope.users.contributableUsers);
+            }
+        };
+
+        // get all users (for adding users to the project)
+        UsersFactory.query().$promise.then(function(response){
+
+            //add a field containing a readable caption for the users
+            response.forEach(function(user){
+                $scope.users.allUsers.push(user);
+                user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                //copy user list into one list for contributors
+                $scope.users.contributableUsers.push(user);
+                $scope.users.managementableUsers.push(user);
+            });
         }, function(error){
            ErrorHandler.handle("Could not fetch users from server.", error);
         });
@@ -521,6 +619,8 @@ materialAdmin
 
         };
     })
+*/
+
 
     //=================================================
     // PROJECT UPDATE
