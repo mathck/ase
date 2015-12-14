@@ -305,6 +305,7 @@ materialAdmin
                 var email = "";
                 var password = "";
                 var passwordCheck = "";
+                $rootScope.loginFail=false;
 
                 if(this.login){
                     var email = this.login.email;
@@ -317,6 +318,7 @@ materialAdmin
                     //workaround to evaluate successful login (currently server returns 200 even if login failed)
                     if(typeof data.token === 'undefined'){
                         console.log("Could not log in. Wrong username or password?");
+                        $rootScope.loginFail=true;
                         console.log(data);
                     }else{
                         //otherwise log in by setting auth header, rerouting and setting the cookie
@@ -329,6 +331,7 @@ materialAdmin
                 }, function(error){
                     console.log("Could not log in. Wrong username or password?");
                     console.log(error);
+                    $rootScope.loginFail=true;
                 });
             };
 
@@ -372,7 +375,7 @@ materialAdmin
                             UserRegistrationFactory.create(userToRegister).$promise.then(function(response){
                                 var loginRegisteredUser = {email: userToRegister.userID, password: userToRegister.password};
                                 //growlService.growl("Registration successful, logging in...");
-                                LoginFactory.create(loginRegisteredUser).$promise.then(function(token){
+                                LoginFactory.receive(loginRegisteredUser).$promise.then(function(token){
                                     $http.defaults.headers.common['user-token'] = token.token;
                                     $cookies.email=loginRegisteredUser.email;
                                     $cookies.token=token.token;
