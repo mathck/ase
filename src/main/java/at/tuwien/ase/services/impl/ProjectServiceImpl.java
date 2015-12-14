@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import at.tuwien.ase.services.TaskService;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +56,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     public JsonStringWrapper writeProject(Project project) {
-        int id = projectDAO.insertProject(project);
-
         project.setCreationTimeDB(new Timestamp(new Date().getTime()));
         project.setUpdateTimeDB(project.getCreationTimeDB());
+
+        int projectID = projectDAO.insertProject(project);
 
         if (project.getAllUser() != null && !project.getAllUser().isEmpty()) {
             for (UserRole user : project.getAllUser()) {
@@ -75,7 +76,7 @@ public class ProjectServiceImpl implements ProjectService {
                 taskService.writeTask(project.getProjectID(), task);
             }
         }
-        return new JsonStringWrapper(id);
+        return new JsonStringWrapper(projectID);
     }
 
     public void deleteProject(int pID) {
@@ -103,9 +104,9 @@ public class ProjectServiceImpl implements ProjectService {
         project.setAllUser(userDAO.loadAllByProject(pID));
         LinkedList<Subtask> listOfSubtasks = subtaskDAO.loadAllByUser(uID);
         int xp = 0;
-        if(listOfSubtasks != null && !listOfSubtasks.isEmpty()) {
+        if (listOfSubtasks != null && !listOfSubtasks.isEmpty()) {
             for (Subtask subtask : listOfSubtasks) {
-                if(subtask.getId() == pID) {
+                if (subtask.getId() == pID) {
                     xp += subtask.getXp();
                 }
             }
@@ -124,7 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     public LinkedList<Project> getAllProjectsFromUser(String uID) throws EmptyResultDataAccessException {
         LinkedList<Project> list = projectDAO.loadAllByUser(uID);
-        if(list != null && !list.isEmpty()) {
+        if (list != null && !list.isEmpty()) {
             for (Project project : list) {
                 project.setAllUser(userDAO.loadAllByProject(project.getProjectID()));
             }
@@ -134,9 +135,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     public void addUser(int pID, String uID, String role) {
         LinkedList<UserRole> userList = projectDAO.findByID(pID).getAllUser();
-        if(userList != null) {
+        if (userList != null) {
             for (UserRole userRole : userList) {
-                if(userRole.getUser() == uID) {
+                if (userRole.getUser() == uID) {
                     return;
                 }
             }
@@ -145,10 +146,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     public void removeUser(int pID, String uID) {
-        for(Task task : taskDAO.loadAllByProjectAndUser(pID, uID)) {
+        for (Task task : taskDAO.loadAllByProjectAndUser(pID, uID)) {
             taskDAO.removeTaskByID(task.getId());
         }
-        for(Issue issue : issueDAO.loadAllByProjectAndUser(pID, uID)) {
+        for (Issue issue : issueDAO.loadAllByProjectAndUser(pID, uID)) {
             issueDAO.removeIssueByID(issue.getId());
         }
         projectDAO.removeUserFromProject(uID, pID);
