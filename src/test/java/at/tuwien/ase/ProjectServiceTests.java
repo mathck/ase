@@ -5,11 +5,13 @@ package at.tuwien.ase;
  */
 import at.tuwien.ase.dao.IssueDAO;
 import at.tuwien.ase.dao.ProjectDAO;
+import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.TaskDAO;
 import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.junit.AppConfig;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.Issue;
+import at.tuwien.ase.model.Subtask;
 import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.ProjectService;
 import at.tuwien.ase.services.impl.ProjectServiceImpl;
@@ -39,7 +41,8 @@ public class ProjectServiceTests {
         IssueDAO issueDAO = Mockito.mock(IssueDAO.class);
         TaskDAO taskDAO = Mockito.mock(TaskDAO.class);
         UserDAO userDAO = Mockito.mock(UserDAO.class);
-        ProjectService projectService = new ProjectServiceImpl(projectDAO, issueDAO, taskDAO, userDAO);
+        SubtaskDAO subtaskDAO = Mockito.mock(SubtaskDAO.class);
+        ProjectService projectService = new ProjectServiceImpl(projectDAO, issueDAO, taskDAO, userDAO, subtaskDAO);
         Project project = new Project(0, "title", "desc");
         Issue issue = new Issue(); issue.setId(4);
         Task task = new Task(); task.setId(5);

@@ -1,53 +1,52 @@
 package at.tuwien.ase.model;
 
-import at.tuwien.ase.controller.PasswordEncryption;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import at.tuwien.ase.services.impl.PasswordEncryption;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.LinkedList;
 
 /**
- * Created by Tomislav Nikic on 05/11/2015.
+ * A model class describing the user object. It is containing a list of projects as well
+ * as the level object
+ *
+ * @author Tomislav Nikic
+ * @version 1.0, 13.12.2015
  */
 public class User {
-    // Info
-    private String uID;
+
+    private String userID;
     private String firstName;
     private String lastName;
     private String avatar;
     private Level level;
 
-    // Lists
     private LinkedList<String> projectList = null;
 
-    // Security
     private byte[] password;
     private byte[] salt;
 
-    // Constructors
-    // @author Tomislav Nikic
-    public User() {
-    }
+    public User() {}
 
-    public User(String uID, String password) {
-        this.uID = uID;
+    /**
+     * Constructor for creating a user object and encrypting the given password with the
+     * automatically generated salt.
+     *
+     * @param userID The user email that is stored in the database.
+     * @param password A string password written in plain text.
+     */
+    public User(String userID, String password) {
+        this.userID = userID;
         this.salt = PasswordEncryption.generateSalt();
         this.password = PasswordEncryption.getEncryptedPassword(password, salt);
     }
 
-    // Getter and setter for user ID (email)
-    // @author Tomislav Nikic
     public String getUserID() {
-        return uID;
+        return userID;
     }
 
     public void setUserID(String email) {
-        this.uID = email;
+        this.userID = email;
     }
 
-    // Getter and setter for first name
-    // @author Tomislav Nikic
     public String getFirstName() {
         return firstName;
     }
@@ -56,8 +55,6 @@ public class User {
         this.firstName = givenName;
     }
 
-    // Getter and setter for last name
-    // @author Tomislav Nikic
     public String getLastName() {
         return lastName;
     }
@@ -66,8 +63,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    // Getter and setter for avatar
-    // @author Tomislav Nikic
     public String getAvatar() {
         return avatar;
     }
@@ -76,14 +71,18 @@ public class User {
         this.avatar = avatar;
     }
 
-    // Getter and setter for password
-    // @author Tomislav Nikic
     public byte[] getPassword() {
         return password;
     }
 
+    /**
+     * Setting the password as a simple string and saving it as a byte array after
+     * encrypting it using the PasswordEncryption class.
+     *
+     * @param password A string password written in plain text.
+     */
     public void setPassword(String password) {
-        if(password != null) {
+        if (password != null) {
             if (salt == null) {
                 salt = PasswordEncryption.generateSalt();
             }
@@ -98,8 +97,6 @@ public class User {
         this.password = password;
     }
 
-    // Getter and setter for salt
-    // @author Tomislav Nikic
     public byte[] getSalt() {
         return salt;
     }
@@ -108,8 +105,6 @@ public class User {
         this.salt = salt;
     }
 
-    // Getter and setter for project list
-    // @author Tomislav Nikic
     public LinkedList<String> getProjectList() {
         return projectList;
     }
@@ -125,4 +120,5 @@ public class User {
     public void setLevel(Level level) {
         this.level = level;
     }
+
 }

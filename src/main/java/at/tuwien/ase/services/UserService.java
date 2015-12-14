@@ -6,23 +6,25 @@ import at.tuwien.ase.model.User;
 import java.util.LinkedList;
 
 /**
- * Created by Daniel Hofer on 16.11.2015.
+ * Interface for user service. With Spring an Autowire is possible.
+ *
+ * @author Tomislav Nikic
+ * @version 1.0, 14.12.2015
  */
-public interface UserService
-{
+public interface UserService {
 
-	void writeUser(User user);
+    void writeUser(User user);
 
-	void deleteUser(String uID);
+    void deleteUser(String uID);
 
-	User getByID(String uID);
+    User getByID(String uID);
 
-	User authUser(String uID);
+    User authUser(String uID);
 
-	LinkedList<User> getAllUsers();
+    LinkedList<User> getAllUsers();
 
-	LinkedList<UserRole> getAllUsersFromProject(int pID);
+    LinkedList<UserRole> getAllUsersFromProject(int pID);
 
-	void updateUser(String uID, User user);
+    void updateUser(String uID, User user);
 
 }

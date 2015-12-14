@@ -26,6 +26,14 @@ public class GenericRestExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseBody
+    public JsonStringWrapper handleArgumentException(final IllegalArgumentException exception) {
+        logger.warn(exception.getMessage());
+        return new JsonStringWrapper(exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseBody
     protected JsonStringWrapper handleEmptyResult(final EmptyResultDataAccessException exception) {
