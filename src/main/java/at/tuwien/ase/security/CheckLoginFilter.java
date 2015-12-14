@@ -5,7 +5,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.services.LoginService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.filter.GenericFilterBean;
@@ -39,21 +41,21 @@ public class CheckLoginFilter extends GenericFilterBean {
 
             if ((userToken == null) || (userToken.equals(""))) {
                 //auth token not found in http header
-                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token missing.");
+                createJsonError(httpResponse, HttpServletResponse.SC_UNAUTHORIZED, new String("Unauthorized: Authentication token missing."));
             } else {
 
                 try {
                     //check validity of token in request header
                     if (!loginService.checkLogin(userToken)) {
                         //http token in request header is invalid
-                        httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token invalid.");
+                        createJsonError(httpResponse, HttpServletResponse.SC_UNAUTHORIZED, new String("Unauthorized: Authentication token invalid."));
                     } else {
                         //http token in request header is valid
                         chain.doFilter(request, response);
                     }
 
                 } catch (Exception e) {
-                    httpResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
+                    createJsonError(httpResponse, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, new String("Internal Error"));
                 }
 
             }
@@ -65,4 +67,23 @@ public class CheckLoginFilter extends GenericFilterBean {
 
 
     }
+
+    private void createJsonError(HttpServletResponse response, int responseCode, String errorMessage) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        //create jsonStringMapper object with error message
+        JsonStringWrapper jsonStringWrapper = new JsonStringWrapper(errorMessage);
+        //serialize object to json string
+        String jsonString = mapper.writeValueAsString(jsonStringWrapper);
+
+        response.setStatus(responseCode);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonString);
+
+    }
+
+
+
 }

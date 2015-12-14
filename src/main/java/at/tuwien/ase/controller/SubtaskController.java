@@ -70,10 +70,10 @@ public class SubtaskController {
     }
 
     // @author Daniel Hofer
-    @RequestMapping(value = "workspace/projects/subtasks/{tID}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "workspace/projects/subtasks/{sID}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteSubtasksByID(@PathVariable("tID") int tID)  throws Exception {
-        ts.deleteSubtaskByID(tID);
+    public void deleteSubtasksByID(@PathVariable("sID") int sID)  throws Exception {
+        ts.deleteSubtaskByID(sID);
     }
 
 }
