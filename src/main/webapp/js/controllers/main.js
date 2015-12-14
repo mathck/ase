@@ -342,6 +342,7 @@ materialAdmin
                 $rootScope.emailFail = false;
                 $rootScope.passwordMatchFail = false;
                 $rootScope.passwordFail = false;
+                $rootScope.registrationFail = false;
 
                 if(!this.user){
                     $timeout(function(){document.getElementById('firstName').focus();});
@@ -381,6 +382,10 @@ materialAdmin
                                     $cookies.token=token.token;
                                     $window.location.href='/taskit/main.html';
                                 });
+                            },function(error){
+                                console.log("Registration failed." + error.value);
+                                $rootScope.registrationFail=true;
+                                $rootScope.errorMessage=error.item;
                             });
                         }else{
                             //growlService.growl("Password has to be longer than 7 characters. Please try again.");
