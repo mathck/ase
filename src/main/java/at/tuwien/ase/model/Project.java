@@ -7,36 +7,50 @@ import java.util.Date;
 import java.util.LinkedList;
 
 /**
- * Created by Tomislav Nikic on 16/11/2015.
+ * A model class describing the project object. It combines task, issue, user
+ * as well as the minor classes like sub task and reward.
+ *
+ * @author Tomislav Nikic
+ * @verison 1.0, 13.12.2015
  */
 public class Project {
 
-    // Info
-    private int pID;
+    private int projectID;
     private String title;
     private String description;
     private Level level;
 
-    // Time
-    @JsonIgnore
-    private Timestamp creationTimeDB;
-    @JsonIgnore
-    private Timestamp updateTimeDB;
+    /*
+     * Ignoring this attribute due to not being able to use it on the frontend.
+     * Used for storing the time in the database with the right format.
+     */
+    @JsonIgnore private Timestamp creationTimeDB;
+    /*
+     * Ignoring this attribute due to not being able to use it on the frontend.
+     * Used for storing the time in the database with the right format.
+     */
+    @JsonIgnore private Timestamp updateTimeDB;
+
     private String creationTime;
     private String updateTime;
 
-    // Lists
     private LinkedList<UserRole> userList;
     private LinkedList<Task> taskList;
     private LinkedList<Issue> issueList;
 
-    // Constructors
-    // @author Tomislav Nikic
-    public Project() {
-    }
+    public Project() {}
 
-    public Project(int pID, String title, String description) {
-        this.pID = pID;
+    /**
+     * Constructor for creating the project object. After initializing the given parameters
+     * it stores the current time and and stores it in the update time since this is the
+     * first occurrence of the object.
+     *
+     * @param projectID The project ID that was assigned during the first write to the database.
+     * @param title The main title for the project.
+     * @param description A short description of the project.
+     */
+    public Project(int projectID, String title, String description) {
+        this.projectID = projectID;
         this.title = title;
         this.description = description;
 
@@ -49,18 +63,90 @@ public class Project {
         issueList = new LinkedList<Issue>();
     }
 
-    // Getter and setter for project ID
-    // @author Tomislav Nikic
+    /**
+     * Adds a user to the list of users (using the class at.tuwien.ase.mode.UserRole).
+     *
+     * @param userID The user email that is stored in the database.
+     * @param role The role of the user, specified in userID, in this project.
+     */
+    public void addUser(String userID, String role) {
+        UserRole newUser = new UserRole(userID, this.projectID, role);
+        userList.add(newUser);
+    }
+
+    /**
+     * Deletes a user from the list of users.
+     *
+     * @param userID The user email that is stored in the database.
+     */
+    public void deleteUser(String userID) {
+        for (UserRole iteration : userList) {
+            if (iteration.getUser() == userID)
+                userList.remove(iteration);
+        }
+    }
+
+    /**
+     * Retrieves a specific role of the user specified in the parameter.
+     *
+     * @param userID The user email that is stored in the database.
+     * @return An object of the type UserRole containing this one user and his role in the project.
+     */
+    public UserRole getUserRole(String userID) {
+        for (UserRole iterator : userList)
+            if (iterator.getUser() == userID)
+                return iterator;
+        return null;
+    }
+
+    /**
+     * Adds a task object to the list of tasks.
+     *
+     * @param task The task object, that should be added.
+     */
+    public void addTask(Task task) {
+        taskList.add(task);
+    }
+
+    /**
+     * Deletes a task from the task list.
+     *
+     * @param taskID The task ID that is given when writing to the database.
+     */
+    public void deleteTask(int taskID) {
+        for (Task iterator : taskList)
+            if (iterator.getId() == taskID)
+                taskList.remove(iterator);
+    }
+
+    /**
+     * Adds an issue object to the issue list.
+     *
+     * @param issue The issue object, that should be added.
+     */
+    public void addIssue(Issue issue) {
+        issueList.add(issue);
+    }
+
+    /**
+     * Deletes an issue object from the issue list.
+     *
+     * @param issueID The issue ID that is given when writing to the database.
+     */
+    public void deleteIssue(int issueID) {
+        for (Issue iterator : issueList)
+            if (iterator.getId() == issueID)
+                issueList.remove(iterator);
+    }
+
     public int getProjectID() {
-        return pID;
+        return projectID;
     }
 
     public void setProjectID(int pID) {
-        this.pID = pID;
+        this.projectID = pID;
     }
 
-    // Getter and setter for title
-    // @author Tomislav Nikic
     public String getTitle() {
         return title;
     }
@@ -69,8 +155,6 @@ public class Project {
         this.title = title;
     }
 
-    // Getter and setter for description
-    // @author Tomislav Nikic
     public String getDescription() {
         return description;
     }
@@ -79,85 +163,40 @@ public class Project {
         this.description = description;
     }
 
-    // Add/delete a user to/from the list
-    // @author Tomislav Nikic
-    public void addUser(String uID, String role) {
-        UserRole newUser = new UserRole(uID, this.pID, role);
-        userList.add(newUser);
-    }
-
-    public void deleteUser(String uID) {
-        for (UserRole iteration : userList) {
-            if (iteration.getUser() == uID)
-                userList.remove(iteration);
-        }
+    public LinkedList<UserRole> getAllUser() {
+        return userList;
     }
 
     public void setAllUser(LinkedList<UserRole> userList) {
         this.userList = userList;
     }
 
-    // Reading lists
-    // @author Tomislav Nikic
-    public LinkedList<UserRole> getAllUser() {
-        return userList;
-    }
-
-    public UserRole getUserRole(String uID) {
-        for (UserRole iterator : userList)
-            if (iterator.getUser() == uID)
-                return iterator;
-        return null;
-    }
-
-    // Add/delete a task to/from the list
-    // @author Tomislav Nikic
-    public void addTask(Task task) {
-        taskList.add(task);
-    }
-
-    public void deleteTask(int id) {
-        for (Task iterator : taskList)
-            if (iterator.getId() == id)
-                taskList.remove(iterator);
+    public LinkedList<Task> getAllTasks() {
+        return taskList;
     }
 
     public void setAllTasks(LinkedList<Task> taskList) {
         this.taskList = taskList;
     }
 
-    // Get list of all tasks
-    // @author Tomislav Nikic
-    public LinkedList<Task> getAllTasks() {
-        return taskList;
-    }
-
-    // Add/delete a issue to/from the list
-    // @author Tomislav Nikic
-    public void addIssue(Issue issue) {
-        issueList.add(issue);
-    }
-
-    public void deleteIssue(int id) {
-        for (Issue iterator : issueList)
-            if (iterator.getId() == id)
-                issueList.remove(iterator);
+    public LinkedList<Issue> getAllIssues() {
+        return issueList;
     }
 
     public void setAllIssues(LinkedList<Issue> issueList) {
         this.issueList = issueList;
     }
 
-    // Get list of all issues
-    // @author Tomislav Nikic
-    public LinkedList<Issue> getAllIssues() {
-        return issueList;
-    }
-
     public Timestamp getCreationTimeDB() {
         return creationTimeDB;
     }
 
+    /**
+     * Sets up the creation time used for the database. Doing this, it also saves a readable
+     * representation of the date and time as a String in creationTime.
+     *
+     * @param creationTimeDB The time of creation, produced during the first instantiation.
+     */
     public void setCreationTimeDB(Timestamp creationTimeDB) {
         this.creationTimeDB = creationTimeDB;
         creationTime = creationTimeDB.toString();
@@ -167,6 +206,12 @@ public class Project {
         return updateTimeDB;
     }
 
+    /**
+     * Sets up the update time used for the database. Doing this, it also saves a readable
+     * representation of the date and time as a String in updateTime.
+     *
+     * @param updateTimeDB The time when the last changes where made to this object.
+     */
     public void setUpdateTimeDB(Timestamp updateTimeDB) {
         this.updateTimeDB = updateTimeDB;
         updateTime = updateTimeDB.toString();
@@ -195,4 +240,5 @@ public class Project {
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
+
 }

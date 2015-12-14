@@ -2,6 +2,7 @@ package at.tuwien.ase.dao.impl;
 
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.model.Project;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,18 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Tomislav Nikic on 20/11/2015.
+ * The PostgreSQL implementation of the Project DAO interface. Using annotations it is possible to
+ * Autowire to this class.
+ *
+ * @author Tomislav Nikic
+ * @version 1.0, 14.12.2015
  */
 @Repository
 public class ProjectDAOImpl implements ProjectDAO {
@@ -29,105 +35,156 @@ public class ProjectDAOImpl implements ProjectDAO {
     private JdbcTemplate jdbcTemplate;
     KeyHolder keyHolder;
 
+    /**
+     * Creating the JDBC template and key holder.
+     *
+     * @param dataSource Is provided through @Autowired. Needed to connect through SQL.
+     */
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.keyHolder = new GeneratedKeyHolder();
     }
 
+    /**
+     * Gets a new unique ID for project.
+     *
+     * @return An integer project ID.
+     */
     public int getNewProjectID() {
-        Integer id = this.jdbcTemplate.queryForObject(
+        Integer projectID = this.jdbcTemplate.queryForObject(
                 "SELECT nextval('seq_project_id')",
                 Integer.class);
-        return id;
+        return projectID;
     }
 
+    /**
+     * Gets a new unique ID for the user-project-role relation.
+     *
+     * @return An integer user-project-role ID.
+     */
     public int getNewRelationID() {
-        Integer id = this.jdbcTemplate.queryForObject(
-                "SELECT nextval('rel_user_project_id_seq')",
+        Integer relationID = this.jdbcTemplate.queryForObject(
+                "SELECT nextval('seq_user_project_id')",
                 Integer.class);
-        return id;
+        return relationID;
     }
 
+    /**
+     * Writes a project to the database.
+     *
+     * @param project Project object that is to be written to the database.
+     * @return The project ID generated during the writing process.
+     */
     public int insertProject(final Project project) {
-        int id = this.getNewProjectID();
-        logger.debug("Inserting project <" + id + ":" + project.getTitle() + "> into DB");
+        int projectID = this.getNewProjectID();
+        logger.info("Inserting project <" + projectID + ":" + project.getTitle() + "> into DB");
         final String sqlQuery = "INSERT INTO project (id, description, name, creation_date, update_date) " +
                 "VALUES (?,?,?,?,?)";
         this.jdbcTemplate.update(
                 sqlQuery,
-                id,
+                projectID,
                 project.getDescription(),
                 project.getTitle(),
                 project.getCreationTimeDB(),
                 project.getUpdateTimeDB()
         );
-        return id;
+        return projectID;
     }
 
-    public void removeProject(int pID) {
-        logger.debug("Removing project <" + pID + "> from DB");
+    /**
+     * Removes a project from the database.
+     *
+     * @param projectID The project ID that is given when written to the database.
+     */
+    public void removeProject(int projectID) {
+        logger.info("Removing project <" + projectID + "> from DB");
         String sqlQuery = "DELETE " +
                 "FROM project " +
                 "WHERE id = ?";
         this.jdbcTemplate.update(
                 sqlQuery,
-                pID
+                projectID
         );
     }
 
-    public void updateProject(int pID, Project project) {
-        logger.debug("Updating project <" + pID + "> on DB");
+    /**
+     * Updates an existing project in the database with new values that are provided through
+     * the parameter.
+     *
+     * @param projectID The project ID that is given when written to the database.
+     * @param project The project object with the updated entries.
+     */
+    public void updateProject(int projectID, Project project) {
+        logger.info("Updating project <" + projectID + "> on DB");
         String sqlQuery = "UPDATE project " +
                 "SET " +
                 "description = COALESCE (?, description), " +
                 "name = COALESCE (?, name), " +
-                "creation_date = COALESCE (?, creation_date), " +
                 "update_date = COALESCE (?, update_date) " +
                 "WHERE id = ?";
         this.jdbcTemplate.update(
                 sqlQuery,
                 project.getDescription(),
                 project.getTitle(),
-                project.getCreationTimeDB(),
                 project.getUpdateTimeDB(),
-                pID
+                projectID
         );
     }
 
-    public void addUserToProject(String uID, int pID, String role) {
-        logger.debug("Inserting user <" + uID + "> into project <" + pID + "> and storing on DB");
+    /**
+     * Adds a user (using UserRole) to the project and storing it in the relation table.
+     *
+     * @param userID The user email that is stored in the database.
+     * @param projectID The project ID that is given when written to the database.
+     * @param role The role of the user in this project.
+     */
+    public void addUserToProject(String userID, int projectID, String role) {
+        logger.info("Inserting user <" + userID + "> into project <" + projectID + "> and storing on DB");
         String sqlQuery = "INSERT INTO rel_user_project (id, user_mail, project_id, role) " +
                 "VALUES (?,?,?,?)";
         this.jdbcTemplate.update(
                 sqlQuery,
                 this.getNewRelationID(),
-                uID,
-                pID,
+                userID,
+                projectID,
                 role.toString()
         );
     }
 
-    public void removeUserFromProject(String uID, int pID) {
-        logger.debug("Removing user <" + uID + "> from project <" + pID + "> on DB");
+    /**
+     * Removes user from a specific project.
+     *
+     * @param userID The user email that is stored in the database.
+     * @param projectID The project ID that is given when written to the database.
+     */
+    public void removeUserFromProject(String userID, int projectID) {
+        logger.info("Removing user <" + userID + "> from project <" + projectID + "> on DB");
         String sqlQuery = "DELETE " +
                 "FROM rel_user_project " +
                 "WHERE project_id = ? AND user_mail = ?";
         this.jdbcTemplate.update(
                 sqlQuery,
-                pID,
-                uID
+                projectID,
+                userID
         );
     }
 
-    public Project findByID(int pID) throws EmptyResultDataAccessException {
-        logger.debug("Searching for projects <" + pID + "> in DB");
+    /**
+     * Pull the project object from the database.
+     *
+     * @param projectID The project ID that is given when written to the database.
+     * @return The requested project object.
+     * @throws EmptyResultDataAccessException Only thrown, if the list is empty.
+     */
+    public Project findByID(int projectID) throws EmptyResultDataAccessException {
+        logger.info("Searching for projects <" + projectID + "> in DB");
         String sqlQuery = "SELECT id, description, name, creation_date, update_date " +
                 "FROM project " +
                 "WHERE id = ?";
         return this.jdbcTemplate.queryForObject(
                 sqlQuery,
-                new Integer[]{pID},
+                new Integer[]{projectID},
                 new RowMapper<Project>() {
                     public Project mapRow(ResultSet resultSet, int i) throws SQLException {
                         Project project = new Project();
@@ -143,8 +200,14 @@ public class ProjectDAOImpl implements ProjectDAO {
         );
     }
 
+    /**
+     * Loads all projects from the database and return them as a linked list.
+     *
+     * @return A linked list containing project objects. These are filled with only essential data.
+     * @throws EmptyResultDataAccessException Only thrown, if the list is empty.
+     */
     public LinkedList<Project> loadAll() throws EmptyResultDataAccessException {
-        logger.debug("Loading all projects from DB");
+        logger.info("Loading all projects from DB");
         String sqlQuery = "SELECT id, description, name, creation_date, update_date " +
                 "FROM project";
         List<Project> list = this.jdbcTemplate.query(
@@ -164,14 +227,21 @@ public class ProjectDAOImpl implements ProjectDAO {
         return new LinkedList<Project>(list);
     }
 
-    public LinkedList<Project> loadAllByUser(String uID) throws EmptyResultDataAccessException {
-        logger.debug("Loading all projects of user <" + uID + "> from DB");
+    /**
+     * Loads all projects connected to a specific user.
+     *
+     * @param userID The user email that is stored in the database.
+     * @return A linked list containing project objects. These are filled with only essential data.
+     * @throws EmptyResultDataAccessException Only thrown, if the list is empty.
+     */
+    public LinkedList<Project> loadAllByUser(String userID) throws EmptyResultDataAccessException {
+        logger.debug("Loading all projects of user <" + userID + "> from DB");
         String sqlQuery = "SELECT project_id, description, name, creation_date, update_date " +
                 "FROM project JOIN rel_user_project ON rel_user_project.project_id = project.id " +
                 "WHERE rel_user_project.user_mail = ?";
         List<Project> list = this.jdbcTemplate.query(
                 sqlQuery,
-                new String[]{uID},
+                new String[]{userID},
                 new RowMapper<Project>() {
                     public Project mapRow(ResultSet resultSet, int i) throws SQLException {
                         Project project = new Project();

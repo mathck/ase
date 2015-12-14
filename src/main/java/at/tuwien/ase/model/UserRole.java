@@ -1,58 +1,57 @@
 package at.tuwien.ase.model;
 
 /**
- * Created by Tomislav Nikic on 16/11/2015.
+ * A model class describing the user-project-role relation object. It contains a
+ * string containing the role of the user in this particular project.
+ *
+ * @author Tomislav Nikic
+ * @version 1.0, 13.12.2015
  */
 public class UserRole {
 
-    private int pID;
-    private String uID;
+    private int projectID;
+    private String userID;
     private String role;
 
-    //Default Constructor - necessary for REST POST Functionality!
     public UserRole() {}
 
-    // @author Tomislav Nikic
-    public UserRole(String uID, int pID, String role)
-    {
-        this.uID = uID;
-        this.pID = pID;
+    /**
+     * Constructor for creating a user-project-role relation object. It connects these
+     * three parts by using the corresponding id.
+     *
+     * @param userID The user email that is stored in the database.
+     * @param projectID The project ID that is created during creation.
+     * @param role The role of the user, specified in userID, in the project,
+     *             specified in projectID.
+     */
+    public UserRole(String userID, int projectID, String role) {
+        this.userID = userID;
+        this.projectID = projectID;
         this.role = role;
     }
 
-    // Getter and setter for Project
-    // @author Tomislav Nikic
-    public int getProject()
-    {
-        return pID;
+
+    public int getProject() {
+        return projectID;
     }
 
-    public void setProject(int pID)
-    {
-        this.pID = pID;
+    public void setProject(int pID) {
+        this.projectID = pID;
     }
 
-    // Getter and setter for User
-    // @author Tomislav Nikic
-    public String getUser()
-    {
-        return uID;
+    public String getUser() {
+        return userID;
     }
 
-    public void setUser(String uID)
-    {
-        this.uID = uID;
+    public void setUser(String uID) {
+        this.userID = uID;
     }
 
-    // Getter and setter for Role
-    // @author Tomislav Nikic
-    public String getRole()
-    {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(String role)
-    {
+    public void setRole(String role) {
         this.role = role;
     }
 

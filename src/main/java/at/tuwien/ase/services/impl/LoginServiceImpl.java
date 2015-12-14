@@ -1,12 +1,11 @@
 package at.tuwien.ase.services.impl;
-import at.tuwien.ase.controller.PasswordEncryption;
 import at.tuwien.ase.dao.LoginDAO;
 import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.model.LoginToken;
 import at.tuwien.ase.model.User;
 import at.tuwien.ase.security.TokenGenerator;
 import at.tuwien.ase.services.LoginService;
-import at.tuwien.ase.services.UserService;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

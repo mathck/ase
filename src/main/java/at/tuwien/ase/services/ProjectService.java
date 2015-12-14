@@ -6,7 +6,10 @@ import at.tuwien.ase.model.Project;
 import java.util.LinkedList;
 
 /**
- * Created by Tomislav Nikic on 17/11/2015.
+ * Interface for project service. With Spring an Autowire is possible.
+ *
+ * @author Tomislav Nikic
+ * @version 1.0, 14.12.2015
  */
 public interface ProjectService {
 
@@ -17,10 +20,15 @@ public interface ProjectService {
     void updateProject(int pID, Project project);
 
     Project getByID(int pID, String uID);
+
     LinkedList<Project> getAllProjects();
+
     LinkedList<Project> getAllProjectsFromUser(String uID);
 
     void addUser(int pID, String uID, String role);
+
     void removeUser(int pID, String uID);
+
+    void updateTime(int projectID);
 
 }
