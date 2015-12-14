@@ -17,7 +17,7 @@ taskServices.factory('TasksFactory', function ($resource) {
 });
 
 taskServices.factory('TaskFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects/:pid/:id', {}, {
+    return $resource('/taskit/api/workspace/projects/:pid/tasks', {}, {
         show: {
             method: 'GET'
             //headers: { 'auth-token': '@token' }
@@ -30,6 +30,11 @@ taskServices.factory('TaskFactory', function ($resource) {
         delete: {
             method: 'DELETE',
             params: {pid: '@pid', id: '@id'}
+            //headers: { 'auth-token': '@token' }
+        },
+        create: {
+            method: 'POST',
+            params: {pid: '@pid'}
             //headers: { 'auth-token': '@token' }
         }
     })

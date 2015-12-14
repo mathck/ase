@@ -678,36 +678,63 @@ materialAdmin
     // TASK CREATION
     //=================================================
 
-    .controller('createTaskCtrl', function ( $scope, IssuesFactory, $location, $window) {
+    .controller('createTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
+        TaskFactory, IssuesFactory, ProjectFactory, UserFactory) {
 
-          var counter = 0;
-          $scope.data = {
+        $scope.currentPID = $stateParams.pID;
+        //console.log("Current PID (Task): " + $scope.currentPID);
+        var counter = 0;
+        $scope.data = {
             stateFields: [],
             templateFields: []
-          }
+        }
 
-          $scope.states = ['New', 'Open', 'Closed'];
-          $scope.templates = ['Template 1', 'Template 2', 'Template 3'];
-
-          $scope.addState = function() {
+        $scope.states = ['Open', 'Closed'];
+        $scope.templates = ['Template 1', 'Template 2', 'Template 3'];
+        $scope.addState = function() {
             $scope.data.stateFields.push({
-              name: "test " + counter++
+                name: "test " + counter++
             });
-          };
-          $scope.addTemplate = function() {
+        };
+        $scope.addTemplate = function() {
             $scope.data.templateFields.push({
-              name: "test " + counter++
+                name: "test " + counter++
             });
-          };
-          $scope.removeTemplate = function() {
+        };
+        $scope.removeTemplate = function() {
             $scope.data.templateFields.pop();
-          };
-          $scope.removeState = function() {
+        };
+        $scope.removeState = function() {
             $scope.data.stateFields.pop();
-          };
-          $scope.createTask = function() {
+        };
 
-          };
+        ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
+            $scope.selectedProject=response;
+            $scope.userList=[];
+            //get user information for all users of the current project
+            $scope.selectedProject.allUser.forEach(function(participant){
+                UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                    user.userID={userID: user.userID.trim()};
+                    $scope.userList.push(user);
+                }, function(error){
+                    ErrorHandler.handle("Could not fetch users from server.", error);
+                });
+            });
+        }, function(error){
+            ErrorHandler.handle("Could not fetch project information from server.", error);
+        });
+        $scope.createTask = function() {
+            TaskFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
+            taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
+                userList: $scope.userPicker}).$promise.then(function(result){
+                    growlService.growl("Task created.");
+                    $state.go("viewProject", {pID:$scope.currentPID});
+                }, function(error){
+                    ErrorHandler.handle("Could not save task.", error);
+                });
+            console.log($scope.userPicker);
+        };
     })
 
     //=================================================

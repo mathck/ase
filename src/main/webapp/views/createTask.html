@@ -130,14 +130,7 @@
                      <div class="row">
                          <div class="col-sm-12 m-b-15">
                              <p class="f-500 c-black m-b-15">Contributor/s</p>
-                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPickerContributor">
-                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                                 <option value="user1@email.com">FirstName LastName (user1@email.com)</option>
-                             </select>
+                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPicker" data-ng-options="user.userID as user.name for user in userList"></select>
                          </div>
                      </div>
                 </div>
