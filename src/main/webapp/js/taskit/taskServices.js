@@ -1,7 +1,7 @@
 var taskServices = angular.module('taskit.taskServices', ['ngResource']);
 
 taskServices.factory('TasksFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects/:pid', {}, {
+    return $resource('/taskit/api/workspace/projects/:pid/tasks', {}, {
         query: {
             method: 'GET',
             params: {pid: '@pid'},
@@ -30,11 +30,6 @@ taskServices.factory('TaskFactory', function ($resource) {
         delete: {
             method: 'DELETE',
             params: {pid: '@pid', id: '@id'}
-            //headers: { 'auth-token': '@token' }
-        },
-        create: {
-            method: 'POST',
-            params: {pid: '@pid'}
             //headers: { 'auth-token': '@token' }
         }
     })

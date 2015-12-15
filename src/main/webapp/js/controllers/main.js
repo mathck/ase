@@ -779,7 +779,7 @@ materialAdmin
     //=================================================
 
     .controller('createTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
-        TaskFactory, IssuesFactory, ProjectFactory, UserFactory) {
+        TasksFactory, IssuesFactory, ProjectFactory, UserFactory) {
 
         $scope.currentPID = $stateParams.pID;
         //console.log("Current PID (Task): " + $scope.currentPID);
@@ -825,16 +825,40 @@ materialAdmin
             ErrorHandler.handle("Could not fetch project information from server.", error);
         });
         $scope.createTask = function() {
-            TaskFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
-            taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
+            console.log($scope.taskType);
+            //if($scope.taskType=="cooperative"){
+                TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
+                    taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
                 userList: $scope.userPicker}).$promise.then(function(result){
                     growlService.growl("Task created.");
                     $state.go("viewProject", {pID:$scope.currentPID});
                 }, function(error){
                     ErrorHandler.handle("Could not save task.", error);
                 });
-            console.log($scope.userPicker);
-        };
+            /*}else{
+                var allUsers=$scope.userPicker;
+                var lastUserInList=allUsers[allUsers.length()-1];
+                console.log(lastUserInList);
+                $scope.userPicker.forEach(function(user){
+                    var userList=[];
+                    userList.push(user);
+                    console.log(userList);
+                    title=$scope.task.title + " " + user;
+                    TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
+                        taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
+                    userList: $userList}).$promise.then(function(result){
+                        if (user==lastUserInList){
+                            growlService.growl("Task created.");
+                            $state.go("viewProject", {pID:$scope.currentPID});
+                        }
+                    }, function(error){
+                        ErrorHandler.handle("Could not save task.", error);
+                    });
+                });
+            }*/
+            //console.log($scope.userPicker);
+        }
+
     })
 
     //=================================================
