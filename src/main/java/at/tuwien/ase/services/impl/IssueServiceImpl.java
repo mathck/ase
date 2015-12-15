@@ -3,6 +3,7 @@ package at.tuwien.ase.services.impl;
 import at.tuwien.ase.dao.IssueDAO;
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.dao.impl.IssueDAOImpl;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.Issue;
@@ -28,6 +29,13 @@ public class IssueServiceImpl implements IssueService {
     @Autowired
     private TaskDAO taskDAO;
 
+    public IssueServiceImpl() {
+    }
+
+    public IssueServiceImpl(IssueDAO issueDAO, TaskDAO taskDAO) {
+        this.issueDAO = issueDAO;
+        this.taskDAO = taskDAO;
+    }
 
     private static final Logger logger = LogManager.getLogger(IssueServiceImpl.class);
 

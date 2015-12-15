@@ -51,22 +51,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     }
 
-    /**
-     *
-     *
-     * @param projectDAO
-     * @param issueDAO
-     * @param taskDAO
-     * @param userDAO
-     * @param subtaskDAO
-     */
     public ProjectServiceImpl(ProjectDAO projectDAO, IssueDAO issueDAO, TaskDAO taskDAO,
-                              UserDAO userDAO, SubtaskDAO subtaskDAO) {
+                              UserDAO userDAO, SubtaskDAO subtaskDAO, IssueService issueService, TaskService taskService) {
         this.projectDAO = projectDAO;
         this.issueDAO = issueDAO;
         this.taskDAO = taskDAO;
         this.userDAO = userDAO;
         this.subtaskDAO = subtaskDAO;
+        this.issueService = issueService;
+        this.taskService = taskService;
     }
 
     /**

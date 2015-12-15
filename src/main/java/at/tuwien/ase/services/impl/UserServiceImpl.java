@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
      * @param user The user object that is inserted.
      */
     public void writeUser(User user) {
+        // todo refac this, same ifs are in updateUser
         if(user.getFirstName() != null && user.getFirstName().length() > 2) {
             if(user.getLastName() != null && user.getLastName().length() > 2) {
                 if(user.getAvatar() != null && user.getAvatar().length() > 0) {
@@ -161,11 +162,12 @@ public class UserServiceImpl implements UserService {
      */
     public void updateUser(String userID, User user)
             throws EmptyResultDataAccessException, IllegalArgumentException {
-        if(user.getFirstName() != null && user.getLastName().length() > 0) {
-            if(user.getLastName() != null && user.getLastName().length() > 0) {
+        // todo refac this, same ifs are in writeUser
+        if(user.getFirstName() != null && user.getFirstName().length() > 2) {
+            if(user.getLastName() != null && user.getLastName().length() > 2) {
                 if(user.getAvatar() != null && user.getAvatar().length() > 0) {
                     if(user.getPassword() != null) {
-                        if(user.getUserID() != null && user.getUserID().length() > 5) {
+                        if(user.getUserID() != null && user.getUserID().length() > 5 && EmailValidator.getInstance().isValid(user.getUserID())) {
                             userDAO.updateUser(userID, user);
                         } else {
                             throw new IllegalArgumentException("User ID is not valid");
@@ -182,7 +184,7 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IllegalArgumentException("First name is not valid");
         }
-        userDAO.updateUser(userID, user);
+        //userDAO.updateUser(userID, user); // todo TOM pls verify that this should not be here and remove it completely
     }
 
 }

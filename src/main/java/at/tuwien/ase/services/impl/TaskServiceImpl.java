@@ -27,6 +27,13 @@ public class TaskServiceImpl implements TaskService {
 
     private static final Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
+    public TaskServiceImpl() {
+    }
+
+    public TaskServiceImpl(TaskDAO taskDAO) {
+        this.taskDAO = taskDAO;
+    }
+
     public Task getByID(int tID) {
         logger.debug("get task with id=" + tID);
         return taskDAO.findByID(tID);
@@ -92,6 +99,4 @@ public class TaskServiceImpl implements TaskService {
         logger.debug("remove user with id="+uID+" from task with id="+tID);
         taskDAO.removeUserFromTask(tID, uID);
     }
-
-
 }

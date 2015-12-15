@@ -115,6 +115,4 @@ public class LoginServiceImpl implements LoginService {
         return loginDAO.checkLoginValidity(token, tokenValidityInMins);
 
     }
-
-
 }

@@ -170,4 +170,113 @@ public class UserServiceTests {
         // Assert
         // IllegalArgumentException
     }
+
+    // @author: Mateusz Czernecki
+    @Test
+    public void updateUser_working() {
+        // Arrange
+        String uID = "0";
+        User oUser = new User("zergling@domain.com", "password");
+        oUser.setFirstName("Brad");
+        oUser.setLastName("Pitt");
+        oUser.setAvatar("18.png");
+        when(userDAO.findByID(uID)).thenReturn(oUser);
+
+        // Act
+        userService.updateUser(uID, oUser);
+
+        // Assert
+        verify(userDAO, times(1)).updateUser(uID, oUser);
+    }
+
+    // @author: Mateusz Czernecki
+    @Test(expected = IllegalArgumentException.class)
+    public void updateUser_invalidFirstname() {
+        // Arrange
+        String uID = "0";
+        User oUser = new User("zergling@domain.com", "password");
+        oUser.setFirstName("B");
+        oUser.setLastName("Pitt");
+        oUser.setAvatar("18.png");
+        when(userDAO.findByID(uID)).thenReturn(oUser);
+
+        // Act
+        userService.updateUser(uID, oUser);
+
+        // Assert
+        verify(userDAO, times(0)).updateUser(uID, oUser);
+    }
+
+    // @author: Mateusz Czernecki
+    @Test(expected = IllegalArgumentException.class)
+    public void updateUser_invalidLastname() {
+        // Arrange
+        String uID = "0";
+        User oUser = new User("zergling@domain.com", "password");
+        oUser.setFirstName("Brad");
+        oUser.setLastName("P");
+        oUser.setAvatar("18.png");
+        when(userDAO.findByID(uID)).thenReturn(oUser);
+
+        // Act
+        userService.updateUser(uID, oUser);
+
+        // Assert
+        verify(userDAO, times(0)).updateUser(uID, oUser);
+    }
+
+    // @author: Mateusz Czernecki
+    @Test(expected = IllegalArgumentException.class)
+    public void updateUser_invalidUserId() {
+        // Arrange
+        String uID = "0";
+        User oUser = new User("zergling", "password");
+        oUser.setFirstName("Brad");
+        oUser.setLastName("Pitt");
+        oUser.setAvatar("18.png");
+        when(userDAO.findByID(uID)).thenReturn(oUser);
+
+        // Act
+        userService.updateUser(uID, oUser);
+
+        // Assert
+        verify(userDAO, times(0)).updateUser(uID, oUser);
+    }
+
+    // @author: Mateusz Czernecki
+    @Test(expected = IllegalArgumentException.class)
+    public void updateUser_invalidAvatar() {
+        // Arrange
+        String uID = "0";
+        User oUser = new User("zergling@domain.com", "password");
+        oUser.setFirstName("Brad");
+        oUser.setLastName("Pitt");
+        oUser.setAvatar("");
+        when(userDAO.findByID(uID)).thenReturn(oUser);
+
+        // Act
+        userService.updateUser(uID, oUser);
+
+        // Assert
+        verify(userDAO, times(0)).updateUser(uID, oUser);
+    }
+
+    // @author: Mateusz Czernecki
+    @Test(expected = IllegalArgumentException.class)
+    public void updateUser_invalidPassword() {
+        // Arrange
+        String uID = "0";
+        User oUser = new User("zergling@domain.com", "password");
+        oUser.setPassword(null);
+        oUser.setFirstName("Brad");
+        oUser.setLastName("Pitt");
+        oUser.setAvatar("");
+        when(userDAO.findByID(uID)).thenReturn(oUser);
+
+        // Act
+        userService.updateUser(uID, oUser);
+
+        // Assert
+        verify(userDAO, times(0)).updateUser(uID, oUser);
+    }
 }

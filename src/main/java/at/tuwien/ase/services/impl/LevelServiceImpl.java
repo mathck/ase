@@ -24,7 +24,11 @@ public class LevelServiceImpl implements LevelService {
     }
 
     private double computeNextLevelRatio(int currentXp) {
-        return (currentXp / getXpNeededForLevelN(computeLevel(currentXp) + 1)) * 100;
+        double xpNeededForLevelN = getXpNeededForLevelN(computeLevel(currentXp));
+        double xpNeededForLevelNplus1 = getXpNeededForLevelN(computeLevel(currentXp) + 1);
+        double xpLevelGap = xpNeededForLevelNplus1 - xpNeededForLevelN;
+
+        return ((currentXp - xpNeededForLevelN) / xpLevelGap) * 100;
     }
 
     private int getXpNeededForLevelN(int N) {
