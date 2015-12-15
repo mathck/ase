@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import java.util.LinkedList;
 
 
@@ -48,10 +50,11 @@ public class UserServiceImpl implements UserService {
      * @param projectDAO The project dao link.
      * @param subtaskDAO The sub-task dao link.
      */
-    public UserServiceImpl(UserDAO userDAO, ProjectDAO projectDAO, SubtaskDAO subtaskDAO) {
+    public UserServiceImpl(UserDAO userDAO, ProjectDAO projectDAO, SubtaskDAO subtaskDAO, LevelService levelService) {
         this.userDAO = userDAO;
         this.projectDAO = projectDAO;
         this.subtaskDAO = subtaskDAO;
+        this.levelService = levelService;
     }
 
     /**
@@ -60,11 +63,11 @@ public class UserServiceImpl implements UserService {
      * @param user The user object that is inserted.
      */
     public void writeUser(User user) {
-        if(user.getFirstName() != null && user.getLastName().length() > 0) {
-            if(user.getLastName() != null && user.getLastName().length() > 0) {
+        if(user.getFirstName() != null && user.getFirstName().length() > 2) {
+            if(user.getLastName() != null && user.getLastName().length() > 2) {
                 if(user.getAvatar() != null && user.getAvatar().length() > 0) {
                     if(user.getPassword() != null) {
-                        if(user.getUserID() != null && user.getUserID().length() > 5) {
+                        if(user.getUserID() != null && user.getUserID().length() > 5 && EmailValidator.getInstance().isValid(user.getUserID())) {
                             userDAO.insertUser(user);
                         } else {
                             throw new IllegalArgumentException("User ID is not valid");
