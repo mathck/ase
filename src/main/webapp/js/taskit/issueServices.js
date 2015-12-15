@@ -20,7 +20,7 @@ issueServices.factory('IssuePostFactory', function ($resource) {
 });
 
 issueServices.factory('IssueRetrieveFactory', function ($resource) {
-    return $resource('taskit/api/workspace/projects/issues/:issueID', {}, {
+    return $resource('/taskit/api/workspace/projects/issues/:issueID', {}, {
         show: {
             method: 'GET',
             params: {issueID: '@iID'}

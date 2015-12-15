@@ -5,10 +5,10 @@
 
     <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
 
-    <section id="content">
-        <div class="container" data-ng-controller="viewIssue">
+    <section id="content" data-ng-controller="viewIssue as vICtrl">
+        <div class="container">
             <div class="block-header">
-                <h2>View Issue</h2>
+                <h2>View Issue {{hans}}</h2>
 
                 <ul class="actions">
                     <li>
@@ -37,7 +37,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
                                 <div class="fg-line">
-                                    <input type="text" class="form-control input-lg" value="" data-ng-model="issue.title" disabled="" placeholder="Loading issue title...">
+                                    <input type="text" class="form-control input-lg" data-ng-model="issue.title" placeholder="Loading issue title...">
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                         <div class="col-sm-12">
                             <p class="c-black f-500 m-b-20">Description</p>
                             <div class="fg-line">
-                                <textarea class="form-control input-md description" data-ng-model="issue.description" disabled="" placeholder="Loading issue description..."></textarea>
+                                <textarea class="form-control input-md description" data-ng-model="issue.description" placeholder="Loading issue description..."></textarea>
                             </div>
                         </div>
                     </div>

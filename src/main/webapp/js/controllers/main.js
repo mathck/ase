@@ -758,8 +758,15 @@ materialAdmin
         $scope.currentIID = $stateParams.iID;
         $scope.currentPID = $stateParams.pID;
 
+
+        $scope.hans="BLAH";
         IssueRetrieveFactory.show({issueID: $scope.currentIID}).$promise.then(function(response){
-            response=issue;
+            $scope.issue=response;
+            $scope.issue.title=response.title.trim();
+            $scope.issue.description=response.description.trim();
+            console.log($scope.issue.title);
+            console.log($scope.issue.description);
+            console.log($scope.issue);
         }, function(error){
             ErrorHandler.handle("Could not retrieve Issue Information.", error);
         });
