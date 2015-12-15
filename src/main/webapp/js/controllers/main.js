@@ -422,7 +422,12 @@ materialAdmin
         //edit project information so it can easily be displayed (trim returned variables and identify user role for each project
             response.forEach(function(project){
                 project.title=project.title.trim();
-                project.description=project.description.trim();
+
+                if(project.description == null)
+                    project.description = "";
+                else
+                    project.description=project.description.trim();
+
                 userInProject=project.allUser.filter(function(user){
                     return(user.user.trim()==TokenService.username);
                 });
