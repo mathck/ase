@@ -12,6 +12,7 @@ public class Subtask {
     private String description;
     private int taskId; //reference to task ('consists of')
     private String status;
+    private Integer dslTemplateId;
     private int xp;
     private Date creationDate;
     private Date updateDate;
@@ -95,6 +96,14 @@ public class Subtask {
         this.updateDate = updateDate;
     }
 
+    public Integer getDslTemplateId() {
+        return dslTemplateId;
+    }
+
+    public void setDslTemplateId(Integer dslTemplateId) {
+        this.dslTemplateId = dslTemplateId;
+    }
+
     @Override
     public String toString() {
         return "Subtask{" +
@@ -103,6 +112,7 @@ public class Subtask {
                 ", description='" + description + '\'' +
                 ", taskId=" + taskId +
                 ", status='" + status + '\'' +
+                ", dslTemplateId=" + dslTemplateId +
                 ", xp=" + xp +
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +

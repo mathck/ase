@@ -43,7 +43,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         logger.debug("insert into db: subtask with id=" + subtask.getId());
 
-        String sqlQuery = "INSERT INTO SUBTASK (ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE) " +
+        String sqlQuery = "INSERT INTO SUBTASK (ID, TITLE, DESCRIPTION, DSL_TEMPLATE_ID, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         this.jdbcTemplate.update(
@@ -51,6 +51,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 subtask.getId(),
                 subtask.getTitle(),
                 subtask.getDescription(),
+                subtask.getDslTemplateId(),
                 subtask.getTaskId(),
                 subtask.getStatus(),
                 subtask.getXp(),
@@ -76,7 +77,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         logger.debug("retrieve from db: subtask with id=" + tID);
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, DSL_TEMPLATE_ID, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
                 "FROM SUBTASK " +
                 "WHERE ID = ?";
 
@@ -89,6 +90,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                         subtask.setId(Integer.valueOf(rs.getString("id")));
                         subtask.setTitle(rs.getString("title"));
                         subtask.setDescription(rs.getString("description"));
+                        subtask.setDslTemplateId(Integer.valueOf(rs.getString("dsl_template_id")));
                         subtask.setTaskId(rs.getInt("task_id"));
                         subtask.setStatus(rs.getString("status"));
                         subtask.setXp(rs.getInt("xp"));
@@ -103,7 +105,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         logger.debug("retrieve from db: all subtasks");
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, DSL_TEMPLATE_ID, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
                 "FROM SUBTASK";
 
         LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
@@ -117,6 +119,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
             subtask.setId((Integer)row.get("id"));
             subtask.setTitle((String)row.get("title"));
             subtask.setDescription((String)row.get("description"));
+            subtask.setDslTemplateId((Integer)row.get("dsl_template_id"));
             subtask.setTaskId((Integer)row.get("task_id"));
             subtask.setStatus((String)row.get("status"));
             subtask.setXp((Integer) row.get("xp"));
@@ -134,7 +137,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         logger.debug("retrieve from db: all subtasks by task with id="+tID);
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, DSL_TEMPLATE_ID, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE " +
                 "FROM SUBTASK " +
                 "WHERE TASK_ID = ?";
 
@@ -150,6 +153,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
             subtask.setId((Integer)row.get("id"));
             subtask.setTitle((String)row.get("title"));
             subtask.setDescription((String)row.get("description"));
+            subtask.setDslTemplateId((Integer)row.get("dsl_template_id"));
             subtask.setTaskId((Integer)row.get("task_id"));
             subtask.setStatus((String)row.get("status"));
             subtask.setXp((Integer) row.get("xp"));
@@ -167,7 +171,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         logger.debug("retrieve from db: all subtasks by project with id="+pID);
 
-        String sqlQuery = "SELECT SUBTASK.ID, SUBTASK.TITLE, SUBTASK.DESCRIPTION, SUBTASK.TASK_ID, SUBTASK.STATUS, SUBTASK.XP, SUBTASK.CREATION_DATE, SUBTASK.UPDATE_DATE " +
+        String sqlQuery = "SELECT SUBTASK.ID, SUBTASK.TITLE, SUBTASK.DESCRIPTION, SUBTASK.DSL_TEMPLATE_ID, SUBTASK.TASK_ID, SUBTASK.STATUS, SUBTASK.XP, SUBTASK.CREATION_DATE, SUBTASK.UPDATE_DATE " +
                 "FROM SUBTASK, TASK " +
                 "WHERE TASK.ID = SUBTASK.TASK_ID " +
                 "AND TASK.PROJECT_ID = ? ";
@@ -184,6 +188,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
             subtask.setId((Integer)row.get("id"));
             subtask.setTitle((String)row.get("title"));
             subtask.setDescription((String)row.get("description"));
+            subtask.setDslTemplateId((Integer)row.get("dsl_template_id"));
             subtask.setTaskId((Integer)row.get("task_id"));
             subtask.setStatus((String)row.get("status"));
             subtask.setXp((Integer) row.get("xp"));
@@ -201,7 +206,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         logger.debug("retrieve from db: all subtasks by user with id="+uID);
 
-        String sqlQuery = "SELECT SUBTASK.ID, SUBTASK.TITLE, SUBTASK.DESCRIPTION, SUBTASK.TASK_ID, SUBTASK.STATUS, SUBTASK.XP, SUBTASK.CREATION_DATE, SUBTASK.UPDATE_DATE " +
+        String sqlQuery = "SELECT SUBTASK.ID, SUBTASK.TITLE, SUBTASK.DESCRIPTION, SUBTASK.DSL_TEMPLATE_ID, SUBTASK.TASK_ID, SUBTASK.STATUS, SUBTASK.XP, SUBTASK.CREATION_DATE, SUBTASK.UPDATE_DATE " +
                 "FROM SUBTASK, TASK " +
                 "WHERE TASK.ID = SUBTASK.TASK_ID " +
                 "AND TASK.USER_MAIL = ? ";
@@ -218,6 +223,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
             subtask.setId((Integer)row.get("id"));
             subtask.setTitle((String)row.get("title"));
             subtask.setDescription((String)row.get("description"));
+            subtask.setDslTemplateId((Integer)row.get("dsl_template_id"));
             subtask.setTaskId((Integer)row.get("task_id"));
             subtask.setStatus((String)row.get("status"));
             subtask.setXp((Integer) row.get("xp"));

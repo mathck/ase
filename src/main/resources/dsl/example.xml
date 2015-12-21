@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template>
+
+	<identifier>
+		<title>Bilderrätsel</title>
+		<description>Quiz für Schüler</description>
+		<estimatedWorkTime>60</estimatedWorkTime>	
+		<deadline>2015-12-12</deadline>
+		<githook>???</githook>
+	</identifier>
+
+	<taskBody>
+
+		<h1>Willkommen zum tollen Quiz!!</h1>
+		<br></br>
+		<h2>Eine Frage für euch!</h2>
+		<br/>
+		<h3>Schau Dir das folgende Bild genau an:</h3>
+		<br/>
+		{taskElement:1}
+		<br/>
+		<b>Frage:</b> Was ist auf dem Bild zu sehen?
+		<br/>
+		{taskElement:2}
+		<br/>
+		{taskElement:3}
+		<br/>
+		Freies Textfeld!
+		<br/>
+		{taskElement:4}
+		<br/>
+		Die Auflösung der Frage im folgenden PDF File:
+		<br/>
+		{taskElement:5}
+		<br/>
+		Wie gut hat Dir dieser Task gefallen?
+		<br/>
+		{taskElement:6}
+		
+	</taskBody>
+
+	<taskElements>
+		<taskElement id="1">
+			<status></status>
+			<value></value>
+			<link>C:\tier.jpg</link>
+			<search_string></search_string>
+			<type>image</type> 
+		</taskElement>
+		<taskElement id="2">
+			<status>unchecked</status>
+			<value>Katze</value>
+			<link></link>
+			<search_string></search_string>
+			<type>checkbox</type> 
+		</taskElement>
+		<taskElement id="3">
+			<status>unchecked</status>
+			<value>Maus</value>
+			<link></link>
+			<search_string></search_string>
+			<type>checkbox</type> 
+		</taskElement>
+		<taskElement id="4">
+			<status></status>
+			<value>hier dein text...</value>
+			<link></link>
+			<search_string></search_string>
+			<type>textbox</type> 
+		</taskElement>
+		<taskElement id="5">
+			<status>file</status>
+			<value></value>
+			<link>C:\loesung.pdf</link>
+			<search_string></search_string>
+			<type>file</type> 
+		</taskElement>
+		<taskElement id="6">
+			<status>gut</status>
+			<value>gut|mittelmäßig|schlecht</value>
+			<link></link>
+			<search_string></search_string>
+			<type>slider</type> 
+		</taskElement>
+	</taskElements>
+
+</template>

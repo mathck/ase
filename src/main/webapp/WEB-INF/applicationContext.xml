@@ -12,13 +12,13 @@
     <!-- initialization for data source -->
     <!-- @author Daniel Hofer -->
     <!-- -->
-    <bean id="dataSource"
-          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://74.208.225.133/postgres"/>
-        <property name="username" value="admin"/>
-        <property name="password" value="8aPhUxdS"/>
-    </bean>
+      <bean id="dataSource"
+           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+         <property name="driverClassName" value="org.postgresql.Driver"/>
+         <property name="url" value="jdbc:postgresql://74.208.225.133/postgres"/>
+         <property name="username" value="admin"/>
+         <property name="password" value="8aPhUxdS"/>
+     </bean>
     <!-- -->
 
     <!-- LOCAL DB -->
@@ -34,5 +34,12 @@
 
     <!-- @author Daniel Hofer -->
     <context:property-placeholder location="classpath:app.properties"/>
+
+    <!-- @author Daniel Hofer -->
+    <!-- hibernate validator -->
+    <bean id="validatorFactory" class="javax.validation.Validation"
+          factory-method="buildDefaultValidatorFactory" />
+    <bean id="validator" factory-bean="validatorFactory"
+          factory-method="getValidator" />
 
 </beans>

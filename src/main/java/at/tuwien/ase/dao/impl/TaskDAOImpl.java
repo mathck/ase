@@ -48,13 +48,12 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: task with id=" + task.getId());
 
-        String sqlQuery = "INSERT INTO TASK (ID, DSL_TEMPLATE_ID, PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO TASK (ID, PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         this.jdbcTemplate.update(
                 sqlQuery,
                 task.getId(),
-                task.getDslTemplateId(),
                 task.getProjectId(),
                 task.getTitle(),
                 task.getDescription(),
@@ -84,7 +83,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: task with id=" + taskId);
 
-        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.DSL_TEMPLATE_ID as task_dsl_template_id, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, SUBTASK.ID as subtask_id, SUBTASK.TASK_ID as subtask_task_id, SUBTASK.TITLE as subtask_title, SUBTASK.DESCRIPTION as subtask_description, SUBTASK.STATUS as subtask_status, SUBTASK.XP as subtask_xp, SUBTASK.CREATION_DATE as subtask_creation_date, SUBTASK.UPDATE_DATE as subtask_update_date " +
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, SUBTASK.ID as subtask_id, SUBTASK.TASK_ID as subtask_task_id, SUBTASK.TITLE as subtask_title, SUBTASK.DESCRIPTION as subtask_description, SUBTASK.STATUS as subtask_status, SUBTASK.XP as subtask_xp, SUBTASK.CREATION_DATE as subtask_creation_date, SUBTASK.UPDATE_DATE as subtask_update_date " +
                 "FROM TASK, SUBTASK " +
                 "WHERE TASK.ID = ? AND TASK_TYPE = ? " +
                 "AND TASK.ID = SUBTASK.TASK_ID";
@@ -107,7 +106,6 @@ public class TaskDAOImpl implements TaskDAO {
                 task.setTaskType((String)row.get("task_task_type"));
                 task.setCreationDate(new java.sql.Date(((Timestamp)row.get("task_creation_date")).getTime()));
                 task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("task_update_date")).getTime()));
-                task.setDslTemplateId((Integer)row.get("task_dsl_template_id"));
                 task.setProjectId((Integer) row.get("task_project_id"));
                 task.setUserMail((String)row.get("task_user_mail"));
                 task.setStatus((String)row.get("task_status"));
@@ -137,7 +135,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks");
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, PROJECT_ID, USER_MAIL, STATUS " +
                 "FROM TASK " +
                 "WHERE TASK_TYPE = ?";
 
@@ -156,7 +154,6 @@ public class TaskDAOImpl implements TaskDAO {
             task.setTaskType((String)row.get("task_type"));
             task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            task.setDslTemplateId((Integer)row.get("dsl_template_id"));
             task.setProjectId((Integer)row.get("project_id"));
             task.setUserMail((String)row.get("user_mail"));
             task.setStatus((String)row.get("status"));
@@ -171,7 +168,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks by project with id="+pID);
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, PROJECT_ID, USER_MAIL, STATUS " +
                 "FROM TASK " +
                 "WHERE TASK_TYPE = ? " +
                     "AND PROJECT_ID = ?";
@@ -192,7 +189,6 @@ public class TaskDAOImpl implements TaskDAO {
             task.setTaskType((String)row.get("task_type"));
             task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            task.setDslTemplateId((Integer)row.get("dsl_template_id"));
             task.setProjectId((Integer)row.get("project_id"));
             task.setUserMail((String)row.get("user_mail"));
             task.setStatus((String)row.get("status"));
@@ -207,7 +203,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks by user with id="+uID);
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.DSL_TEMPLATE_ID, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS " +
+        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS " +
                 "FROM TASK, REL_USER_TASK, TASKIT_USER " +
                 "WHERE TASK_TYPE = ? " +
                     "AND REL_USER_TASK.USER_MAIL = ? " +
@@ -231,7 +227,6 @@ public class TaskDAOImpl implements TaskDAO {
             task.setTaskType((String)row.get("task_type"));
             task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            task.setDslTemplateId((Integer)row.get("dsl_template_id"));
             task.setProjectId((Integer)row.get("project_id"));
             task.setUserMail((String)row.get("user_mail"));
             task.setStatus((String)row.get("status"));
@@ -279,7 +274,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks from user with id="+uID+" and project with id="+pID);
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.DSL_TEMPLATE_ID, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
+        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
                 "FROM TASK, TASKIT_USER " +
                 "WHERE TASK_TYPE = ? " +
                 "AND TASK.USER_MAIL = ? " +
@@ -304,7 +299,6 @@ public class TaskDAOImpl implements TaskDAO {
             task.setTaskType((String)row.get("task_type"));
             task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            task.setDslTemplateId((Integer)row.get("dsl_template_id"));
             task.setProjectId((Integer) row.get("project_id"));
             task.setUserMail((String)row.get("user_mail"));
             task.setStatus((String)row.get("status"));

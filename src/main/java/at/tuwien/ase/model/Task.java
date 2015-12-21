@@ -14,7 +14,6 @@ public class Task {
     private String taskType;
     private Date creationDate;
     private Date updateDate;
-    private Integer dslTemplateId;
     private Integer projectId;
     private String userMail;
     private String status;
@@ -29,14 +28,13 @@ public class Task {
         userList = new LinkedList<User>();
     }
 
-    public Task(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer dslTemplateId, Integer projectId, String userMail) {
+    public Task(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userMail) {
         this.status = status;
         this.title = title;
         this.description = description;
         this.taskType = taskType;
         this.creationDate = creationDate;
         this.updateDate = updateDate;
-        this.dslTemplateId = dslTemplateId;
         this.projectId = projectId;
         this.userMail = userMail;
         subtaskList = new LinkedList<Subtask>();
@@ -44,7 +42,7 @@ public class Task {
     }
 
     public Task(String title, String description) {
-        this(null, title, description, null, null, null, null, null, null);
+        this(null, title, description, null, null, null, null, null);
     }
 
     public Integer getId() {
@@ -93,14 +91,6 @@ public class Task {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public Integer getDslTemplateId() {
-        return dslTemplateId;
-    }
-
-    public void setDslTemplateId(Integer dslTemplateId) {
-        this.dslTemplateId = dslTemplateId;
     }
 
     public Integer getProjectId() {
@@ -168,7 +158,6 @@ public class Task {
                 ", taskType='" + taskType + '\'' +
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +
-                ", dslTemplateId=" + dslTemplateId +
                 ", projectId=" + projectId +
                 ", userMail='" + userMail + '\'' +
                 ", status='" + status + '\'' +
