@@ -48,7 +48,7 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
         logger.debug("post new dsl template");
 
-        //unmarshal xml template
+        //unmarshal and validate xml template
         unmarshalTemplateXml(template);
 
 
@@ -67,6 +67,15 @@ public class DslTemplateServiceImpl implements DslTemplateService{
     public void deleteDslTemplateByID(int tID) {
         logger.debug("delete dsl template with id="+tID);
         dslTemplateDAO.removeDslTemplateByID(tID);
+    }
+
+    public void updateDslTemplateById(DslTemplate template, int tID)  throws Exception {
+        logger.debug("update dsl template with id="+tID);
+
+        //unmarshal and validate xml template
+        unmarshalTemplateXml(template);
+
+        dslTemplateDAO.alterDslTemplateByID(template, tID);
     }
 
     public DslTemplate getByID(int tID) {

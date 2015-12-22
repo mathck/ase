@@ -125,6 +125,26 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
         return templates;
     }
 
+    public void alterDslTemplateByID(DslTemplate template, int tID) {
+
+        logger.debug("update dsl template with id="+tID);
+
+        String sqlQuery = "UPDATE DSL_TEMPLATE " +
+                "SET TITLE = ?, DESCRIPTION = ?, SYNTAX = ?, TEMPLATE_CATEGORY_NAME = ?, TEMPLATE_CATEGORY_DESCRIPTION = ? " +
+                "WHERE ID = ?";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                template.getTitle(),
+                template.getDescription(),
+                template.getSyntax(),
+                template.getTemplateCategoryName(),
+                template.getTemplateCategoryDescription(),
+                tID
+        );
+
+    }
+
     public int getNewID() {
 
         Integer id = this.jdbcTemplate.queryForObject(

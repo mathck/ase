@@ -15,6 +15,8 @@ public interface DslTemplateDAO {
     DslTemplate findByID(int tID);
     LinkedList<DslTemplate> loadAll();
 
+    void alterDslTemplateByID(DslTemplate template, int tID);
+
     int getNewID();
 
 }

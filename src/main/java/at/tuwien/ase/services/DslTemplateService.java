@@ -16,6 +16,7 @@ public interface DslTemplateService {
     JsonStringWrapper writeDslTemplate(DslTemplate template) throws Exception;
 
     void deleteDslTemplateByID(int tID);
+    void updateDslTemplateById(DslTemplate template, int tID) throws Exception;
 
     DslTemplate getByID(int tID);
 

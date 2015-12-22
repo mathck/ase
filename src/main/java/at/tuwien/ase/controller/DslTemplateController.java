@@ -35,6 +35,13 @@ public class DslTemplateController {
     }
 
     // @author Daniel Hofer
+    @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.PATCH)
+    @ResponseBody
+    public void updateDslTemplate(@RequestBody DslTemplate dslTemplate, @PathVariable("tID") int tID) throws Exception  {
+        ts.updateDslTemplateById(dslTemplate, tID);
+    }
+
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.GET)
     @ResponseBody
     public DslTemplate getDslTemplateByID(@PathVariable("tID") int tID) throws Exception {
@@ -51,7 +58,7 @@ public class DslTemplateController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteIssueByID(@PathVariable("tID") int tID)  throws Exception {
+    public void deleteDslTemplateByID(@PathVariable("tID") int tID)  throws Exception {
         ts.deleteDslTemplateByID(tID);
     }
 
