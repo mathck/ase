@@ -44,8 +44,8 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public JsonStringWrapper createTask(@RequestBody Task task, @PathVariable("pID") int pID) throws Exception {
-        return ts.writeTask(pID, task);
+    public void createTask(@RequestBody Task task, @PathVariable("pID") int pID) throws Exception {
+        ts.writeTask(pID, task);
     }
 
     // @author Daniel Hofer

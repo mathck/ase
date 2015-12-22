@@ -13,7 +13,7 @@ import java.util.LinkedList;
  */
 public interface ProjectService {
 
-    JsonStringWrapper writeProject(Project project);
+    JsonStringWrapper writeProject(Project project) throws Exception;
 
     void deleteProject(int pID);
 

@@ -44,43 +44,37 @@
 			<status></status>
 			<value></value>
 			<link>C:\tier.jpg</link>
-			<search_string></search_string>
-			<type>image</type> 
+			<type>image</type>
 		</taskElement>
 		<taskElement id="2">
 			<status>unchecked</status>
 			<value>Katze</value>
 			<link></link>
-			<search_string></search_string>
-			<type>checkbox</type> 
+			<type>checkbox</type>
 		</taskElement>
 		<taskElement id="3">
 			<status>unchecked</status>
 			<value>Maus</value>
 			<link></link>
-			<search_string></search_string>
-			<type>checkbox</type> 
+			<type>checkbox</type>
 		</taskElement>
 		<taskElement id="4">
 			<status></status>
 			<value>hier dein text...</value>
 			<link></link>
-			<search_string></search_string>
-			<type>textbox</type> 
+			<type>textbox</type>
 		</taskElement>
 		<taskElement id="5">
 			<status>file</status>
 			<value></value>
 			<link>C:\loesung.pdf</link>
-			<search_string></search_string>
-			<type>file</type> 
+			<type>file</type>
 		</taskElement>
 		<taskElement id="6">
 			<status>gut</status>
 			<value>gut|mittelmäßig|schlecht</value>
 			<link></link>
-			<search_string></search_string>
-			<type>slider</type> 
+			<type>slider</type>
 		</taskElement>
 	</taskElements>
 

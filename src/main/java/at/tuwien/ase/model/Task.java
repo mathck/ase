@@ -12,20 +12,23 @@ public class Task {
     private String title;
     private String description;
     private String taskType;
+    private String executionType; //single_task, collaborative_task
     private Date creationDate;
     private Date updateDate;
     private Integer projectId;
     private String userMail;
-    private String status;
+    private String status; //current status
     private User user;
 
     private LinkedList<Subtask> subtaskList;
     private LinkedList<User> userList;
+    private LinkedList<TaskState> taskStates;
 
     // Must have no-argument constructor
     public Task() {
         subtaskList = new LinkedList<Subtask>();
         userList = new LinkedList<User>();
+        taskStates = new LinkedList<TaskState>();
     }
 
     public Task(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userMail) {
@@ -149,6 +152,26 @@ public class Task {
         this.user = user;
     }
 
+    public String getExecutionType() {
+        return executionType;
+    }
+
+    public void setExecutionType(String executionType) {
+        this.executionType = executionType;
+    }
+
+    public LinkedList<TaskState> getTaskStates() {
+        return taskStates;
+    }
+
+    public void setTaskStates(LinkedList<TaskState> taskStates) {
+        this.taskStates = taskStates;
+    }
+
+    public void addTaskState(TaskState taskState){
+        this.taskStates.add(taskState);
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -156,6 +179,7 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", taskType='" + taskType + '\'' +
+                ", executionType='" + executionType + '\'' +
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +
                 ", projectId=" + projectId +
@@ -164,6 +188,7 @@ public class Task {
                 ", user=" + user +
                 ", subtaskList=" + subtaskList +
                 ", userList=" + userList +
+                ", taskStates=" + taskStates +
                 '}';
     }
 }

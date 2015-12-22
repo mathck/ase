@@ -48,34 +48,9 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
         logger.debug("post new dsl template");
 
-        errorHandler = new JavaxErrorHandler();
+        //unmarshal xml template
+        unmarshalTemplateXml(template);
 
-        try {
-            //get xsd file from src/main/resource
-            ClassLoader classLoader = getClass().getClassLoader();
-            schema = sf.newSchema(new File(classLoader.getResource(TEMPLATE_XSD_FILE_NAME).getFile()));
-
-            JAXBContext jc = JAXBContext.newInstance(Template.class);
-
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-            unmarshaller.setSchema(schema);
-            //set error handler for javax errors
-            unmarshaller.setEventHandler(errorHandler);
-
-            //read xml from template object and unmarshal
-            StringReader reader = new StringReader(template.getSyntax());
-            unmarshaller.unmarshal(reader);
-
-        } catch (UnmarshalException e) {
-
-            //get list of validation errors and throw exception
-            if (errorHandler.getErrors() == null || errorHandler.getErrors().equals("")) {
-                throw new Exception("Unknow error: " + e.getMessage());
-            }else{
-                throw new Exception(errorHandler.getErrors());
-            }
-
-        }
 
         //set id and creationDate
         id = dslTemplateDAO.getNewID();
@@ -104,8 +79,41 @@ public class DslTemplateServiceImpl implements DslTemplateService{
         return dslTemplateDAO.loadAll();
     }
 
+    public Template unmarshalTemplateXml(DslTemplate dslTemplate) throws Exception{
+        try {
+            errorHandler = new JavaxErrorHandler();
 
-    public String convertTaskBodyToString(List<Serializable> content) {
+            //get xsd file from src/main/resource
+            ClassLoader classLoader = getClass().getClassLoader();
+            schema = sf.newSchema(new File(classLoader.getResource(TEMPLATE_XSD_FILE_NAME).getFile()));
+
+            JAXBContext jc = JAXBContext.newInstance(Template.class);
+
+            Unmarshaller unmarshaller = jc.createUnmarshaller();
+            unmarshaller.setSchema(schema);
+            //set error handler for javax errors
+            unmarshaller.setEventHandler(errorHandler);
+
+            //read xml from template object and unmarshal
+            StringReader reader = new StringReader(dslTemplate.getSyntax());
+            Template template = (Template) unmarshaller.unmarshal(reader);
+
+            return template;
+
+        } catch (UnmarshalException e) {
+
+            //get list of validation errors and throw exception
+            if (errorHandler.getErrors() == null || errorHandler.getErrors().equals("")) {
+                throw new Exception("Unknow error: " + e.getMessage());
+            }else{e.printStackTrace();
+                throw new Exception(errorHandler.getErrors());
+            }
+
+        }
+
+    }
+
+    public String convertTaskBodyToString(List<Serializable> content) throws  Exception {
 
         String returnString = new String("");
         Object currentContent;
@@ -128,5 +136,7 @@ public class DslTemplateServiceImpl implements DslTemplateService{
         return returnString;
 
     }
+
+
 
 }

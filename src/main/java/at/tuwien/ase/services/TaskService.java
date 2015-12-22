@@ -10,7 +10,7 @@ import java.util.LinkedList;
  */
 public interface TaskService {
 
-    JsonStringWrapper writeTask(int pID, Task task);
+    void writeTask(int pID, Task task) throws Exception;
 
     void deleteTaskByID(int tID);
 

@@ -1,6 +1,7 @@
 package at.tuwien.ase.dao;
 
 import at.tuwien.ase.model.Subtask;
+import at.tuwien.ase.model.TaskElementJson;
 
 import java.util.LinkedList;
 
@@ -18,6 +19,9 @@ public interface SubtaskDAO {
     LinkedList<Subtask> loadAllByProject(int pID);
     LinkedList<Subtask> loadAllByUser(String uID);
 
+    void addTaskItemToSubtask(TaskElementJson taskItem, int sID) throws Exception;
+
     int getNewID();
+    int getNewIDForTaskItem();
 
 }

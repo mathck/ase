@@ -33,13 +33,13 @@ public class SubtaskController {
     public Subtask getSubtaskByID(@PathVariable("sID") int sID) throws Exception {
         return ts.getByID(sID);
     }
-
+/*
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public JsonStringWrapper createSubtask(@RequestBody Subtask subtask) throws Exception {
         return ts.writeSubtask(subtask);
-    }
+    }*/
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks", method = RequestMethod.GET)

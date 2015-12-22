@@ -26,6 +26,7 @@ public class DslTemplateController {
 
     private static final Logger logger = LogManager.getLogger(DslTemplateController.class);
 
+
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
