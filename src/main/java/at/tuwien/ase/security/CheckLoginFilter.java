@@ -32,9 +32,11 @@ public class CheckLoginFilter extends GenericFilterBean {
         String uri = ((HttpServletRequest) request).getRequestURI().toString();
 
 
+        // todo use a whitelist instead of multiple if's
         //for register and for login the token validation is not necessary
         if (!uri.equalsIgnoreCase("/taskit/api/user/login")
-                && !uri.equalsIgnoreCase("/taskit/api/user/register")) {
+                && !uri.equalsIgnoreCase("/taskit/api/user/register")
+                    && !uri.equalsIgnoreCase("/taskit/api/testdata/1/generate/5796e83c-f5fa-4730-9915-a47bfcecad6d")) {
 
             //get user-token from request header
             userToken = httpRequest.getHeader("user-token");

@@ -55,16 +55,16 @@
                 <div class="card-header">
                     <h2>Add User/s <small>Add users in the role as contributor or manager...</small></h2>
                 </div>
-                <div class="card-body card-padding">
+                <div class="card-body card-padding"> <!-- data-ng-click="updateUsers()" -->
                     <div class="row">
                         <div class="col-sm-8 m-b-15">
                             <p class="f-500 c-black m-b-15">Contributor/s</p>
-                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers">
+                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers | orderBy:'user.user.name'">
                             </select>
                         </div>
                         <div class="col-sm-4 m-b-15">
                             <p class="f-500 c-black m-b-15">Manager/s</p>
-                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers">
+                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers" data-ng-unfocus="updateUsers()">
                             </select>
                         </div>
                     </div>
@@ -73,12 +73,12 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2>Add Reward/s <small>Add rewards to increase the performance of your contributor/s...</small></h2>
+                    <h2">Add Reward/s <small>Add rewards to increase the performance of your contributor/s...</small></h2>
                 </div>
                 <div class="card-body card-padding">
                     <div class="row">
                         <div class="col-sm-9 m-b-15">
-                            <select  chosen multiple data-placeholder="Select a Reward..." class="w-100" data-ng-model="rewardPicker" data-ng-options="reward.id as reward.name for reward in rewards.rewardList">
+                            <select  chosen multiple data-placeholder="Select a Reward..." class="w-100" data-ng-model="rewardPicker" data-ng-options="reward.id as reward.name for reward in rewards.rewardList | orderBy:'reward.level' ">
                             </select>
                         </div>
                     </div>

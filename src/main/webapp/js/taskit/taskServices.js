@@ -1,7 +1,7 @@
 var taskServices = angular.module('taskit.taskServices', ['ngResource']);
 
 taskServices.factory('TasksFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects/:pid', {}, {
+    return $resource('/taskit/api/workspace/projects/:pid/tasks', {}, {
         query: {
             method: 'GET',
             params: {pid: '@pid'},
@@ -17,7 +17,7 @@ taskServices.factory('TasksFactory', function ($resource) {
 });
 
 taskServices.factory('TaskFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects/:pid/:id', {}, {
+    return $resource('/taskit/api/workspace/projects/:pid/tasks', {}, {
         show: {
             method: 'GET'
             //headers: { 'auth-token': '@token' }

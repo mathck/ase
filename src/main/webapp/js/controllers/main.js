@@ -422,7 +422,12 @@ materialAdmin
         //edit project information so it can easily be displayed (trim returned variables and identify user role for each project
             response.forEach(function(project){
                 project.title=project.title.trim();
-                project.description=project.description.trim();
+
+                if(project.description == null)
+                    project.description = "";
+                else
+                    project.description=project.description.trim();
+
                 userInProject=project.allUser.filter(function(user){
                     return(user.user.trim()==TokenService.username);
                 });
@@ -469,25 +474,123 @@ materialAdmin
 
     .controller('createProjectCtrl', function ($scope, $location, $window, $state, growlService, ErrorHandler,
         TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
-
         console.log("starting Project Creation");
-
         // get all users (for adding users to the project)
         UsersFactory.query().$promise.then(function(response){
             $scope.users={};
             $scope.users.contributableUsers=[];
             $scope.users.userPickerContributor=[];
             $scope.users.userPickerManager=[];
-
             //add a field containing a readable caption for the users
             response.forEach(function(user){
                 user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
                 //copy user list into one list for contributors
                 $scope.users.contributableUsers.push(user);
             });
-
             //create a second list for managers
             $scope.users.managementableUsers=$scope.users.contributableUsers;
+        }, function(error){
+           ErrorHandler.handle("Could not fetch users from server.", error);
+        });
+        //Get all created rewards for the current user
+        RewardsByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+            $scope.rewardList=rewards;
+        }, function(error){
+           ErrorHandler.handle("Could not fetch your rewards from server.", error);
+        });
+        $scope.createProject = function () {
+            console.log($scope.users.userPickerContributor);
+            ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
+                $scope.pID=response.item;
+                AddUserToProjectFactory.add({project: $scope.pID, user: TokenService.username, role: "ADMIN"});
+                $scope.users.userPickerContributor.forEach(function(contributor){
+                    AddUserToProjectFactory.add({project: $scope.pID, user: contributor, role: "CONTRIBUTOR"});
+                });
+                $scope.users.userPickerManager.forEach(function(manager){
+                    AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
+                });
+                growlService.growl("Project created!")
+                $state.go("viewProject",{pID:$scope.pID});
+            }, function(error){
+               ErrorHandler.handle("Could not save your project.", error);
+            });
+        };
+    })
+
+
+/*     ------ Contributors & Manager dürfen nicht doppelt gewählt werden. 1ster Ansatz. Funktioniert einseitig,
+            d.h. wenn ein manager ausgewählt wurde, kann dieser nicht mehr als contributor gewählt werden. anders herum klappt es nicht!
+
+    .controller('createProjectCtrl', function ($scope, $location, $window, $state, growlService, ErrorHandler,
+        TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
+
+        console.log("starting Project Creation");
+
+        $scope.users={};
+        $scope.users.allUsers=[];
+        $scope.users.allUsersTemp=[];
+        $scope.users.contributableUsers=[];
+        $scope.users.managementableUsers=[];
+        $scope.users.userPickerContributor=[];
+        $scope.users.userPickerManager=[];
+
+        // Update Users after selecting a Contributor or Manager
+        $scope.updateUsers=function(){
+            if($scope.users.userPickerManager.length != 0){
+
+                $scope.users.contributableUsers = [];
+                //$scope.users.managementableUsers = [];
+
+                $scope.users.allUsersTemp = $scope.users.allUsers;
+                [].forEach.call($scope.users.userPickerManager,function(name){
+                    $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+                });
+                $scope.users.allUsersTemp.forEach(function(user){
+                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+
+                    $scope.users.contributableUsers.push(user);
+                    //$scope.users.managementableUsers.push(user);
+                });
+
+                console.log("Geändert" + $scope.users.userPickerManager + "  --------     und   -------   " + $scope.users.userPickerContributor);
+            }
+        };
+
+
+        --- Klappt nicht! ---
+        $scope.updateManagerList=function(){
+            if($scope.users.userPickerManager.length != 0){
+
+                $scope.users.managementableUsers = [];
+
+                $scope.users.allUsersTemp = $scope.users.allUsers;
+                [].forEach.call($scope.users.userPickerManager,function(name){
+                    $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+                });
+                $scope.users.allUsersTemp.forEach(function(user){
+                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                    //copy user list into one list for contributors
+                    $scope.users.managementableUsers.push(user);
+                });
+
+                //$scope.users.managementableUsers=$scope.users.allUsers - $scope.users.userPickerContributor - $scope.users.userPickerManager;
+                //$scope.users.contributableUsers=$scope.users.allUsers - $scope.users.userPickerContributor - $scope.users.userPickerManager;
+                //$scope.$apply();
+                console.log("Geändert" + $scope.users.contributableUsers);
+            }
+        };
+
+        // get all users (for adding users to the project)
+        UsersFactory.query().$promise.then(function(response){
+
+            //add a field containing a readable caption for the users
+            response.forEach(function(user){
+                $scope.users.allUsers.push(user);
+                user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                //copy user list into one list for contributors
+                $scope.users.contributableUsers.push(user);
+                $scope.users.managementableUsers.push(user);
+            });
         }, function(error){
            ErrorHandler.handle("Could not fetch users from server.", error);
         });
@@ -521,6 +624,8 @@ materialAdmin
 
         };
     })
+*/
+
 
     //=================================================
     // PROJECT UPDATE
@@ -658,8 +763,15 @@ materialAdmin
         $scope.currentIID = $stateParams.iID;
         $scope.currentPID = $stateParams.pID;
 
+
+        $scope.hans="BLAH";
         IssueRetrieveFactory.show({issueID: $scope.currentIID}).$promise.then(function(response){
-            response=issue;
+            $scope.issue=response;
+            $scope.issue.title=response.title.trim();
+            $scope.issue.description=response.description.trim();
+            console.log($scope.issue.title);
+            console.log($scope.issue.description);
+            console.log($scope.issue);
         }, function(error){
             ErrorHandler.handle("Could not retrieve Issue Information.", error);
         });
@@ -678,36 +790,87 @@ materialAdmin
     // TASK CREATION
     //=================================================
 
-    .controller('createTaskCtrl', function ( $scope, IssuesFactory, $location, $window) {
+    .controller('createTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
+        TasksFactory, IssuesFactory, ProjectFactory, UserFactory) {
 
-          var counter = 0;
-          $scope.data = {
+        $scope.currentPID = $stateParams.pID;
+        //console.log("Current PID (Task): " + $scope.currentPID);
+        var counter = 0;
+        $scope.data = {
             stateFields: [],
             templateFields: []
-          }
+        }
 
-          $scope.states = ['New', 'Open', 'Closed'];
-          $scope.templates = ['Template 1', 'Template 2', 'Template 3'];
-
-          $scope.addState = function() {
+        $scope.states = ['Open', 'Closed'];
+        $scope.templates = ['Template 1', 'Template 2', 'Template 3'];
+        $scope.addState = function() {
             $scope.data.stateFields.push({
-              name: "test " + counter++
+                name: "test " + counter++
             });
-          };
-          $scope.addTemplate = function() {
+        };
+        $scope.addTemplate = function() {
             $scope.data.templateFields.push({
-              name: "test " + counter++
+                name: "test " + counter++
             });
-          };
-          $scope.removeTemplate = function() {
+        };
+        $scope.removeTemplate = function() {
             $scope.data.templateFields.pop();
-          };
-          $scope.removeState = function() {
+        };
+        $scope.removeState = function() {
             $scope.data.stateFields.pop();
-          };
-          $scope.createTask = function() {
+        };
 
-          };
+        ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
+            $scope.selectedProject=response;
+            $scope.userList=[];
+            //get user information for all users of the current project
+            $scope.selectedProject.allUser.forEach(function(participant){
+                UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                    user.userID={userID: user.userID.trim()};
+                    $scope.userList.push(user);
+                }, function(error){
+                    ErrorHandler.handle("Could not fetch users from server.", error);
+                });
+            });
+        }, function(error){
+            ErrorHandler.handle("Could not fetch project information from server.", error);
+        });
+        $scope.createTask = function() {
+            console.log($scope.taskType);
+            //if($scope.taskType=="cooperative"){
+                TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
+                    taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
+                userList: $scope.userPicker}).$promise.then(function(result){
+                    growlService.growl("Task created.");
+                    $state.go("viewProject", {pID:$scope.currentPID});
+                }, function(error){
+                    ErrorHandler.handle("Could not save task.", error);
+                });
+            /*}else{
+                var allUsers=$scope.userPicker;
+                var lastUserInList=allUsers[allUsers.length()-1];
+                console.log(lastUserInList);
+                $scope.userPicker.forEach(function(user){
+                    var userList=[];
+                    userList.push(user);
+                    console.log(userList);
+                    title=$scope.task.title + " " + user;
+                    TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
+                        taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
+                    userList: $userList}).$promise.then(function(result){
+                        if (user==lastUserInList){
+                            growlService.growl("Task created.");
+                            $state.go("viewProject", {pID:$scope.currentPID});
+                        }
+                    }, function(error){
+                        ErrorHandler.handle("Could not save task.", error);
+                    });
+                });
+            }*/
+            //console.log($scope.userPicker);
+        }
+
     })
 
     //=================================================
