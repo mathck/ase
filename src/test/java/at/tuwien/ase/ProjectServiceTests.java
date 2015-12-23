@@ -44,7 +44,7 @@ public class ProjectServiceTests {
     static ProjectService projectService;
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws  Exception{
         //executed only once, before the first test
         userDAO = Mockito.mock(UserDAO.class);
         projectDAO = Mockito.mock(ProjectDAO.class);
@@ -61,7 +61,7 @@ public class ProjectServiceTests {
 
     // @author: Mateusz Czernecki
     @Test
-    public void whenProjectIsDeleted_DeleteAllTasksAndIssuesToo() {
+    public void whenProjectIsDeleted_DeleteAllTasksAndIssuesToo() throws  Exception{
 
         // Arrange
         final int pID = 0;
@@ -86,7 +86,7 @@ public class ProjectServiceTests {
 
     // @author: Mateusz Czernecki
     @Test
-    public void writeProject_working() {
+    public void writeProject_working() throws  Exception{
 
         // Arrange
         final int pID = 0;
@@ -109,7 +109,7 @@ public class ProjectServiceTests {
 
     // @author: Mateusz Czernecki
     @Test(expected = IllegalArgumentException.class)
-    public void writeProject_invalidTitle() {
+    public void writeProject_invalidTitle() throws  Exception{
 
         // Arrange
         final int pID = 0;
@@ -132,7 +132,7 @@ public class ProjectServiceTests {
 
     // @author: Mateusz Czernecki
     @Test(expected = IllegalArgumentException.class)
-    public void writeProject_invalidDesc() {
+    public void writeProject_invalidDesc() throws  Exception{
 
         // Arrange
         final int pID = 0;
@@ -155,7 +155,7 @@ public class ProjectServiceTests {
 
     // @author: Mateusz Czernecki
     @Test
-    public void updateProject_working() {
+    public void updateProject_working() throws  Exception{
 
         // Arrange
         final int pID = 0;
@@ -178,7 +178,7 @@ public class ProjectServiceTests {
 
     // @author: Mateusz Czernecki
     @Test(expected = IllegalArgumentException.class)
-    public void updateProject_invalidTitle() {
+    public void updateProject_invalidTitle() throws  Exception{
 
         // Arrange
         final int pID = 0;
@@ -201,7 +201,7 @@ public class ProjectServiceTests {
 
     // @author: Mateusz Czernecki
     @Test(expected = IllegalArgumentException.class)
-    public void updateProject_invalidDesc() {
+    public void updateProject_invalidDesc() throws  Exception{
 
         // Arrange
         final int pID = 0;

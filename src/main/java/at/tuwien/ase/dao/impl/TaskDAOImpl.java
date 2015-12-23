@@ -42,7 +42,7 @@ public class TaskDAOImpl implements TaskDAO {
         taskType = new String("task");
     }
 
-    public void insertTask(Task task) {
+    public void insertTask(int pID, Task task) {
 
         logger.debug("insert into db: task with id=" + task.getId());
 
@@ -52,7 +52,7 @@ public class TaskDAOImpl implements TaskDAO {
         this.jdbcTemplate.update(
                 sqlQuery,
                 task.getId(),
-                task.getProjectId(),
+                pID,
                 task.getTitle(),
                 task.getDescription(),
                 task.getStatus(),

@@ -29,7 +29,7 @@ public class IssueServiceImpl implements IssueService {
     private IssueDAO issueDAO;
 
     @Autowired
-    private TaskService taskService;
+    private TaskDAO taskDAO;
 
 
     public IssueServiceImpl() {
@@ -56,7 +56,7 @@ public class IssueServiceImpl implements IssueService {
         issueDAO.removeIssueByID(iID);
 
         //insert task
-        taskService.writeTask(pID, task);
+        taskDAO.insertTask(pID, task);
 
     }
 

@@ -1,17 +1,16 @@
 package at.tuwien.ase.services.impl;
 
-import at.tuwien.ase.dao.ProjectDAO;
+import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.TaskDAO;
-import at.tuwien.ase.model.JsonStringWrapper;
-import at.tuwien.ase.model.Project;
-import at.tuwien.ase.model.Task;
-import at.tuwien.ase.model.User;
+import at.tuwien.ase.model.*;
+import at.tuwien.ase.model.javax.TaskElement;
+import at.tuwien.ase.model.javax.Template;
+import at.tuwien.ase.services.DslTemplateService;
 import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,34 +45,38 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.findByID(tID);
     }
 
-    public JsonStringWrapper writeTask(int pID, Task task) {
-        int id;
+    public void writeTask(int pID, Task task) throws Exception{
 
-        logger.debug("post new task to project with id="+pID);
+        logger.debug("post new task");
 
-        id = taskDAO.getNewID();
-        task.setId(id);
-        task.setCreationDate(new Date());
-        task.setUpdateDate(new Date());
-
-        //insert task to db
-        taskDAO.insertTask(task);
-
-        if (task.getUserList() != null && !task.getUserList().isEmpty())
-        {
-            for (User u : task.getUserList())
-            {
-                //assign user to task
-                taskDAO.addUserToTask(u.getUserID(), task.getId());
-            }
+        if (task.getTaskStates() == null ||  task.getTaskStates().isEmpty()
+                || task.getSubtaskList() == null ||  task.getSubtaskList().isEmpty()
+                || task.getExecutionType() == null || task.getExecutionType().equals("")){
+            throw new Exception("not all input values are present!");
         }
+
+        if (task.getExecutionType().equals("collaborative_task")) {
+
+            writeTaskAndSubtask(pID, task);
+
+        }else{
+
+            if (task.getExecutionType().equals("single_task")) {
+
+                String taskTitle = task.getTitle().trim();
+                if (task.getUserList() != null && !task.getUserList().isEmpty()) {
+                    for (User u : task.getUserList()) {
+                        task.setTitle(u.getFirstName() + ": " + taskTitle);
+                        writeTaskAndSubtask(pID, task);
+
+                    }
+                }
 
             }else{
                 throw new Exception("execution type not supported");
             }
         }
 
-        return new JsonStringWrapper(id);
     }
 
 
@@ -114,7 +117,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
 
-    private void writeTaskAndSubtask(Task task) throws Exception {
+    private void writeTaskAndSubtask(int pID, Task task) throws Exception {
 
         int taskId;
         DslTemplate dslTemplate;
@@ -131,7 +134,7 @@ public class TaskServiceImpl implements TaskService {
         task.setUpdateDate(new Date());
 
         //insert task to db
-        taskDAO.insertTask(task);
+        taskDAO.insertTask(pID, task);
 
         //add contributors to task
         if (task.getUserList() != null && !task.getUserList().isEmpty()) {
