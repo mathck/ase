@@ -20,6 +20,9 @@ public interface SubtaskDAO {
     LinkedList<Subtask> loadAllByUser(String uID);
 
     void addTaskItemToSubtask(TaskElementJson taskItem, int sID) throws Exception;
+    int updateTaskItemById(TaskElementJson taskItem) throws Exception;
+
+    int updateSubtaskById(int sID, Subtask subtask) throws Exception;
 
     int getNewID();
     int getNewIDForTaskItem();

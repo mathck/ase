@@ -4,6 +4,8 @@ import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Subtask;
+import at.tuwien.ase.model.TaskElementJson;
+import at.tuwien.ase.services.DslTemplateService;
 import at.tuwien.ase.services.SubtaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,6 +43,36 @@ public class SubtaskServiceImpl implements SubtaskService {
     public void deleteSubtaskByID(int sID) {
         logger.debug("delete subtask with id=" + sID);
         subtaskDAO.removeSubtaskByID(sID);
+    }
+
+    public void updateSubtask(int sID, Subtask subtask) throws Exception {
+        logger.debug("update subtask with id=" + sID);
+
+        if (subtaskDAO.updateSubtaskById(sID, subtask) == 0){
+            throw new Exception("subtask with ID="+sID+" could not be found");
+        }
+
+        if (subtask.getTaskElements() != null && !subtask.getTaskElements().isEmpty()) {
+
+            for (TaskElementJson t : subtask.getTaskElements()) {
+
+
+                //if no task item id set --> insert
+                if (t.getId() == null){
+                    //create new task item id
+                    t.setId(subtaskDAO.getNewIDForTaskItem());
+                    subtaskDAO.addTaskItemToSubtask(t, sID);
+                }else {
+                    //if task item id set --> update
+                    if (subtaskDAO.updateTaskItemById(t) == 0){
+                        throw new Exception("error while updating task items");
+                    }
+                }
+
+            }
+
+        }
+
     }
 
     public Subtask getByID(int sID) {

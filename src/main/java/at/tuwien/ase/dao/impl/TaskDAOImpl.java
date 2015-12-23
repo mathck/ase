@@ -329,23 +329,6 @@ public class TaskDAOImpl implements TaskDAO {
         return tasks;
     }
 
-    public void updateIssueToTask(int iID) {
-
-        logger.debug("update issue with id="+iID+" to task");
-
-        String sqlQuery = "UPDATE TASK " +
-                "SET TASK_TYPE = ?, UPDATE_DATE = ?, STATUS = ? " +
-                "WHERE ID = ?";
-
-                this.jdbcTemplate.update(
-                        sqlQuery,
-                        this.taskType,
-                        new Date(),
-                        new String("open"),
-                        iID);
-
-    }
-
     public void addUserToTask(String uID, int tID) {
 
         logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);

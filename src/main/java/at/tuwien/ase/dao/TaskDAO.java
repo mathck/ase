@@ -20,7 +20,6 @@ public interface TaskDAO {
     LinkedList<Task> loadAllByProject(int pID);
     LinkedList<Task> loadAllByUser(String uID);
 
-    void updateIssueToTask(int iID);
 
     //assign user to task
     void addUserToTask(String uID, int tID);

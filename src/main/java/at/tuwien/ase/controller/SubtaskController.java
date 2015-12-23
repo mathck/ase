@@ -76,4 +76,11 @@ public class SubtaskController {
         ts.deleteSubtaskByID(sID);
     }
 
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/tasks/subtasks/{sID}", method = RequestMethod.PATCH)
+    @ResponseBody
+    public void updateSubtask(@PathVariable("sID") int sID, @RequestBody Subtask subtask) throws Exception {
+        ts.updateSubtask(sID, subtask);
+    }
+
 }

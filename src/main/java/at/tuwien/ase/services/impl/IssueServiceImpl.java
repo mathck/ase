@@ -6,7 +6,9 @@ import at.tuwien.ase.dao.TaskDAO;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.Issue;
+import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.IssueService;
+import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,8 @@ public class IssueServiceImpl implements IssueService {
     private IssueDAO issueDAO;
 
     @Autowired
-    private TaskDAO taskDAO;
+    private TaskService taskService;
+
 
 
     private static final Logger logger = LogManager.getLogger(IssueServiceImpl.class);
@@ -36,13 +39,16 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public JsonStringWrapper updateIssueToTask(int iID) {
+    public void updateIssueToTask(int iID, int pID, Task task) throws Exception {
         logger.debug("update issue with id="+iID+" to task");
 
-        //update issue to task
-        taskDAO.updateIssueToTask(iID);
+        int tID;
 
-        return new JsonStringWrapper(iID);
+        //remove issue
+        issueDAO.removeIssueByID(iID);
+
+        //insert task
+        taskService.writeTask(pID, task);
 
     }
 

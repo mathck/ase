@@ -7,32 +7,32 @@ import java.util.LinkedList;
  */
 public class TaskElementJson {
 
-    private int id;
-    private int itemId;
+    private Integer id;
+    private Integer itemId;
     private String status;
     private String value;
     private String link;
     private String itemType;
-    private int subtaskId;
+    private Integer subtaskId;
 
     // Must have no-argument constructor
     public TaskElementJson() {
 
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getItemId() {
+    public Integer getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
 
@@ -68,11 +68,11 @@ public class TaskElementJson {
         this.itemType = itemType;
     }
 
-    public int getSubtaskId() {
+    public Integer getSubtaskId() {
         return subtaskId;
     }
 
-    public void setSubtaskId(int subtaskId) {
+    public void setSubtaskId(Integer subtaskId) {
         this.subtaskId = subtaskId;
     }
 
