@@ -12843,18 +12843,33 @@ a.thumbnail.active {
   overflow: hidden;
   height: 100%;
 }
+.mainLogo {
+    height:85px;
+    z-index: 500;
+    position:absolute !important;
+    top: 0px;
+    cursor: pointer;
+}
+.loginContainer {
+    position: relative;
+    display: inline-block;
+}
+.logoContainer {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+}
 .lc-block {
   background: #fff;
   box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
   border-radius: 2px;
   width: 500px;
   display: inline-block;
-  margin-top: 42px;
   vertical-align: middle;
   position: relative;
 }
 .lc-block:not(.lcb-alt) {
-  padding: 35px 55px 35px;
+  padding: 25px 55px 25px;
 }
 .lc-block:not(.lcb-alt) .btn-login {
   top: 50%;

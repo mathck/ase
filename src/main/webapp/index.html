@@ -22,8 +22,8 @@
 <body class="login-content" data-ng-controller="loginCtrl as lctrl" ng-keyup="$event.keyCode == 13 && lctrl.loginStat === 1 ? lctrl.loginUser() : ($event.keyCode == 13 && lctrl.register === 1 ? lctrl.createUser() : null)">
 
 <!-- Login -->
-<div style="position: relative; display: inline-block;" data-ng-if="lctrl.loginStat === 1">
-    <div style="position: relative; display: inline-block; margin-bottom: 20px;">
+<div class="loginContainer" data-ng-if="lctrl.loginStat === 1">
+    <div class="logoContainer">
         <img src="img/logo/TaskItLogo.png" width="180px">
     </div>
     <br>

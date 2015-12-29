@@ -13,7 +13,7 @@
                 <ul class="actions">
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger waves-effect" data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-arrow-back"></i>&nbsp;Cancel</button>
+                            <button class="btn btn-danger waves-effect" data-ui-sref="viewProject({pID: currentPID})" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-arrow-back"></i>&nbsp;Cancel</button>
                         </div>
                     </li>
                 </ul>
@@ -113,14 +113,14 @@
                         <div class="col-sm-12 m-b-15">
                             <div class="radio m-b-15">
                                 <label>
-                                    <input data-ng-model="taskType" value="cooperative" type="radio" checked="checked">
+                                    <input data-ng-model="taskType" type="radio" checked="checked">
                                     <i class="input-helper"></i>
                                     Cooperative Task
                                 </label>
                             </div>
                             <div class="radio m-b-15">
                                 <label>
-                                    <input data-ng-model="taskType" value="singleUser" type="radio">
+                                    <input data-ng-model="taskType" type="radio" value="">
                                     <i class="input-helper"></i>
                                     Single User Task
                                 </label>
