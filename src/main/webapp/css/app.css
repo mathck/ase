@@ -8564,7 +8564,8 @@ body #content {
   background-size: 100%;
 }
 #sidebar .profile-menu > a .profile-pic {
-  padding: 12px;
+  padding-top: 24px;
+  padding-bottom:0px;
 }
 #sidebar .profile-menu > a .profile-pic > img {
   width: 47px;

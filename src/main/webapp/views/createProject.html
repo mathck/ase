@@ -57,14 +57,14 @@
                 </div>
                 <div class="card-body card-padding"> <!-- data-ng-click="updateUsers()" -->
                     <div class="row">
-                        <div class="col-sm-8 m-b-15">
+                        <div class="col-sm-8 m-b-15" ng-click="updateContributors()">
                             <p class="f-500 c-black m-b-15">Contributor/s</p>
                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers | orderBy:'user.user.name'">
                             </select>
                         </div>
-                        <div class="col-sm-4 m-b-15">
+                        <div class="col-sm-4 m-b-15" ng-click="updateManagers()">
                             <p class="f-500 c-black m-b-15">Manager/s</p>
-                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers" data-ng-unfocus="updateUsers()">
+                            <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers">
                             </select>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2">Add Reward/s <small>Add rewards to increase the performance of your contributor/s...</small></h2>
+                    <h2>Add Reward/s <small>Add rewards to increase the performance of your contributor/s...</small></h2>
                 </div>
                 <div class="card-body card-padding">
                     <div class="row">
@@ -89,7 +89,7 @@
                 <ul class="actions">
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project" data-ng-click="createProject()"><i class="zmdi zmdi-check"></i>Create Project</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Project" data-ng-click="updateContributors(); updateManagers(); createProject()"><i class="zmdi zmdi-check"></i>Create Project</button>
                         </div>
                     </li>
                 </ul>

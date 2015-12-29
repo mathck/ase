@@ -13,289 +13,305 @@
     <!-- CSS -->
     <link href="css/app.css" rel="stylesheet">
     <!-- <link href="css/app.min.2.css" rel="stylesheet"> -->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img/favicon/TaskIt.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon/TaskIt.ico" type="image/x-icon">
 </head>
 
 <body class="login-content" data-ng-controller="loginCtrl as lctrl" ng-keyup="$event.keyCode == 13 && lctrl.loginStat === 1 ? lctrl.loginUser() : ($event.keyCode == 13 && lctrl.register === 1 ? lctrl.createUser() : null)">
+
 <!-- Login -->
-<div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.loginStat === 1 }" data-ng-if="lctrl.loginStat === 1"><!-- data-ng-app="restLoginApp" data-ng-controller="restLoginCtrl" -->
-    <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
-        <div class="fg-line">
-            <input type="text" class="form-control" placeholder="E-Mail" data-ng-model="lctrl.login.email" autofocus>
+<div style="position: relative; display: inline-block;" data-ng-if="lctrl.loginStat === 1">
+    <div style="position: relative; display: inline-block; margin-bottom: 20px;">
+        <img src="img/logo/TaskItLogo.png" width="180px">
+    </div>
+    <br>
+    <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.loginStat === 1 }" data-ng-if="lctrl.loginStat === 1"><!-- data-ng-app="restLoginApp" data-ng-controller="restLoginCtrl" -->
+        <div class="input-group m-b-20">
+            <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+            <div class="fg-line">
+                <input type="text" class="form-control" placeholder="E-Mail" data-ng-model="lctrl.login.email" autofocus>
+            </div>
         </div>
-    </div>
 
-    <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
-        <div class="fg-line">
-            <input type="password" class="form-control" placeholder="Password" data-ng-model="lctrl.login.password">
+        <div class="input-group m-b-20">
+            <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
+            <div class="fg-line">
+                <input type="password" class="form-control" placeholder="Password" data-ng-model="lctrl.login.password">
+            </div>
         </div>
+        <div data-ng-show="loginFail"><b>Could not log you in. Wrong username or password.<br><i> Please try again.</i></b> </div>
+        <div class="clearfix"></div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="">
+                <i class="input-helper"></i>
+                Keep me signed in
+            </label>
+        </div>
+
+        <a href="" class="btn btn-login bgm-teal btn-float" data-ng-click="lctrl.loginUser()"><i class="zmdi zmdi-arrow-forward"></i></a>
+
+        <ul class="login-navigation">
+            <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.loginStat = 0; lctrl.register = 1">Register</li>
+            <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.loginStat = 0; lctrl.forgot = 1">Forgot Password?</li>-->
+        </ul>
     </div>
-    <div data-ng-show="loginFail"><b>Could not log you in. Wrong username or password.<br><i> Please try again.</i></b> </div>
-    <div class="clearfix"></div>
-
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" value="">
-            <i class="input-helper"></i>
-            Keep me signed in
-        </label>
-    </div>
-
-    <a href="" class="btn btn-login bgm-teal btn-float" data-ng-click="lctrl.loginUser()"><i class="zmdi zmdi-arrow-forward"></i></a>
-
-    <ul class="login-navigation">
-        <li data-block="#l-register" class="bgm-blue" data-ng-click="lctrl.loginStat = 0; lctrl.register = 1">Register</li>
-        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.loginStat = 0; lctrl.forgot = 1">Forgot Password?</li>-->
-    </ul>
 </div>
 
 <!-- Register -->
-<div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1"><!-- data-ng-app="restRegisterApp" data-ng-controller="restRegisterCtrl" -->
+<div style="position: relative; display: inline-block;" data-ng-if="lctrl.register === 1">
+    <div style="position: relative; display: inline-block; margin-bottom: 20px;">
+        <img src="img/logo/TaskItLogo.png" width="180px">
+    </div>
+    <br>
+    <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1"><!-- data-ng-app="restRegisterApp" data-ng-controller="restRegisterCtrl" -->
 
-    <div class="card-body card-padding p-t-0" data-ng-controller="ModalCtrl as modalCtrl">
+        <div class="card-body card-padding p-t-0" data-ng-controller="ModalCtrl as modalCtrl">
 
-        <script type="text/ng-template" id="myModalContent.html">
+            <script type="text/ng-template" id="myModalContent.html">
 
-            <div class="modal-body">
-                <!--<p>{{ modalContent }}</p>-->
-                <div class="card-body card-padding">
+                <div class="modal-body">
+                    <!--<p>{{ modalContent }}</p>-->
+                    <div class="card-body card-padding">
 
-                    <div class="lightbox row">
-                        <div data-src="img/avatars/0.png"  data-ng-click="changeAvatar(0)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/0.png" alt="" />
+                        <div class="lightbox row">
+                            <div data-src="img/avatars/0.png"  data-ng-click="changeAvatar(0)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/0.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/1.png" data-ng-click="changeAvatar(1)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/1.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/2.png" data-ng-click="changeAvatar(2)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/2.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/3.png" data-ng-click="changeAvatar(3)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/3.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/4.png" data-ng-click="changeAvatar(4)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/4.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/5.png" data-ng-click="changeAvatar(5)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/5.png" alt="" />
+                                </div>
                             </div>
                         </div>
-                        <div data-src="img/avatars/1.png" data-ng-click="changeAvatar(1)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/1.png" alt="" />
+                        <div class="lightbox row">
+                            <div data-src="img/avatars/6.png" data-ng-click="changeAvatar(6)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/6.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/7.png" data-ng-click="changeAvatar(7)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/7.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/8.png" data-ng-click="changeAvatar(8)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/8.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/9.png" data-ng-click="changeAvatar(9)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/9.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/10.png" data-ng-click="changeAvatar(10)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/10.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/11.png" data-ng-click="changeAvatar(11)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/11.png" alt="" />
+                                </div>
                             </div>
                         </div>
-                        <div data-src="img/avatars/2.png" data-ng-click="changeAvatar(2)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/2.png" alt="" />
+                        <div class="lightbox row">
+                            <div data-src="img/avatars/12.png" data-ng-click="changeAvatar(12)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/12.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/13.png" data-ng-click="changeAvatar(13)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/13.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/14.png" data-ng-click="changeAvatar(14)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/14.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/15.png" data-ng-click="changeAvatar(15)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/15.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/16.png" data-ng-click="changeAvatar(16)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/16.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/17.png" data-ng-click="changeAvatar(17)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/17.png" alt="" />
+                                </div>
                             </div>
                         </div>
-                        <div data-src="img/avatars/3.png" data-ng-click="changeAvatar(3)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/3.png" alt="" />
+                        <div class="lightbox row">
+                            <div data-src="img/avatars/18.png" data-ng-click="changeAvatar(18)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/18.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/19.png" data-ng-click="changeAvatar(19)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/19.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/20.png" data-ng-click="changeAvatar(20)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/20.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/21.png" data-ng-click="changeAvatar(21)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/21.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/22.png" data-ng-click="changeAvatar(22)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/22.png" alt="" />
+                                </div>
+                            </div>
+                            <div data-src="img/avatars/23.png" data-ng-click="changeAvatar(23)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/23.png" alt="" />
+                                </div>
                             </div>
                         </div>
-                        <div data-src="img/avatars/4.png" data-ng-click="changeAvatar(4)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/4.png" alt="" />
+                        <div class="lightbox row">
+                            <div data-src="img/avatars/24.png" data-ng-click="changeAvatar(24)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/24.png" alt="" />
+                                </div>
                             </div>
-                        </div>
-                        <div data-src="img/avatars/5.png" data-ng-click="changeAvatar(5)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/5.png" alt="" />
+                            <div data-src="img/avatars/25.png" data-ng-click="changeAvatar(25)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/25.png" alt="" />
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="lightbox row">
-                        <div data-src="img/avatars/6.png" data-ng-click="changeAvatar(6)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/6.png" alt="" />
+                            <div data-src="img/avatars/26.png" data-ng-click="changeAvatar(26)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/26.png" alt="" />
+                                </div>
                             </div>
-                        </div>
-                        <div data-src="img/avatars/7.png" data-ng-click="changeAvatar(7)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/7.png" alt="" />
+                            <div data-src="img/avatars/27.png" data-ng-click="changeAvatar(27)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/27.png" alt="" />
+                                </div>
                             </div>
-                        </div>
-                        <div data-src="img/avatars/8.png" data-ng-click="changeAvatar(8)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/8.png" alt="" />
+                            <div data-src="img/avatars/28.png" data-ng-click="changeAvatar(28)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/28.png" alt="" />
+                                </div>
                             </div>
-                        </div>
-                        <div data-src="img/avatars/9.png" data-ng-click="changeAvatar(9)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/9.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/10.png" data-ng-click="changeAvatar(10)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/10.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/11.png" data-ng-click="changeAvatar(11)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/11.png" alt="" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lightbox row">
-                        <div data-src="img/avatars/12.png" data-ng-click="changeAvatar(12)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/12.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/13.png" data-ng-click="changeAvatar(13)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/13.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/14.png" data-ng-click="changeAvatar(14)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/14.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/15.png" data-ng-click="changeAvatar(15)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/15.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/16.png" data-ng-click="changeAvatar(16)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/16.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/17.png" data-ng-click="changeAvatar(17)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/17.png" alt="" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lightbox row">
-                        <div data-src="img/avatars/18.png" data-ng-click="changeAvatar(18)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/18.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/19.png" data-ng-click="changeAvatar(19)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/19.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/20.png" data-ng-click="changeAvatar(20)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/20.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/21.png" data-ng-click="changeAvatar(21)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/21.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/22.png" data-ng-click="changeAvatar(22)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/22.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/23.png" data-ng-click="changeAvatar(23)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/23.png" alt="" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lightbox row">
-                        <div data-src="img/avatars/24.png" data-ng-click="changeAvatar(24)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/24.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/25.png" data-ng-click="changeAvatar(25)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/25.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/26.png" data-ng-click="changeAvatar(26)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/26.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/27.png" data-ng-click="changeAvatar(27)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/27.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/28.png" data-ng-click="changeAvatar(28)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/28.png" alt="" />
-                            </div>
-                        </div>
-                        <div data-src="img/avatars/29.png" data-ng-click="changeAvatar(29)" class="col-sm-2 col-xs-6">
-                            <div class="lightbox-item">
-                                <img src="img/avatars/29.png" alt="" />
+                            <div data-src="img/avatars/29.png" data-ng-click="changeAvatar(29)" class="col-sm-2 col-xs-6">
+                                <div class="lightbox-item">
+                                    <img src="img/avatars/29.png" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-link" ng-click="cancel()">Cancel</button>
-            </div>
-        </script>
-        <div class="lightbox row">
-            <div data-src="img/avatars/0.png" class="col-xs-5 centered">
-                <div class="lightbox-item" ng-click="open('lg')">
-                    <img src="{{avatar}}" alt="" />
+                <div class="modal-footer">
+                    <button class="btn btn-link" ng-click="cancel()">Cancel</button>
+                </div>
+            </script>
+            <div class="lightbox row">
+                <div data-src="img/avatars/0.png" class="col-xs-5 centered">
+                    <div class="lightbox-item" ng-click="open('lg')">
+                        <img ng-src="{{avatar}}" alt="" />
+                    </div>
                 </div>
             </div>
+            <button class="btn bgm-teal waves-effect" data-swal-warning="" ng-click="open('lg')">Select Avatar</button>
+
         </div>
-        <button class="btn bgm-teal waves-effect" data-swal-warning="" ng-click="open('lg')">Select Avatar</button>
 
-    </div>
-
-    <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-        <div ng-class="!firstNameFail ? 'fg-line' : 'fg-line has-feedback has-error'">
-            <input type="text" id="firstName" class="form-control" placeholder="First Name" data-ng-model="lctrl.user.firstName">
+        <div class="input-group m-b-20">
+            <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+            <div ng-class="!firstNameFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                <input type="text" id="firstName" class="form-control" placeholder="First Name" data-ng-model="lctrl.user.firstName">
+            </div>
+            <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="firstNameFail"></span>
         </div>
-        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="firstNameFail"></span>
-    </div>
 
-    <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-        <div ng-class="!lastNameFail ? 'fg-line' : 'fg-line has-feedback has-error'">
-            <input type="text" id="lastName" class="form-control" placeholder="Last Name" data-ng-model="lctrl.user.lastName">
+        <div class="input-group m-b-20">
+            <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+            <div ng-class="!lastNameFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                <input type="text" id="lastName" class="form-control" placeholder="Last Name" data-ng-model="lctrl.user.lastName">
+            </div>
+            <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="lastNameFail"></span>
         </div>
-        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="lastNameFail"></span>
-    </div>
 
-    <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
-        <div ng-class="!emailFail ? 'fg-line' : 'fg-line has-feedback has-error'">
-            <input type="text" id="email" class="form-control" placeholder="Email Address" data-ng-model="lctrl.user.userID">
+        <div class="input-group m-b-20">
+            <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+            <div ng-class="!emailFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                <input type="text" id="email" class="form-control" placeholder="Email Address" data-ng-model="lctrl.user.userID">
+            </div>
+            <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="emailFail"></span>
         </div>
-        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="emailFail"></span>
-    </div>
 
-    <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
-        <div ng-class="!passwordFail ? 'fg-line' : 'fg-line has-feedback has-error'">
-            <input type="password" id="password" class="form-control" placeholder="Password" data-ng-model="lctrl.user.password" tooltip-class="tooltip-blue" tooltip-trigger="focus" tooltip="At least 8 Characters" tooltip-placement="right">
+        <div class="input-group m-b-20">
+            <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
+            <div ng-class="!passwordFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                <input type="password" id="password" class="form-control" placeholder="Password" data-ng-model="lctrl.user.password" tooltip-class="tooltip-blue" tooltip-trigger="focus" tooltip="At least 8 Characters" tooltip-placement="right">
+            </div>
+            <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="passwordFail"></span>
         </div>
-        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="passwordFail"></span>
-    </div>
 
-    <div class="input-group m-b-20">
-        <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
-        <div ng-class="!passwordMatchFail ? 'fg-line' : 'fg-line has-feedback has-error'">
-            <input type="password" id="passwordRepeat" class="form-control" placeholder="Re-Enter Password" data-ng-model="lctrl.passwordCheck" tooltip-class="tooltip-blue" tooltip-trigger="focus" tooltip="Repeat Password" tooltip-placement="right" ng-blur="passwordMatch()">
+        <div class="input-group m-b-20">
+            <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
+            <div ng-class="!passwordMatchFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                <input type="password" id="passwordRepeat" class="form-control" placeholder="Re-Enter Password" data-ng-model="lctrl.passwordCheck" tooltip-class="tooltip-blue" tooltip-trigger="focus" tooltip="Repeat Password" tooltip-placement="right" ng-blur="passwordMatch()">
+            </div>
+            <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="passwordMatchFail"></span>
         </div>
-        <span class="zmdi zmdi-close form-control-feedback c-red" ng-show="passwordMatchFail"></span>
+
+        <!-- Error Messages -->
+        <small class="help-block c-red" ng-show="firstNameFail">First Name is Empty!</small>
+        <small class="help-block c-red" ng-show="lastNameFail">Last Name is Empty!</small>
+        <small class="help-block c-red" ng-show="emailFail">Email Address is Empty!</small>
+        <small class="help-block c-red" ng-show="passwordFail">Password is too short!</small>
+        <small class="help-block c-red" ng-show="passwordMatchFail">Passwords do not match!</small>
+        <small class="help-block c-red" ng-show="registrationFail">Could not register user: {{errorMessage}} <br> - already registered?!</small>
+
+        <div class="clearfix"></div>
+
+        <a href="" class="btn btn-login bgm-teal btn-float" data-ng-model="registerButton" data-ng-click="lctrl.createUser()"><i class="zmdi zmdi-arrow-forward"></i></a>
+
+        <ul class="login-navigation">
+            <li data-block="#l-login" class="bgm-blue" data-ng-click="lctrl.register = 0; lctrl.loginStat = 1">Login</li>
+            <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">Forgot Password?</li>-->
+        </ul>
     </div>
-
-    <!-- Error Messages -->
-    <small class="help-block c-red" ng-show="firstNameFail">First Name is Empty!</small>
-    <small class="help-block c-red" ng-show="lastNameFail">Last Name is Empty!</small>
-    <small class="help-block c-red" ng-show="emailFail">Email Address is Empty!</small>
-    <small class="help-block c-red" ng-show="passwordFail">Password is too short!</small>
-    <small class="help-block c-red" ng-show="passwordMatchFail">Passwords do not match!</small>
-    <small class="help-block c-red" ng-show="registrationFail">Could not register user: {{errorMessage}} <br> - already registered?!</small>
-
-    <div class="clearfix"></div>
-
-    <a href="" class="btn btn-login bgm-teal btn-float" data-ng-model="registerButton" data-ng-click="lctrl.createUser()"><i class="zmdi zmdi-arrow-forward"></i></a>
-
-    <ul class="login-navigation">
-        <li data-block="#l-login" class="bgm-blue" data-ng-click="lctrl.register = 0; lctrl.loginStat = 1">Login</li>
-        <!--<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">Forgot Password?</li>-->
-    </ul>
 </div>
-
 <!-- Forgot Password -->
 <!--
 <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }" data-ng-if="lctrl.forgot === 1">
