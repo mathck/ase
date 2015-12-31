@@ -30,5 +30,4 @@ public interface ProjectService {
     void removeUser(int pID, String uID);
 
     void updateTime(int projectID);
-
 }

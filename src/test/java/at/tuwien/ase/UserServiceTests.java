@@ -78,6 +78,7 @@ public class UserServiceTests {
 
         assertNotNull(user);
         assertNotEquals(password, user.getPassword());
+        // mockito reset todo
     }
 
     // @author: Mateusz Czernecki
