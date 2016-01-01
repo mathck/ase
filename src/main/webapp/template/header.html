@@ -92,21 +92,21 @@
             <li class="dropdown hidden-xs" dropdown>
                 <a dropdown-toggle class="tm-task" href=""><i class="tmn-counts">5</i></a>
                 <div class="dropdown-menu pull-right dropdown-menu-lg">
-                    <div class="card" data-ng-controller="recentpostCtrl as rpctrl">
+                    <div class="card" data-ng-controller="headerCtrl as hdctrl">
                         <div class="listview">
                             <div class="lv-header">
                                 Issues
                             </div>
                             <div class="lv-body">
-                                <a class="lv-item" data-ui-sref="viewIssue" data-ng-repeat="w in rpctrl.rpResult.list">
+                                <a class="lv-item" data-ui-sref="viewIssue" data-ng-repeat="i in hdctrl.issues">
                                     <div class="media">
                                         <div class="pull-left">
-                                            <img class="lv-img-sm" data-ng-src="img/avatars/{{ w.img }}" alt="">
+                                            <img class="lv-img-sm" data-ng-src="" alt=""><!--{{ i.user.avatar }}-->
                                         </div>
                                         <div class="media-body">
-                                            <div class="lv-title">Wrong Design</div>
-                                            <small class="lv-small">{{ w.text }}</small>
-                                            <small class="ms-date"><i class="zmdi"></i> by {{ w.user }}</small>
+                                            <div class="lv-title">{{ i.title }}</div>
+                                            <small class="lv-small">{{ i.description }}</small>
+                                            <small class="ms-date"><i class="zmdi"></i> by </small><!--{{ i.user.firstName }} {{ i.user.lastName }}-->
                                         </div>
                                     </div>
                                 </a>

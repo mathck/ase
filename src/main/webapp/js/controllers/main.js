@@ -87,7 +87,7 @@ materialAdmin
     // =========================================================================
     // Header
     // =========================================================================
-    .controller('headerCtrl', function($timeout, messageService){
+    .controller('headerCtrl', function($scope, $timeout, messageService, IssuesMessageBoxFactory, TokenService){
     
          // Top Search
         this.openSearch = function(){
@@ -98,17 +98,40 @@ materialAdmin
         this.closeSearch = function(){
             angular.element('#header').removeClass('search-toggled');
         }
-        
+
+
+
+        $scope.filter="";
+        IssuesMessageBoxFactory.query({uID: TokenService.username}).$promise.then(function(response){
+
+            response.forEach(function(issue){
+                issue.title=issue.title.trim();
+
+                if(issue.description == null)
+                    issue.description = "";
+                else
+                    issue.description=issue.description.trim();
+            });
+            $scope.issues=response;
+            $scope.issues.forEach
+        }, function(error){
+           ErrorHandler.handle("Could not fetch issues.", error);
+        });
+
+
+
+
+
         // Get messages and notification for header
-        this.img = messageService.img;
+        /*this.img = messageService.img;
         this.user = messageService.user;
-        this.user = messageService.text;
+        this.text = messageService.text;
 
         this.messageResult = messageService.getMessage(this.img, this.user, this.text);
-
+        */
 
         //Clear Notification
-        this.clearNotification = function($event) {
+        /*this.clearNotification = function($event) {
             $event.preventDefault();
             
             var x = angular.element($event.target).closest('.listview');
@@ -133,7 +156,7 @@ materialAdmin
             $timeout(function(){
                 angular.element('#notifications').addClass('empty');
             }, (z*150)+200);
-        }
+        }*/
         
         // Clear Local Storage
         this.clearLocalStorage = function() {
