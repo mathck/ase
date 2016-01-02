@@ -2,6 +2,7 @@ package at.tuwien.ase.services;
 
 import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.model.JsonStringWrapper;
+import at.tuwien.ase.model.Task;
 
 import java.util.LinkedList;
 
@@ -23,6 +24,6 @@ public interface IssueService {
 
     LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID);
 
-    JsonStringWrapper updateIssueToTask(int iID);
+    void updateIssueToTask(int iID, int pID, Task task) throws Exception;
 
 }

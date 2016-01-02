@@ -1,0 +1,1 @@
+%JAVA_HOME%\bin\xjc.exe ..\template.xsd -d ..\..\..\..\main\java\ -p at.tuwien.ase.model.javax -b binding.xml

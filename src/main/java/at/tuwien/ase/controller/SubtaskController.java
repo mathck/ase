@@ -33,13 +33,13 @@ public class SubtaskController {
     public Subtask getSubtaskByID(@PathVariable("sID") int sID) throws Exception {
         return ts.getByID(sID);
     }
-
+/*
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public JsonStringWrapper createSubtask(@RequestBody Subtask subtask) throws Exception {
         return ts.writeSubtask(subtask);
-    }
+    }*/
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks", method = RequestMethod.GET)
@@ -74,6 +74,13 @@ public class SubtaskController {
     @ResponseBody
     public void deleteSubtasksByID(@PathVariable("sID") int sID)  throws Exception {
         ts.deleteSubtaskByID(sID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/tasks/subtasks/{sID}", method = RequestMethod.PATCH)
+    @ResponseBody
+    public void updateSubtask(@PathVariable("sID") int sID, @RequestBody Subtask subtask) throws Exception {
+        ts.updateSubtask(sID, subtask);
     }
 
 }

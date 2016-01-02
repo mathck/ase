@@ -16,6 +16,8 @@ public interface SubtaskService {
 
     void deleteSubtaskByID(int sID);
 
+    void updateSubtask(int sID, Subtask subtask) throws Exception;
+
     Subtask getByID(int sID);
     LinkedList<Subtask> getAllSubtasks();
     LinkedList<Subtask> getAllSubtasksFromTask(int tID);

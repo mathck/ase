@@ -1,6 +1,7 @@
 package at.tuwien.ase.model;
 
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * Created by mathc_000 on 05-Nov-15.
@@ -12,13 +13,17 @@ public class Subtask {
     private String description;
     private int taskId; //reference to task ('consists of')
     private String status;
+    private String taskBody;
+    private Integer dslTemplateId;
     private int xp;
     private Date creationDate;
     private Date updateDate;
 
+    private LinkedList<TaskElementJson> taskElements;
+
     // Must have no-argument constructor
     public Subtask() {
-
+        taskElements = new LinkedList<TaskElementJson>();
     }
 
     public Subtask(String title, String description, int taskId, String status, int xp, Date creationDate, Date updateDate) {
@@ -95,6 +100,34 @@ public class Subtask {
         this.updateDate = updateDate;
     }
 
+    public Integer getDslTemplateId() {
+        return dslTemplateId;
+    }
+
+    public void setDslTemplateId(Integer dslTemplateId) {
+        this.dslTemplateId = dslTemplateId;
+    }
+
+    public String getTaskBody() {
+        return taskBody;
+    }
+
+    public void setTaskBody(String taskBody) {
+        this.taskBody = taskBody;
+    }
+
+    public LinkedList<TaskElementJson> getTaskElements() {
+        return taskElements;
+    }
+
+    public void setTaskElements(LinkedList<TaskElementJson> taskElements) {
+        this.taskElements = taskElements;
+    }
+
+    public void addTaskElement(TaskElementJson taskElement) {
+        this.taskElements.add(taskElement);
+    }
+
     @Override
     public String toString() {
         return "Subtask{" +
@@ -103,9 +136,12 @@ public class Subtask {
                 ", description='" + description + '\'' +
                 ", taskId=" + taskId +
                 ", status='" + status + '\'' +
+                ", taskBody='" + taskBody + '\'' +
+                ", dslTemplateId=" + dslTemplateId +
                 ", xp=" + xp +
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +
+                ", taskElements=" + taskElements +
                 '}';
     }
 }

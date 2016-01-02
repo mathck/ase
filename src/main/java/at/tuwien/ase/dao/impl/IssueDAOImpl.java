@@ -76,7 +76,7 @@ public class IssueDAOImpl implements IssueDAO {
 
         logger.debug("retrieve from db: issue with id=" + issueId);
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, DSL_TEMPLATE_ID, PROJECT_ID, USER_MAIL, STATUS " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, PROJECT_ID, USER_MAIL, STATUS " +
                 "FROM TASK " +
                 "WHERE ID = ? AND TASK_TYPE = ?";
 

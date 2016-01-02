@@ -67,7 +67,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @param project
      * @return
      */
-    public JsonStringWrapper writeProject(Project project) {
+    public JsonStringWrapper writeProject(Project project) throws Exception {
         if(project.getTitle() != null && project.getTitle().length() > 3) {
             if(project.getDescription() != null && project.getDescription().length() > 3) {
                 project.setCreationTimeDB(new Timestamp(new Date().getTime()));

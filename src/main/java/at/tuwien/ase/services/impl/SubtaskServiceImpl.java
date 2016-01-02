@@ -4,6 +4,8 @@ import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Subtask;
+import at.tuwien.ase.model.TaskElementJson;
+import at.tuwien.ase.services.DslTemplateService;
 import at.tuwien.ase.services.SubtaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,11 +30,13 @@ public class SubtaskServiceImpl implements SubtaskService {
         logger.debug("create new subtask");
         int id;
 
+        //set id and date
         id = subtaskDAO.getNewID();
         subtask.setId(id);
         subtask.setCreationDate(new Date());
         subtask.setUpdateDate(new Date());
 
+        //insert subtask
         subtaskDAO.insertSubtask(subtask);
 
         return new JsonStringWrapper(id);
@@ -41,6 +45,40 @@ public class SubtaskServiceImpl implements SubtaskService {
     public void deleteSubtaskByID(int sID) {
         logger.debug("delete subtask with id=" + sID);
         subtaskDAO.removeSubtaskByID(sID);
+    }
+
+    public void updateSubtask(int sID, Subtask subtask) throws Exception {
+        logger.debug("update subtask with id=" + sID);
+
+        if (subtaskDAO.updateSubtaskById(sID, subtask) == 0){
+            throw new Exception("subtask with ID="+sID+" could not be found");
+        }
+
+
+        //TODO improvement: Is it even allowed to add new task elements or to delete/modify existing ones?
+        //TODO close subtasks and tasks
+
+        if (subtask.getTaskElements() != null && !subtask.getTaskElements().isEmpty()) {
+
+            for (TaskElementJson t : subtask.getTaskElements()) {
+
+
+                //if no task item id set --> insert
+                if (t.getId() == null){
+                    //create new task item id
+                    t.setId(subtaskDAO.getNewIDForTaskItem());
+                    subtaskDAO.addTaskItemToSubtask(t, sID);
+                }else {
+                    //if task item id set --> update
+                    if (subtaskDAO.updateTaskItemById(t) == 0){
+                        throw new Exception("error while updating task items");
+                    }
+                }
+
+            }
+
+        }
+
     }
 
     public Subtask getByID(int sID) {
