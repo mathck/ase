@@ -97,7 +97,6 @@ public class TestdataController {
                         "task",
                         new Date(),
                         new Date(),
-                        null,
                         project.getProjectID(),
                         teachers.get(i).getUserID()));
 

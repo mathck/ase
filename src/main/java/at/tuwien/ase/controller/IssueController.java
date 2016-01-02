@@ -3,6 +3,7 @@ package at.tuwien.ase.controller;
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.model.JsonStringWrapper;
+import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.IssueService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,10 +63,10 @@ public class IssueController {
     }
 
     // @author Daniel Hofer
-    @RequestMapping(value = "workspace/projects/issues/{iID}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "workspace/projects/{pID}/issues/{iID}", method = RequestMethod.PATCH)
     @ResponseBody
-    public JsonStringWrapper updateIssueToTask(@PathVariable("iID") int iID) throws Exception  {
-        return is.updateIssueToTask(iID);
+    public void updateIssueToTask(@PathVariable("pID") int pID, @PathVariable("iID") int iID, @RequestBody Task task) throws Exception  {
+        is.updateIssueToTask(iID, pID, task);
     }
 
     // @author Daniel Hofer

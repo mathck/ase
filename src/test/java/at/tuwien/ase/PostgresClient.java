@@ -19,7 +19,7 @@ public class PostgresClient {
         TaskDAO taskDAO = (TaskDAO) context.getBean("taskDAO");
         Task task = new Task("taskTitle", "taskDescription");
         task.setId(1);
-        taskDAO.insertTask(task);
+        taskDAO.insertTask(task.getId(), task);
 
         //read task from db
         Task task1 = taskDAO.findByID(1);
