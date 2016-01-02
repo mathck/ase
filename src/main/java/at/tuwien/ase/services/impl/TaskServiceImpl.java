@@ -119,6 +119,11 @@ public class TaskServiceImpl implements TaskService {
 
     private void writeTaskAndSubtask(int pID, Task task) throws Exception {
 
+        //TODO performance improvement
+        // 1. store all task elements of a specific template as linkedList to db (during template creation).
+        // 2. use batch inserts for users, states, task elements
+        // 3. for single tasks: start a thread for each user or for a set of users
+
         int taskId;
         DslTemplate dslTemplate;
         Template template;
@@ -171,7 +176,7 @@ public class TaskServiceImpl implements TaskService {
                 subtask.setTaskId(taskId);
                 subtask.setTitle(template.getIdentifier().getTitle());
                 subtask.setDescription(template.getIdentifier().getDescription());
-                //s.setStatus(); // TODO
+                //s.setStatus(); // TODO: does a subtask state even exist?
                 subtask.setXp(template.getIdentifier().getEstimatedWorkTime().intValue());
                 subtask.setCreationDate(new Date());
                 subtask.setUpdateDate(new Date());

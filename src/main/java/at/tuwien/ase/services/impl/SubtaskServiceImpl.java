@@ -30,11 +30,13 @@ public class SubtaskServiceImpl implements SubtaskService {
         logger.debug("create new subtask");
         int id;
 
+        //set id and date
         id = subtaskDAO.getNewID();
         subtask.setId(id);
         subtask.setCreationDate(new Date());
         subtask.setUpdateDate(new Date());
 
+        //insert subtask
         subtaskDAO.insertSubtask(subtask);
 
         return new JsonStringWrapper(id);
@@ -51,6 +53,10 @@ public class SubtaskServiceImpl implements SubtaskService {
         if (subtaskDAO.updateSubtaskById(sID, subtask) == 0){
             throw new Exception("subtask with ID="+sID+" could not be found");
         }
+
+
+        //TODO improvement: Is it even allowed to add new task elements or to delete/modify existing ones?
+        //TODO close subtasks and tasks
 
         if (subtask.getTaskElements() != null && !subtask.getTaskElements().isEmpty()) {
 
