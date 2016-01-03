@@ -8,7 +8,7 @@
     <section id="content" data-ng-controller="viewIssue as vICtrl">
         <div class="container">
             <div class="block-header">
-                <h2>View Issue {{hans}}</h2>
+                <h2>View Issue</h2>
 
                 <ul class="actions">
                     <li>
@@ -26,7 +26,8 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2>Related to {{project.title}}
+                    <h2>Related to: {{selectedProject.title}}
+                        <small>By: {{issue.userId}}</small>
                         <small>Discard an issue or convert it to a task.</small></h2>
                 </div>
 

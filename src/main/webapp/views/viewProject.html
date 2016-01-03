@@ -18,7 +18,7 @@
                     </li>
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Project" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="saveProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Save Project" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="saveProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
                         </div>
                     </li>
                 </ul>
@@ -34,15 +34,15 @@
                         <div class="col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
-                                <div class="fg-line">
-                                        <input type="text" class="form-control input-lg" placeholder="<<Title>>" data-ng-model="selectedProject.title">
+                                <div ng-class="!titleFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                                    <input type="text" id="projectTitle" class="form-control input-lg" placeholder="<<Title>>" data-ng-model="selectedProject.title" tooltip-class="tooltip-blue" tooltip-enable="titleFail" tooltip-trigger="focus" tooltip="Cannot be empty!" tooltip-placement="right">
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <p class="c-black f-500 m-b-20 m-t-20">Description</p>
-                            <div class="fg-line">
-                                <textarea class="form-control input-md description" placeholder="<<Your description...>>" data-ng-model="selectedProject.description"></textarea>
+                            <div ng-class="!descriptionFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                                <textarea id="projectDescription" class="form-control input-md description" placeholder="<<Your description...>>" data-ng-model="selectedProject.description" tooltip-class="tooltip-blue" tooltip-enable="descriptionFail" tooltip-trigger="focus" tooltip="Cannot be empty!" tooltip-placement="right"></textarea>
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                             <div class="card-header bgm-task">
                                 <div class="input-group" data-ui-sref="createTask({pID: currentPID})">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <h2>Create Task</h2>
+                                    <h2>Create Task<small>Status of Task</small></h2>
                                 </div>
                                 <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTask({pID: currentPID})" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
@@ -103,7 +103,7 @@
                             <div class="card-header bgm-issue">
                                 <div class="input-group" data-ui-sref="createIssue({pID: currentPID})">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
-                                    <h2>Create Issue</h2>
+                                    <h2>Create Issue<small>Author of Issue</small></h2>
                                 </div>
                                 <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createIssue({pID: currentPID})" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
@@ -120,7 +120,7 @@
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask({tID:task.id, pID: currentPID})">
                             <div class="card-header bgm-task">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
+                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
                                     <h2>{{task.title|limitTo:20}}{{task.title > 30 ? '...' : ''}}<small>{{task.status|limitTo:30}}</small></h2>
                                 </div>
                             </div>
@@ -136,7 +136,7 @@
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewIssue({iID:issue.id, pID: currentPID})">
                             <div class="card-header bgm-issue">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
+                                    <span class="input-group-addon"><i class="zmdi zmdi-file c-white"></i></span>
                                     <h2>{{issue.title|limitTo:20}}{{issue.title.length > 20 ? '...' : ''}}<small>{{issue.user.firstName|limitTo:20}} {{issue.user.lastName|limitTo:20}}</small></h2>
                                 </div>
                             </div>

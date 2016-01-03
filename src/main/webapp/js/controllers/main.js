@@ -88,7 +88,7 @@ materialAdmin
     // Header
     // =========================================================================
     .controller('headerCtrl', function($scope, $timeout, messageService, IssuesMessageBoxFactory, TokenService){
-    
+
          // Top Search
         this.openSearch = function(){
             angular.element('#header').addClass('search-toggled');
@@ -495,10 +495,13 @@ materialAdmin
     // PROJECT CREATION
     //=================================================
 
-    .controller('createProjectCtrl', function ($scope, $location, $window, $state, growlService, ErrorHandler,
+    .controller('createProjectCtrl', function ($scope, $location, $window, $timeout, $state, growlService, ErrorHandler,
         TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
 
         console.log("starting Project Creation");
+
+        $scope.descriptionFail = false;
+        $scope.titleFail = false;
 
         $scope.users={};
         $scope.users.allUsers=[];
@@ -567,25 +570,36 @@ materialAdmin
         });
 
         $scope.createProject = function () {
-            console.log($scope.users.userPickerContributor);
-            ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
-                $scope.pID=response.item;
 
-                AddUserToProjectFactory.add({project: $scope.pID, user: TokenService.username, role: "ADMIN"});
-                $scope.users.userPickerContributor.forEach(function(contributor){
-                    AddUserToProjectFactory.add({project: $scope.pID, user: contributor, role: "CONTRIBUTOR"});
+            if(!$scope.project) {
+                $scope.titleFail = true;
+                $timeout(function(){document.getElementById('projectTitle').focus();});
+            }
+            else
+                if(!$scope.project.description) {
+                    $scope.descriptionFail = true;
+                    $timeout(function(){document.getElementById('projectDescription').focus();});
+                }
+            else {
+                console.log($scope.users.userPickerContributor);
+                ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
+                    $scope.pID=response.item;
+
+                    AddUserToProjectFactory.add({project: $scope.pID, user: TokenService.username, role: "ADMIN"});
+                    $scope.users.userPickerContributor.forEach(function(contributor){
+                        AddUserToProjectFactory.add({project: $scope.pID, user: contributor, role: "CONTRIBUTOR"});
+                    });
+                    $scope.users.userPickerManager.forEach(function(manager){
+                        AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
+                    });
+
+                    growlService.growl("Project created!")
+                    $state.go("viewProject",{pID:$scope.pID});
+
+                }, function(error){
+                   ErrorHandler.handle("Could not save your project.", error);
                 });
-                $scope.users.userPickerManager.forEach(function(manager){
-                    AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
-                });
-
-                growlService.growl("Project created!")
-                $state.go("viewProject",{pID:$scope.pID});
-
-            }, function(error){
-               ErrorHandler.handle("Could not save your project.", error);
-            });
-
+            }
         };
     })
 
@@ -593,10 +607,13 @@ materialAdmin
     // PROJECT UPDATE
     //=================================================
 
-    .controller('updateProjectCtrl', function ($scope, $stateParams, growlService, ErrorHandler, TokenService,
+    .controller('updateProjectCtrl', function ($scope, $stateParams, $timeout, growlService, ErrorHandler, TokenService,
         ProjectFactory, AddUserToProjectFactory, UserFactory, UsersFactory, RewardsByProjectFactory, RewardsByUserFactory, RemoveUserFromProjectFactory) {
 
        growlService.growl('Fetching project information...');
+
+       $scope.descriptionFail = false;
+       $scope.titleFail = false;
 
        //Set project ID according to parameter
        $scope.currentPID = $stateParams.pID;
@@ -607,6 +624,8 @@ materialAdmin
         $scope.updateProjectInformation=function(){
             //Get project information
             ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){0
+                response.title=response.title.trim();
+                response.description=response.description.trim();
                 $scope.selectedProject=response;
                 $scope.selectedProject.userList=[];
                 //get user information for all users of the current project
@@ -663,31 +682,39 @@ materialAdmin
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
         });
 
-
-
         $scope.deleteUserFromProject=function(userID){
             RemoveUserFromProjectFactory.delete({pID:$scope.currentPID, uID:userID}).$promise.then(function(response){
                 $scope.updateProjectInformation();
             }, function(error){
                 ErrorHandler.handle("Could not delete user from project.", error);
             });
-
         }
 
         //Save changes after button is clicked
         $scope.saveProject=function(){
-            ProjectFactory.update({pID: $scope.currentPID}, {
-                title: $scope.selectedProject.title,
-                description: $scope.selectedProject.description
-            });
-                //save newly added users to project:
-            $scope.users.userPickerContributor.forEach(function(contributor){
-                AddUserToProjectFactory.add({project: $scope.currentPID, user: contributor, role: "CONTRIBUTOR"});
-            });
-            $scope.users.userPickerManager.forEach(function(manager){
-                AddUserToProjectFactory.add({project: $scope.currentPID, user: manager, role: "ADMIN"});
-            });
-            $scope.updateProjectInformation();
+            if(!$scope.selectedProject.title) {
+                $scope.titleFail = true;
+                $timeout(function(){document.getElementById('projectTitle').focus();});
+            }
+            else
+                if(!$scope.selectedProject.description) {
+                    $scope.descriptionFail = true;
+                    $timeout(function(){document.getElementById('projectDescription').focus();});
+                }
+            else {
+                ProjectFactory.update({pID: $scope.currentPID}, {
+                    title: $scope.selectedProject.title,
+                    description: $scope.selectedProject.description
+                });
+                    //save newly added users to project:
+                $scope.users.userPickerContributor.forEach(function(contributor){
+                    AddUserToProjectFactory.add({project: $scope.currentPID, user: contributor, role: "CONTRIBUTOR"});
+                });
+                $scope.users.userPickerManager.forEach(function(manager){
+                    AddUserToProjectFactory.add({project: $scope.currentPID, user: manager, role: "ADMIN"});
+                });
+                $scope.updateProjectInformation();
+            }
         };
     })
 
@@ -695,7 +722,7 @@ materialAdmin
     // ISSUE CREATION
     //=================================================
 
-    .controller('createIssueCtrl', function ( $scope, $state, $stateParams, $state, growlService, ErrorHandler, IssuePostFactory, ProjectFactory, TokenService) {
+    .controller('createIssueCtrl', function ( $scope, $state, $stateParams, $state, $timeout, growlService, ErrorHandler, IssuePostFactory, ProjectFactory, TokenService) {
 
         // callback for ng-click 'create Issue':
         console.log("starting issue creation");
@@ -707,12 +734,23 @@ materialAdmin
 
 
         $scope.createIssue = function () {
-            IssuePostFactory.create({pID: $scope.currentPID, uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
-                growlService.growl("Issue created.");
-                $state.go("viewProject", {pID:$scope.currentPID});
-            }, function(error){
-                ErrorHandler.handle("Could not create Issue.", error);
-            });
+           if(!$scope.issue) {
+                $scope.titleFail = true;
+                $timeout(function(){document.getElementById('issueTitle').focus();});
+           }
+           else
+               if(!$scope.issue.description) {
+                    $scope.descriptionFail = true;
+                    $timeout(function(){document.getElementById('issueDescription').focus();});
+               }
+           else {
+               IssuePostFactory.create({pID: $scope.currentPID, uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
+                    growlService.growl("Issue created.");
+                    $state.go("viewProject", {pID:$scope.currentPID});
+               }, function(error){
+                    ErrorHandler.handle("Could not create Issue.", error);
+               });
+           }
         };
     })
 
@@ -725,8 +763,10 @@ materialAdmin
         $scope.currentIID = $stateParams.iID;
         $scope.currentPID = $stateParams.pID;
 
+        ProjectFactory.show({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(response){
+            $scope.selectedProject=response;
+        });
 
-        $scope.hans="BLAH";
         IssueRetrieveFactory.show({issueID: $scope.currentIID}).$promise.then(function(response){
             $scope.issue=response;
             $scope.issue.title=response.title.trim();
@@ -752,8 +792,11 @@ materialAdmin
     // TASK CREATION
     //=================================================
 
-    .controller('createTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
+    .controller('createTaskCtrl', function ( $scope, $state, $stateParams, $timeout, growlService, TokenService, ErrorHandler,
         TasksFactory, IssuesFactory, ProjectFactory, UserFactory) {
+
+        $scope.titleFail = false;
+        $scope.descriptionFail = false;
 
         $scope.currentPID = $stateParams.pID;
         //console.log("Current PID (Task): " + $scope.currentPID);
@@ -799,40 +842,50 @@ materialAdmin
             ErrorHandler.handle("Could not fetch project information from server.", error);
         });
         $scope.createTask = function() {
-            console.log($scope.taskType);
-            //if($scope.taskType=="cooperative"){
-                TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
-                    taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
-                userList: $scope.userPicker}).$promise.then(function(result){
-                    growlService.growl("Task created.");
-                    $state.go("viewProject", {pID:$scope.currentPID});
-                }, function(error){
-                    ErrorHandler.handle("Could not save task.", error);
-                });
-            /*}else{
-                var allUsers=$scope.userPicker;
-                var lastUserInList=allUsers[allUsers.length()-1];
-                console.log(lastUserInList);
-                $scope.userPicker.forEach(function(user){
-                    var userList=[];
-                    userList.push(user);
-                    console.log(userList);
-                    title=$scope.task.title + " " + user;
+            if(!$scope.task) {
+                $scope.titleFail = true;
+                $timeout(function(){document.getElementById('taskTitle').focus();});
+            }
+            else
+                if(!$scope.task.description) {
+                    $scope.descriptionFail = true;
+                    $timeout(function(){document.getElementById('taskDescription').focus();});
+                }
+            else {
+                console.log($scope.taskType);
+                //if($scope.taskType=="cooperative"){
                     TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
                         taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
-                    userList: $userList}).$promise.then(function(result){
-                        if (user==lastUserInList){
-                            growlService.growl("Task created.");
-                            $state.go("viewProject", {pID:$scope.currentPID});
-                        }
+                    userList: $scope.userPicker}).$promise.then(function(result){
+                        growlService.growl("Task created.");
+                        $state.go("viewProject", {pID:$scope.currentPID});
                     }, function(error){
                         ErrorHandler.handle("Could not save task.", error);
                     });
-                });
-            }*/
-            //console.log($scope.userPicker);
+                /*}else{
+                    var allUsers=$scope.userPicker;
+                    var lastUserInList=allUsers[allUsers.length()-1];
+                    console.log(lastUserInList);
+                    $scope.userPicker.forEach(function(user){
+                        var userList=[];
+                        userList.push(user);
+                        console.log(userList);
+                        title=$scope.task.title + " " + user;
+                        TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
+                            taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
+                        userList: $userList}).$promise.then(function(result){
+                            if (user==lastUserInList){
+                                growlService.growl("Task created.");
+                                $state.go("viewProject", {pID:$scope.currentPID});
+                            }
+                        }, function(error){
+                            ErrorHandler.handle("Could not save task.", error);
+                        });
+                    });
+                }*/
+                //console.log($scope.userPicker);
+            }
         }
-
     })
 
     //=================================================
