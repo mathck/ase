@@ -80,10 +80,10 @@ public class UserServiceImpl implements UserService {
                     throw new IllegalArgumentException("Avatar is not valid");
                 }
             } else {
-                throw new IllegalArgumentException("Last name is not valid");
+                throw new IllegalArgumentException("Last name is not valid: " + user.getLastName());
             }
         } else {
-            throw new IllegalArgumentException("First name is not valid");
+            throw new IllegalArgumentException("First name is not valid: " + user.getFirstName());
         }
     }
 
