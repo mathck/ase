@@ -1,6 +1,7 @@
 package at.tuwien.ase.model;
 
 import java.util.LinkedList;
+import java.util.zip.Inflater;
 
 /**
  * Created by DanielHofer on 22.12.2015.
@@ -14,6 +15,12 @@ public class TaskState {
     // Must have no-argument constructor
     public TaskState() {
 
+    }
+
+    public TaskState(Integer id, String stateName, Integer taskId) {
+        this.id = id;
+        this.stateName = stateName;
+        this.taskId = taskId;
     }
 
     public Integer getId() {
