@@ -298,7 +298,6 @@ public class TaskDAOImpl implements TaskDAO {
                 "FROM TASK, REL_USER_TASK, TASKIT_USER " +
                 "WHERE TASK_TYPE = ? " +
                     "AND REL_USER_TASK.USER_MAIL = ? " +
-                    "AND REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL " +
                     "AND REL_USER_TASK.TASK_ID = TASK.ID";
 
 
