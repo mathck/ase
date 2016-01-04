@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template>
+
+	<identifier>
+		<title>User story #5: Teacher and class</title>
+		<description>In a class with 20 students and 1 teacher the teacher wants to assign homework to his students. Also he wants the students to be rewarded if they do their homework. In this case the class, lasting for 1 year, is one project. The participants are the students. The teacher assigns in the project view specific rewards when a student reaches a level. In this case, the teacher assigns one reward to level 4: Grade 4. For level 5 he applies the Grade 3, level 6 -> grade 2, level 7 -> grade 1.</description>
+		<estimatedWorkTime>60</estimatedWorkTime>	
+		<deadline>2016-03-03</deadline>
+		<githook>???</githook>
+		<comments>true</comments>
+	</identifier>
+
+	<taskBody>
+
+		<h1>Upload your homework</h1>
+		<br />
+		{taskElement:1}
+		
+	</taskBody>
+
+	<taskElements>
+		<taskElement id="1">
+			<status></status>
+			<value></value>
+			<link>user_story_5/files/loesung.pdf</link>
+			<type>file</type> 
+		</taskElement>
+	</taskElements>
+</template>

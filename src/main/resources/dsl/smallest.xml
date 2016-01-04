@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template>
+	<identifier>
+		<title>Smallest</title>
+		<description>Sample</description>
+		<estimatedWorkTime>60</estimatedWorkTime>	
+		<deadline>2016-03-03</deadline>
+		<githook>???</githook>
+		<comments>false</comments>
+	</identifier>
+</template>

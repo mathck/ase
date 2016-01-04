@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template>
+
+	<identifier>
+		<title>User story #2: Company</title>
+		<description>Using already saved DSL based Templates not originally provided by TaskIt</description>
+		<estimatedWorkTime>60</estimatedWorkTime>	
+		<deadline>2016-03-03</deadline>
+		<githook>???</githook>
+		<comments>true</comments>
+	</identifier>
+
+	<taskBody>
+
+		<h1>Customer Feedback</h1>
+		<br/>
+		<h2>Zufriedenheit</h2>
+		{taskElement:1}
+		<br/>
+		<h2>Sonstige Anmerkungen</h2>
+		{taskElement:2}
+		
+	</taskBody>
+
+	<taskElements>
+		<taskElement id="1">
+			<status></status>
+			<value>angry;nice</value>
+			<link></link>
+			<type>checkbox</type> 
+		</taskElement>
+		<taskElement id="2">
+			<status></status>
+			<value>text ...</value>
+			<link></link>
+			<type>textbox</type> 
+		</taskElement>
+	</taskElements>
+</template>
