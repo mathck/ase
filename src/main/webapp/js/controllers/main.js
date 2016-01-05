@@ -46,7 +46,6 @@ materialAdmin
 
 
         $scope.logoutUser = function () {
-            console.log("click");
             LogoutFactory.logout({email:TokenService.username});
             TokenService.user={}
             TokenService.token='';
@@ -279,15 +278,30 @@ materialAdmin
     // Profile
     //=================================================
 
-    .controller('profileCtrl', function($scope, growlService, TokenService){
-        
-        //Get Profile Information from User Service
+    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory){
 
-        //User
-        $scope.avatar=TokenService.user.avatar;
-        $scope.firstName=TokenService.user.firstName;
-        $scope.lastName=TokenService.user.lastName;
-        $scope.userID=TokenService.user.userID;
+        currentUID = $stateParams.uID;
+
+        console.log("uid:" + $stateParams.uID);
+
+        //If uID is not set in the state, show information of the user logged in
+        if(typeof currentUID == 'undefined'){
+            $scope.avatar=TokenService.user.avatar;
+            $scope.firstName=TokenService.user.firstName;
+            $scope.lastName=TokenService.user.lastName;
+            $scope.userID=TokenService.user.userID;
+        //otherwise, show the user informetion of the uID provided
+        }else{
+            //Get Profile Information from User Service
+            UserFactory.get({uID: currentUID}).$promise.then(function(user){
+                $scope.avatar=user.avatar;
+                $scope.firstName=user.firstName;
+                $scope.lastName=user.lastName;
+                $scope.userID=user.userID;
+            }, function(error){
+               ErrorHandler.handle("Could not fetch user information from server.", error);
+            });
+        }
 
         //Edit
         this.editSummary = 0;

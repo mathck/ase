@@ -629,17 +629,17 @@ materialAdmin
             //Profile
         
             .state ('pages.profile', {
-                url: '/profile',
+                url: '/profile/:uID',
                 templateUrl: 'views/profile.html',
             })
         
             .state ('pages.profile.profile-about', {
-                url: '/profile-about',
+                url: '/profile-about/:uID',
                 templateUrl: 'views/profile-about.html',
             })
         
             .state ('pages.profile.profile-timeline', {
-                url: '/profile-timeline',
+                url: '/profile-timeline/:uID',
                 templateUrl: 'views/profile-timeline.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
@@ -663,7 +663,7 @@ materialAdmin
             })
 
             .state ('pages.profile.profile-photos', {
-                url: '/profile-photos',
+                url: '/profile-photos/:uID',
                 templateUrl: 'views/profile-photos.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
@@ -687,7 +687,7 @@ materialAdmin
             })
         
             .state ('pages.profile.profile-connections', {
-                url: '/profile-connections',
+                url: '/profile-connections/:uID',
                 templateUrl: 'views/profile-connections.html'
             })
         

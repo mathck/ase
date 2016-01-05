@@ -174,9 +174,9 @@
                                     <!--NG Repeat for User starts here -->
                                     <tr data-ng-repeat="user in selectedProject.userList" ng-if="user.role.trim()=='CONTRIBUTOR'">
                                         <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
-                                        <td>{{user.firstName}}</td>
-                                        <td>{{user.lastName}}</td>
-                                        <td>{{user.userID}}</td>
+                                        <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.firstName}}</td>
+                                        <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.lastName}}</td>
+                                        <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.userID}}</td>
                                         <!--<td>{{user.level}}</td><!--TODO Level to be implemented -->
                                         <td><button data-ng-click="deleteUserFromProject(user.userID)" data-ng-show="currentUserRole=='ADMIN'" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
@@ -207,10 +207,10 @@
                                     <tbody>
                                     <!--NG Repeat for User starts here -->
                                     <tr data-ng-repeat="user in selectedProject.userList" ng-if="user.role.trim()=='ADMIN'">
-                                        <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
-                                        <td>{{user.firstName}}</td>
-                                        <td>{{user.lastName}}</td>
-                                        <td>{{user.userID}}</td>
+                                        <td data-ui-sref="pages.profile.profile-about({uID: user.userID})"><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
+                                        <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.firstName}}</td>
+                                        <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.lastName}}</td>
+                                        <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.userID}}</td>
                                         <!--<td>{{user.level}}</td> TODO Level to be implemented -->
                                         <td><button data-ng-click="deleteUserFromProject(user.userID)" data-ng-show="currentUserRole=='ADMIN'" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
