@@ -42,7 +42,12 @@ public class TaskServiceImpl implements TaskService {
 
     public Task getByID(int tID) {
         logger.debug("get task with id=" + tID);
-        return taskDAO.findByID(tID);
+        Task task =  taskDAO.findByID(tID);
+
+        //get subtasks
+        task.setSubtaskList(subtaskDAO.loadAllByTask(task.getId()));
+
+        return task;
     }
 
     public void writeTask(int pID, Task task) throws Exception{

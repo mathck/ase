@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template>
+
+	<identifier>
+		<title>User story #1: Student project</title>
+		<description>Using Predefined Task Templates and Superordinate Tasks</description>
+		<estimatedWorkTime>60</estimatedWorkTime>	
+		<deadline>2016-03-03</deadline>
+		<githook>???</githook>
+		<comments>true</comments>
+	</identifier>
+
+	<taskBody>
+		<h1>Nice Subtask</h1>
+	</taskBody>
+
+	<taskElements />
+</template>

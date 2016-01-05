@@ -31,6 +31,9 @@ public class IssueServiceImpl implements IssueService {
     @Autowired
     private TaskDAO taskDAO;
 
+    @Autowired
+    private TaskService ts;
+
 
     public IssueServiceImpl() {
     }
@@ -50,13 +53,11 @@ public class IssueServiceImpl implements IssueService {
     public void updateIssueToTask(int iID, int pID, Task task) throws Exception {
         logger.debug("update issue with id="+iID+" to task");
 
-        int tID;
-
         //remove issue
         issueDAO.removeIssueByID(iID);
 
         //insert task
-        taskDAO.insertTask(pID, task);
+        ts.writeTask(pID, task);
 
     }
 

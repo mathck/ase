@@ -55,7 +55,7 @@ public class TestdataController {
 
         // create 2000 students
         List<User> students = new ArrayList<User>();
-        for(int i = 0; i < 2000; i++) {
+        for(int i = 0; i < 200; i++) {
             String firstname = RandomUserGenerator.getRandomFirstname();
             String lastname = RandomUserGenerator.getRandomLastname();
             String mail = RandomUserGenerator.getMailByName(firstname, lastname, "student");
@@ -71,7 +71,7 @@ public class TestdataController {
 
         List<User> teachers = new ArrayList<User>();
         // create 100 teachers
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             String firstname = RandomUserGenerator.getRandomFirstname();
             String lastname = RandomUserGenerator.getRandomLastname();
             String mail = RandomUserGenerator.getMailByName(firstname, lastname, "teacher");
@@ -86,10 +86,11 @@ public class TestdataController {
         }
 
         // create 100 class projects for every teacher
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             Project project = new Project(i+1, "Class " + (i+1), "Class project for class " + (i+1));
 
             // 5 tasks (homeworks) for every class
+            /*
             for(int j = 0; j < 5; j++)
                 project.addTask(new Task("Open",
                         "Homework " + (i+j),
@@ -99,6 +100,7 @@ public class TestdataController {
                         new Date(),
                         project.getProjectID(),
                         teachers.get(i).getUserID()));
+            //*/
 
             // 1 admin and 1 teacher for every class
             project.addUser(admin.getUserID(), "ADMIN");

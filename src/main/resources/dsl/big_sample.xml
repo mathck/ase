@@ -2,17 +2,18 @@
 <template>
 
 	<identifier>
-		<title>Bilderrätsel</title>
-		<description>Quiz für Schüler</description>
+		<title>Big</title>
+		<description>Sample</description>
 		<estimatedWorkTime>60</estimatedWorkTime>	
-		<deadline>2015-12-12</deadline>
+		<deadline>2016-03-03</deadline>
 		<githook>???</githook>
+		<comments>true</comments>
 	</identifier>
 
 	<taskBody>
 
-		<h1>Willkommen zum tollen Quiz!!</h1>
-		<br></br>
+		<h1>Nice Subtask</h1>
+		<br/><br/>
 		<h2>Eine Frage für euch!</h2>
 		<br/>
 		<h3>Schau Dir das folgende Bild genau an:</h3>
@@ -35,7 +36,6 @@
 		<br/>
 		Wie gut hat Dir dieser Task gefallen?
 		<br/>
-		{taskElement:6}
 		
 	</taskBody>
 
@@ -43,39 +43,38 @@
 		<taskElement id="1">
 			<status></status>
 			<value></value>
-			<link>C:\tier.jpg</link>
-			<type>image</type>
+			<link>http://www.michi.com/tier.jpg</link>
+			<type>image</type> 
 		</taskElement>
 		<taskElement id="2">
-			<status>unchecked</status>
+			<status>checked</status>
 			<value>Katze</value>
 			<link></link>
-			<type>checkbox</type>
+			<type>checkbox</type> 
 		</taskElement>
 		<taskElement id="3">
 			<status>unchecked</status>
 			<value>Maus</value>
 			<link></link>
-			<type>checkbox</type>
+			<type>checkbox</type> 
 		</taskElement>
-		<taskElement id="4">
+		<taskElement id="3">
 			<status></status>
 			<value>hier dein text...</value>
 			<link></link>
-			<type>textbox</type>
+			<type>textbox</type> 
 		</taskElement>
-		<taskElement id="5">
+		<taskElement id="4">
 			<status>file</status>
 			<value></value>
 			<link>C:\loesung.pdf</link>
-			<type>file</type>
+			<type>file</type> 
 		</taskElement>
-		<taskElement id="6">
+		<taskElement id="5">
 			<status>gut</status>
 			<value>gut|mittelmäßig|schlecht</value>
 			<link></link>
-			<type>slider</type>
+			<type>slider</type> 
 		</taskElement>
 	</taskElements>
-
 </template>

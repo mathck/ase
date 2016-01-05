@@ -29,8 +29,8 @@
                         <div class="col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
-                                <div class="fg-line">
-                                        <input type="text" class="form-control input-lg" placeholder="Title" data-ng-model="task.title">
+                                <div ng-class="!titleFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                                    <input type="text" id="taskTitle" class="form-control input-lg" placeholder="Title" data-ng-model="task.title" tooltip-class="tooltip-blue" tooltip-enable="titleFail" tooltip-trigger="focus" tooltip="Cannot be empty!" tooltip-placement="right">
                                 </div>
                             </div>
                         </div>
@@ -97,8 +97,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="c-black f-500 m-b-20 m-t-20">Description</p>
-                            <div class="fg-line">
-                                <textarea class="form-control input-md description" placeholder="Write your description here..." data-ng-model="task.description"></textarea>
+                            <div ng-class="!descriptionFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                                <textarea id="taskDescription" class="form-control input-md description" placeholder="Write your description here..." data-ng-model="task.description" tooltip-class="tooltip-blue" tooltip-enable="descriptionFail" tooltip-trigger="focus" tooltip="Cannot be empty!" tooltip-placement="right"></textarea>
                             </div>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
                 <ul class="actions">
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Task" data-ng-click="createTask()"><i class="zmdi zmdi-check"></i>Create Task</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Create Task" data-ng-click="createTask()"><i class="zmdi zmdi-check"></i>Create Task</button>
                         </div>
                     </li>
                 </ul>

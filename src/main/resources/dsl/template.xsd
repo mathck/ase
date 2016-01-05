@@ -7,24 +7,17 @@
 						<xs:documentation/>
 					</xs:annotation>
 					<xs:complexType>
-						<xs:sequence><!--
-							<xs:element name="states">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element type="xs:string" name="state" maxOccurs="unbounded" minOccurs="1"/>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>-->
+						<xs:sequence>
 							<xs:element type="xs:string" name="title"/>
 							<xs:element type="xs:string" name="description"/>
 							<xs:element type="xs:integer" name="estimatedWorkTime"/>
 							<xs:element type="xs:date" name="deadline"/>
 							<xs:element type="xs:string" name="githook"/>
+							<xs:element type="xs:boolean" name="comments"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-				
-				<xs:element name="taskBody">
+				<xs:element name="taskBody" minOccurs="0">
 					<xs:complexType mixed="true">
 						<xs:choice maxOccurs="unbounded" minOccurs="0">
 							<xs:element type="xs:string" name="h1"/>
@@ -35,7 +28,7 @@
 						</xs:choice>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="taskElements">
+				<xs:element name="taskElements" minOccurs="0">
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element name="taskElement" maxOccurs="unbounded" minOccurs="0">
@@ -44,7 +37,6 @@
 										<xs:element type="xs:string" name="status"/>
 										<xs:element type="xs:string" name="value"/>
 										<xs:element type="xs:string" name="link"/>
-										<!--<xs:element type="xs:string" name="search_string"/>-->
 										<xs:element type="taskElementsType" name="type"/>
 									</xs:sequence>
 									<xs:attribute type="xs:integer" name="id" use="optional"/>
@@ -65,5 +57,4 @@
 			<xs:enumeration value="slider"/>
 		</xs:restriction>
 	</xs:simpleType>
-
 </xs:schema>
