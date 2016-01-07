@@ -35,7 +35,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
                                 <div class="fg-line">
-                                        <input type="text" class="form-control input-lg" placeholder="<<Title>>" data-ng-model="task.title">
+                                        <input type="text" class="form-control input-lg" placeholder="<<Title>>" data-ng-model="task.title"> (from: {{project.title}})
                                 </div>
                             </div>
                             <p class="c-black f-500 m-b-20 m-t-20">Change State</p>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-sm-8 right">
                             <div class="fg-line">
-                                <select chosen multiple data-placeholder="Add Contributor/s..." class="w-100" data-ng-model="userPicker"></select>
+                                <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPicker" data-ng-options="user.userID as user.name for user in project.userList"></select>
                             </div>
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
                                 <table class="table table-hover">
@@ -68,7 +68,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr data-ng-repeat="user in selectedProject.userList">
+                                    <tr data-ng-repeat="user in task.userList">
                                         <td><img src="{{user.avatar}}" alt="Avatar of {{user.firstName}} {{user.LastName}}" height="50" width="50"></td>
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.firstName}}</td>
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.lastName}}</td>

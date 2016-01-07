@@ -354,7 +354,7 @@ materialAdmin
                 LoginFactory.receive(this.login).$promise.then(function(data){
                     //workaround to evaluate successful login (currently server returns 200 even if login failed)
                     if(typeof data.token === 'undefined'){
-                        console.log("Could not log in. Wrong username or password?");
+                        //console.log("Could not log in. Wrong username or password?");
                         $rootScope.loginFail=true;
                         console.log(data);
                     }else{
@@ -366,8 +366,8 @@ materialAdmin
                         $window.location.href='/taskit/main.html';
                     }
                 }, function(error){
-                    console.log("Could not log in. Wrong username or password?");
-                    console.log(error);
+                    //console.log("Could not log in. Wrong username or password?");
+                    //console.log(error);
                     $rootScope.loginFail=true;
                 });
             };
@@ -906,7 +906,43 @@ materialAdmin
     // TASK UPDATE
     //=================================================
 
-    .controller('updateTaskCtrl', function ( $scope, IssuesFactory, $location, $window) {
+    .controller('updateTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
+        TaskFactory, IssuesFactory, ProjectFactory, UserFactory) {
+
+        $scope.currentPID = $stateParams.pID;
+        $scope.currentTID = $stateParams.tID;
+
+        console.log($scope.currentPID);
+        console.log($scope.currentTID);
+
+        ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
+            $scope.project=response;
+            $scope.project.userList=[];
+            //get user information for all users of the current project
+            $scope.project.allUser.forEach(function(participant){
+                UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                    //user.userID={userID: user.userID.trim()};
+                    $scope.project.userList.push(user);
+                }, function(error){
+                    ErrorHandler.handle("Could not fetch users from server.", error);
+                });
+            });
+        }, function(error){
+            ErrorHandler.handle("Could not fetch project information from server.", error);
+        });
+
+        TaskFactory.show({tID: $stateParams.tID}).$promise.then(function(response){
+            console.log(response);
+            $scope.task=response;
+        }, function(error){
+            ErrorHandler.handle("Could not fetch task information from server.", error);
+        });
+
+        $scope.deleteUserFromTask=function(userID){
+            console.log("deleting user "+userID);
+        };
+
 
     })
 

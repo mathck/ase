@@ -55,7 +55,7 @@ projectServices.factory('RemoveUserFromProjectFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects/remove/:pID', {}, {
         delete: {
             method: 'DELETE',
-            params: {uID: '@uID'}
+            params: {uID: '@uID', pID:'@pID'}
         }
     })
 });

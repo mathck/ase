@@ -6,31 +6,27 @@ taskServices.factory('TasksFactory', function ($resource) {
             method: 'GET',
             params: {pid: '@pid'},
             isArray: true
-            //headers: { 'auth-token': '@token' }
         },
         create: {
             method: 'POST',
             params: {pid: '@pid'}
-            //headers: { 'auth-token': '@token' }
         }
     })
 });
 
 taskServices.factory('TaskFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/projects/:pid/tasks', {}, {
+    return $resource('/taskit/api/workspace/projects/tasks/:tID', {}, {
         show: {
-            method: 'GET'
-            //headers: { 'auth-token': '@token' }
+            method: 'GET',
+            params: {tID: '@tID'}
         },
         update: {
             method: 'PUT',
             params: {pid: '@pid', id: '@id'}
-            //headers: { 'auth-token': '@token' }
         },
         delete: {
             method: 'DELETE',
             params: {pid: '@pid', id: '@id'}
-            //headers: { 'auth-token': '@token' }
         }
     })
 });
