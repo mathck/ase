@@ -1,10 +1,8 @@
 package at.tuwien.ase.dao.impl;
 
+import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.TaskDAO;
-import at.tuwien.ase.model.Subtask;
-import at.tuwien.ase.model.Task;
-import at.tuwien.ase.model.TaskState;
-import at.tuwien.ase.model.User;
+import at.tuwien.ase.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,9 @@ public class TaskDAOImpl implements TaskDAO {
     KeyHolder keyHolder;
 
     String taskType;
+
+    @Autowired
+    private SubtaskDAO subtaskDAO;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -85,73 +86,29 @@ public class TaskDAOImpl implements TaskDAO {
 
         String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
-                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
                 "FROM " +
                 "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
                 "LEFT JOIN REL_USER_TASK ON TASK.ID = REL_USER_TASK.TASK_ID " +
                 "LEFT JOIN TASKIT_USER ON REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL " +
+                "LEFT JOIN TASK_COMMENTS ON TASK_COMMENTS.TASK_ID = TASK.ID " +
                 "WHERE TASK.ID = ? AND TASK_TYPE = ? ";
-
-
-        int statesId;
-        String userId;
-        ArrayList<Integer> statesList = new ArrayList<Integer>();
-        ArrayList<String>  usersList = new ArrayList<String> ();
-        Task task = new Task();
-        TaskState taskState;
-        User user;
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 taskId,
                 this.taskType);
-        for (Map<String,Object> row : rows) {
 
-            //set task information only in first iteration
-            if (task.getId() == null){
-                task.setId((Integer)row.get("task_id"));
-                task.setTitle((String)row.get("task_title"));
-                task.setDescription((String)row.get("task_description"));
-                task.setTaskType((String)row.get("task_task_type"));
-                task.setCreationDate(new java.sql.Date(((Timestamp)row.get("task_creation_date")).getTime()));
-                task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("task_update_date")).getTime()));
-                task.setProjectId((Integer) row.get("task_project_id"));
-                task.setUserMail((String)row.get("task_user_mail"));
-                task.setStatus((String)row.get("task_status"));
-                task.setExecutionType((String) row.get("task_execution_type"));
-            }
+        LinkedList<Task> taskList = mapRows(rows);
 
-            statesId = (Integer)row.get("states_id");
-            //state already in task object?
-            if (!statesList.contains(statesId)){
-                taskState = new TaskState();
-
-                taskState.setId((Integer)row.get("states_id"));
-                taskState.setStateName((String)row.get("states_state_name"));
-                taskState.setTaskId((Integer)row.get("states_task_id"));
-
-                task.addTaskState(taskState);
-                statesList.add(statesId);
-            }
-
-            userId = (String)row.get("users_mail");
-            //user already in task object?
-
-            if (!usersList.contains(userId)){
-                user = new User();
-
-                user.setUserID((String)row.get("users_mail"));
-                user.setFirstName((String)row.get("users_firstname"));
-                user.setLastName((String)row.get("users_lastname"));
-
-                task.addUser(user);
-                usersList.add(userId);
-            }
-
-
+        //return first task element
+        if (taskList != null && taskList.size() > 0){
+            return taskList.get(0);
         }
 
-        return task;
+        return null;
+
     }
 
     public LinkedList<Task> loadAll() {
@@ -160,172 +117,70 @@ public class TaskDAOImpl implements TaskDAO {
 
         String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
-                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
                 "FROM " +
                 "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
                 "LEFT JOIN REL_USER_TASK ON TASK.ID = REL_USER_TASK.TASK_ID " +
                 "LEFT JOIN TASKIT_USER ON REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL " +
+                "LEFT JOIN TASK_COMMENTS ON TASK_COMMENTS.TASK_ID = TASK.ID " +
                 "WHERE TASK_TYPE = ? ";
-
-        int statesId;
-        String userId;
-        int taskId;
-        LinkedList<Task> tasks = new LinkedList<Task>();
-        HashMap<Integer, Task> taskMap = new HashMap<Integer, Task>();
-        HashMap<Integer, TaskState> statesMap = new HashMap<Integer, TaskState>();
-        HashMap<String, User> usersMap = new HashMap<String, User>();
-
-        Task task;
-        TaskState taskState;
-        User user;
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 this.taskType);
-        for (Map<String,Object> row : rows) {
 
-            if (row.get("task_id") != null){
+        return mapRows(rows);
 
-                taskId = (Integer)row.get("task_id");
-
-                //task already in linked list?
-                if (taskMap.get(taskId) == null){
-
-                    task = new Task();
-
-                    task.setId(taskId);
-                    task.setTitle((String)row.get("task_title"));
-                    task.setDescription((String)row.get("task_description"));
-                    task.setTaskType((String)row.get("task_task_type"));
-                    task.setCreationDate(new java.sql.Date(((Timestamp)row.get("task_creation_date")).getTime()));
-                    task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("task_update_date")).getTime()));
-                    task.setProjectId((Integer) row.get("task_project_id"));
-                    task.setUserMail((String)row.get("task_user_mail"));
-                    task.setStatus((String)row.get("task_status"));
-                    task.setExecutionType((String) row.get("task_execution_type"));
-
-                    tasks.add(task);
-                    taskMap.put(taskId, task);
-
-                }
-
-                if (row.get("states_id") != null){
-                    statesId = (Integer)row.get("states_id");
-                    //state already in task object?
-                    if (statesMap.get(taskId+statesId) == null){
-                        taskState = new TaskState();
-
-                        taskState.setId((Integer)row.get("states_id"));
-                        taskState.setStateName((String)row.get("states_state_name"));
-                        taskState.setTaskId((Integer)row.get("states_task_id"));
-
-                        //put taskState to task element
-                        ((Task)taskMap.get(taskId)).addTaskState(taskState);
-                        statesMap.put(taskId+statesId, taskState);
-
-                    }
-
-                }
-
-                if (row.get("users_mail") != null){
-
-                    userId = (String)row.get("users_mail");
-                    //user already in task object?
-
-                    if (usersMap.get(taskId+userId.trim()) == null){
-                        user = new User();
-
-                        user.setUserID((String)row.get("users_mail"));
-                        user.setFirstName((String)row.get("users_firstname"));
-                        user.setLastName((String)row.get("users_lastname"));
-
-                        //put taskState to task element
-                        ((Task)taskMap.get(taskId)).addUser(user);
-                        usersMap.put(taskId+userId.trim(), user);
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        return tasks;
     }
 
     public LinkedList<Task> loadAllByProject(int pID) {
 
         logger.debug("retrieve from db: all tasks by project with id="+pID);
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, PROJECT_ID, USER_MAIL, STATUS, EXECUTION_TYPE " +
-                "FROM TASK " +
-                "WHERE TASK_TYPE = ? " +
-                    "AND PROJECT_ID = ?";
-
-        LinkedList<Task> tasks = new LinkedList<Task>();
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+                "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
+                "FROM " +
+                "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
+                "LEFT JOIN REL_USER_TASK ON TASK.ID = REL_USER_TASK.TASK_ID " +
+                "LEFT JOIN TASKIT_USER ON REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL " +
+                "LEFT JOIN TASK_COMMENTS ON TASK_COMMENTS.TASK_ID = TASK.ID " +
+                "WHERE TASK_TYPE = ? AND PROJECT_ID = ?";
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 this.taskType,
-                Integer.valueOf(pID));
+                pID);
 
-        for (Map<String,Object> row : rows) {
+        return mapRows(rows);
 
-            Task task = new Task();
-            task.setId((Integer)row.get("id"));
-            task.setTitle((String)row.get("title"));
-            task.setDescription((String)row.get("description"));
-            task.setTaskType((String)row.get("task_type"));
-            task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-            task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            task.setProjectId((Integer)row.get("project_id"));
-            task.setUserMail((String)row.get("user_mail"));
-            task.setStatus((String)row.get("status"));
-            task.setExecutionType((String)row.get("execution_type"));
-
-            tasks.add(task);
-        }
-
-        return tasks;
     }
 
     public LinkedList<Task> loadAllByUser(String uID) {
 
         logger.debug("retrieve from db: all tasks by user with id="+uID);
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS, TASK.EXECUTION_TYPE " +
-                "FROM TASK, REL_USER_TASK, TASKIT_USER " +
-                "WHERE TASK_TYPE = ? " +
-                    "AND REL_USER_TASK.USER_MAIL = ? " +
-                    "AND REL_USER_TASK.TASK_ID = TASK.ID";
-
-
-        LinkedList<Task> tasks = new LinkedList<Task>();
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+                "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
+                "FROM " +
+                "(SELECT REL_USER_TASK.TASK_ID FROM REL_USER_TASK WHERE REL_USER_TASK.USER_MAIL = ?) as user_tasks, " +
+                "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
+                "LEFT JOIN REL_USER_TASK ON TASK.ID = REL_USER_TASK.TASK_ID " +
+                "LEFT JOIN TASKIT_USER ON REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL " +
+                "LEFT JOIN TASK_COMMENTS ON TASK_COMMENTS.TASK_ID = TASK.ID " +
+                "WHERE TASK_TYPE = ? AND USER_TASKS.TASK_ID  = TASK.ID ";
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
-                this.taskType,
-                uID);
+                uID,
+                this.taskType
+                );
 
-        for (Map<String,Object> row : rows) {
-
-            Task task = new Task();
-            task.setId((Integer)row.get("id"));
-            task.setTitle((String)row.get("title"));
-            task.setDescription((String)row.get("description"));
-            task.setTaskType((String)row.get("task_type"));
-            task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-            task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            task.setProjectId((Integer)row.get("project_id"));
-            task.setUserMail((String)row.get("user_mail"));
-            task.setStatus((String)row.get("status"));
-            task.setExecutionType((String)row.get("execution_type"));
-
-            tasks.add(task);
-        }
-
-        return tasks;
+        return mapRows(rows);
     }
 
     public void addUserToTask(String uID, int tID) {
@@ -365,50 +220,26 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks from user with id="+uID+" and project with id="+pID);
 
-        String sqlQuery = "SELECT TASK.ID, TASK.TITLE, TASK.DESCRIPTION, TASK.TASK_TYPE, TASK.CREATION_DATE, TASK.UPDATE_DATE, TASK.PROJECT_ID, TASK.USER_MAIL, TASK.STATUS, TASK.EXECUTION_TYPE, TASKIT_USER.FIRSTNAME, TASKIT_USER.LASTNAME, TASKIT_USER.MAIL, TASKIT_USER.AVATAR_URL " +
-                "FROM TASK, TASKIT_USER " +
-                "WHERE TASK_TYPE = ? " +
-                "AND TASK.USER_MAIL = ? " +
-                "AND TASK.PROJECT_ID = ? " +
-                "AND TASK.USER_MAIL = TASKIT_USER.MAIL";
-
-        LinkedList<Task> tasks = new LinkedList<Task>();
-        User user;
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+                "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
+                "FROM " +
+                "(SELECT REL_USER_TASK.TASK_ID FROM REL_USER_TASK WHERE REL_USER_TASK.USER_MAIL = ?) as user_tasks, " +
+                "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
+                "LEFT JOIN REL_USER_TASK ON TASK.ID = REL_USER_TASK.TASK_ID " +
+                "LEFT JOIN TASKIT_USER ON REL_USER_TASK.USER_MAIL = TASKIT_USER.MAIL " +
+                "LEFT JOIN TASK_COMMENTS ON TASK_COMMENTS.TASK_ID = TASK.ID " +
+                "WHERE TASK_TYPE = ? AND PROJECT_ID = ? AND USER_TASKS.TASK_ID  = TASK.ID ";
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
-                this.taskType,
                 uID,
-                pID);
+                this.taskType,
+                pID
+        );
 
-        for (Map<String,Object> row : rows) {
-
-            Task task = new Task();
-            task.setId((Integer)row.get("id"));
-            task.setTitle((String)row.get("title"));
-            task.setDescription((String)row.get("description"));
-            task.setTaskType((String)row.get("task_type"));
-            task.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-            task.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            task.setProjectId((Integer) row.get("project_id"));
-            task.setUserMail((String)row.get("user_mail"));
-            task.setStatus((String)row.get("status"));
-            task.setExecutionType((String)row.get("execution_type"));
-
-            //create user
-            user = new User();
-            user.setFirstName((String)row.get("firstname"));
-            user.setLastName((String)row.get("lastname"));
-            user.setUserID((String)row.get("mail"));
-            user.setAvatar((String)row.get("avatar_url"));
-
-            //add user to issue
-            task.setUser(user);
-
-            tasks.add(task);
-        }
-
-        return tasks;
+        return mapRows(rows);
     }
 
     public void assignUserToTask(int tID, String uID) {
@@ -442,6 +273,39 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
+    public void addCommentToTask(int tID, Comment comment) {
+
+        logger.debug("insert into db: add comment to task with id=" + tID);
+
+        String sqlQuery = "INSERT INTO TASK_COMMENTS (ID, TASK_ID, TEXT, USER_MAIL, CREATION_DATE) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                comment.getId(),
+                tID,
+                comment.getText(),
+                comment.getUser_mail(),
+                new Date()
+        );
+
+    }
+
+    public void removeCommentFromTask(int tID, int cID) {
+
+        logger.debug("delete from db: remove comment with id="+cID+" from task with id="+tID);
+
+        String sqlQuery = "DELETE " +
+                "FROM TASK_COMMENTS " +
+                "WHERE ID = ? AND TASK_ID = ?";
+
+        this.jdbcTemplate.update(
+                sqlQuery,
+                cID,
+                tID
+        );
+    }
+
     public int getNewID() {
 
         Integer id = this.jdbcTemplate.queryForObject(
@@ -467,6 +331,125 @@ public class TaskDAOImpl implements TaskDAO {
                 Integer.class);
 
         return id;
+    }
+
+    public int getNewIDForComments() {
+
+        Integer id = this.jdbcTemplate.queryForObject(
+                "SELECT nextval('seq_comments_id')",
+                Integer.class);
+
+        return id;
+    }
+
+    private LinkedList<Task>  mapRows(List<Map<String,Object>> rows){
+
+        int statesId;
+        int commentId;
+        String userId;
+        int taskId;
+        LinkedList<Task> tasks = new LinkedList<Task>();
+        HashMap<Integer, Task> taskMap = new HashMap<Integer, Task>();
+        HashMap<Integer, TaskState> statesMap = new HashMap<Integer, TaskState>();
+        HashMap<Integer, Comment> commentsMap = new HashMap<Integer, Comment>();
+        HashMap<String, User> usersMap = new HashMap<String, User>();
+
+        Task task;
+        TaskState taskState;
+        User user;
+        Comment comment;
+
+        for (Map<String,Object> row : rows) {
+
+            if (row.get("task_id") != null) {
+
+                taskId = (Integer) row.get("task_id");
+
+                //task already in linked list?
+                if (taskMap.get(taskId) == null) {
+
+                    task = new Task();
+
+                    task.setId(taskId);
+                    task.setTitle((String) row.get("task_title"));
+                    task.setDescription((String) row.get("task_description"));
+                    task.setTaskType((String) row.get("task_task_type"));
+                    task.setCreationDate(new java.sql.Date(((Timestamp) row.get("task_creation_date")).getTime()));
+                    task.setUpdateDate(new java.sql.Date(((Timestamp) row.get("task_update_date")).getTime()));
+                    task.setProjectId((Integer) row.get("task_project_id"));
+                    task.setUserMail((String) row.get("task_user_mail"));
+                    task.setStatus((String) row.get("task_status"));
+                    task.setExecutionType((String) row.get("task_execution_type"));
+
+                    tasks.add(task);
+                    taskMap.put(taskId, task);
+
+                }
+
+                if (row.get("states_id") != null) {
+                    statesId = (Integer) row.get("states_id");
+                    //state already in task object?
+                    if (statesMap.get(taskId + statesId) == null) {
+                        taskState = new TaskState();
+
+                        taskState.setId((Integer) row.get("states_id"));
+                        taskState.setStateName((String) row.get("states_state_name"));
+                        taskState.setTaskId((Integer) row.get("states_task_id"));
+
+                        //put taskState to task element
+                        ((Task) taskMap.get(taskId)).addTaskState(taskState);
+                        statesMap.put(taskId + statesId, taskState);
+
+                    }
+
+                }
+
+                if (row.get("users_mail") != null) {
+
+                    userId = (String) row.get("users_mail");
+                    //user already in task object?
+
+                    if (usersMap.get(taskId + userId.trim()) == null) {
+                        user = new User();
+
+                        user.setUserID((String) row.get("users_mail"));
+                        user.setFirstName((String) row.get("users_firstname"));
+                        user.setLastName((String) row.get("users_lastname"));
+
+                        //put taskState to task element
+                        ((Task) taskMap.get(taskId)).addUser(user);
+                        usersMap.put(taskId + userId.trim(), user);
+
+                    }
+
+                }
+
+                if (row.get("comment_id") != null) {
+
+                    commentId = (Integer) row.get("comment_id");
+                    //comment already in task object?
+
+                    if (commentsMap.get(taskId + commentId) == null) {
+                        comment = new Comment();
+
+                        comment.setUser_mail((String) row.get("comment_mail"));
+                        comment.setText((String) row.get("comment_text"));
+                        comment.setCreationDate(new java.sql.Date(((Timestamp) row.get("comment_creation_date")).getTime()));
+
+                        //put comment to task element
+                        ((Task) taskMap.get(taskId)).addComment(comment);
+                        commentsMap.put(taskId + commentId, comment);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return tasks;
+
     }
 
 }

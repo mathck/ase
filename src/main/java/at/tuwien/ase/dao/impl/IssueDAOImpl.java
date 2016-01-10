@@ -109,36 +109,12 @@ public class IssueDAOImpl implements IssueDAO {
                 "WHERE TASK_TYPE = ? " +
                 "AND TASK.USER_MAIL = TASKIT_USER.MAIL";
 
-        LinkedList<Issue> issues = new LinkedList<Issue>();
-        User user;
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType
+        );
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType);
-        for (Map<String,Object> row : rows) {
-
-            Issue issue = new Issue();
-            issue.setId((Integer)row.get("id"));
-            issue.setTitle((String)row.get("title"));
-            issue.setDescription((String)row.get("description"));
-            issue.setTaskType((String)row.get("task_type"));
-            issue.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-            issue.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            issue.setProjectId((Integer)row.get("project_id"));
-            issue.setUserId((String)row.get("user_mail"));
-
-            //create user
-            user = new User();
-            user.setFirstName((String)row.get("firstname"));
-            user.setLastName((String)row.get("lastname"));
-            user.setUserID((String)row.get("mail"));
-            user.setAvatar((String)row.get("avatar_url"));
-
-            //add user to issue
-            issue.setUser(user);
-
-            issues.add(issue);
-        }
-
-        return issues;
+        return mapRows(rows);
 
     }
 
@@ -152,36 +128,13 @@ public class IssueDAOImpl implements IssueDAO {
                 "AND TASK.PROJECT_ID = ? " +
                 "AND TASK.USER_MAIL = TASKIT_USER.MAIL";
 
-        LinkedList<Issue> issues = new LinkedList<Issue>();
-        User user;
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType,
+                pID
+        );
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, pID);
-        for (Map<String,Object> row : rows) {
-
-            Issue issue = new Issue();
-            issue.setId((Integer)row.get("id"));
-            issue.setTitle((String)row.get("title"));
-            issue.setDescription((String)row.get("description"));
-            issue.setTaskType((String)row.get("task_type"));
-            issue.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-            issue.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            issue.setProjectId((Integer)row.get("project_id"));
-            issue.setUserId((String)row.get("user_mail"));
-
-            //create user
-            user = new User();
-            user.setFirstName((String)row.get("firstname"));
-            user.setLastName((String)row.get("lastname"));
-            user.setUserID((String)row.get("mail"));
-            user.setAvatar((String)row.get("avatar_url"));
-
-            //add user to issue
-            issue.setUser(user);
-
-            issues.add(issue);
-        }
-
-        return issues;
+        return mapRows(rows);
 
     }
 
@@ -195,36 +148,13 @@ public class IssueDAOImpl implements IssueDAO {
                 "AND TASK.USER_MAIL = ? " +
                 "AND TASK.USER_MAIL = TASKIT_USER.MAIL";
 
-        LinkedList<Issue> issues = new LinkedList<Issue>();
-        User user;
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType,
+                uID
+        );
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, uID);
-        for (Map<String,Object> row : rows) {
-
-            Issue issue = new Issue();
-            issue.setId((Integer)row.get("id"));
-            issue.setTitle((String)row.get("title"));
-            issue.setDescription((String)row.get("description"));
-            issue.setTaskType((String)row.get("task_type"));
-            issue.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-            issue.setUpdateDate(new java.sql.Date(((Timestamp)row.get("update_date")).getTime()));
-            issue.setProjectId((Integer)row.get("project_id"));
-            issue.setUserId((String)row.get("user_mail"));
-
-            //create user
-            user = new User();
-            user.setFirstName((String)row.get("firstname"));
-            user.setLastName((String)row.get("lastname"));
-            user.setUserID((String)row.get("mail"));
-            user.setAvatar((String)row.get("avatar_url"));
-
-            //add user to issue
-            issue.setUser(user);
-
-            issues.add(issue);
-        }
-
-        return issues;
+        return mapRows(rows);
     }
 
     public LinkedList<Issue> loadAllByProjectAndUser(int pID, String uID) {
@@ -238,10 +168,29 @@ public class IssueDAOImpl implements IssueDAO {
                 "AND TASK.PROJECT_ID = ? " +
                 "AND TASK.USER_MAIL = TASKIT_USER.MAIL";
 
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                this.taskType,
+                uID,
+                pID);
+
+        return mapRows(rows);
+
+    }
+
+    public int getNewID() {
+
+        Integer id = this.jdbcTemplate.queryForObject(
+                "SELECT nextval('seq_task_id')",
+                Integer.class);
+
+        return id;
+    }
+
+    private LinkedList<Issue> mapRows(List<Map<String,Object>> rows){
         LinkedList<Issue> issues = new LinkedList<Issue>();
         User user;
 
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, this.taskType, uID, pID);
         for (Map<String,Object> row : rows) {
 
             Issue issue = new Issue();
@@ -270,12 +219,4 @@ public class IssueDAOImpl implements IssueDAO {
         return issues;
     }
 
-    public int getNewID() {
-
-        Integer id = this.jdbcTemplate.queryForObject(
-                "SELECT nextval('seq_task_id')",
-                Integer.class);
-
-        return id;
-    }
 }

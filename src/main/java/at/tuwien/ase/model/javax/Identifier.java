@@ -2,7 +2,7 @@
 // Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.8-b130911.1802 generiert 
 // Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2015.12.21 um 09:08:44 PM CET 
+// Generiert: 2016.01.09 um 04:22:48 PM CET 
 //
 
 
@@ -32,6 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="estimatedWorkTime" type="{http://www.w3.org/2001/XMLSchema}integer"/>
  *         &lt;element name="deadline" type="{http://www.w3.org/2001/XMLSchema}date"/>
  *         &lt;element name="githook" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="comments" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -46,7 +47,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "description",
     "estimatedWorkTime",
     "deadline",
-    "githook"
+    "githook",
+    "comments"
 })
 public class Identifier {
 
@@ -61,6 +63,7 @@ public class Identifier {
     protected XMLGregorianCalendar deadline;
     @XmlElement(required = true)
     protected String githook;
+    protected boolean comments;
 
     /**
      * Ruft den Wert der title-Eigenschaft ab.
@@ -180,6 +183,22 @@ public class Identifier {
      */
     public void setGithook(String value) {
         this.githook = value;
+    }
+
+    /**
+     * Ruft den Wert der comments-Eigenschaft ab.
+     * 
+     */
+    public boolean isComments() {
+        return comments;
+    }
+
+    /**
+     * Legt den Wert der comments-Eigenschaft fest.
+     * 
+     */
+    public void setComments(boolean value) {
+        this.comments = value;
     }
 
 }

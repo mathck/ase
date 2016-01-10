@@ -45,7 +45,12 @@ public class TaskServiceImpl implements TaskService {
         Task task =  taskDAO.findByID(tID);
 
         //get subtasks
-        task.setSubtaskList(subtaskDAO.loadAllByTask(task.getId()));
+
+        LinkedList<Subtask> subtaskList = subtaskDAO.loadAllByTask(task.getId());
+
+        if (subtaskList != null){
+            task.setSubtaskList(subtaskList);
+        }
 
         return task;
     }
@@ -121,6 +126,23 @@ public class TaskServiceImpl implements TaskService {
         taskDAO.removeUserFromTask(tID, uID);
     }
 
+    public JsonStringWrapper addCommentToTask(int tID, Comment comment) {
+        logger.debug("add comment to task with id="+tID);
+
+        int id;
+
+        id = taskDAO.getNewIDForComments();
+        comment.setId(id);
+        taskDAO.addCommentToTask(tID, comment);
+
+        return new JsonStringWrapper(id);
+    }
+
+    public void deleteCommentFromTask(int tID, int cID) {
+        logger.debug("remove comment with id="+cID+" from task with id="+tID);
+        taskDAO.removeCommentFromTask(tID, cID);
+    }
+
 
     private void writeTaskAndSubtask(int pID, Task task) throws Exception {
 
@@ -181,7 +203,7 @@ public class TaskServiceImpl implements TaskService {
                 subtask.setTaskId(taskId);
                 subtask.setTitle(template.getIdentifier().getTitle());
                 subtask.setDescription(template.getIdentifier().getDescription());
-                //s.setStatus(); // TODO: does a subtask state even exist?
+                subtask.setStatus(new String("open")); //TODO
                 subtask.setXp(template.getIdentifier().getEstimatedWorkTime().intValue());
                 subtask.setCreationDate(new Date());
                 subtask.setUpdateDate(new Date());

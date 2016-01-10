@@ -1,6 +1,7 @@
 package at.tuwien.ase.dao.impl;
 
 import at.tuwien.ase.dao.RewardDAO;
+import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.model.Reward;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,25 +102,10 @@ public class RewardDAOImpl implements RewardDAO{
         String sqlQuery = "SELECT ID, USER_MAIL, NAME, DESCRIPTION, XPBASE, IMAGE_LINK, CREATION_DATE " +
                 "FROM REWARD";
 
-        LinkedList<Reward> rewards = new LinkedList<Reward>();
-
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery);
-        for (Map<String,Object> row : rows) {
 
-            Reward reward = new Reward();
-            reward.setId((Integer)row.get("id"));
-            reward.setUserMail((String)row.get("user_mail"));
-            reward.setName((String)row.get("name"));
-            reward.setDescription((String)row.get("description"));
-            reward.setXpbase((Integer)row.get("xpbase"));
-            reward.setImageLink((String)row.get("image_link"));
-            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-
-            rewards.add(reward);
-        }
-
-        return rewards;
+        return mapRows(rows);
 
     }
 
@@ -131,27 +117,12 @@ public class RewardDAOImpl implements RewardDAO{
                 "FROM REWARD " +
                 "WHERE USER_MAIL = ? ";
 
-        LinkedList<Reward> rewards = new LinkedList<Reward>();
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 uID);
 
-        for (Map<String,Object> row : rows) {
-
-            Reward reward = new Reward();
-            reward.setId((Integer)row.get("id"));
-            reward.setUserMail((String)row.get("user_mail"));
-            reward.setName((String)row.get("name"));
-            reward.setDescription((String)row.get("description"));
-            reward.setXpbase((Integer)row.get("xpbase"));
-            reward.setImageLink((String)row.get("image_link"));
-            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-
-            rewards.add(reward);
-        }
-
-        return rewards;
+        return mapRows(rows);
 
     }
 
@@ -164,28 +135,11 @@ public class RewardDAOImpl implements RewardDAO{
                 "WHERE REL_USER_REWARD_PROJECT.USER_MAIL = ? " +
                 "AND REL_USER_REWARD_PROJECT.REWARD_ID = REWARD.ID";
 
-
-        LinkedList<Reward> rewards = new LinkedList<Reward>();
-
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 uID);
 
-        for (Map<String,Object> row : rows) {
-
-            Reward reward = new Reward();
-            reward.setId((Integer)row.get("id"));
-            reward.setUserMail((String)row.get("user_mail"));
-            reward.setName((String)row.get("name"));
-            reward.setDescription((String)row.get("description"));
-            reward.setXpbase((Integer)row.get("xpbase"));
-            reward.setImageLink((String)row.get("image_link"));
-            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-
-            rewards.add(reward);
-        }
-
-        return rewards;
+        return mapRows(rows);
     }
 
     public LinkedList<Reward> loadAllByProject(int pID) {
@@ -193,32 +147,15 @@ public class RewardDAOImpl implements RewardDAO{
         logger.debug("retrieve from db: all rewards by project with id="+pID);
 
         String sqlQuery = "SELECT REWARD.ID, REWARD.USER_MAIL, REWARD.NAME, REWARD.DESCRIPTION, REWARD.XPBASE, REWARD.IMAGE_LINK, REWARD.CREATION_DATE " +
-                "FROM REWARD, REL_USER_REWARD_PROJECT " +
-                "WHERE REL_USER_REWARD_PROJECT.PROJECT_ID = ? " +
-                "AND REL_USER_REWARD_PROJECT.REWARD_ID = REWARD.ID";
-
-
-        LinkedList<Reward> rewards = new LinkedList<Reward>();
+                "FROM REWARD, REL_PROJECT_REWARD " +
+                "WHERE REL_PROJECT_REWARD.PROJECT_ID = ? " +
+                "AND REL_PROJECT_REWARD.REWARD_ID = REWARD.ID";
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 pID);
 
-        for (Map<String,Object> row : rows) {
-
-            Reward reward = new Reward();
-            reward.setId((Integer)row.get("id"));
-            reward.setUserMail((String)row.get("user_mail"));
-            reward.setName((String)row.get("name"));
-            reward.setDescription((String)row.get("description"));
-            reward.setXpbase((Integer)row.get("xpbase"));
-            reward.setImageLink((String)row.get("image_link"));
-            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-
-            rewards.add(reward);
-        }
-
-        return rewards;
+        return mapRows(rows);
     }
 
     public LinkedList<Reward> loadAllByProjectAndUser(int pID, String uID) {
@@ -231,29 +168,12 @@ public class RewardDAOImpl implements RewardDAO{
                 "AND REL_USER_REWARD_PROJECT.USER_MAIL = ? " +
                 "AND REL_USER_REWARD_PROJECT.REWARD_ID = REWARD.ID";
 
-
-        LinkedList<Reward> rewards = new LinkedList<Reward>();
-
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 pID,
                 uID);
 
-        for (Map<String,Object> row : rows) {
-
-            Reward reward = new Reward();
-            reward.setId((Integer)row.get("id"));
-            reward.setUserMail((String)row.get("user_mail"));
-            reward.setName((String)row.get("name"));
-            reward.setDescription((String)row.get("description"));
-            reward.setXpbase((Integer)row.get("xpbase"));
-            reward.setImageLink((String)row.get("image_link"));
-            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
-
-            rewards.add(reward);
-        }
-
-        return rewards;
+        return mapRows(rows);
     }
 
     public void assignAwardToUser(int pID, String uID, int rID) {
@@ -287,6 +207,27 @@ public class RewardDAOImpl implements RewardDAO{
                 Integer.class);
 
         return id;
+    }
+
+    private LinkedList<Reward> mapRows(List<Map<String,Object>> rows){
+
+        LinkedList<Reward> rewards = new LinkedList<Reward>();
+
+        for (Map<String,Object> row : rows) {
+
+            Reward reward = new Reward();
+            reward.setId((Integer)row.get("id"));
+            reward.setUserMail((String)row.get("user_mail"));
+            reward.setName((String)row.get("name"));
+            reward.setDescription((String)row.get("description"));
+            reward.setXpbase((Integer)row.get("xpbase"));
+            reward.setImageLink((String)row.get("image_link"));
+            reward.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+
+            rewards.add(reward);
+        }
+
+        return rewards;
     }
 
 }

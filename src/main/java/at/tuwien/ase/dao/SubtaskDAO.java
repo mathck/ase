@@ -4,6 +4,8 @@ import at.tuwien.ase.model.Subtask;
 import at.tuwien.ase.model.TaskElementJson;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Daniel Hofer on 20.11.2015.

@@ -3,19 +3,19 @@ package at.tuwien.ase.dao.impl;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.model.Subtask;
 
+
 import at.tuwien.ase.model.TaskElementJson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -85,61 +85,21 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
                 "WHERE SUBTASK.ID = ? ";
 
-        int subtaskId;
-        Subtask subtask = new Subtask();
-        HashMap<Integer, Subtask> subtaskMap = new HashMap<Integer, Subtask>();
-        TaskElementJson taskElementJson;
+
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 tID
         );
 
-        for (Map<String,Object> row : rows) {
+        LinkedList<Subtask> subtaskList = mapRows(rows);
 
-
-            if (row.get("subtasks_id") != null){
-
-                subtaskId = (Integer)row.get("subtasks_id");
-
-                //subtask already in linked list?
-                if (subtask.getId() == null){
-
-                    subtask.setId((Integer)row.get("subtasks_id"));
-                    subtask.setTitle((String)row.get("subtasks_title"));
-                    subtask.setDescription((String)row.get("subtasks_description"));
-                    subtask.setDslTemplateId((Integer)row.get("subtasks_dsl_template_id"));
-                    subtask.setTaskId((Integer)row.get("subtasks_task_id"));
-                    subtask.setStatus((String)row.get("subtasks_status"));
-                    subtask.setTaskBody((String)row.get("subtasks_task_body"));
-                    subtask.setXp((Integer) row.get("subtasks_xp"));
-                    subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("subtasks_creation_date")).getTime()));
-                    subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("subtasks_update_date")).getTime()));
-
-                }
-
-                //task item present?
-                if (row.get("taskitems_subtask_id") != null){
-
-                    //create task item and add it to subtask
-                    taskElementJson = new TaskElementJson();
-
-                    subtaskId = (Integer)row.get("taskitems_subtask_id");
-
-                    taskElementJson.setId((Integer)row.get("taskitems_id"));
-                    taskElementJson.setItemType((String)row.get("taskitems_item_type"));
-                    taskElementJson.setLink((String)row.get("taskitems_link"));
-                    taskElementJson.setStatus((String)row.get("taskitems_status"));
-                    taskElementJson.setValue((String)row.get("taskitems_value"));
-                    taskElementJson.setSubtaskId(subtaskId);
-
-                    //add task element to subtask
-                    subtask.addTaskElement(taskElementJson);
-                }
-            }
+        //return first task element
+        if (subtaskList != null && subtaskList.size() > 0){
+            return subtaskList.get(0);
         }
 
-        return subtask ;
+        return null;
     }
 
     public LinkedList<Subtask> loadAll() {
@@ -153,67 +113,11 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 "TASK LEFT JOIN SUBTASK ON TASK.ID = SUBTASK.TASK_ID " +
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID ";
 
-        int subtaskId;
-        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
-        HashMap<Integer, Subtask> subtaskMap = new HashMap<Integer, Subtask>();
-        Subtask subtask;
-        TaskElementJson taskElementJson;
-
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery
         );
 
-        for (Map<String,Object> row : rows) {
-
-
-            if (row.get("subtasks_id") != null){
-
-                subtaskId = (Integer)row.get("subtasks_id");
-
-                //subtask already in linked list?
-                if (subtaskMap.get(subtaskId) == null){
-
-                    //create subtask
-                    subtask = new Subtask();
-
-                    subtask.setId((Integer)row.get("subtasks_id"));
-                    subtask.setTitle((String)row.get("subtasks_title"));
-                    subtask.setDescription((String)row.get("subtasks_description"));
-                    subtask.setDslTemplateId((Integer)row.get("subtasks_dsl_template_id"));
-                    subtask.setTaskId((Integer)row.get("subtasks_task_id"));
-                    subtask.setStatus((String)row.get("subtasks_status"));
-                    subtask.setTaskBody((String)row.get("subtasks_task_body"));
-                    subtask.setXp((Integer) row.get("subtasks_xp"));
-                    subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("subtasks_creation_date")).getTime()));
-                    subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("subtasks_update_date")).getTime()));
-
-                    //add subtask to linked list and to hashmap
-                    subtasks.add(subtask);
-                    subtaskMap.put(subtaskId, subtask);
-                }
-
-                //task item present?
-                if (row.get("taskitems_subtask_id") != null){
-
-                    //create task item and add it to subtask
-                    taskElementJson = new TaskElementJson();
-
-                    subtaskId = (Integer)row.get("taskitems_subtask_id");
-
-                    taskElementJson.setId((Integer)row.get("taskitems_id"));
-                    taskElementJson.setItemType((String)row.get("taskitems_item_type"));
-                    taskElementJson.setLink((String)row.get("taskitems_link"));
-                    taskElementJson.setStatus((String)row.get("taskitems_status"));
-                    taskElementJson.setValue((String)row.get("taskitems_value"));
-                    taskElementJson.setSubtaskId(subtaskId);
-
-                    //add task element to subtask
-                    ((Subtask)subtaskMap.get(subtaskId)).addTaskElement(taskElementJson);
-                }
-            }
-        }
-
-        return subtasks;
+        return mapRows(rows);
 
     }
 
@@ -229,68 +133,12 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
                 "WHERE TASK.ID = ?";
 
-        int subtaskId;
-        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
-        HashMap<Integer, Subtask> subtaskMap = new HashMap<Integer, Subtask>();
-        Subtask subtask;
-        TaskElementJson taskElementJson;
-
-        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+       List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 tID
         );
 
-        for (Map<String,Object> row : rows) {
-
-
-            if (row.get("subtasks_id") != null){
-
-                subtaskId = (Integer)row.get("subtasks_id");
-
-                //subtask already in linked list?
-                if (subtaskMap.get(subtaskId) == null){
-
-                    //create subtask
-                    subtask = new Subtask();
-
-                    subtask.setId((Integer)row.get("subtasks_id"));
-                    subtask.setTitle((String)row.get("subtasks_title"));
-                    subtask.setDescription((String)row.get("subtasks_description"));
-                    subtask.setDslTemplateId((Integer)row.get("subtasks_dsl_template_id"));
-                    subtask.setTaskId((Integer)row.get("subtasks_task_id"));
-                    subtask.setStatus((String)row.get("subtasks_status"));
-                    subtask.setTaskBody((String)row.get("subtasks_task_body"));
-                    subtask.setXp((Integer) row.get("subtasks_xp"));
-                    subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("subtasks_creation_date")).getTime()));
-                    subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("subtasks_update_date")).getTime()));
-
-                    //add subtask to linked list and to hashmap
-                    subtasks.add(subtask);
-                    subtaskMap.put(subtaskId, subtask);
-                }
-
-                //task item present?
-                if (row.get("taskitems_subtask_id") != null){
-
-                    //create task item and add it to subtask
-                    taskElementJson = new TaskElementJson();
-
-                    subtaskId = (Integer)row.get("taskitems_subtask_id");
-
-                    taskElementJson.setId((Integer)row.get("taskitems_id"));
-                    taskElementJson.setItemType((String)row.get("taskitems_item_type"));
-                    taskElementJson.setLink((String)row.get("taskitems_link"));
-                    taskElementJson.setStatus((String)row.get("taskitems_status"));
-                    taskElementJson.setValue((String)row.get("taskitems_value"));
-                    taskElementJson.setSubtaskId(subtaskId);
-
-                    //add task element to subtask
-                    ((Subtask)subtaskMap.get(subtaskId)).addTaskElement(taskElementJson);
-                }
-            }
-        }
-
-        return subtasks;
+        return mapRows(rows);
 
     }
 
@@ -306,69 +154,13 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
                 "WHERE TASK.PROJECT_ID = ? ";
 
-        int subtaskId;
-        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
-        HashMap<Integer, Subtask> subtaskMap = new HashMap<Integer, Subtask>();
-        Subtask subtask;
-        TaskElementJson taskElementJson;
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 pID
         );
 
-        for (Map<String,Object> row : rows) {
-
-
-            if (row.get("subtasks_id") != null){
-
-                subtaskId = (Integer)row.get("subtasks_id");
-
-                //subtask already in linked list?
-                if (subtaskMap.get(subtaskId) == null){
-
-                    //create subtask
-                    subtask = new Subtask();
-
-                    subtask.setId((Integer)row.get("subtasks_id"));
-                    subtask.setTitle((String)row.get("subtasks_title"));
-                    subtask.setDescription((String)row.get("subtasks_description"));
-                    subtask.setDslTemplateId((Integer)row.get("subtasks_dsl_template_id"));
-                    subtask.setTaskId((Integer)row.get("subtasks_task_id"));
-                    subtask.setStatus((String)row.get("subtasks_status"));
-                    subtask.setTaskBody((String)row.get("subtasks_task_body"));
-                    subtask.setXp((Integer) row.get("subtasks_xp"));
-                    subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("subtasks_creation_date")).getTime()));
-                    subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("subtasks_update_date")).getTime()));
-
-                    //add subtask to linked list and to hashmap
-                    subtasks.add(subtask);
-                    subtaskMap.put(subtaskId, subtask);
-                }
-
-                //task item present?
-                if (row.get("taskitems_subtask_id") != null){
-
-                    //create task item and add it to subtask
-                    taskElementJson = new TaskElementJson();
-
-                    subtaskId = (Integer)row.get("taskitems_subtask_id");
-
-                    taskElementJson.setId((Integer)row.get("taskitems_id"));
-                    taskElementJson.setItemType((String)row.get("taskitems_item_type"));
-                    taskElementJson.setLink((String)row.get("taskitems_link"));
-                    taskElementJson.setStatus((String)row.get("taskitems_status"));
-                    taskElementJson.setValue((String)row.get("taskitems_value"));
-                    taskElementJson.setSubtaskId(subtaskId);
-
-                    //add task element to subtask
-                    ((Subtask)subtaskMap.get(subtaskId)).addTaskElement(taskElementJson);
-                }
-            }
-        }
-
-        return subtasks;
-
+        return mapRows(rows);
     }
 
     public LinkedList<Subtask> loadAllByUser(String uID) {
@@ -383,68 +175,12 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
                 "WHERE TASK.USER_MAIL = ? AND SUBTASK.ID IS NOT NULL";
 
-        int subtaskId;
-        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
-        HashMap<Integer, Subtask> subtaskMap = new HashMap<Integer, Subtask>();
-        Subtask subtask;
-        TaskElementJson taskElementJson;
-
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 uID
         );
 
-        for (Map<String,Object> row : rows) {
-
-
-            if (row.get("subtasks_id") != null){
-
-                subtaskId = (Integer)row.get("subtasks_id");
-
-                //subtask already in linked list?
-                if (subtaskMap.get(subtaskId) == null){
-
-                    //create subtask
-                    subtask = new Subtask();
-
-                    subtask.setId((Integer)row.get("subtasks_id"));
-                    subtask.setTitle((String)row.get("subtasks_title"));
-                    subtask.setDescription((String)row.get("subtasks_description"));
-                    subtask.setDslTemplateId((Integer)row.get("subtasks_dsl_template_id"));
-                    subtask.setTaskId((Integer)row.get("subtasks_task_id"));
-                    subtask.setStatus((String)row.get("subtasks_status"));
-                    subtask.setTaskBody((String)row.get("subtasks_task_body"));
-                    subtask.setXp((Integer) row.get("subtasks_xp"));
-                    subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("subtasks_creation_date")).getTime()));
-                    subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("subtasks_update_date")).getTime()));
-
-                    //add subtask to linked list and to hashmap
-                    subtasks.add(subtask);
-                    subtaskMap.put(subtaskId, subtask);
-                }
-
-                //task item present?
-                if (row.get("taskitems_subtask_id") != null){
-
-                    //create task item and add it to subtask
-                    taskElementJson = new TaskElementJson();
-
-                    subtaskId = (Integer)row.get("taskitems_subtask_id");
-
-                    taskElementJson.setId((Integer)row.get("taskitems_id"));
-                    taskElementJson.setItemType((String)row.get("taskitems_item_type"));
-                    taskElementJson.setLink((String)row.get("taskitems_link"));
-                    taskElementJson.setStatus((String)row.get("taskitems_status"));
-                    taskElementJson.setValue((String)row.get("taskitems_value"));
-                    taskElementJson.setSubtaskId(subtaskId);
-
-                    //add task element to subtask
-                    ((Subtask)subtaskMap.get(subtaskId)).addTaskElement(taskElementJson);
-                }
-            }
-        }
-
-        return subtasks;
+        return mapRows(rows);
 
     }
 
@@ -523,5 +259,75 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         return id;
     }
+
+    private LinkedList<Subtask>  mapRows(List<Map<String,Object>> rows){
+        int subtaskId;
+        int taskitemId;
+        LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
+        HashMap<Integer, Subtask> subtaskMap = new HashMap<Integer, Subtask>();
+        HashMap<Integer, TaskElementJson> taskElementJsonMap = new HashMap<Integer, TaskElementJson>();
+        Subtask subtask;
+        TaskElementJson taskElementJson;
+
+        for (Map<String,Object> row : rows) {
+
+
+            if (row.get("subtasks_id") != null){
+
+                subtaskId = (Integer)row.get("subtasks_id");
+
+                //subtask already in linked list?
+                if (subtaskMap.get(subtaskId) == null){
+
+                    //create subtask
+                    subtask = new Subtask();
+
+                    subtask.setId((Integer)row.get("subtasks_id"));
+                    subtask.setTitle((String)row.get("subtasks_title"));
+                    subtask.setDescription((String)row.get("subtasks_description"));
+                    subtask.setDslTemplateId((Integer)row.get("subtasks_dsl_template_id"));
+                    subtask.setTaskId((Integer)row.get("subtasks_task_id"));
+                    subtask.setStatus((String)row.get("subtasks_status"));
+                    subtask.setTaskBody((String)row.get("subtasks_task_body"));
+                    subtask.setXp((Integer) row.get("subtasks_xp"));
+                    subtask.setCreationDate(new java.sql.Date(((Timestamp)row.get("subtasks_creation_date")).getTime()));
+                    subtask.setUpdateDate(new java.sql.Date(((Timestamp)row.get("subtasks_update_date")).getTime()));
+
+                    //add subtask to linked list and to hashmap
+                    subtasks.add(subtask);
+                    subtaskMap.put(subtaskId, subtask);
+                }
+
+                if (row.get("taskitems_id") != null) {
+
+                    taskitemId = (Integer) row.get("taskitems_id");
+                    //subtask already in task object?
+
+                    if (taskElementJsonMap.get(subtaskId + taskitemId) == null) {
+                        //create task item and add it to subtask
+                        taskElementJson = new TaskElementJson();
+
+                        subtaskId = (Integer)row.get("taskitems_subtask_id");
+
+                        taskElementJson.setId((Integer)row.get("taskitems_id"));
+                        taskElementJson.setItemType((String)row.get("taskitems_item_type"));
+                        taskElementJson.setLink((String)row.get("taskitems_link"));
+                        taskElementJson.setStatus((String)row.get("taskitems_status"));
+                        taskElementJson.setValue((String)row.get("taskitems_value"));
+                        taskElementJson.setSubtaskId(subtaskId);
+
+                        //add task element to subtask
+                        ((Subtask)subtaskMap.get(subtaskId)).addTaskElement(taskElementJson);
+                        taskElementJsonMap.put(subtaskId + taskitemId, taskElementJson);
+
+                    }
+
+                }
+            }
+
+        }
+        return subtasks;
+    }
+
 
 }

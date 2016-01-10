@@ -2,6 +2,7 @@ package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 
+import at.tuwien.ase.model.Comment;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
 import at.tuwien.ase.services.TaskService;
@@ -88,6 +89,20 @@ public class TaskController {
     @ResponseBody
     public void deleteTasksByID(@PathVariable("tID") int tID)  throws Exception {
         ts.deleteTaskByID(tID);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/tasks/{tID}/comments", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    public JsonStringWrapper addCommentToTask(@PathVariable("tID") int tID, @RequestBody Comment comment) throws Exception {
+        return ts.addCommentToTask(tID, comment);
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/tasks/{tID}/comments/{cID}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteCommentFromTask(@PathVariable("tID") int tID, @PathVariable("cID") int cID)  throws Exception {
+        ts.deleteCommentFromTask(tID, cID);
     }
 
 }

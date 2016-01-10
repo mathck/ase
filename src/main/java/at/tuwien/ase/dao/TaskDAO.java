@@ -1,5 +1,6 @@
 package at.tuwien.ase.dao;
 
+import at.tuwien.ase.model.Comment;
 import at.tuwien.ase.model.Task;
 import at.tuwien.ase.model.TaskState;
 import at.tuwien.ase.model.User;
@@ -31,9 +32,13 @@ public interface TaskDAO {
     int getNewID();
     int getNewIDForRelTaskUser();
     int getNewIDForTaskStates();
+    int getNewIDForComments();
 
     void assignUserToTask(int tID, String uID);
     void removeUserFromTask(int tID, String uID);
 
+    void addCommentToTask(int tID, Comment comment);
+
+    void removeCommentFromTask(int tID, int cID);
 
 }

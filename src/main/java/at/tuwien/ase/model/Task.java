@@ -23,12 +23,14 @@ public class Task {
     private LinkedList<Subtask> subtaskList;
     private LinkedList<User> userList;
     private LinkedList<TaskState> taskStates;
+    private LinkedList<Comment> commentList;
 
     // Must have no-argument constructor
     public Task() {
         subtaskList = new LinkedList<Subtask>();
         userList = new LinkedList<User>();
         taskStates = new LinkedList<TaskState>();
+        commentList = new LinkedList<Comment>();
     }
 
     public Task(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userMail) {
@@ -42,6 +44,8 @@ public class Task {
         this.userMail = userMail;
         subtaskList = new LinkedList<Subtask>();
         userList = new LinkedList<User>();
+        taskStates = new LinkedList<TaskState>();
+        commentList = new LinkedList<Comment>();
     }
 
     public Task(String title, String description) {
@@ -172,6 +176,18 @@ public class Task {
         this.taskStates.add(taskState);
     }
 
+    public void addComment(Comment comment){
+        this.commentList.add(comment);
+    }
+
+    public LinkedList<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(LinkedList<Comment> commentList) {
+        this.commentList = commentList;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -189,6 +205,7 @@ public class Task {
                 ", subtaskList=" + subtaskList +
                 ", userList=" + userList +
                 ", taskStates=" + taskStates +
+                ", commentList=" + commentList +
                 '}';
     }
 }

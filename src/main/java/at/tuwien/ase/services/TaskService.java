@@ -1,5 +1,6 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.model.Comment;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
 
@@ -24,6 +25,10 @@ public interface TaskService {
 
     void assignUserToTask(int tID, String uID);
     void removeUserFromTask(int tID, String uID);
+
+    JsonStringWrapper addCommentToTask(int tID, Comment comment);
+
+    void deleteCommentFromTask(int tID, int cID);
 
 
 }
