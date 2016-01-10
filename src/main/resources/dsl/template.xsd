@@ -13,7 +13,6 @@
 							<xs:element type="xs:integer" name="estimatedWorkTime"/>
 							<xs:element type="xs:date" name="deadline"/>
 							<xs:element type="xs:string" name="githook"/>
-							<xs:element type="xs:boolean" name="comments"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
