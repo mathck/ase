@@ -40,7 +40,7 @@ public class TaskServiceImpl implements TaskService {
         this.taskDAO = taskDAO;
     }
 
-    public Task getByID(int tID) {
+    public Task getByID(int tID) throws Exception {
         logger.debug("get task with id=" + tID);
         Task task =  taskDAO.findByID(tID);
 
@@ -59,15 +59,27 @@ public class TaskServiceImpl implements TaskService {
 
         logger.debug("post new task");
 
+        LinkedList<TaskElementJson> taskElementJsonList = new LinkedList<TaskElementJson>();
+        LinkedList<Subtask> subtaskList = new LinkedList<Subtask>();
+        LinkedList<Task> taskList = new LinkedList<Task>();
+        Task t;
+
         if (task.getTaskStates() == null ||  task.getTaskStates().isEmpty()
                 || task.getSubtaskList() == null ||  task.getSubtaskList().isEmpty()
                 || task.getExecutionType() == null || task.getExecutionType().equals("")){
             throw new Exception("not all input values are present!");
         }
 
-        if (task.getExecutionType().equals("collaborative_task")) {
 
-            writeTaskAndSubtask(pID, task);
+        //create task list
+
+        if (task.getExecutionType().equals("collaborative_task")) {
+            int taskId = taskDAO.getNewID();
+            task.setId(taskId);
+            task.setStatus(task.getTaskStates().get(0).getStateName());
+            task.setCreationDate(new Date());
+            task.setUpdateDate(new Date());
+            taskList.add(task);
 
         }else{
 
@@ -76,8 +88,22 @@ public class TaskServiceImpl implements TaskService {
                 String taskTitle = task.getTitle().trim();
                 if (task.getUserList() != null && !task.getUserList().isEmpty()) {
                     for (User u : task.getUserList()) {
-                        task.setTitle(u.getFirstName() + ": " + taskTitle);
-                        writeTaskAndSubtask(pID, task);
+
+                        t = (Task) task.clone();
+
+                        int taskId = taskDAO.getNewID();
+                        t.setId(taskId);
+                        t.setTitle(u.getFirstName() + ": " + taskTitle);
+                        t.setStatus(t.getTaskStates().get(0).getStateName());
+                        t.setCreationDate(new Date());
+                        t.setUpdateDate(new Date());
+
+                        //single task --> only one contributor
+                        LinkedList<User> userList = new LinkedList<User>();
+                        userList.add(u);
+                        t.setUserList(userList);
+
+                        taskList.add(t);
 
                     }
                 }
@@ -85,48 +111,65 @@ public class TaskServiceImpl implements TaskService {
             }else{
                 throw new Exception("execution type not supported");
             }
+
         }
+
+        //create subtask and subtask elements
+        createSubtasks(task, taskList, taskElementJsonList, subtaskList);
+
+        //insert tasks
+        taskDAO.insertTaskBatch(pID, taskList);
+
+        //add contributors to task
+        taskDAO.assignUserToTaskBatch(task.getUserList(), taskList);
+
+        //add states to task state list
+        taskDAO.addStateToTaskStatesBatch(task.getTaskStates(), taskList);
+
+        //store subtasks and subtask elements to db
+        subtaskDAO.insertSubtaskBatch(subtaskList);
+
+        //add task elements to subtasks
+        subtaskDAO.addTaskItemToSubtaskBatch(taskElementJsonList);
 
     }
 
-
-
-    public void deleteTaskByID(int tID) {
+    public void deleteTaskByID(int tID) throws Exception {
         logger.debug("delete task with id="+tID);
         taskDAO.removeTaskByID(tID);
     }
 
-    public LinkedList<Task> getAllTasks() {
+    public LinkedList<Task> getAllTasks() throws Exception {
         logger.debug("get all tasks");
         return taskDAO.loadAll();
     }
 
-    public LinkedList<Task> getAllTasksFromUser(String uID) {
+    public LinkedList<Task> getAllTasksFromUser(String uID) throws Exception {
         logger.debug("get all tasks from user"+uID);
         return taskDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Task> getAllTasksFromProject(int pID) {
+    public LinkedList<Task> getAllTasksFromProject(int pID) throws Exception {
         logger.debug("get all tasks from project");
         return taskDAO.loadAllByProject(pID);
     }
 
-    public LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID) {
+    public LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID) throws Exception {
         logger.debug("get all tasks from project " + pID + " and from user " + uID);
         return taskDAO.loadAllByProjectAndUser(pID, uID);
     }
 
-    public void assignUserToTask(int tID, String uID) {
+    public void assignUserToTask(int tID, String uID) throws Exception {
         logger.debug("assign user with id="+uID+" to task with id="+tID);
         taskDAO.assignUserToTask(tID, uID);
     }
 
-    public void removeUserFromTask(int tID, String uID) {
+    public void removeUserFromTask(int tID, String uID) throws Exception {
         logger.debug("remove user with id="+uID+" from task with id="+tID);
         taskDAO.removeUserFromTask(tID, uID);
     }
 
-    public JsonStringWrapper addCommentToTask(int tID, Comment comment) {
+    public JsonStringWrapper addCommentToTask(int tID, Comment comment) throws Exception {
         logger.debug("add comment to task with id="+tID);
 
         int id;
@@ -138,18 +181,15 @@ public class TaskServiceImpl implements TaskService {
         return new JsonStringWrapper(id);
     }
 
-    public void deleteCommentFromTask(int tID, int cID) {
+    public void deleteCommentFromTask(int tID, int cID) throws Exception {
         logger.debug("remove comment with id="+cID+" from task with id="+tID);
         taskDAO.removeCommentFromTask(tID, cID);
     }
 
 
-    private void writeTaskAndSubtask(int pID, Task task) throws Exception {
+    private void createSubtasks(Task task, LinkedList<Task> taskList, LinkedList<TaskElementJson> taskElementJsonList, LinkedList<Subtask> subtaskList) throws Exception {
 
         //TODO performance improvement
-        // 1. store all task elements of a specific template as linkedList to db (during template creation).
-        // 2. use batch inserts for users, states, task elements
-        // 3. for single tasks: start a thread for each user or for a set of users
 
         int taskId;
         DslTemplate dslTemplate;
@@ -157,6 +197,71 @@ public class TaskServiceImpl implements TaskService {
         String taskBody;
         List<TaskElement> taskElementList;
         TaskElementJson taskElementJson;
+        Task t;
+
+
+        //create subtasks from dsl template
+        if (task.getSubtaskList() != null && !task.getSubtaskList().isEmpty()) {
+
+            //for all subtasks
+            for (Subtask subtask : task.getSubtaskList()) {
+
+                //get dsl template for subtask from db
+                dslTemplate = dslTemplateService.getByID(subtask.getDslTemplateId());
+
+                //unmarshal dsl template to java objects
+                template = dslTemplateService.unmarshalTemplateXml(dslTemplate);
+
+                //convert task body to string and add it to Subtask
+                taskBody = dslTemplateService.convertTaskBodyToString(template.getTaskBody().getContent());
+
+
+
+                for (int j = 0; j < taskList.size(); j++) {
+
+                    t = taskList.get(j);
+
+                    Subtask s = (Subtask) subtask.clone();
+
+                    s.setTaskBody(taskBody);
+                    s.setId(subtaskDAO.getNewID());System.out.println(s.getId());
+                    s.setTitle(template.getIdentifier().getTitle());
+                    s.setDescription(template.getIdentifier().getDescription());
+                    s.setStatus(new String("open"));
+                    s.setXp(template.getIdentifier().getEstimatedWorkTime().intValue());
+                    s.setTaskId(t.getId());
+                    s.setCreationDate(new Date());
+                    s.setUpdateDate(new Date());
+
+                    //get task elements from tempalte and add it to subtask
+                    if (template.getTaskElements() != null && template.getTaskElements().getTaskElement() != null
+                            && !template.getTaskElements().getTaskElement().isEmpty()) {
+
+                        taskElementList = template.getTaskElements().getTaskElement();
+                        for (TaskElement taskElement : taskElementList) {
+
+                            taskElementJson = TaskElementJsonFactory.getTaskElement(taskElement);
+
+                            taskElementJson.setSubtaskId(s.getId());
+                            taskElementJsonList.add(taskElementJson);
+
+                        }
+                    }
+
+                    //add subtask to list
+                    subtaskList.add(s);
+
+                }
+
+/*
+        int taskId;
+        DslTemplate dslTemplate;
+        Template template;
+        String taskBody;
+        List<TaskElement> taskElementList;
+        TaskElementJson taskElementJson;
+        LinkedList<TaskElementJson> taskElementJsonList = new LinkedList<TaskElementJson>();
+        LinkedList<Subtask> subtaskList = new LinkedList<Subtask>();
 
         taskId = taskDAO.getNewID();
         task.setId(taskId);
@@ -169,20 +274,10 @@ public class TaskServiceImpl implements TaskService {
         taskDAO.insertTask(pID, task);
 
         //add contributors to task
-        if (task.getUserList() != null && !task.getUserList().isEmpty()) {
-            for (User u : task.getUserList()) {
-                //assign user to task
-                taskDAO.addUserToTask(u.getUserID(), task.getId());
-            }
-        }
+        taskDAO.assignUserToTaskBatch(task.getUserList(), task.getId());
 
         //add states to task state list
-        if (task.getTaskStates() != null && !task.getTaskStates().isEmpty()) {
-            for (TaskState s : task.getTaskStates()) {
-                //add state to state list
-                taskDAO.addStateToTaskStates(s, task.getId());
-            }
-        }
+        taskDAO.addStateToTaskStatesBatch(task.getTaskStates(), task.getId());
 
         //create subtasks from dsl template
         if (task.getSubtaskList() != null && !task.getSubtaskList().isEmpty()) {
@@ -203,13 +298,13 @@ public class TaskServiceImpl implements TaskService {
                 subtask.setTaskId(taskId);
                 subtask.setTitle(template.getIdentifier().getTitle());
                 subtask.setDescription(template.getIdentifier().getDescription());
-                subtask.setStatus(new String("open")); //TODO
+                subtask.setStatus(new String("open"));
                 subtask.setXp(template.getIdentifier().getEstimatedWorkTime().intValue());
                 subtask.setCreationDate(new Date());
                 subtask.setUpdateDate(new Date());
 
-                //add subtask to db
-                subtaskDAO.insertSubtask(subtask);
+                //add subtask to list
+                subtaskList.add(subtask);
 
                 //get task elements from tempalte and add it to subtask
                 if (template.getTaskElements() != null && template.getTaskElements().getTaskElement() != null
@@ -220,16 +315,20 @@ public class TaskServiceImpl implements TaskService {
 
                         taskElementJson = TaskElementJsonFactory.getTaskElement(taskElement);
 
-                        //db insert: add task element to subtask
+                        //add task element to subtask
                         taskElementJson.setId(subtaskDAO.getNewIDForTaskItem());
-                        subtaskDAO.addTaskItemToSubtask(taskElementJson, subtask.getId());
+
+                        taskElementJson.setSubtaskId(subtask.getId());
+                        taskElementJsonList.add(taskElementJson);
 
                     }
-
                 }
             }
-        }
 
+        }*/
+
+            }
+        }
     }
 
 }

@@ -6,12 +6,14 @@ import at.tuwien.ase.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -63,6 +65,37 @@ public class TaskDAOImpl implements TaskDAO {
                 task.getExecutionType(),
                 task.getUserMail()
         );
+    }
+
+    public void insertTaskBatch(final int pID, final List<Task> taskList){
+
+        logger.debug("insert into db: task list");
+
+        String sqlQuery = "INSERT INTO TASK (ID, PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE, EXECUTION_TYPE, USER_MAIL) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+
+                Task task = taskList.get(i);
+                ps.setInt(1, task.getId());
+                ps.setInt(2, pID);
+                ps.setString(3, task.getTitle());
+                ps.setString(4, task.getDescription());
+                ps.setString(5, task.getStatus());
+                ps.setString(6, taskType);
+                ps.setTimestamp(7, new java.sql.Timestamp(task.getCreationDate().getTime()));
+                ps.setTimestamp(8, new java.sql.Timestamp(task.getUpdateDate().getTime()));
+                ps.setString(9, task.getExecutionType());
+                ps.setString(10, task.getUserMail());
+
+            }
+
+            public int getBatchSize() {
+                return taskList.size();
+            }
+        });
     }
 
     public void removeTaskByID(int tID) {
@@ -216,6 +249,42 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
+    public void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Task> taskList) {
+
+        logger.debug("insert into db: add states to task batch");
+
+        String sqlQuery = "INSERT INTO TASK_STATES (ID, STATE_NAME, TASK_ID) " +
+                "VALUES (?, ?, ?)";
+
+        this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
+
+            int j = 0;
+            int currentTaskPosition = 0;
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+
+                //insert state for each task in taskList
+                if (j >= taskStateList.size()){
+                    currentTaskPosition++; //increment counter for taskList
+                    j=0; //reset iterator for taskStateList
+                }
+
+                TaskState taskState = taskStateList.get(j);
+                ps.setInt(1, getNewIDForTaskStates());
+                ps.setString(2, taskState.getStateName());
+                ps.setInt(3, taskList.get(currentTaskPosition).getId());
+
+                j++;
+
+            }
+
+            public int getBatchSize() {
+                return (taskStateList.size() * taskList.size());
+            }
+        });
+
+    }
+
     public LinkedList<Task> loadAllByProjectAndUser(int pID, String uID) {
 
         logger.debug("retrieve from db: all tasks from user with id="+uID+" and project with id="+pID);
@@ -255,6 +324,42 @@ public class TaskDAOImpl implements TaskDAO {
                 uID,
                 tID
         );
+    }
+
+    public void assignUserToTaskBatch(final List<User> userList, final LinkedList<Task> taskList){
+
+        logger.debug("insert into db: add user to task batch");
+
+        String sqlQuery = "INSERT INTO REL_USER_TASK (ID, USER_MAIL, TASK_ID) " +
+                "VALUES (?, ?, ?)";
+
+        this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
+
+            int j = 0;
+            int currentTaskPosition = 0;
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+
+                //insert user for each task in taskList
+                if (j >= userList.size()){
+                    currentTaskPosition++; //increment counter for taskList
+                    j = 0; //reset counter for userList
+                }
+
+                User user = userList.get(j);
+                ps.setInt(1, getNewIDForRelTaskUser());
+                ps.setString(2, user.getUserID());
+                ps.setInt(3,  taskList.get(currentTaskPosition).getId());
+
+                j++;
+
+            }
+
+            public int getBatchSize() {
+                return (userList.size() * taskList.size());
+            }
+
+        });
     }
 
     public void removeUserFromTask(int tID, String uID) {

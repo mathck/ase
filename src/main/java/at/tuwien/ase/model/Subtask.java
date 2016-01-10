@@ -6,7 +6,7 @@ import java.util.LinkedList;
 /**
  * Created by mathc_000 on 05-Nov-15.
  */
-public class Subtask {
+public class Subtask implements Cloneable{
 
     private Integer id;
     private String title;
@@ -126,6 +126,11 @@ public class Subtask {
 
     public void addTaskElement(TaskElementJson taskElement) {
         this.taskElements.add(taskElement);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override

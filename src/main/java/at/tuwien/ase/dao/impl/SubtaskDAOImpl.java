@@ -4,10 +4,12 @@ import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.model.Subtask;
 
 
+import at.tuwien.ase.model.Task;
 import at.tuwien.ase.model.TaskElementJson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -57,6 +61,38 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 subtask.getUpdateDate(),
                 subtask.getTaskBody()
         );
+    }
+
+    public void insertSubtaskBatch(final List<Subtask> subtaskList){
+
+        logger.debug("insert into db: subtask list");
+
+        String sqlQuery = "INSERT INTO SUBTASK (ID, TITLE, DESCRIPTION, DSL_TEMPLATE_ID, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE, TASK_BODY) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+
+                Subtask subtask = subtaskList.get(i);
+                ps.setInt(1, subtask.getId());
+                ps.setString(2, subtask.getTitle());
+                ps.setString(3, subtask.getDescription());
+                ps.setInt(4, subtask.getDslTemplateId());
+                ps.setInt(5, subtask.getTaskId());
+                ps.setString(6, subtask.getStatus());
+                ps.setInt(7, subtask.getXp());
+                ps.setTimestamp(8, new java.sql.Timestamp(subtask.getCreationDate().getTime()));
+                ps.setTimestamp(9, new java.sql.Timestamp(subtask.getUpdateDate().getTime()));
+                ps.setString(10, subtask.getTaskBody());
+
+            }
+
+            public int getBatchSize() {
+                return subtaskList.size();
+            }
+
+        });
     }
 
     public void removeSubtaskByID(int tID) {
@@ -201,6 +237,36 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 taskItem.getItemId(),
                 sID
         );
+
+    }
+
+    public void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList){
+
+        logger.debug("insert into db: add task item to subtask batch");
+
+        String sqlQuery = "INSERT INTO TASK_ITEM (ID, STATUS, ITEM_VALUE, LINK, ITEM_TYPE, ITEM_ID, SUBTASK_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
+
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+
+                TaskElementJson taskElementJson = taskElementJsonList.get(i);
+                ps.setInt(1, getNewIDForTaskItem());
+                ps.setString(2, taskElementJson.getStatus());
+                ps.setString(3, taskElementJson.getValue());
+                ps.setString(4, taskElementJson.getLink());
+                ps.setString(5, taskElementJson.getItemType());
+                ps.setInt(6, taskElementJson.getItemId());
+                ps.setInt(7, taskElementJson.getSubtaskId());
+
+            }
+
+            public int getBatchSize() {
+                return taskElementJsonList.size();
+            }
+        });
 
     }
 

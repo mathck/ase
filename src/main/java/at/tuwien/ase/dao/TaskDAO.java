@@ -6,6 +6,7 @@ import at.tuwien.ase.model.TaskState;
 import at.tuwien.ase.model.User;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Daniel Hofer on 09.11.2015.
@@ -13,6 +14,7 @@ import java.util.LinkedList;
 public interface TaskDAO {
 
     void insertTask(int pID, Task task);
+    void insertTaskBatch(final int pID, final List<Task> taskList);
     void removeTaskByID(int tID);
 
     Task findByID(int tID);
@@ -24,6 +26,8 @@ public interface TaskDAO {
 
     //assign user to task
     void addUserToTask(String uID, int tID);
+    void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Task> taskList);
+
     //add state to state list
     void addStateToTaskStates(TaskState state, int tID);
 
@@ -35,6 +39,8 @@ public interface TaskDAO {
     int getNewIDForComments();
 
     void assignUserToTask(int tID, String uID);
+    void assignUserToTaskBatch(final List<User> userList, final LinkedList<Task> taskList);
+
     void removeUserFromTask(int tID, String uID);
 
     void addCommentToTask(int tID, Comment comment);

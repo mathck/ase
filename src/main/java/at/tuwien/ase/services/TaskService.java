@@ -13,22 +13,22 @@ public interface TaskService {
 
     void writeTask(int pID, Task task) throws Exception;
 
-    void deleteTaskByID(int tID);
+    void deleteTaskByID(int tID) throws Exception;
 
-    Task getByID(int tID);
-    LinkedList<Task> getAllTasks();
-    LinkedList<Task> getAllTasksFromUser(String uID);
+    Task getByID(int tID) throws Exception;
+    LinkedList<Task> getAllTasks() throws Exception;
+    LinkedList<Task> getAllTasksFromUser(String uID) throws Exception;
 
-    LinkedList<Task> getAllTasksFromProject(int pID);
+    LinkedList<Task> getAllTasksFromProject(int pID) throws Exception;
 
-    LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID);
+    LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID) throws Exception;
 
-    void assignUserToTask(int tID, String uID);
-    void removeUserFromTask(int tID, String uID);
+    void assignUserToTask(int tID, String uID) throws Exception;
+    void removeUserFromTask(int tID, String uID) throws Exception;
 
-    JsonStringWrapper addCommentToTask(int tID, Comment comment);
+    JsonStringWrapper addCommentToTask(int tID, Comment comment) throws Exception;
 
-    void deleteCommentFromTask(int tID, int cID);
+    void deleteCommentFromTask(int tID, int cID) throws Exception;
 
 
 }

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 /**
  * Created by Daniel Hofer on 04.11.2015.
  */
-public class Task {
+public class Task implements Cloneable{
 
     private Integer id;
     private String title;
@@ -186,6 +186,11 @@ public class Task {
 
     public void setCommentList(LinkedList<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
