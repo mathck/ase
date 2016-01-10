@@ -224,7 +224,7 @@ public class TaskServiceImpl implements TaskService {
                     Subtask s = (Subtask) subtask.clone();
 
                     s.setTaskBody(taskBody);
-                    s.setId(subtaskDAO.getNewID());System.out.println(s.getId());
+                    s.setId(subtaskDAO.getNewID());
                     s.setTitle(template.getIdentifier().getTitle());
                     s.setDescription(template.getIdentifier().getDescription());
                     s.setStatus(new String("open"));
