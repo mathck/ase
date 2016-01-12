@@ -14,11 +14,12 @@ import java.util.List;
 public interface TaskDAO {
 
     void insertTask(int pID, Task task);
-    void insertTaskBatch(final int pID, final List<Task> taskList);
+    void insertTaskBatch(final int pID, final List<Task> taskList, final String uuID);
     void removeTaskByID(int tID);
 
     Task findByID(int tID);
     LinkedList<Task> loadAll();
+    LinkedList<Integer> loadTaskIdsByUuID(String uuID);
 
     LinkedList<Task> loadAllByProject(int pID);
     LinkedList<Task> loadAllByUser(String uID);
@@ -26,20 +27,17 @@ public interface TaskDAO {
 
     //assign user to task
     void addUserToTask(String uID, int tID);
-    void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Task> taskList);
+    void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Integer> taskIds);
 
     //add state to state list
     void addStateToTaskStates(TaskState state, int tID);
 
     LinkedList<Task> loadAllByProjectAndUser(int pID, String uID);
 
-    int getNewID();
-    int getNewIDForRelTaskUser();
-    int getNewIDForTaskStates();
     int getNewIDForComments();
 
     void assignUserToTask(int tID, String uID);
-    void assignUserToTaskBatch(final List<User> userList, final LinkedList<Task> taskList);
+    void assignUserToTaskBatch(final List<User> userList, final Integer taskId);
 
     void removeUserFromTask(int tID, String uID);
 

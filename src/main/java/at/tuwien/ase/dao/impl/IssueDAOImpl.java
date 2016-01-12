@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -38,23 +39,42 @@ public class IssueDAOImpl implements IssueDAO {
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public void insertIssue(Issue issue) {
+    public int insertIssue(final Issue issue) {
 
         logger.debug("insert into db: issue with id=" + issue.getId());
 
-        String sqlQuery = "INSERT INTO TASK (ID, TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, PROJECT_ID, USER_MAIL)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        final String sqlQuery = "INSERT INTO TASK (TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, PROJECT_ID, USER_MAIL)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-                this.jdbcTemplate.update(
+            /*    this.jdbcTemplate.update(
                         sqlQuery,
-                        issue.getId(),
                         issue.getTitle(),
                         issue.getDescription(),
                         this.taskType,
                         issue.getCreationDate(),
                         issue.getUpdateDate(),
                         issue.getProjectId(),
-                        issue.getUserId());
+                        issue.getUserId());*/
+
+        this.jdbcTemplate.update(new PreparedStatementCreator() {
+
+            public PreparedStatement createPreparedStatement(Connection connection)
+                    throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sqlQuery.toString(), new String[] { "id" });
+                ps.setString(1, issue.getTitle());
+                ps.setString(2, issue.getDescription());
+                ps.setString(3, taskType);
+                ps.setTimestamp(4, new java.sql.Timestamp(issue.getCreationDate().getTime()));
+                ps.setTimestamp(5, new java.sql.Timestamp(issue.getUpdateDate().getTime()));
+                ps.setInt(6, issue.getProjectId());
+                ps.setString(7, issue.getUserId());
+
+                return ps;
+            }
+        }, keyHolder);
+
+
+        return keyHolder.getKey().intValue();
     }
 
     public void removeIssueByID(int iID) {
@@ -176,15 +196,6 @@ public class IssueDAOImpl implements IssueDAO {
 
         return mapRows(rows);
 
-    }
-
-    public int getNewID() {
-
-        Integer id = this.jdbcTemplate.queryForObject(
-                "SELECT nextval('seq_task_id')",
-                Integer.class);
-
-        return id;
     }
 
     private LinkedList<Issue> mapRows(List<Map<String,Object>> rows){

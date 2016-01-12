@@ -55,8 +55,8 @@ public class ProjectServiceTests {
         taskService = new TaskServiceImpl(taskDAO);
         projectService = new ProjectServiceImpl(projectDAO, issueDAO, taskDAO, userDAO, subtaskDAO, issueService, taskService);
 
-        when(issueDAO.getNewID()).thenReturn(50);
-        when(taskDAO.getNewID()).thenReturn(50);
+        //when(issueDAO.getNewID()).thenReturn(50);
+        //when(taskDAO.getNewID()).thenReturn(50);
     }
 
     // @author: Mateusz Czernecki

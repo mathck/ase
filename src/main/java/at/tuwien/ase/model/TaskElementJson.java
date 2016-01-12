@@ -5,7 +5,7 @@ import java.util.LinkedList;
 /**
  * Created by DanielHofer on 22.12.2015.
  */
-public class TaskElementJson {
+public class TaskElementJson implements Cloneable{
 
     private Integer id;
     private Integer itemId;
@@ -74,6 +74,11 @@ public class TaskElementJson {
 
     public void setSubtaskId(Integer subtaskId) {
         this.subtaskId = subtaskId;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override

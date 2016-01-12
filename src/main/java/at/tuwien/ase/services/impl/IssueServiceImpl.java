@@ -66,14 +66,12 @@ public class IssueServiceImpl implements IssueService {
 
         logger.debug("post new issue");
 
-        id = issueDAO.getNewID();
-        issue.setId(id);
         issue.setCreationDate(new Date());
         issue.setUpdateDate(new Date());
         issue.setProjectId(pID);
         issue.setUserId(uID);
 
-        issueDAO.insertIssue(issue);
+        id = issueDAO.insertIssue(issue);
 
         return new JsonStringWrapper(id);
     }

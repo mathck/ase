@@ -12,8 +12,8 @@ import java.util.Map;
  * Created by Daniel Hofer on 20.11.2015.
  */
 public interface SubtaskDAO {
-    void insertSubtask(Subtask subtask);
-    void insertSubtaskBatch(final List<Subtask> subtaskList);
+    int insertSubtask(final Subtask subtask);
+    void insertSubtaskBatch(final List<Subtask> subtaskList, final LinkedList<Integer> taskIds, final String uuID);
     void removeSubtaskByID(int tID);
 
     Subtask findByID(int tID);
@@ -21,14 +21,12 @@ public interface SubtaskDAO {
     LinkedList<Subtask> loadAllByTask(int tID);
     LinkedList<Subtask> loadAllByProject(int pID);
     LinkedList<Subtask> loadAllByUser(String uID);
+    LinkedList<Integer> loadSubtaskIdsByUuID(String uuID);
 
     void addTaskItemToSubtask(TaskElementJson taskItem, int sID) throws Exception;
     void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList) throws Exception;
     int updateTaskItemById(TaskElementJson taskItem) throws Exception;
 
     int updateSubtaskById(int sID, Subtask subtask) throws Exception;
-
-    int getNewID();
-    int getNewIDForTaskItem();
 
 }

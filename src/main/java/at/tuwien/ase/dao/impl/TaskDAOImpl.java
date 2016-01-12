@@ -67,11 +67,11 @@ public class TaskDAOImpl implements TaskDAO {
         );
     }
 
-    public void insertTaskBatch(final int pID, final List<Task> taskList){
+    public void insertTaskBatch(final int pID, final List<Task> taskList, final String uuID){
 
         logger.debug("insert into db: task list");
 
-        String sqlQuery = "INSERT INTO TASK (ID, PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE, EXECUTION_TYPE, USER_MAIL) " +
+        String sqlQuery = "INSERT INTO TASK (PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE, EXECUTION_TYPE, USER_MAIL, BATCH_UUID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
@@ -79,16 +79,17 @@ public class TaskDAOImpl implements TaskDAO {
             public void setValues(PreparedStatement ps, int i) throws SQLException {
 
                 Task task = taskList.get(i);
-                ps.setInt(1, task.getId());
-                ps.setInt(2, pID);
-                ps.setString(3, task.getTitle());
-                ps.setString(4, task.getDescription());
-                ps.setString(5, task.getStatus());
-                ps.setString(6, taskType);
-                ps.setTimestamp(7, new java.sql.Timestamp(task.getCreationDate().getTime()));
-                ps.setTimestamp(8, new java.sql.Timestamp(task.getUpdateDate().getTime()));
-                ps.setString(9, task.getExecutionType());
-                ps.setString(10, task.getUserMail());
+               // ps.setInt(1, task.getId());
+                ps.setInt(1, pID);
+                ps.setString(2, task.getTitle());
+                ps.setString(3, task.getDescription());
+                ps.setString(4, task.getStatus());
+                ps.setString(5, taskType);
+                ps.setTimestamp(6, new java.sql.Timestamp(task.getCreationDate().getTime()));
+                ps.setTimestamp(7, new java.sql.Timestamp(task.getUpdateDate().getTime()));
+                ps.setString(8, task.getExecutionType());
+                ps.setString(9, task.getUserMail());
+                ps.setString(10, uuID);
 
             }
 
@@ -141,6 +142,34 @@ public class TaskDAOImpl implements TaskDAO {
         }
 
         return null;
+
+    }
+
+    public LinkedList<Integer> loadTaskIdsByUuID(String uuID) {
+
+        logger.debug("retrieve from db: all task ids by uuid");
+
+        LinkedList<Integer> idList = new LinkedList<Integer>();
+
+        String sqlQuery = "SELECT ID " +
+                "FROM TASK " +
+                "WHERE BATCH_UUID = ?" +
+                "ORDER BY ID ";
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                uuID);
+
+        for (Map<String,Object> row : rows) {
+
+            if (row.get("id") != null) {
+
+                idList.add((Integer)row.get("id"));
+
+            }
+        }
+
+        return idList;
 
     }
 
@@ -220,12 +249,11 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);
 
-        String sqlQuery = "INSERT INTO REL_USER_TASK (ID, USER_MAIL, TASK_ID) " +
-                "VALUES (?, ?, ?)";
+        String sqlQuery = "INSERT INTO REL_USER_TASK (USER_MAIL, TASK_ID) " +
+                "VALUES (?, ?)";
 
         this.jdbcTemplate.update(
                 sqlQuery,
-                this.getNewIDForRelTaskUser(),
                 uID,
                 tID
         );
@@ -236,12 +264,11 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: add state ="+state.getStateName()+" to task with id="+tID);
 
-        String sqlQuery = "INSERT INTO TASK_STATES (ID, STATE_NAME, TASK_ID) " +
-                "VALUES (?, ?, ?)";
+        String sqlQuery = "INSERT INTO TASK_STATES (STATE_NAME, TASK_ID) " +
+                "VALUES (?, ?)";
 
         this.jdbcTemplate.update(
                 sqlQuery,
-                this.getNewIDForTaskStates(),
                 state.getStateName(),
                 tID
         );
@@ -249,12 +276,15 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Task> taskList) {
+    public void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Integer> taskIds) {
 
         logger.debug("insert into db: add states to task batch");
-
+/*
         String sqlQuery = "INSERT INTO TASK_STATES (ID, STATE_NAME, TASK_ID) " +
-                "VALUES (?, ?, ?)";
+                "VALUES (?, ?, ?)";*/
+
+        String sqlQuery = "INSERT INTO TASK_STATES ( STATE_NAME, TASK_ID) " +
+                "VALUES (?, ?)";
 
         this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
 
@@ -270,16 +300,20 @@ public class TaskDAOImpl implements TaskDAO {
                 }
 
                 TaskState taskState = taskStateList.get(j);
-                ps.setInt(1, getNewIDForTaskStates());
+                /*ps.setInt(1, getNewIDForTaskStates());
                 ps.setString(2, taskState.getStateName());
-                ps.setInt(3, taskList.get(currentTaskPosition).getId());
+                ps.setInt(3, taskList.get(currentTaskPosition).getId());*/
+
+
+                ps.setString(1, taskState.getStateName());
+                ps.setInt(2, taskIds.get(currentTaskPosition));
 
                 j++;
 
             }
 
             public int getBatchSize() {
-                return (taskStateList.size() * taskList.size());
+                return (taskStateList.size() * taskIds.size());
             }
         });
 
@@ -315,48 +349,39 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);
 
-        String sqlQuery = "INSERT INTO REL_USER_TASK (ID, USER_MAIL, TASK_ID) " +
-                "VALUES (?, ?, ?)";
+        String sqlQuery = "INSERT INTO REL_USER_TASK (USER_MAIL, TASK_ID) " +
+                "VALUES (?, ?)";
 
         this.jdbcTemplate.update(
                 sqlQuery,
-                this.getNewIDForRelTaskUser(),
                 uID,
                 tID
         );
     }
 
-    public void assignUserToTaskBatch(final List<User> userList, final LinkedList<Task> taskList){
+    public void assignUserToTaskBatch(final List<User> userList, final Integer taskId){
 
         logger.debug("insert into db: add user to task batch");
 
-        String sqlQuery = "INSERT INTO REL_USER_TASK (ID, USER_MAIL, TASK_ID) " +
-                "VALUES (?, ?, ?)";
+/*        String sqlQuery = "INSERT INTO REL_USER_TASK (ID, USER_MAIL, TASK_ID) " +
+                "VALUES (?, ?, ?)";*/
+
+        String sqlQuery = "INSERT INTO REL_USER_TASK (USER_MAIL, TASK_ID) " +
+                "VALUES (?, ?)";
 
         this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
 
-            int j = 0;
-            int currentTaskPosition = 0;
-
             public void setValues(PreparedStatement ps, int i) throws SQLException {
 
-                //insert user for each task in taskList
-                if (j >= userList.size()){
-                    currentTaskPosition++; //increment counter for taskList
-                    j = 0; //reset counter for userList
-                }
+                User user = userList.get(i);
+                ps.setString(1, user.getUserID());
+                ps.setInt(2,  taskId);
 
-                User user = userList.get(j);
-                ps.setInt(1, getNewIDForRelTaskUser());
-                ps.setString(2, user.getUserID());
-                ps.setInt(3,  taskList.get(currentTaskPosition).getId());
-
-                j++;
 
             }
 
             public int getBatchSize() {
-                return (userList.size() * taskList.size());
+                return userList.size();
             }
 
         });
@@ -409,33 +434,6 @@ public class TaskDAOImpl implements TaskDAO {
                 cID,
                 tID
         );
-    }
-
-    public int getNewID() {
-
-        Integer id = this.jdbcTemplate.queryForObject(
-                "SELECT nextval('seq_task_id')",
-                Integer.class);
-
-        return id;
-    }
-
-    public int getNewIDForRelTaskUser() {
-
-        Integer id = this.jdbcTemplate.queryForObject(
-                "SELECT nextval('seq_user_task_id')",
-                Integer.class);
-
-        return id;
-    }
-
-    public int getNewIDForTaskStates() {
-
-        Integer id = this.jdbcTemplate.queryForObject(
-                "SELECT nextval('seq_task_states_id')",
-                Integer.class);
-
-        return id;
     }
 
     public int getNewIDForComments() {
