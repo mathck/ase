@@ -49,8 +49,8 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: task with id=" + task.getId());
 
-        String sqlQuery = "INSERT INTO TASK (ID, PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE, EXECUTION_TYPE, USER_MAIL) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO TASK (ID, PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE, EXECUTION_TYPE, USER_MAIL, COMMENTS_ALLOWED) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         this.jdbcTemplate.update(
                 sqlQuery,
@@ -63,7 +63,8 @@ public class TaskDAOImpl implements TaskDAO {
                 task.getCreationDate(),
                 task.getUpdateDate(),
                 task.getExecutionType(),
-                task.getUserMail()
+                task.getUserMail(),
+                task.isCommentsAllowed()
         );
     }
 
@@ -71,8 +72,8 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: task list");
 
-        String sqlQuery = "INSERT INTO TASK (PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE, EXECUTION_TYPE, USER_MAIL, BATCH_UUID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO TASK (PROJECT_ID, TITLE, DESCRIPTION, STATUS, TASK_TYPE, CREATION_DATE, UPDATE_DATE, EXECUTION_TYPE, USER_MAIL, BATCH_UUID, COMMENTS_ALLOWED) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
 
@@ -90,6 +91,7 @@ public class TaskDAOImpl implements TaskDAO {
                 ps.setString(8, task.getExecutionType());
                 ps.setString(9, task.getUserMail());
                 ps.setString(10, uuID);
+                ps.setBoolean(11, task.isCommentsAllowed());
 
             }
 
@@ -118,7 +120,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: task with id=" + taskId);
 
-        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
                 "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
@@ -163,9 +165,7 @@ public class TaskDAOImpl implements TaskDAO {
         for (Map<String,Object> row : rows) {
 
             if (row.get("id") != null) {
-
                 idList.add((Integer)row.get("id"));
-
             }
         }
 
@@ -177,7 +177,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks");
 
-        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
                 "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
@@ -200,7 +200,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks by project with id="+pID);
 
-        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
                 "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
@@ -224,7 +224,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks by user with id="+uID);
 
-        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
                 "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
@@ -272,16 +272,11 @@ public class TaskDAOImpl implements TaskDAO {
                 state.getStateName(),
                 tID
         );
-
-
     }
 
     public void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Integer> taskIds) {
 
         logger.debug("insert into db: add states to task batch");
-/*
-        String sqlQuery = "INSERT INTO TASK_STATES (ID, STATE_NAME, TASK_ID) " +
-                "VALUES (?, ?, ?)";*/
 
         String sqlQuery = "INSERT INTO TASK_STATES ( STATE_NAME, TASK_ID) " +
                 "VALUES (?, ?)";
@@ -293,18 +288,13 @@ public class TaskDAOImpl implements TaskDAO {
 
             public void setValues(PreparedStatement ps, int i) throws SQLException {
 
-                //insert state for each task in taskList
+                //insert state for each task in taskList (inner loop)
                 if (j >= taskStateList.size()){
                     currentTaskPosition++; //increment counter for taskList
                     j=0; //reset iterator for taskStateList
                 }
 
                 TaskState taskState = taskStateList.get(j);
-                /*ps.setInt(1, getNewIDForTaskStates());
-                ps.setString(2, taskState.getStateName());
-                ps.setInt(3, taskList.get(currentTaskPosition).getId());*/
-
-
                 ps.setString(1, taskState.getStateName());
                 ps.setInt(2, taskIds.get(currentTaskPosition));
 
@@ -323,7 +313,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all tasks from user with id="+uID+" and project with id="+pID);
 
-        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, " +
+        String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
                 "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
@@ -363,9 +353,6 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("insert into db: add user to task batch");
 
-/*        String sqlQuery = "INSERT INTO REL_USER_TASK (ID, USER_MAIL, TASK_ID) " +
-                "VALUES (?, ?, ?)";*/
-
         String sqlQuery = "INSERT INTO REL_USER_TASK (USER_MAIL, TASK_ID) " +
                 "VALUES (?, ?)";
 
@@ -376,8 +363,6 @@ public class TaskDAOImpl implements TaskDAO {
                 User user = userList.get(i);
                 ps.setString(1, user.getUserID());
                 ps.setInt(2,  taskId);
-
-
             }
 
             public int getBatchSize() {
@@ -483,6 +468,7 @@ public class TaskDAOImpl implements TaskDAO {
                     task.setUserMail((String) row.get("task_user_mail"));
                     task.setStatus((String) row.get("task_status"));
                     task.setExecutionType((String) row.get("task_execution_type"));
+                    task.setCommentsAllowed((Boolean) row.get("task_comments_allowed"));
 
                     tasks.add(task);
                     taskMap.put(taskId, task);

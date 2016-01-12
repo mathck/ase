@@ -19,6 +19,7 @@ public class Task implements Cloneable{
     private String userMail;
     private String status; //current status
     private User user;
+    private boolean commentsAllowed;
 
     private LinkedList<Subtask> subtaskList;
     private LinkedList<User> userList;
@@ -188,6 +189,14 @@ public class Task implements Cloneable{
         this.commentList = commentList;
     }
 
+    public boolean isCommentsAllowed() {
+        return commentsAllowed;
+    }
+
+    public void setCommentsAllowed(boolean commentsAllowed) {
+        this.commentsAllowed = commentsAllowed;
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -207,6 +216,7 @@ public class Task implements Cloneable{
                 ", userMail='" + userMail + '\'' +
                 ", status='" + status + '\'' +
                 ", user=" + user +
+                ", commentsAllowed=" + commentsAllowed +
                 ", subtaskList=" + subtaskList +
                 ", userList=" + userList +
                 ", taskStates=" + taskStates +

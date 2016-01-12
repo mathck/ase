@@ -1,5 +1,6 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.Comment;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
@@ -26,7 +27,7 @@ public interface TaskService {
     void assignUserToTask(int tID, String uID) throws Exception;
     void removeUserFromTask(int tID, String uID) throws Exception;
 
-    JsonStringWrapper addCommentToTask(int tID, Comment comment) throws Exception;
+    JsonStringWrapper addCommentToTask(int tID, Comment comment) throws ValidationException;
 
     void deleteCommentFromTask(int tID, int cID) throws Exception;
 

@@ -4,7 +4,6 @@ import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.model.Subtask;
 
 
-import at.tuwien.ase.model.Task;
 import at.tuwien.ase.model.TaskElementJson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,19 +48,6 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         final String sqlQuery = "INSERT INTO SUBTASK (TITLE, DESCRIPTION, DSL_TEMPLATE_ID, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE, TASK_BODY) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-/*
-        this.jdbcTemplate.update(
-                sqlQuery,
-                subtask.getTitle(),
-                subtask.getDescription(),
-                subtask.getDslTemplateId(),
-                subtask.getTaskId(),
-                subtask.getStatus(),
-                subtask.getXp(),
-                subtask.getCreationDate(),
-                subtask.getUpdateDate(),
-                subtask.getTaskBody()
-        );*/
 
         this.jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -85,49 +71,6 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         return keyHolder.getKey().intValue();
 
     }
-/*
-    public void insertSubtaskBatch(final List<Subtask> subtaskList, final LinkedList<Integer> taskIds, final String uuID){
-
-        logger.debug("insert into db: subtask list");
-
-        String sqlQuery = "INSERT INTO SUBTASK (TITLE, DESCRIPTION, DSL_TEMPLATE_ID, TASK_ID, STATUS, XP, CREATION_DATE, UPDATE_DATE, TASK_BODY, BATCH_UUID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
-
-            int j = 0;
-            int currentTaskPosition = 0;
-
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-
-                //insert subtasks for each task
-                if (j == (subtaskList.size()/taskIds.size())){
-                    currentTaskPosition++; //increment counter for taskIds
-                    j=0; //reset iterator for subtaskList
-                }
-
-                Subtask subtask = subtaskList.get(i);
-                //ps.setInt(1, subtask.getId());
-                ps.setString(1, subtask.getTitle());
-                ps.setString(2, subtask.getDescription());
-                ps.setInt(3, subtask.getDslTemplateId());
-                ps.setInt(4, taskIds.get(currentTaskPosition));
-                ps.setString(5, subtask.getStatus());
-                ps.setInt(6, subtask.getXp());
-                ps.setTimestamp(7, new java.sql.Timestamp(subtask.getCreationDate().getTime()));
-                ps.setTimestamp(8, new java.sql.Timestamp(subtask.getUpdateDate().getTime()));
-                ps.setString(9, subtask.getTaskBody());
-                ps.setString(10, uuID);
-
-
-            }
-
-            public int getBatchSize() {
-                return subtaskList.size();
-            }
-
-        });
-    }*/
 
     public void insertSubtaskBatch(final List<Subtask> subtaskList, final LinkedList<Integer> taskIds, final String uuID){
 
@@ -143,14 +86,13 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
             public void setValues(PreparedStatement ps, int i) throws SQLException {
 
-                //insert subtasks for each task
+                //insert subtasks for each task (inner loop)
                 if (j >= subtaskList.size()){
                     currentTaskPosition++; //increment counter for taskIds
                     j=0; //reset iterator for subtaskList
                 }
 
                 Subtask subtask = subtaskList.get(j);
-                //ps.setInt(1, subtask.getId());
                 ps.setString(1, subtask.getTitle());
                 ps.setString(2, subtask.getDescription());
                 ps.setInt(3, subtask.getDslTemplateId());
@@ -193,13 +135,11 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         String sqlQuery = "SELECT SUBTASK.ID as subtasks_id, SUBTASK.TITLE as subtasks_title, SUBTASK.DESCRIPTION as subtasks_description, SUBTASK.DSL_TEMPLATE_ID as subtasks_dsl_template_id, " +
                 "SUBTASK.TASK_ID as subtasks_task_id, SUBTASK.STATUS as subtasks_status, SUBTASK.TASK_BODY as subtasks_task_body, SUBTASK.XP as subtasks_xp, SUBTASK.CREATION_DATE as subtasks_creation_date, SUBTASK.UPDATE_DATE as subtasks_update_date, " +
-                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id " +
+                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id, TASK_ITEM.ITEM_ID as taskitems_item_id " +
                 "FROM " +
                 "TASK LEFT JOIN SUBTASK ON TASK.ID = SUBTASK.TASK_ID " +
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
                 "WHERE SUBTASK.ID = ? ";
-
-
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
@@ -250,7 +190,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         String sqlQuery = "SELECT SUBTASK.ID as subtasks_id, SUBTASK.TITLE as subtasks_title, SUBTASK.DESCRIPTION as subtasks_description, SUBTASK.DSL_TEMPLATE_ID as subtasks_dsl_template_id, " +
                 "SUBTASK.TASK_ID as subtasks_task_id, SUBTASK.STATUS as subtasks_status, SUBTASK.TASK_BODY as subtasks_task_body, SUBTASK.XP as subtasks_xp, SUBTASK.CREATION_DATE as subtasks_creation_date, SUBTASK.UPDATE_DATE as subtasks_update_date, " +
-                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id " +
+                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id, TASK_ITEM.ITEM_ID as taskitems_item_id " +
                 "FROM " +
                 "TASK LEFT JOIN SUBTASK ON TASK.ID = SUBTASK.TASK_ID " +
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID ";
@@ -269,7 +209,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         String sqlQuery = "SELECT SUBTASK.ID as subtasks_id, SUBTASK.TITLE as subtasks_title, SUBTASK.DESCRIPTION as subtasks_description, SUBTASK.DSL_TEMPLATE_ID as subtasks_dsl_template_id, " +
                 "SUBTASK.TASK_ID as subtasks_task_id, SUBTASK.STATUS as subtasks_status, SUBTASK.TASK_BODY as subtasks_task_body, SUBTASK.XP as subtasks_xp, SUBTASK.CREATION_DATE as subtasks_creation_date, SUBTASK.UPDATE_DATE as subtasks_update_date, " +
-                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id " +
+                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id, TASK_ITEM.ITEM_ID as taskitems_item_id " +
                 "FROM " +
                 "TASK LEFT JOIN SUBTASK ON TASK.ID = SUBTASK.TASK_ID " +
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
@@ -290,12 +230,11 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         String sqlQuery = "SELECT SUBTASK.ID as subtasks_id, SUBTASK.TITLE as subtasks_title, SUBTASK.DESCRIPTION as subtasks_description, SUBTASK.DSL_TEMPLATE_ID as subtasks_dsl_template_id, " +
                 "SUBTASK.TASK_ID as subtasks_task_id, SUBTASK.STATUS as subtasks_status, SUBTASK.TASK_BODY as subtasks_task_body, SUBTASK.XP as subtasks_xp, SUBTASK.CREATION_DATE as subtasks_creation_date, SUBTASK.UPDATE_DATE as subtasks_update_date, " +
-                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id " +
+                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id, TASK_ITEM.ITEM_ID as taskitems_item_id " +
                 "FROM " +
                 "TASK LEFT JOIN SUBTASK ON TASK.ID = SUBTASK.TASK_ID " +
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
                 "WHERE TASK.PROJECT_ID = ? ";
-
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
@@ -311,7 +250,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         String sqlQuery = "SELECT SUBTASK.ID as subtasks_id, SUBTASK.TITLE as subtasks_title, SUBTASK.DESCRIPTION as subtasks_description, SUBTASK.DSL_TEMPLATE_ID as subtasks_dsl_template_id, " +
                 "SUBTASK.TASK_ID as subtasks_task_id, SUBTASK.STATUS as subtasks_status, SUBTASK.TASK_BODY as subtasks_task_body, SUBTASK.XP as subtasks_xp, SUBTASK.CREATION_DATE as subtasks_creation_date, SUBTASK.UPDATE_DATE as subtasks_update_date, " +
-                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id " +
+                "TASK_ITEM.ID as taskitems_id, TASK_ITEM.ITEM_TYPE as taskitems_item_type, TASK_ITEM.LINK as taskitems_link, TASK_ITEM.STATUS as taskitems_status, TASK_ITEM.ITEM_VALUE as taskitems_value, TASK_ITEM.SUBTASK_ID as taskitems_subtask_id, TASK_ITEM.ITEM_ID as taskitems_item_id " +
                 "FROM " +
                 "TASK LEFT JOIN SUBTASK ON TASK.ID = SUBTASK.TASK_ID " +
                 "LEFT JOIN TASK_ITEM ON SUBTASK.ID = TASK_ITEM.SUBTASK_ID " +
@@ -363,7 +302,6 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 ps.setString(4, taskElementJson.getItemType());
                 ps.setInt(5, taskElementJson.getItemId());
                 ps.setInt(6, taskElementJson.getSubtaskId());
-
             }
 
             public int getBatchSize() {
@@ -465,6 +403,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                         taskElementJson.setLink((String)row.get("taskitems_link"));
                         taskElementJson.setStatus((String)row.get("taskitems_status"));
                         taskElementJson.setValue((String)row.get("taskitems_value"));
+                        taskElementJson.setItemId((Integer)row.get("taskitems_item_id"));
                         taskElementJson.setSubtaskId(subtaskId);
 
                         //add task element to subtask

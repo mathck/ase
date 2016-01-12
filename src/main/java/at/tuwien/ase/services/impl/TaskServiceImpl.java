@@ -2,6 +2,7 @@ package at.tuwien.ase.services.impl;
 
 import java.util.*;
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.TaskDAO;
 import at.tuwien.ase.model.*;
@@ -182,16 +183,33 @@ public class TaskServiceImpl implements TaskService {
         taskDAO.removeUserFromTask(tID, uID);
     }
 
-    public JsonStringWrapper addCommentToTask(int tID, Comment comment) throws Exception {
+    public JsonStringWrapper addCommentToTask(int tID, Comment comment) throws ValidationException {
+
         logger.debug("add comment to task with id="+tID);
 
         int id;
 
-        id = taskDAO.getNewIDForComments();
-        comment.setId(id);
-        taskDAO.addCommentToTask(tID, comment);
+        Task task = taskDAO.findByID(tID);
 
-        return new JsonStringWrapper(id);
+        if (task != null){
+
+            //are comments allowed for this task?
+            if (task.isCommentsAllowed()){
+
+                id = taskDAO.getNewIDForComments();
+                comment.setId(id);
+                taskDAO.addCommentToTask(tID, comment);
+
+                return new JsonStringWrapper(id);
+
+            }else{
+                throw new ValidationException("comments are not allowed for this task");
+            }
+
+        }else{
+            throw new ValidationException("Task with id "+tID+" could not be found");
+        }
+
     }
 
     public void deleteCommentFromTask(int tID, int cID) throws Exception {
