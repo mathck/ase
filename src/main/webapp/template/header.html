@@ -90,7 +90,7 @@
             </li>
             -->
             <li class="dropdown hidden-xs" dropdown>
-                <a dropdown-toggle class="tm-task" href=""><i class="tmn-counts">5</i></a>
+                <a dropdown-toggle class="tm-task" href=""><i class="tmn-counts">{{ibNumberOfIssues}}</i></a>
                 <div class="dropdown-menu pull-right dropdown-menu-lg">
                     <div class="card" data-ng-controller="headerCtrl as hdctrl">
                         <div class="listview">
@@ -98,15 +98,15 @@
                                 Issues
                             </div>
                             <div class="lv-body">
-                                <a class="lv-item" data-ui-sref="viewIssue" data-ng-repeat="i in hdctrl.issues">
+                                <a class="lv-item" data-ng-repeat="boxIssue in ibLoadedIssues" data-ui-sref="viewIssue({pID: boxIssue.projectId, iID: boxIssue.id})" >
                                     <div class="media">
                                         <div class="pull-left">
-                                            <img class="lv-img-sm" data-ng-src="" alt=""><!--{{ i.user.avatar }}-->
+                                            <img class="lv-img-sm" data-ng-src="{{ boxIssue.user.avatar }}" alt="Avatar of user {{ boxIssue.user.firstName }} {{ boxIssue.user.lastName }}">
                                         </div>
                                         <div class="media-body">
-                                            <div class="lv-title">{{ i.title }}</div>
-                                            <small class="lv-small">{{ i.description }}</small>
-                                            <small class="ms-date"><i class="zmdi"></i> by </small><!--{{ i.user.firstName }} {{ i.user.lastName }}-->
+                                            <div class="lv-title">{{ boxIssue.title }}</div>
+                                            <small class="lv-small">{{ boxIssue.description }}</small>
+                                            <small class="ms-date"><i class="zmdi"></i> by </small>{{ boxIssue.user.firstName }} {{ boxIssue.user.lastName }}-->
                                         </div>
                                     </div>
                                 </a>

@@ -101,22 +101,22 @@ materialAdmin
 
 
         $scope.filter="";
+        $scope.ibLoadedIssues={};
+        $scope.ibNumberOfIssues=0;
         IssuesMessageBoxFactory.query({uID: TokenService.username}).$promise.then(function(response){
-            response.forEach(function(issue){
+            $scope.ibLoadedIssues=response;
+            $scope.ibLoadedIssues.forEach(function(issue){
+                $scope.ibNumberOfIssues++;
                 issue.title=issue.title.trim();
-
                 if(issue.description == null)
                     issue.description = "";
                 else
                     issue.description=issue.description.trim();
+                console.log($scope.ibLoadedIssues);
             });
-            $scope.issues=response;
         }, function(error){
            ErrorHandler.handle("Could not fetch issues.", error);
         });
-
-
-
 
 
         // Get messages and notification for header
