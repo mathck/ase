@@ -44,14 +44,6 @@
         <div data-ng-show="loginFail"><small class="help-block c-red">Could not log you in. Wrong username or password.<br><i> Please try again.</i></small></div>
         <div class="clearfix"></div>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="">
-                <i class="input-helper"></i>
-                Keep me signed in
-            </label>
-        </div>
-
         <a href="" class="btn btn-login bgm-teal btn-float" data-ng-click="lctrl.loginUser()"><i class="zmdi zmdi-arrow-forward"></i></a>
 
         <ul class="login-navigation">
@@ -74,166 +66,38 @@
             <script type="text/ng-template" id="myModalContent.html">
 
                 <div class="modal-body">
-                    <!--<p>{{ modalContent }}</p>-->
                     <div class="card-body card-padding">
 
-                        <div class="lightbox row">
-                            <div data-src="img/avatars/0.png"  data-ng-click="changeAvatar(0)" class="col-sm-2 col-xs-6">
+                        <!-- ng-repeat for avatar in avatars -->
+                        <div class="lightbox row" data-ng-repeat="n in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]" ng-if="$index % 6 == 0">
+                            <div ng-data-src="img/avatars/{{n}}.png"  data-ng-click="changeAvatar(n)" class="col-sm-2 col-xs-6">
                                 <div class="lightbox-item">
-                                    <img src="img/avatars/0.png" alt="" />
+                                    <img ng-src="img/avatars/{{n}}.png" alt="" />
                                 </div>
                             </div>
-                            <div data-src="img/avatars/1.png" data-ng-click="changeAvatar(1)" class="col-sm-2 col-xs-6">
+                            <div ng-data-src="img/avatars/{{n+1}}.png" data-ng-click="changeAvatar(n+1)" class="col-sm-2 col-xs-6">
                                 <div class="lightbox-item">
-                                    <img src="img/avatars/1.png" alt="" />
+                                    <img ng-src="img/avatars/{{n+1}}.png" alt="" />
                                 </div>
                             </div>
-                            <div data-src="img/avatars/2.png" data-ng-click="changeAvatar(2)" class="col-sm-2 col-xs-6">
+                            <div ng-data-src="img/avatars/{{n+2}}.png" data-ng-click="changeAvatar(n+2)" class="col-sm-2 col-xs-6">
                                 <div class="lightbox-item">
-                                    <img src="img/avatars/2.png" alt="" />
+                                    <img ng-src="img/avatars/{{n+2}}.png" alt="" />
                                 </div>
                             </div>
-                            <div data-src="img/avatars/3.png" data-ng-click="changeAvatar(3)" class="col-sm-2 col-xs-6">
+                            <div ng-data-src="img/avatars/{{n+3}}.png" data-ng-click="changeAvatar(n+3)" class="col-sm-2 col-xs-6">
                                 <div class="lightbox-item">
-                                    <img src="img/avatars/3.png" alt="" />
+                                    <img ng-src="img/avatars/{{n+3}}.png" alt="" />
                                 </div>
                             </div>
-                            <div data-src="img/avatars/4.png" data-ng-click="changeAvatar(4)" class="col-sm-2 col-xs-6">
+                            <div ng-data-src="img/avatars/{{n+4}}.png" data-ng-click="changeAvatar(n+4)" class="col-sm-2 col-xs-6">
                                 <div class="lightbox-item">
-                                    <img src="img/avatars/4.png" alt="" />
+                                    <img ng-src="img/avatars/{{n+4}}.png" alt="" />
                                 </div>
                             </div>
-                            <div data-src="img/avatars/5.png" data-ng-click="changeAvatar(5)" class="col-sm-2 col-xs-6">
+                            <div ng-data-src="img/avatars/{{n+5}}.png" data-ng-click="changeAvatar(n+5)" class="col-sm-2 col-xs-6">
                                 <div class="lightbox-item">
-                                    <img src="img/avatars/5.png" alt="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="lightbox row">
-                            <div data-src="img/avatars/6.png" data-ng-click="changeAvatar(6)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/6.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/7.png" data-ng-click="changeAvatar(7)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/7.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/8.png" data-ng-click="changeAvatar(8)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/8.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/9.png" data-ng-click="changeAvatar(9)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/9.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/10.png" data-ng-click="changeAvatar(10)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/10.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/11.png" data-ng-click="changeAvatar(11)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/11.png" alt="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="lightbox row">
-                            <div data-src="img/avatars/12.png" data-ng-click="changeAvatar(12)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/12.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/13.png" data-ng-click="changeAvatar(13)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/13.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/14.png" data-ng-click="changeAvatar(14)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/14.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/15.png" data-ng-click="changeAvatar(15)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/15.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/16.png" data-ng-click="changeAvatar(16)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/16.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/17.png" data-ng-click="changeAvatar(17)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/17.png" alt="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="lightbox row">
-                            <div data-src="img/avatars/18.png" data-ng-click="changeAvatar(18)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/18.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/19.png" data-ng-click="changeAvatar(19)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/19.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/20.png" data-ng-click="changeAvatar(20)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/20.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/21.png" data-ng-click="changeAvatar(21)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/21.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/22.png" data-ng-click="changeAvatar(22)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/22.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/23.png" data-ng-click="changeAvatar(23)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/23.png" alt="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="lightbox row">
-                            <div data-src="img/avatars/24.png" data-ng-click="changeAvatar(24)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/24.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/25.png" data-ng-click="changeAvatar(25)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/25.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/26.png" data-ng-click="changeAvatar(26)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/26.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/27.png" data-ng-click="changeAvatar(27)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/27.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/28.png" data-ng-click="changeAvatar(28)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/28.png" alt="" />
-                                </div>
-                            </div>
-                            <div data-src="img/avatars/29.png" data-ng-click="changeAvatar(29)" class="col-sm-2 col-xs-6">
-                                <div class="lightbox-item">
-                                    <img src="img/avatars/29.png" alt="" />
+                                    <img ng-src="img/avatars/{{n+5}}.png" alt="" />
                                 </div>
                             </div>
                         </div>
