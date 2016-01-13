@@ -1,21 +1,6 @@
 <div class="pmb-block">
     <div class="pmbb-header">
         <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Overall Experience</h2>
-<!--
-        <ul class="actions" data-ng-if="pctrl.editSummary === 0">
-            <li class="dropdown" dropdown>
-                <a href="" dropdown-toggle>
-                    <i class="zmdi zmdi-more-vert"></i>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a data-ng-click="pctrl.editSummary = 1" href="">Edit</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        -->
     </div>
     <div class="pmbb-body p-l-30">
         <div class="pmbb-view" data-ng-if="pctrl.editSummary === 0">
@@ -27,14 +12,14 @@
                             <div class="lv-item">
                                 <div class="media">
                                     <div class="pull-left">
-                                        Level 1 <i class="zmdi zmdi-star"></i>
+                                        {{user.level.currentLevel}} <i class="zmdi zmdi-star"></i>
                                     </div>
 
-                                    <div class="pull-right">Level 2</div>
+                                    <div class="pull-right">{{user.level.nextLevel}}</div>
 
                                     <div class="media-body">
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%; height: 60px;">
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{user.level.xpBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{user.level.xpBar}}%; height: 60px;">
                                             </div>
                                         </div>
                                     </div>
@@ -60,9 +45,10 @@
     </div>
 </div>
 
-<div class="pmb-block">
+<div class="pmb-block" data-ng-repeat="project in userProjects">
     <div class="pmbb-header">
-        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project #1 Experience</h2>
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project #1: {{project.title}} Experience <i data-ng-show="project.role.trim()=='ADMIN'" class="zmdi zmdi-star"></i></h2>
+        {{project.description}}
         <!--
                 <ul class="actions" data-ng-if="pctrl.editSummary === 0">
                     <li class="dropdown" dropdown>
@@ -137,56 +123,57 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div class="pmb-block">
-        <div class="pmbb-header">
-            <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project #2 Experience</h2>
-            <!--
-                    <ul class="actions" data-ng-if="pctrl.editSummary === 0">
-                        <li class="dropdown" dropdown>
-                            <a href="" dropdown-toggle>
-                                <i class="zmdi zmdi-more-vert"></i>
-                            </a>
+<div class="pmb-block">
+    <div class="pmbb-header">
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project #2 Experience</h2>
+        <!--
+                <ul class="actions" data-ng-if="pctrl.editSummary === 0">
+                    <li class="dropdown" dropdown>
+                        <a href="" dropdown-toggle>
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
 
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a data-ng-click="pctrl.editSummary = 1" href="">Edit</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    -->
-        </div>
-        <div class="pmbb-body p-l-30">
-            <div class="pmbb-view" data-ng-if="pctrl.editSummary === 0">
-                <div class="rating-list">
-                    <div class="listview">
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a data-ng-click="pctrl.editSummary = 1" href="">Edit</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                -->
+    </div>
+    <div class="pmbb-body p-l-30">
+        <div class="pmbb-view" data-ng-if="pctrl.editSummary === 0">
+            <div class="rating-list">
+                <div class="listview">
 
-                        <div class="lv-body">
-                            <div class="p-15">
-                                <div class="lv-item">
-                                    <div class="media">
-                                        <div class="pull-left">
-                                            Level 1 <i class="zmdi zmdi-star"></i>
-                                        </div>
+                    <div class="lv-body">
+                        <div class="p-15">
+                            <div class="lv-item">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        Level 1 <i class="zmdi zmdi-star"></i>
+                                    </div>
 
-                                        <div class="pull-right">Level 2</div>
+                                    <div class="pull-right">Level 2</div>
 
-                                        <div class="media-body">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%; height: 60px;">
-                                                </div>
+                                    <div class="media-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%; height: 60px;">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
-            <!--
+        </div>
+        <!--
                     <form data-ng-submit="pctrl.submit('profileSummary', 'Profile Summary')" class="pmbb-edit" data-ng-if="pctrl.editSummary === 1">
                         <div class="fg-line">
                             <textarea data-ng-model="pctrl.profileSummary" class="form-control" rows="5" placeholder="Summary...">Sed eu est vulputate, fringilla ligula ac, maximus arcu. Donec sed felis vel magna mattis ornare ut non turpis. Sed id arcu elit. Sed nec sagittis tortor. Mauris ante urna, ornare sit amet mollis eu, aliquet ac ligula. Nullam dolor metus, suscipit ac imperdiet nec, consectetur sed ex. Sed cursus porttitor leo.</textarea>

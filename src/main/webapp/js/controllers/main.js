@@ -112,7 +112,6 @@ materialAdmin
                     issue.description = "";
                 else
                     issue.description=issue.description.trim();
-                console.log($scope.ibLoadedIssues);
             });
         }, function(error){
            ErrorHandler.handle("Could not fetch issues.", error);
@@ -276,14 +275,15 @@ materialAdmin
     // Profile
     //=================================================
 
-    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory){
+    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, ErrorHandler){
 
         currentUID = $stateParams.uID;
 
         console.log("uid:" + $stateParams.uID);
 
         //If uID is not set in the state, show information of the user logged in
-        if(typeof currentUID == 'undefined'){
+        if((typeof currentUID === 'undefined')||currentUID=="" ){
+            $scope.user=TokenService.user;
             $scope.avatar=TokenService.user.avatar;
             $scope.firstName=TokenService.user.firstName;
             $scope.lastName=TokenService.user.lastName;
@@ -300,6 +300,28 @@ materialAdmin
                ErrorHandler.handle("Could not fetch user information from server.", error);
             });
         }
+
+        ProjectsFactory.query({uID: $scope.userID}).$promise.then(function(response){
+        //AdminProjectsFactory.query().$promise.then(function(response){
+        //edit project information so it can easily be displayed (trim returned variables and identify user role for each project
+            response.forEach(function(project){
+                project.title=project.title.trim();
+
+                if(project.description == null)
+                    project.description = "";
+                else
+                    project.description=project.description.trim();
+
+                userInProject=project.allUser.filter(function(user){
+                    return(user.user.trim()==TokenService.username);
+                });
+                project.role=userInProject[0].role.trim();
+            });
+            $scope.userProjects=response;
+        }, function(error){
+           ErrorHandler.handle("Could not fetch projects.", error);
+        });
+
 
         //Edit
         this.editSummary = 0;
