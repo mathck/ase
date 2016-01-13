@@ -8,7 +8,7 @@
 
          <div class="container" data-ng-controller="createTaskCtrl"><!---->
             <div class="block-header">
-                <h2>Create Task</h2>
+                <h2>Create Task <span data-ng-show="isTransformedIssue"> from issue {{issue.title}}</span></h2>
 
                 <ul class="actions">
                     <li>
@@ -21,7 +21,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2><small>Fill in the provided fields in order to create a new task.</small></h2>
+                    <h2><small>Fill in the provided fields in order to create a new task<span data-ng-show="isTransformedIssue"> from this issue</span>.</small></h2>
                 </div>
 
                 <div class="card-body card-padding">
@@ -61,14 +61,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--<form>
+                            <form>
                                 <div data-ng-repeat="stateField in data.stateFields">
                                     <div data-display-states="stateField" data-states="states"></div>
                                 </div>
                                 <button data-ng-click="addState()" class="btn bgm-teal waves-effect"><i class="zmdi zmdi-plus"></i></button>
                                 <button data-ng-click="removeState()" class="btn btn-danger waves-effect"><i class="zmdi zmdi-minus"></i></button>
 
-                            </form>-->
+                            </form>
                         </div>
                         <div class="col-sm-6">
                             <p class="c-black f-500 m-b-20 m-t-20">Select Template</p>
@@ -140,7 +140,7 @@
                 <ul class="actions">
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Create Task" data-ng-click="createTask()"><i class="zmdi zmdi-check"></i>Create Task</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Create Task" data-ng-click="createTask()"><i class="zmdi zmdi-check"></i>Create Task <span data-ng-show="isTransformedIssue"> from this issue</span></button>
                         </div>
                     </li>
                 </ul>

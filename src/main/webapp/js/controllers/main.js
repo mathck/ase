@@ -102,7 +102,6 @@ materialAdmin
 
         $scope.filter="";
         IssuesMessageBoxFactory.query({uID: TokenService.username}).$promise.then(function(response){
-
             response.forEach(function(issue){
                 issue.title=issue.title.trim();
 
@@ -112,7 +111,6 @@ materialAdmin
                     issue.description=issue.description.trim();
             });
             $scope.issues=response;
-            $scope.issues.forEach
         }, function(error){
            ErrorHandler.handle("Could not fetch issues.", error);
         });
@@ -785,9 +783,6 @@ materialAdmin
             $scope.issue=response;
             $scope.issue.title=response.title.trim();
             $scope.issue.description=response.description.trim();
-            console.log($scope.issue.title);
-            console.log($scope.issue.description);
-            console.log($scope.issue);
         }, function(error){
             ErrorHandler.handle("Could not retrieve Issue Information.", error);
         });
@@ -807,13 +802,29 @@ materialAdmin
     //=================================================
 
     .controller('createTaskCtrl', function ( $scope, $state, $stateParams, $timeout, growlService, TokenService, ErrorHandler,
-        TasksFactory, IssuesFactory, ProjectFactory, UserFactory) {
-
+        TasksFactory, IssueRetrieveFactory, ProjectFactory, UserFactory) {
+        console.log("starting task creation");
         $scope.titleFail = false;
         $scope.descriptionFail = false;
-
+        $scope.isTransformedIssue=false;
         $scope.currentPID = $stateParams.pID;
-        //console.log("Current PID (Task): " + $scope.currentPID);
+        $scope.currentIID = $stateParams.iID;
+
+        if (!(typeof $scope.currentIID==='undefined')){
+            $scope.currentIID = $stateParams.iID;
+            IssueRetrieveFactory.show({issueID: $scope.currentIID}).$promise.then(function(response){
+                    $scope.isTransformedIssue=true;
+                    $scope.issue=response;
+                    $scope.task={};
+                    $scope.task.title=response.title.trim();
+                    $scope.task.description=response.description.trim();
+                    console.log($scope.task.title);
+                    console.log($scope.task.description);
+                }, function(error){
+                    ErrorHandler.handle("Could not retrieve Issue Information although issue ID was provided.", error);
+                });
+        }
+
         var counter = 0;
         $scope.data = {
             stateFields: [],
@@ -855,6 +866,7 @@ materialAdmin
         }, function(error){
             ErrorHandler.handle("Could not fetch project information from server.", error);
         });
+
         $scope.createTask = function() {
             if(!$scope.task) {
                 $scope.titleFail = true;
@@ -870,8 +882,15 @@ materialAdmin
                 //if($scope.taskType=="cooperative"){
                     TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
                         taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
-                    userList: $scope.userPicker}).$promise.then(function(result){
+                        userList: $scope.userPicker}).$promise.then(function(result){
                         growlService.growl("Task created.");
+                        if($scope.isTransformedIssue){
+                                IssueRetrieveFactory.delete({issueID: $scope.currentIID}).$promise.then(function(response){
+                                    console.log("issue deleted.")
+                            }, function(error){
+                                ErrorHandler.handle("Could not delete Issue.", error);
+                            });
+                        }
                         $state.go("viewProject", {pID:$scope.currentPID});
                     }, function(error){
                         ErrorHandler.handle("Could not save task.", error);

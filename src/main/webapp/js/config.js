@@ -240,7 +240,7 @@ materialAdmin
             //------------------------------
 
             .state ('createTask', {
-                url: '/createTask/:pID',
+                url: '/createTask/:pID/?iID',
                 templateUrl: 'views/createTask.html',
                 resolve: {
                     loadPlugin: function($ocLazyLoad) {
