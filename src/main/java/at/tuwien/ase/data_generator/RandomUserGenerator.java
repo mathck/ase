@@ -1,10 +1,8 @@
-package at.tuwien.ase.junit;
+package at.tuwien.ase.data_generator;
 
-import at.tuwien.ase.junit.testdata.Firstnames;
-import at.tuwien.ase.junit.testdata.Lastnames;
-import at.tuwien.ase.model.LoginToken;
+import at.tuwien.ase.data_generator.testdata.Firstnames;
+import at.tuwien.ase.data_generator.testdata.Lastnames;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -30,7 +28,7 @@ public class RandomUserGenerator {
         return "img/avatars/" + new Random().nextInt(30) + ".png";
     }
 
-
+    @Deprecated
     private static String getRandomBirthDate() {
         return (new Random().nextInt(100) + 1900) + "";
     }

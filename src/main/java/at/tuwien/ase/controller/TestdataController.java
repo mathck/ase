@@ -1,9 +1,8 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
-import at.tuwien.ase.junit.RandomUserGenerator;
+import at.tuwien.ase.data_generator.RandomUserGenerator;
 import at.tuwien.ase.model.Project;
-import at.tuwien.ase.model.Task;
 import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.ProjectService;
 import at.tuwien.ase.services.TaskService;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

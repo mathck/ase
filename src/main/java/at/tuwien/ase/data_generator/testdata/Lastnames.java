@@ -1,13 +1,12 @@
-package at.tuwien.ase.junit.testdata;
-
-import java.util.Random;
+package at.tuwien.ase.data_generator.testdata;
 
 /**
  * Created by mathc_000 on 25-Nov-15.
  */
 
 // @author Mateusz Czernecki
-public class Firstnames {
+@Deprecated
+public class Lastnames {
 
     public static String data[] = {
             "John",
