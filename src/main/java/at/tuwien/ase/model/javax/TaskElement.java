@@ -2,7 +2,7 @@
 // Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.8-b130911.1802 generiert 
 // Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2016.01.10 um 02:11:08 PM CET 
+// Generiert: 2016.01.13 um 07:20:15 PM CET 
 //
 
 
@@ -29,10 +29,11 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="value" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="link" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="solution" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="link" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="type" type="{}taskElementsType"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}integer" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -44,6 +45,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "status",
     "value",
+    "solution",
     "link",
     "type"
 })
@@ -54,11 +56,12 @@ public class TaskElement {
     @XmlElement(required = true)
     protected String value;
     @XmlElement(required = true)
+    protected String solution;
     protected String link;
     @XmlElement(required = true)
     @XmlSchemaType(name = "string")
     protected TaskElementsType type;
-    @XmlAttribute(name = "id")
+    @XmlAttribute(name = "id", required = true)
     protected BigInteger id;
 
     /**
@@ -107,6 +110,30 @@ public class TaskElement {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * Ruft den Wert der solution-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSolution() {
+        return solution;
+    }
+
+    /**
+     * Legt den Wert der solution-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSolution(String value) {
+        this.solution = value;
     }
 
     /**

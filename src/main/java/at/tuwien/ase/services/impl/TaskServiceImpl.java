@@ -45,7 +45,6 @@ public class TaskServiceImpl implements TaskService {
         Task task =  taskDAO.findByID(tID);
 
         //get subtasks
-
         LinkedList<Subtask> subtaskList = subtaskDAO.loadAllByTask(task.getId());
 
         if (subtaskList != null){
@@ -59,13 +58,18 @@ public class TaskServiceImpl implements TaskService {
 
         logger.debug("post new task");
 
-        Task t;
-        String uuID;
         LinkedList<TaskElementJson> taskElementJsonList = new LinkedList<TaskElementJson>();
+        LinkedList<TaskElementJson> taskElementJsonListForDbBatch = new LinkedList<TaskElementJson>();
         LinkedList<Subtask> subtaskList = new LinkedList<Subtask>();
         LinkedList<Task> taskList = new LinkedList<Task>();
         LinkedList<Integer> taskIds = new LinkedList<Integer>();
-        LinkedList<Integer> subtaskIds = new LinkedList<Integer>();
+        HashMap<Integer, LinkedList<Subtask>> subtaskHashMap = new HashMap<Integer, LinkedList<Subtask>>();
+        LinkedList<Subtask> subtaskIdList = new LinkedList<Subtask>();
+        TaskElementJson taskElementJson;
+        Task t;
+        int dslTempalteId;
+        Subtask subtask;
+        String uuID;
 
         if (task.getTaskStates() == null ||  task.getTaskStates().isEmpty()
                 || task.getSubtaskList() == null ||  task.getSubtaskList().isEmpty()
@@ -75,6 +79,7 @@ public class TaskServiceImpl implements TaskService {
 
         //create task list
         if (task.getExecutionType().equals("collaborative_task")) {
+
             task.setStatus(task.getTaskStates().get(0).getStateName());
             task.setCreationDate(new Date());
             task.setUpdateDate(new Date());
@@ -126,25 +131,41 @@ public class TaskServiceImpl implements TaskService {
 
         //store subtasks to db
         subtaskDAO.insertSubtaskBatch(subtaskList, taskIds, uuID);
-        subtaskIds = subtaskDAO.loadSubtaskIdsByUuID(uuID);
+        //load subtask hashmap
+        subtaskHashMap = subtaskDAO.loadSubtaskIdsByUuID(uuID);
 
-        //create taskItem List and label taskItems with subtask ids from db
-        int k = 0;
-        taskElementJsonList = new LinkedList<TaskElementJson>();
-        for (int j = 0; j < taskList.size(); j++) {
-            for (int i = 0; i < subtaskList.size(); i++) {
-                //loop over taskItems of subtask i
-                for (int l = 0; l < subtaskList.get(i).getTaskElements().size(); l++) {
-                    TaskElementJson taskElementJson = subtaskList.get(i).getTaskElements().get(l);
-                    taskElementJson.setSubtaskId(subtaskIds.get(k));
-                    taskElementJsonList.add((TaskElementJson)taskElementJson.clone());
+
+        //create taskItemJson List and label taskItems with subtask ids from db
+        for (int i = 0; i < taskElementJsonList.size(); i++){
+
+            taskElementJson = taskElementJsonList.get(i);
+
+            if (taskElementJson != null && taskElementJson.getDslTemplateId() != null){
+
+                dslTempalteId = taskElementJson.getDslTemplateId();
+
+                //link taskItems and subtasks via dslTemplateId
+                if (subtaskHashMap.get(dslTempalteId) != null){
+
+                    subtaskIdList = subtaskHashMap.get(dslTempalteId);
+
+                    for (int j = 0; j < subtaskIdList.size(); j++){
+
+                        subtask = subtaskIdList.get(j);
+
+                        if (subtask.getId() != null) {
+                            //set subtask db id and add taskItem to list
+                            taskElementJson.setSubtaskId(subtask.getId());
+                            taskElementJsonListForDbBatch.add((TaskElementJson) taskElementJson.clone());
+                        }
+
+                    }
                 }
-                k++;
             }
         }
 
         //insert taskItem list
-        subtaskDAO.addTaskItemToSubtaskBatch(taskElementJsonList);
+        subtaskDAO.addTaskItemToSubtaskBatch(taskElementJsonListForDbBatch);
 
     }
 
@@ -192,20 +213,16 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskDAO.findByID(tID);
 
         if (task != null){
-
             //are comments allowed for this task?
             if (task.isCommentsAllowed()){
-
                 id = taskDAO.getNewIDForComments();
                 comment.setId(id);
                 taskDAO.addCommentToTask(tID, comment);
 
                 return new JsonStringWrapper(id);
-
             }else{
                 throw new ValidationException("comments are not allowed for this task");
             }
-
         }else{
             throw new ValidationException("Task with id "+tID+" could not be found");
         }
@@ -247,12 +264,10 @@ public class TaskServiceImpl implements TaskService {
                 Subtask s = (Subtask) subtask.clone();
 
                 s.setTaskBody(taskBody);
-                //s.setId(subtaskDAO.getNewID());
                 s.setTitle(template.getIdentifier().getTitle());
                 s.setDescription(template.getIdentifier().getDescription());
                 s.setStatus(new String("open"));
                 s.setXp(template.getIdentifier().getEstimatedWorkTime().intValue());
-                // s.setTaskId(t.getId());
                 s.setCreationDate(new Date());
                 s.setUpdateDate(new Date());
 
@@ -260,23 +275,21 @@ public class TaskServiceImpl implements TaskService {
                 if (template.getTaskElements() != null && template.getTaskElements().getTaskElement() != null
                         && !template.getTaskElements().getTaskElement().isEmpty()) {
 
-                    taskElementJsonList = new LinkedList<TaskElementJson>();
-
                     taskElementList = template.getTaskElements().getTaskElement();
                     for (TaskElement taskElement : taskElementList) {
 
                         taskElementJson = TaskElementJsonFactory.getTaskElement(taskElement);
+                        taskElementJson.setDslTemplateId(s.getDslTemplateId());
                         taskElementJson.setSubtaskId(s.getId());
                         taskElementJsonList.add(taskElementJson);
 
                     }
-                    s.setTaskElements((LinkedList<TaskElementJson>)taskElementJsonList.clone());
+
                 }
 
                 //add subtask to list
                 subtaskList.add(s);
 
-                //}
             }
         }
     }

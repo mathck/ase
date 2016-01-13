@@ -27,6 +27,10 @@ public class TaskElementJsonFactory {
                 taskElementJson.setItemType(javaxTaskElement.getType().value());
             }
 
+            if (javaxTaskElement.getSolution() != null){
+                taskElementJson.setSolution(javaxTaskElement.getSolution());
+            }
+
 
             return taskElementJson;
         }

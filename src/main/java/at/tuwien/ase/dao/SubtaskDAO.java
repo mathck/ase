@@ -1,9 +1,8 @@
 package at.tuwien.ase.dao;
 
-import at.tuwien.ase.model.Subtask;
-import at.tuwien.ase.model.Task;
-import at.tuwien.ase.model.TaskElementJson;
+import at.tuwien.ase.model.*;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,16 +16,17 @@ public interface SubtaskDAO {
     void removeSubtaskByID(int tID);
 
     Subtask findByID(int tID);
+    TaskElementJson findTaskItemByID(int tID);
     LinkedList<Subtask> loadAll();
     LinkedList<Subtask> loadAllByTask(int tID);
     LinkedList<Subtask> loadAllByProject(int pID);
     LinkedList<Subtask> loadAllByUser(String uID);
-    LinkedList<Integer> loadSubtaskIdsByUuID(String uuID);
+    HashMap<Integer, LinkedList<Subtask>> loadSubtaskIdsByUuID(String uuID);
 
     void addTaskItemToSubtask(TaskElementJson taskItem, int sID) throws Exception;
     void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList) throws Exception;
-    int updateTaskItemById(TaskElementJson taskItem) throws Exception;
+    int updateTaskItemById(TaskElementJsonUpdate taskItem) throws Exception;
 
-    int updateSubtaskById(int sID, Subtask subtask) throws Exception;
+    int updateSubtaskById(int sID, SubtaskUpdate subtask) throws Exception;
 
 }

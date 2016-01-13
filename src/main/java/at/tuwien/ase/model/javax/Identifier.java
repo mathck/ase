@@ -2,7 +2,7 @@
 // Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.8-b130911.1802 generiert 
 // Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2016.01.10 um 02:11:08 PM CET 
+// Generiert: 2016.01.13 um 07:20:15 PM CET 
 //
 
 
@@ -30,7 +30,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="title" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="estimatedWorkTime" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *         &lt;element name="deadline" type="{http://www.w3.org/2001/XMLSchema}date"/>
+ *         &lt;element name="deadline" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
  *         &lt;element name="githook" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -56,7 +56,6 @@ public class Identifier {
     protected String description;
     @XmlElement(required = true)
     protected BigInteger estimatedWorkTime;
-    @XmlElement(required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar deadline;
     @XmlElement(required = true)

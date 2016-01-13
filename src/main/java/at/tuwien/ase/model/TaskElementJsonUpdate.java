@@ -1,24 +1,44 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 
 /**
  * Created by DanielHofer on 22.12.2015.
  */
-public class TaskElementJson implements Cloneable{
+public class TaskElementJsonUpdate implements Cloneable{
 
+    @NotNull
     private Integer id;
+
+    @Null
     private Integer itemId;
+
+    @Size(min = 1)
     private String status;
+
+    @Size(min = 1)
     private String value;
+
+    @Size(min = 1)
     private String link;
+
+    @Null
     private String itemType;
+
+    @Null
     private Integer subtaskId;
+
+    @Null
     private Integer dslTemplateId;
+
+    @Null
     private String solution;
 
     // Must have no-argument constructor
-    public TaskElementJson() {
+    public TaskElementJsonUpdate() {
 
     }
 

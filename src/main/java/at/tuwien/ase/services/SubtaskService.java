@@ -1,8 +1,10 @@
 package at.tuwien.ase.services;
 
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Subtask;
+import at.tuwien.ase.model.SubtaskUpdate;
 
 
 import java.util.LinkedList;
@@ -16,7 +18,7 @@ public interface SubtaskService {
 
     void deleteSubtaskByID(int sID);
 
-    void updateSubtask(int sID, Subtask subtask) throws Exception;
+    void updateSubtask(int sID, SubtaskUpdate subtask) throws Exception;
 
     Subtask getByID(int sID);
     LinkedList<Subtask> getAllSubtasks();

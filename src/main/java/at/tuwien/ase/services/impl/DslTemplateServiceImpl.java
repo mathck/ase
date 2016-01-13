@@ -48,9 +48,10 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
         logger.debug("post new dsl template");
 
+        // TODO validate dsl
+
         //unmarshal and validate xml template
         unmarshalTemplateXml(template);
-
 
         //set id and creationDate
         id = dslTemplateDAO.getNewID();

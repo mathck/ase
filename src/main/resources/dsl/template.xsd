@@ -2,21 +2,21 @@
 	<xs:element name="template">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="identifier">
+				<xs:element name="identifier" minOccurs="1" maxOccurs="1">
 					<xs:annotation>
 						<xs:documentation/>
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element type="xs:string" name="title"/>
-							<xs:element type="xs:string" name="description"/>
-							<xs:element type="xs:integer" name="estimatedWorkTime"/>
-							<xs:element type="xs:date" name="deadline"/>
-							<xs:element type="xs:string" name="githook"/>
+							<xs:element type="xs:string" name="title" minOccurs="1" maxOccurs="1"/>
+							<xs:element type="xs:string" name="description" minOccurs="1" maxOccurs="1"/>
+							<xs:element type="xs:integer" name="estimatedWorkTime" minOccurs="1" maxOccurs="1"/>
+							<xs:element type="xs:date" name="deadline" minOccurs="0" maxOccurs="1"/>
+							<xs:element type="xs:string" name="githook" minOccurs="1" maxOccurs="1"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="taskBody" minOccurs="0">
+				<xs:element name="taskBody" minOccurs="0" maxOccurs="1">
 					<xs:complexType mixed="true">
 						<xs:choice maxOccurs="unbounded" minOccurs="0">
 							<xs:element type="xs:string" name="h1"/>
@@ -27,18 +27,19 @@
 						</xs:choice>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="taskElements" minOccurs="0">
+				<xs:element name="taskElements" minOccurs="0" maxOccurs="1">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="taskElement" maxOccurs="unbounded" minOccurs="0">
+							<xs:element name="taskElement" maxOccurs="unbounded" minOccurs="30">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element type="xs:string" name="status"/>
-										<xs:element type="xs:string" name="value"/>
-										<xs:element type="xs:string" name="link"/>
-										<xs:element type="taskElementsType" name="type"/>
+										<xs:element type="xs:string" name="status" minOccurs="1" maxOccurs="1"/>
+										<xs:element type="xs:string" name="value" minOccurs="1" maxOccurs="1"/>
+										<xs:element type="xs:string" name="solution" minOccurs="1" maxOccurs="1"/>
+										<xs:element type="xs:string" name="link" minOccurs="0" maxOccurs="1"/>
+										<xs:element type="taskElementsType" name="type" minOccurs="1" maxOccurs="1"/>
 									</xs:sequence>
-									<xs:attribute type="xs:integer" name="id" use="optional"/>
+									<xs:attribute type="xs:integer" name="id" use="required"/>
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>

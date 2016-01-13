@@ -4,6 +4,7 @@ import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Subtask;
+import at.tuwien.ase.model.SubtaskUpdate;
 import at.tuwien.ase.services.SubtaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,7 +80,7 @@ public class SubtaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/tasks/subtasks/{sID}", method = RequestMethod.PATCH)
     @ResponseBody
-    public void updateSubtask(@PathVariable("sID") int sID, @RequestBody Subtask subtask) throws Exception {
+    public void updateSubtask(@PathVariable("sID") int sID, @RequestBody SubtaskUpdate subtask) throws Exception {
         ts.updateSubtask(sID, subtask);
     }
 
