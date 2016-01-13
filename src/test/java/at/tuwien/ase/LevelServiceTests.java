@@ -4,30 +4,19 @@ package at.tuwien.ase;
  * Created by mathc_000 on 22-Nov-15.
  */
 
-import at.tuwien.ase.dao.*;
-import at.tuwien.ase.junit.AppConfig;
+import at.tuwien.ase.data_generator.AppConfig;
 import at.tuwien.ase.model.*;
-import at.tuwien.ase.services.IssueService;
 import at.tuwien.ase.services.LevelService;
-import at.tuwien.ase.services.ProjectService;
-import at.tuwien.ase.services.TaskService;
-import at.tuwien.ase.services.impl.IssueServiceImpl;
 import at.tuwien.ase.services.impl.LevelServiceImpl;
-import at.tuwien.ase.services.impl.ProjectServiceImpl;
-import at.tuwien.ase.services.impl.TaskServiceImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.util.LinkedList;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
 
 // Bei Problemen bitte pom.xml Rechtsklick -> Maven -> Reimport
 // Im Notfall auskommentieren und ruhig pushen

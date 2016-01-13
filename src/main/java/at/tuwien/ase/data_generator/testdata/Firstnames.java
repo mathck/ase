@@ -1,11 +1,12 @@
-package at.tuwien.ase.junit.testdata;
+package at.tuwien.ase.data_generator.testdata;
 
 /**
  * Created by mathc_000 on 25-Nov-15.
  */
 
-// @author Mateusz Czernecki
-public class Lastnames {
+// @author Mateusz Czerneck
+@Deprecated
+public class Firstnames {
 
     public static String data[] = {
             "John",

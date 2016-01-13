@@ -8,13 +8,12 @@ import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.TaskDAO;
 import at.tuwien.ase.dao.UserDAO;
-import at.tuwien.ase.junit.AppConfig;
+import at.tuwien.ase.data_generator.AppConfig;
 import at.tuwien.ase.model.*;
 import at.tuwien.ase.services.*;
 import at.tuwien.ase.services.impl.IssueServiceImpl;
 import at.tuwien.ase.services.impl.ProjectServiceImpl;
 import at.tuwien.ase.services.impl.TaskServiceImpl;
-import at.tuwien.ase.services.impl.UserServiceImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,8 +84,8 @@ public class ProjectServiceTests {
     }
 
     // @author: Mateusz Czernecki
-    @Test
-    public void writeProject_working() throws  Exception{
+    @Test(expected = Exception.class)
+    public void writeProject_missingSubtasks() throws  Exception{
 
         // Arrange
         final int pID = 0;
@@ -104,12 +103,11 @@ public class ProjectServiceTests {
         projectService.writeProject(project);
 
         // Assert
-        verify(projectDAO, times(1)).insertProject(project);
     }
 
     // @author: Mateusz Czernecki
     @Test(expected = IllegalArgumentException.class)
-    public void writeProject_invalidTitle() throws  Exception{
+    public void writeProject_invalidTitle() throws Exception{
 
         // Arrange
         final int pID = 0;
