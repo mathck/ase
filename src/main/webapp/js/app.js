@@ -13,6 +13,7 @@ var materialAdmin = angular.module('materialAdmin', [
     'taskit.projectServices',
     'taskit.taskServices',
     'taskit.issueServices',
-    'taskit.rewardServices'
+    'taskit.rewardServices',
+    'taskit.templateServices'
 ])
  

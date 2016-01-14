@@ -47,7 +47,7 @@
 
 <div class="pmb-block" data-ng-repeat="project in userProjects">
     <div class="pmbb-header">
-        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project #1: {{project.title}} Experience <i data-ng-show="project.role.trim()=='ADMIN'" class="zmdi zmdi-star"></i></h2>
+        <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project {{project.title}} Experience <i data-ng-show="project.role.trim()=='ADMIN'" class="zmdi zmdi-star"></i></h2>
         {{project.description}}
         <!--
                 <ul class="actions" data-ng-if="pctrl.editSummary === 0">

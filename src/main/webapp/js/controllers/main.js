@@ -908,7 +908,7 @@ materialAdmin
                         growlService.growl("Task created.");
                         if($scope.isTransformedIssue){
                                 IssueRetrieveFactory.delete({issueID: $scope.currentIID}).$promise.then(function(response){
-                                    console.log("issue deleted.")
+                                console.log("issue deleted.")
                             }, function(error){
                                 ErrorHandler.handle("Could not delete Issue.", error);
                             });
@@ -987,6 +987,26 @@ materialAdmin
 
     })
 
+
+    //=================================================
+    // CREATE TEMPLATE
+    //=================================================
+
+    .controller('createTemplateCtrl', function ( $scope, $state, growlService, TokenService, ErrorHandler, TemplateFactory) {
+        //console.log("Template creation started");
+        $scope.template={};
+        $scope.createTemplate = function(){
+            TemplateFactory.create({templateCategoryName: "default", templateCategoryDescription: "default category",
+                title: $scope.template.title.trim(), description: $scope.template.description.trim(), syntax: $scope.template.syntax.trim()}).$promise.then(function(response){
+                    growlService.growl("Template successfully created!");
+                    $state.go("viewTemplates");
+                }, function(error){
+                    ErrorHandler.handle(error);
+                });
+        }
+
+    })
+
     .directive('displayStates', function($compile) {
       return {
         scope: {
@@ -1009,19 +1029,6 @@ materialAdmin
         link: function(scope, elem, attr, ctrl) {
         }
       }
-    })
-
-
-
-    //=================================================
-    // CREATE TEMPLATE
-    //=================================================
-
-    .controller('createTemplateCtrl', function ( $scope, growlService, TokenService, ErrorHandler, TemplateFactory) {
-        $scope.createTemplate = function(){
-            //TemplateFactory.create({templateCategoryName: "default", templateCategoryDescription: "default category", title; "supertemplate", description: "supertemplate"})
-        }
-
     })
 
 

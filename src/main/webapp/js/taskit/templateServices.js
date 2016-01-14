@@ -1,7 +1,7 @@
 var templateServices = angular.module('taskit.templateServices', ['ngResource']);
 
 templateServices.factory('TemplateFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/tempates/:templateId', {}, {
+    return $resource('/taskit/api/workspace/templates/:templateId', {}, {
         show: {
             method: 'GET',
             params: {templateId: '@templateId'}
