@@ -2,7 +2,6 @@
 
 <section id="main">
     <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
-
     <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
 
     <section id="content">
@@ -10,27 +9,26 @@
 
             <div class="block-header">
                 <h2>Templates</h2>
-
                 <ul class="actions">
                     <li>
-                        <a href="">
+                        <a href="" data-ng-click="sort='updateTime'; updateTimeAsc=true; updateTimeDesc=false; titleDesc=false; titleAsc=false" ng-class="updateTimeAsc || ( !updateTimeAsc && !updateTimeDesc && !titleAsc && !titleDesc ) ? 'actionsActive' : '' ">
                             <i class="zmdi zmdi-chevron-up" title="Date" data-ng-click="sort='title'"></i>
                             <i class="zmdi zmdi-watch" title="Date" data-ng-click="sort='creationDate'"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="" data-ng-click="sort='-updateTime'; updateTimeDesc=true; titleDesc=false; titleAsc=false; updateTimeAsc=false" ng-class="updateTimeDesc ? 'actionsActive' : '' ">
                             <i class="zmdi zmdi-chevron-down" title="Date" data-ng-click="sort='-title'"></i>
                             <i class="zmdi zmdi-watch" title="Date" data-ng-click="sort='-creationDate'"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="" data-ng-click="sort='title'; titleAsc=true; titleDesc=false; updateTimeDesc=false; updateTimeAsc=false" ng-class="titleAsc ? 'actionsActive' : '' ">
                             <i class="zmdi zmdi-sort-asc"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="" data-ng-click="sort='-title'; titleDesc=true; updateTimeDesc=false; titleAsc=false; updateTimeAsc=false" ng-class="titleDesc ? 'actionsActive' : '' ">
                             <i class="zmdi zmdi-sort-desc"></i>
                         </a>
                     </li>
@@ -38,10 +36,14 @@
             </div>
 
             <div class="dash-widgets">
+                <div class="row">
                     <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-header bgm-cyan">
-                                <h2>Create Template</h2>
+                        <div class="card floatEffect">
+                            <div class="card-header bgm-lightblue">
+                                <div class="input-group" data-ui-sref="createTemplate">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-assignment-o c-white"></i></span>
+                                    <h2>Create Template</h2>
+                                </div>
                                 <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTemplate" data-ng-click="mactrl.sidebarStat($event)">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
@@ -52,16 +54,20 @@
                         </div>
                     </div>
                     <div class="col-sm-3" data-ng-repeat="template in templates | orderBy:sort">
-                        <div class="card" data-ui-sref="viewTemplate({tID: template.id})">
-                            <div class="card-header bgm-cyan">
-                                <h2>{{template.title}}<br><small>{{template.creationDate}}</small></h2>
+                        <div class="card floatEffect" data-ui-sref="viewTemplate({tID: template.id})">
+                            <div class="card-header bgm-lightblue">
+                                <div class="input-group" data-ui-sref="createTemplate">
+                                    <span class="input-group-addon"><i class="zmdi zmdi-assignment-o c-white"></i></span>
+                                    <h2>{{template.title}}<br><small>{{template.creationDate}}</small></h2>
+                                </div>
                             </div>
                             <div class="card-body card-padding">
                                 {{template.description}}<br><small>Category: {{template.templateCategoryName}}</small>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
-    </div>
+        </div>
     </section>
 </section>
