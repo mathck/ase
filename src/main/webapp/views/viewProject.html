@@ -121,7 +121,7 @@
                             <div class="card-header bgm-task">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <h2>{{task.title|limitTo:20}}{{task.title > 30 ? '...' : ''}}<small>{{task.status|limitTo:30}}</small></h2>
+                                    <img src="{{task.user.avatar}}" alt="Avatar of {{task.user.firstName}} {{task.user.LastName}}" height="20" width="20"> <h2>{{task.title|limitTo:20}}{{task.title > 30 ? '...' : ''}}<small>{{task.status|limitTo:30}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">

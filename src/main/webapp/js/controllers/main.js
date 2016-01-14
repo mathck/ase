@@ -1011,6 +1011,20 @@ materialAdmin
       }
     })
 
+
+
+    //=================================================
+    // CREATE TEMPLATE
+    //=================================================
+
+    .controller('createTemplateCtrl', function ( $scope, growlService, TokenService, ErrorHandler, TemplateFactory) {
+        $scope.createTemplate = function(){
+            //TemplateFactory.create({templateCategoryName: "default", templateCategoryDescription: "default category", title; "supertemplate", description: "supertemplate"})
+        }
+
+    })
+
+
     //=================================================
     // CALENDAR
     //=================================================
