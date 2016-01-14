@@ -24,6 +24,6 @@ public interface IssueService {
 
     LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID);
 
-    void updateIssueToTask(int iID, int pID, Task task) throws Exception;
+    LinkedList<Integer> updateIssueToTask(int iID, int pID, Task task) throws Exception;
 
 }

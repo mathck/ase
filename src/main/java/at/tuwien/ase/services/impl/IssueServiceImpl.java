@@ -50,14 +50,14 @@ public class IssueServiceImpl implements IssueService {
         return issueDAO.findByID(iID);
     }
 
-    public void updateIssueToTask(int iID, int pID, Task task) throws Exception {
+    public LinkedList<Integer> updateIssueToTask(int iID, int pID, Task task) throws Exception {
         logger.debug("update issue with id="+iID+" to task");
 
         //remove issue
         issueDAO.removeIssueByID(iID);
 
         //insert task
-        ts.writeTask(pID, task);
+        return ts.writeTask(pID, task);
 
     }
 

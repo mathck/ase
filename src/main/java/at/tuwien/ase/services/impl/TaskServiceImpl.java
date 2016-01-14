@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
-    public void writeTask(int pID, Task task) throws Exception{
+    public LinkedList<Integer> writeTask(int pID, Task task) throws Exception{
 
         logger.debug("post new task");
 
@@ -115,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
         uuID  = UUID.randomUUID().toString();
 
         //create subtask and subtask elements
-        createSubtasks(task, taskList, taskElementJsonList, subtaskList);
+        createSubtasks(task, taskElementJsonList, subtaskList);
 
         //insert tasks
         taskDAO.insertTaskBatch(pID, taskList, uuID);
@@ -166,6 +166,8 @@ public class TaskServiceImpl implements TaskService {
 
         //insert taskItem list
         subtaskDAO.addTaskItemToSubtaskBatch(taskElementJsonListForDbBatch);
+
+        return taskIds;
 
     }
 
@@ -235,7 +237,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
 
-    private void createSubtasks(Task task, LinkedList<Task> taskList, LinkedList<TaskElementJson> taskElementJsonList, LinkedList<Subtask> subtaskList) throws Exception {
+    private void createSubtasks(Task task, LinkedList<TaskElementJson> taskElementJsonList, LinkedList<Subtask> subtaskList) throws Exception {
         DslTemplate dslTemplate;
         Template template;
         String taskBody;

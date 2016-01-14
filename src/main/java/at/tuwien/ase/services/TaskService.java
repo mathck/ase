@@ -12,7 +12,7 @@ import java.util.LinkedList;
  */
 public interface TaskService {
 
-    void writeTask(int pID, Task task) throws Exception;
+    LinkedList<Integer> writeTask(int pID, Task task) throws Exception;
 
     void deleteTaskByID(int tID) throws Exception;
 

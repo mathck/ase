@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by DanielHofer on 20.11.2015.
@@ -56,6 +53,11 @@ public class SubtaskServiceImpl implements SubtaskService {
         logger.debug("update subtask with id=" + sID);
 
         Subtask s;
+        String subtaskStatus;
+        int corretCount = 0;
+        int correctPercentage = 0;
+        int countTaskItems = 0;
+        HashMap<Integer, TaskElementJson> taskElementMap;
 
         //Validate subtask
         Set<ConstraintViolation<SubtaskUpdate>> constraintViolationsSubtask = validator.validate(subtask);
@@ -72,10 +74,21 @@ public class SubtaskServiceImpl implements SubtaskService {
         }
 
 
+        subtaskStatus = subtask.getStatus();
+
         //get subtask from db
         s = subtaskDAO.findByID(sID);
 
         if (s != null){
+
+            //get all taskElements for subtask
+            taskElementMap = subtaskDAO.loadAllTaskItemsBySubtaskId(sID);
+
+            //taskItem count differs?
+            if (taskElementMap == null
+                    || taskElementMap != null && subtask.getTaskElements() != null && taskElementMap.size() != subtask.getTaskElements().size()){
+                throw new ValidationException("not all task items are present");
+            }
 
             //subtask is not yet closed
             if (!s.getStatus().trim().toLowerCase().equals("closed")){
@@ -101,7 +114,8 @@ public class SubtaskServiceImpl implements SubtaskService {
                         }
 
                         //get original task element from db
-                        taskElementJsonDb = subtaskDAO.findTaskItemByID(t.getId());
+                        //taskElementJsonDb = subtaskDAO.findTaskItemByID(t.getId(), sID);
+                        taskElementJsonDb = taskElementMap.get(t.getId());
 
                         //validate taskelEment status
                         if (taskElementJsonDb != null){
@@ -121,37 +135,8 @@ public class SubtaskServiceImpl implements SubtaskService {
                                 }
                             }
 
-                            //if valiation is ok --> update taskElement
-                            if (subtaskDAO.updateTaskItemById(t) == 0){
-                                throw new Exception("error while updating task items");
-                            }
-
-                        }else{
-                            throw new ValidationException("task item with id "+t.getId()+" could not be found");
-                        }
-
-                    }
-                 }
-
-                //close subtask?
-                if (subtask.getStatus().trim().toLowerCase().equals("closed")){
-
-                    int corretCount = 0;
-                    int correctPercentage = 0;
-                    int countTaskItems = 0;
-
-                    //check solution
-                    if (subtask.getTaskElements() != null && !subtask.getTaskElements().isEmpty()) {
-
-                        //loop over taskElements from request
-                        for (TaskElementJsonUpdate t : subtask.getTaskElements()) {
-
-                            //get original task element from db
-                            taskElementJsonDb = subtaskDAO.findTaskItemByID(t.getId());
-
-                            //validate taskelEment status
-                            if (taskElementJsonDb != null){
-
+                            //close subtask? --> check solution of taskItem
+                            if (subtaskStatus != null && subtaskStatus.trim().toLowerCase().equals("closed")) {
                                 //compare solution from request with solution from db
                                 if (!taskElementJsonDb.getItemType().trim().toLowerCase().equals("image")
                                         && !taskElementJsonDb.getItemType().trim().toLowerCase().equals("file")) {
@@ -161,19 +146,27 @@ public class SubtaskServiceImpl implements SubtaskService {
                                     if (taskElementJsonDb.getSolution().trim().toLowerCase().equals(t.getStatus().trim().toLowerCase())) {
                                         corretCount++;
                                     }
-
                                 }
                             }
+
+                        }else{
+                            throw new ValidationException("task item with id "+t.getId()+" could not be found");
                         }
                     }
 
-                    //calc correct percentage
-                    correctPercentage = (corretCount * 100) / countTaskItems;
-                    subtask.setPercentageReached(correctPercentage);
+                    //update all taskItems
+                    subtaskDAO.updateTaskItemBatch(subtask.getTaskElements());
 
-                }else{
-                    subtask.setStatus("open");
-                }
+                    //close subtask? --> calc percentage of correct solved taskItems
+                    if (subtaskStatus != null && subtaskStatus.trim().toLowerCase().equals("closed")) {
+                        //calc correct percentage
+                        correctPercentage = (corretCount * 100) / countTaskItems;
+                        subtask.setPercentageReached(correctPercentage);
+                    }else{
+                        subtask.setPercentageReached(0);
+                        subtask.setStatus("open");
+                    }
+                 }
 
                 //update subtask
                 subtaskDAO.updateSubtaskById(sID, subtask);
