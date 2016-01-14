@@ -6,84 +6,62 @@
     <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
 
     <section id="content">
-        <div class="container">
+        <div class="container" data-ng-controller="viewTemplatesCtrl">
 
-    <div class="block-header">
-        <h2>Templates</h2>
+            <div class="block-header">
+                <h2>Templates</h2>
 
-        <ul class="actions">
-            <li>
-                <a href="">
-                    <i class="zmdi zmdi-chevron-up" title="Date"></i>
-                    <i class="zmdi zmdi-watch" title="Date"></i>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <i class="zmdi zmdi-chevron-down" title="Date"></i>
-                    <i class="zmdi zmdi-watch" title="Date"></i>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <i class="zmdi zmdi-sort-asc"></i>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <i class="zmdi zmdi-sort-desc"></i>
-                </a>
-            </li>
-        </ul>
+                <ul class="actions">
+                    <li>
+                        <a href="">
+                            <i class="zmdi zmdi-chevron-up" title="Date" data-ng-click="sort='title'"></i>
+                            <i class="zmdi zmdi-watch" title="Date" data-ng-click="sort='creationDate'"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <i class="zmdi zmdi-chevron-down" title="Date" data-ng-click="sort='-title'"></i>
+                            <i class="zmdi zmdi-watch" title="Date" data-ng-click="sort='-creationDate'"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <i class="zmdi zmdi-sort-asc"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <i class="zmdi zmdi-sort-desc"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="dash-widgets">
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <div class="card-header bgm-cyan">
+                                <h2>Create Template</h2>
+                                <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTemplate" data-ng-click="mactrl.sidebarStat($event)">
+                                    <i class="zmdi zmdi-plus"></i>
+                                </button>
+                            </div>
+                            <div class="card-body card-padding">
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" data-ng-repeat="template in templates | orderBy:sort">
+                        <div class="card" data-ui-sref="viewTemplate({tID: template.id})">
+                            <div class="card-header bgm-cyan">
+                                <h2>{{template.title}}<br><small>{{template.creationDate}}</small></h2>
+                            </div>
+                            <div class="card-body card-padding">
+                                {{template.description}}<br><small>Category: {{template.templateCategoryName}}</small>
+                            </div>
+                        </div>
+                    </div>
+            </div>
     </div>
-
-    <div class="dash-widgets">
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-header bgm-cyan">
-                        <h2>Create Template</h2>
-                        <button class="btn bgm-teal btn-float waves-effect waves-effect waves-circle" data-ui-sref="createTemplate" data-ng-click="mactrl.sidebarStat($event)">
-                            <i class="zmdi zmdi-plus"></i>
-                        </button>
-                    </div>
-                    <div class="card-body card-padding">
-                        <br/>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-header bgm-cyan">
-                        <h2>Template 1 <small></small></h2>
-                    </div>
-                    <div class="card-body card-padding">
-                        The Description goes in here.
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-header bgm-cyan">
-                        <h2>Template 2 <small></small></h2>
-                    </div>
-                    <div class="card-body card-padding">
-                        The Description goes in here.
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-header bgm-cyan">
-                        <h2>Template 3 <small></small></h2>
-                    </div>
-                    <div class="card-body card-padding">
-                        The Description goes in here.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
     </section>
 </section>

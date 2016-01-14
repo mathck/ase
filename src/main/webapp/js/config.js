@@ -178,6 +178,15 @@ materialAdmin
             })
 
             //------------------------------
+            // VIEW TEMPLATE
+            //------------------------------
+
+            .state ('viewTemplate', {
+                url: '/viewTemplate/:tID',
+                templateUrl: 'views/viewTemplate.html'
+            })
+
+            //------------------------------
             // CREATE ISSUE
             //------------------------------
 

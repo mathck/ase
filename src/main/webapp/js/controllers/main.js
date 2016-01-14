@@ -530,7 +530,7 @@ materialAdmin
     //=================================================
 
     .controller('createProjectCtrl', function ($scope, $location, $window, $timeout, $state, growlService, ErrorHandler,
-        TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsByUserFactory) {
+        TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsCreatedByUserFactory) {
 
         console.log("starting Project Creation");
 
@@ -597,7 +597,7 @@ materialAdmin
         });
 
         //Get all created rewards for the current user
-        RewardsByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+        RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
             $scope.rewardList=rewards;
         }, function(error){
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
@@ -642,7 +642,7 @@ materialAdmin
     //=================================================
 
     .controller('updateProjectCtrl', function ($scope, $stateParams, $timeout, growlService, ErrorHandler, TokenService,
-        ProjectFactory, AddUserToProjectFactory, UserFactory, UsersFactory, RewardsByProjectFactory, RewardsByUserFactory, RemoveUserFromProjectFactory) {
+        ProjectFactory, AddUserToProjectFactory, UserFactory, UsersFactory, RewardsByProjectFactory, RewardsCreatedByUserFactory, RemoveUserFromProjectFactory) {
 
        growlService.growl('Fetching project information...');
 
@@ -710,7 +710,7 @@ materialAdmin
         });
 
         //Get all created rewards for the current user
-        RewardsByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+        RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
             $scope.rewardList=rewards;
         }, function(error){
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
@@ -987,26 +987,6 @@ materialAdmin
 
     })
 
-
-    //=================================================
-    // CREATE TEMPLATE
-    //=================================================
-
-    .controller('createTemplateCtrl', function ( $scope, $state, growlService, TokenService, ErrorHandler, TemplateFactory) {
-        //console.log("Template creation started");
-        $scope.template={};
-        $scope.createTemplate = function(){
-            TemplateFactory.create({templateCategoryName: "default", templateCategoryDescription: "default category",
-                title: $scope.template.title.trim(), description: $scope.template.description.trim(), syntax: $scope.template.syntax.trim()}).$promise.then(function(response){
-                    growlService.growl("Template successfully created!");
-                    $state.go("viewTemplates");
-                }, function(error){
-                    ErrorHandler.handle(error);
-                });
-        }
-
-    })
-
     .directive('displayStates', function($compile) {
       return {
         scope: {
@@ -1029,6 +1009,65 @@ materialAdmin
         link: function(scope, elem, attr, ctrl) {
         }
       }
+    })
+
+
+    //=================================================
+    // CREATE TEMPLATE
+    //=================================================
+
+    .controller('createTemplateCtrl', function ( $scope, $state, growlService, TokenService, ErrorHandler, TemplateFactory) {
+        //console.log("Template creation started");
+        $scope.template={};
+        $scope.createTemplate = function(){
+            TemplateFactory.create({templateCategoryName: "default", templateCategoryDescription: "default category",
+                title: $scope.template.title.trim(), description: $scope.template.description.trim(), syntax: $scope.template.syntax.trim()}).$promise.then(function(response){
+                    growlService.growl("Template successfully created!");
+                    $state.go("viewTemplates");
+                }, function(error){
+                    ErrorHandler.handle(error);
+                });
+        }
+
+    })
+
+
+    //=================================================
+    // VIEW TEMPLATES
+    //=================================================
+
+    .controller('viewTemplatesCtrl', function ( $scope, $state, growlService, TokenService, ErrorHandler, TemplateFactory) {
+        //console.log("Template overview started");
+        $scope.templates={};
+        TemplateFactory.query().$promise.then(function(response){
+                $scope.templates=response;
+                $scope.templates.forEach(function(template){
+                    template.title=template.title.trim();
+                    template.description=template.description.trim();
+                    template.creationDate=template.creationDate.trim();
+                })
+                //console.log($scope.templates);
+            }, function(error){
+                ErrorHandler.handle(error);
+            });
+    })
+
+
+    //=================================================
+    // VIEW TEMPLATE
+    //=================================================
+
+    .controller('viewTemplateCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler, TemplateFactory) {
+        //console.log("Template view started");
+        //console.log($stateParams.tID);
+        $scope.tID=$stateParams.tID;
+
+        $scope.template={};
+        TemplateFactory.show({tID: $scope.tID}).$promise.then(function(response){
+                $scope.template=response;
+            }, function(error){
+                ErrorHandler.handle(error);
+            });
     })
 
 

@@ -1,10 +1,10 @@
 var templateServices = angular.module('taskit.templateServices', ['ngResource']);
 
 templateServices.factory('TemplateFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/templates/:templateId', {}, {
+    return $resource('/taskit/api/workspace/templates/:tID', {}, {
         show: {
             method: 'GET',
-            params: {templateId: '@templateId'}
+            params: {tID: '@tID'},
         },
         query: {
             method: 'GET',
@@ -12,11 +12,11 @@ templateServices.factory('TemplateFactory', function ($resource) {
         },
         create: {
             method: 'POST',
-            params: {templateId: '@templateId'}
+            params: {tID: '@tID'}
         },
         update: {
             method: 'PUT',
-            params: {templateId: '@templateId'}
+            params: {tID: '@tID'}
         }
     })
 });
