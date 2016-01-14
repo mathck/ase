@@ -8205,7 +8205,6 @@ body #content {
   padding: 0;
 }
 .top-menu > li .dropdown-menu-lg .lv-body {
-  min-height: 295px;
   overflow-x: hidden;
 }
 @media (min-width: 768px) {
