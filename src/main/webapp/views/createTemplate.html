@@ -54,25 +54,24 @@ $(document).delegate('#textbox', 'keydown', function(e) {
                         </div>
                     </div>
 
-                    <br/><br/>
 
-                   <div class="row">
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
-                                <div class="fg-line">
-                                    <input type="text" class="form-control input-lg" placeholder="Description" data-ng-model="template.description">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <br/><br/>
 
                     <div class="row">
                         <div class="col-sm-12">
+                            <p class="c-black f-500 m-b-20 m-t-20">Description</p>
+                            <div ng-class="!descriptionFail ? 'fg-line' : 'fg-line has-feedback has-error'">
+                                <textarea id="projectDescription" class="form-control input-md description" placeholder="Write your description here..." data-ng-model="template.description" tooltip-class="tooltip-blue" tooltip-enable="descriptionFail" tooltip-trigger="focus" tooltip="Cannot be empty!" tooltip-placement="right"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body card-padding">
+                    <div class="row">
+                        <div class="col-sm-12">
                             <div class="fg-line">
-                                <textarea id="textbox" class="form-control input-md description code" placeholder="insert your code ..." data-ng-model="template.syntax"></textarea>
+                                <textarea id="textbox" class="form-control input-md description code" placeholder="Write your code here..." data-ng-model="template.syntax"></textarea>
                             </div>
                         </div>
                     </div>

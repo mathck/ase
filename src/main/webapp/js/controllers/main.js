@@ -547,38 +547,33 @@ materialAdmin
 
         // Update Contributors before selecting a Contributor
         $scope.updateContributors=function(){
-            if($scope.users.userPickerManager.length != 0){
+            $scope.users.contributableUsers = [];
 
-                $scope.users.contributableUsers = [];
+            $scope.users.allUsersTemp = $scope.users.allUsers;
+            [].forEach.call($scope.users.userPickerManager,function(name){
+                $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+            });
+            $scope.users.allUsersTemp.forEach(function(user){
+                user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
 
-                $scope.users.allUsersTemp = $scope.users.allUsers;
-                [].forEach.call($scope.users.userPickerManager,function(name){
-                    $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
-                });
-                $scope.users.allUsersTemp.forEach(function(user){
-                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
-
-                    $scope.users.contributableUsers.push(user);
-                });
-            }
+                $scope.users.contributableUsers.push(user);
+            });
+            console.log("userPickerContributor: " + $scope.users.userPickerContributor);
         };
 
         // Update Managers before selecting a Manager
         $scope.updateManagers=function(){
-            if($scope.users.userPickerContributor.length != 0){
+            $scope.users.managementableUsers = [];
 
-                $scope.users.managementableUsers = [];
-
-                $scope.users.allUsersTemp = $scope.users.allUsers;
-                [].forEach.call($scope.users.userPickerContributor,function(name){
-                    $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
-                });
-                $scope.users.allUsersTemp.forEach(function(user){
-                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
-                    //copy user list into one list for contributors
-                    $scope.users.managementableUsers.push(user);
-                });
-            }
+            $scope.users.allUsersTemp = $scope.users.allUsers;
+            [].forEach.call($scope.users.userPickerContributor,function(name){
+                $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+            });
+            $scope.users.allUsersTemp.forEach(function(user){
+                user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                //copy user list into one list for contributors
+                $scope.users.managementableUsers.push(user);
+            });
         };
 
         // get all users (for adding users to the project)
@@ -646,6 +641,14 @@ materialAdmin
 
        growlService.growl('Fetching project information...');
 
+       $scope.users={};
+       $scope.users.allUsers=[];
+       $scope.users.allUsersTemp=[];
+       $scope.users.contributableUsers=[];
+       $scope.users.managementableUsers=[];
+       $scope.users.userPickerContributor=[];
+       $scope.users.userPickerManager=[];
+
        $scope.descriptionFail = false;
        $scope.titleFail = false;
 
@@ -684,20 +687,55 @@ materialAdmin
         };
         $scope.updateProjectInformation();
 
-        UsersFactory.query().$promise.then(function(response){
-            $scope.users={};
-            $scope.users.contributableUsers=[];
-            $scope.users.userPickerContributor=[];
-            $scope.users.userPickerManager=[];
+        // Update Contributors before selecting a Contributor
+        $scope.updateContributors=function(){
+            $scope.users.contributableUsers = [];
 
+            $scope.users.allUsersTemp = $scope.users.allUsers;
+            [].forEach.call($scope.users.userPickerManager,function(name){
+                $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+            });
+            [].forEach.call($scope.selectedProject.userList,function(user){
+                var userID = user.userID;
+                $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== userID;});
+            });
+
+
+            $scope.users.allUsersTemp.forEach(function(user){
+                user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+
+                $scope.users.contributableUsers.push(user);
+            });
+        };
+
+        // Update Managers before selecting a Manager
+        $scope.updateManagers=function(){
+            $scope.users.managementableUsers = [];
+
+            $scope.users.allUsersTemp = $scope.users.allUsers;
+            [].forEach.call($scope.users.userPickerContributor,function(name){
+                $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== name;});
+            });
+            [].forEach.call($scope.selectedProject.userList,function(user){
+                var userID = user.userID;
+                $scope.users.allUsersTemp = $scope.users.allUsersTemp.filter(function (user) {return user.userID !== userID;});
+            });
+            $scope.users.allUsersTemp.forEach(function(user){
+                user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                //copy user list into one list for contributors
+                $scope.users.managementableUsers.push(user);
+            });
+        };
+
+        UsersFactory.query().$promise.then(function(response){
             //add a field containing a readable caption for the users
             response.forEach(function(user){
+                $scope.users.allUsers.push(user);
                 user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
                 //copy user list into one list for contributors
                 $scope.users.contributableUsers.push(user);
+                $scope.users.managementableUsers.push(user);
             });
-            //create a second list for managers
-            $scope.users.managementableUsers=$scope.users.contributableUsers;
         }, function(error){
            ErrorHandler.handle("Could not fetch users from server.", error);
         });

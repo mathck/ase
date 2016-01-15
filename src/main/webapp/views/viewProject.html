@@ -18,7 +18,7 @@
                     </li>
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Save Project" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="saveProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Save Project" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="updateContributors(); updateManagers(); saveProject()"><i class="zmdi zmdi-check"></i>Save Project</button>
                         </div>
                     </li>
                 </ul>
@@ -154,7 +154,7 @@
                         <div class="col-sm-12">
                             <div class="fg-line">
                                 <p class="f-500 c-black m-b-15">Contributor/s</p>
-                                <div data-ng-show="currentUserRole=='ADMIN'">
+                                <div data-ng-show="currentUserRole=='ADMIN'" ng-click="updateContributors()">
                                     <select chosen multiple data-placeholder="Add a User..."  class="w-100" data-ng-model="users.userPickerContributor" data-ng-options="user.userID as user.name for user in users.contributableUsers | orderBy:'user.name'"></select>
                                 </div>
                             </div>
@@ -194,7 +194,7 @@
                         <div class="col-sm-12">
                             <div class="fg-line">
                                 <p class="f-500 c-black m-b-15">Manager/s</p>
-                                <div data-ng-show="currentUserRole=='ADMIN'">
+                                <div data-ng-show="currentUserRole=='ADMIN'" ng-click="updateManagers()">
                                     <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="users.userPickerManager" data-ng-options="user.userID as user.name for user in users.managementableUsers | orderBy:'user.name'"></select>
                                 </div>
                             </div>
