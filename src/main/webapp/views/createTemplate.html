@@ -41,7 +41,6 @@ $(document).delegate('#textbox', 'keydown', function(e) {
             </div>
 
             <div class="card">
-
                 <div class="card-body card-padding">
                     <div class="row">
                         <div class="col-sm-4">
@@ -53,9 +52,6 @@ $(document).delegate('#textbox', 'keydown', function(e) {
                             </div>
                         </div>
                     </div>
-
-
-
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="c-black f-500 m-b-20 m-t-20">Description</p>
@@ -66,13 +62,14 @@ $(document).delegate('#textbox', 'keydown', function(e) {
                     </div>
                 </div>
             </div>
+
             <div class="card">
                 <div class="card-body card-padding">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="fg-line">
-                                <textarea id="textbox" class="form-control input-md description code" data-ng-model="template.syntax">
-                                    {{minimalCode}}
+                                <textarea id="textbox" class="form-control input-md description code" data-ng-model="minimalCode">
+
                                 </textarea>
                             </div>
                         </div>
