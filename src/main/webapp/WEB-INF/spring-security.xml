@@ -40,6 +40,8 @@
         <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
+    <!-- exclude user registration -->
+    <http pattern="/user/register" security="none" xmlns="http://www.springframework.org/schema/security"/>
 
 
     <bean id="oauthAuthenticationEntryPoint"
@@ -95,18 +97,15 @@
     <authentication-manager alias="authenticationManager"
                             xmlns="http://www.springframework.org/schema/security">
 
-
-        <!--users-by-username-query="select username,password, enabled from users where username=?"
-        authorities-by-username-query="select username, role from users where username =?" />-->
         <authentication-provider>
-            <password-encoder ref="encoderr" />
+            <password-encoder ref="encoder" />
             <jdbc-user-service data-source-ref="dataSource"
-                                users-by-username-query="select mail,password_encr, enabled from taskit_user where mail=?"
+                               users-by-username-query="select mail,password_encr, enabled from taskit_user where mail=?"
                                authorities-by-username-query="select mail, role from taskit_user where mail =?" />
         </authentication-provider>
 
     </authentication-manager>
-    <bean id="encoderr" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <constructor-arg name="strength" value="10" />
     </bean>
     <!--
