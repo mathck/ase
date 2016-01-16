@@ -9,6 +9,7 @@ var materialAdmin = angular.module('materialAdmin', [
     'nouislider',
     'ngTable',
     'ngRoute',
+    'ngSanitize',
     'taskit.userServices',
     'taskit.projectServices',
     'taskit.taskServices',

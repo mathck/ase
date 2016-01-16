@@ -1149,7 +1149,7 @@ materialAdmin
 
                     taskElementsXML=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement");
 
-                    console.log("taskElements:");
+                    //console.log("taskElements:");
                     for (i = 0; i < taskElementsXML.length; i++) {
                         var taskElement={};
                         //console.log(taskElementsXML[i]);
@@ -1164,13 +1164,15 @@ materialAdmin
                             "'>";
                             break;
                         case "checkbox":
-                            taskElement.code="<div class='checkbox m-b-15'> <input type='checkbox' id='" +
+                            taskElement.code='<label><input type="checkbox" name="ny"> New York</label>';
+
+                            /*taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
                                 xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
                                 "' " +
                                 (xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue=="checked"?"checked":"")+
                                 " value='" +
                                 xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() +
-                                "'> </div>";
+                                "'><i class='input-helper'></i></label></div>";*/
                             break;
                         case "textbox":
                             taskElement.code="<textbox id='"+
@@ -1187,21 +1189,13 @@ materialAdmin
                                 "</a>";
                             break;
                         case "slider":
-                            values=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("value").split("|");
-                            var length=values.length();
+                            values=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.split("|");
+                            var length=values.length;
 
-                            taskElement.code="<small class='c-gray ng-binding'>Current value: 2</small>"+
-                                "<div slider='' id='"+
-                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
-                                "' class='input-slider ng-pristine ng-untouched ng-valid ng-isolate-scope noUi-target noUi-ltr noUi-horizontal noUi-background' "+
-                                "start='"+0+"'"+
-                                "end='"+length+"'>"+
-                                "<div class='noUi-base'>"+
-                                "<div style='left: 33.3333%;' class='noUi-origin'>"+
-                                "<div class='noUi-handle noUi-handle-lower'></div>"+
-                                "</div>"+
-                                "</div>"+
-                                "</div>";
+                            taskElement.code="<small class='c-gray ng-binding'>Current value: 2</small> <div slider='' id='"+
+                            xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
+                            "' class='input-slider ng-pristine ng-untouched ng-valid ng-isolate-scope noUi-target noUi-ltr noUi-horizontal noUi-background' start='"+
+                            1+"' end='"+length+"'><div class='noUi-base'><div style='left: 33.3333%;' class='noUi-origin'><div class='noUi-handle noUi-handle-lower'></div></div></div></div>";
                             break;
                         default:
                             //ErrorHandler.handle({status:"0", item:"XML does not conform to XSD. Wrong element type."});
@@ -1212,7 +1206,7 @@ materialAdmin
                     //console.log(taskElements);
 
                     $scope.taskBody = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskBody")[0]);
-                    console.log("taskBody:");
+                    //console.log("taskBody:");
 
 
                     $scope.taskBody=$scope.taskBody.replace("<taskBody>","");
@@ -1233,10 +1227,10 @@ materialAdmin
                             //console.log(match[1]);
 
                             if (taskElement.id==match[1]){
-                                console.log("replacing " + match[0] + " with " + taskElement.code);
-                                console.log($scope.taskBody);
+                                //console.log("replacing " + match[0] + " with " + taskElement.code);
+                                //console.log($scope.taskBody);
                                 $scope.taskBody=$scope.taskBody.replace(match[0],taskElement.code);
-                                console.log($scope.taskBody);
+                                //console.log($scope.taskBody);
                             }
                         });
                         //console.log($scope.taskBody);
