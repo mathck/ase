@@ -1145,31 +1145,101 @@ materialAdmin
 
                     $scope.taskElementsBody = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskElements")[0]);
                     var taskElementsXML = [];
-                    taskElementsXML = xmlDoc.getElementsByTagName("taskElements")[0].childNodes;
-                    //console.log(taskElementsXML);
-
                     var taskElements=[];
+
+                    taskElementsXML=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement");
+
                     console.log("taskElements:");
                     for (i = 0; i < taskElementsXML.length; i++) {
-                        var taskElement;
-                        console.log(taskElementsXML[i]);
-                        //console.log(taskElementsXML.getElementsByTagName("type")[0]);
+                        var taskElement={};
+                        //console.log(taskElementsXML[i]);
+                        taskElement.type=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("type")[0].firstChild.nodeValue.trim();
+                        taskElement.id=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim();
+                        //console.log("Element: " + taskElement.type);
+                        //console.log("id: " + taskElement.id);
+                        switch (taskElement.type)
+                        {
+                        case "image":
+                            taskElement.code="<img src='"+xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("link")[0].firstChild.nodeValue.trim()+
+                            "'>";
+                            break;
+                        case "checkbox":
+                            taskElement.code="<div class='checkbox m-b-15'> <input type='checkbox' id='" +
+                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
+                                "' " +
+                                (xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue=="checked"?"checked":"")+
+                                " value='" +
+                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() +
+                                "'> </div>";
+                            break;
+                        case "textbox":
+                            taskElement.code="<textbox id='"+
+                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
+                                "'>" +
+                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() +
+                                "</textbox>";
+                            break;
+                        case "file":
+                            taskElement.code="<a href='"+
+                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("link")[0].firstChild.nodeValue.trim() +
+                                "'>"+
+                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue.trim() +
+                                "</a>";
+                            break;
+                        case "slider":
+                            values=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("value").split("|");
+                            var length=values.length();
+
+                            taskElement.code="<small class='c-gray ng-binding'>Current value: 2</small>"+
+                                "<div slider='' id='"+
+                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
+                                "' class='input-slider ng-pristine ng-untouched ng-valid ng-isolate-scope noUi-target noUi-ltr noUi-horizontal noUi-background' "+
+                                "start='"+0+"'"+
+                                "end='"+length+"'>"+
+                                "<div class='noUi-base'>"+
+                                "<div style='left: 33.3333%;' class='noUi-origin'>"+
+                                "<div class='noUi-handle noUi-handle-lower'></div>"+
+                                "</div>"+
+                                "</div>"+
+                                "</div>";
+                            break;
+                        default:
+                            //ErrorHandler.handle({status:"0", item:"XML does not conform to XSD. Wrong element type."});
+                            break;
+                        }
+                        taskElements.push(taskElement);
                     }
+                    //console.log(taskElements);
 
                     $scope.taskBody = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskBody")[0]);
                     console.log("taskBody:");
+
+
+                    $scope.taskBody=$scope.taskBody.replace("<taskBody>","");
+                    $scope.taskBody=$scope.taskBody.replace("</taskBody>","");
+
                     //extract position of taskElements in body
                     var pattern= /{taskElement:(\d+)}/g;
                     var match;
-
-
-
                     while (match=pattern.exec($scope.taskBody)){
-                        console.log(match);
-                        console.log(match.index);
-                        var start=match.index
+                        //console.log(match);
+                        //console.log(match.index);
+                        var start=match.index;
                         var end=match.index + match[0].length;
-                        console.log(start + "," + end);
+                        //console.log(start + "," + end);
+                        var insertElement={}
+                        taskElements.forEach(function(taskElement){
+                            //console.log(taskElement.id);
+                            //console.log(match[1]);
+
+                            if (taskElement.id==match[1]){
+                                console.log("replacing " + match[0] + " with " + taskElement.code);
+                                console.log($scope.taskBody);
+                                $scope.taskBody=$scope.taskBody.replace(match[0],taskElement.code);
+                                console.log($scope.taskBody);
+                            }
+                        });
+                        //console.log($scope.taskBody);
                     }
 
                     /*var elements = body.match(/{taskElement:(\d+)}/g);
