@@ -1108,6 +1108,17 @@ materialAdmin
             }, function(error){
                 ErrorHandler.handle(error);
             });
+
+        //$scope.parseDSL();
+
+        //$scope.parseDSL=function(){
+            parser = new DOMParser();
+            $scope.syntax=$scope.template.syntax;
+            xmlDoc = parser.parseFromString($scope.template.syntax,"text/xml");
+            $scope.identifier = xmlDoc.getElementsByTagName("identifier")[0].childNodes[0].nodeValue;
+            $scope.taskBody = xmlDoc.getElementsByTagName("taskBody")[0].childNodes[0].nodeValue;
+            $scope.taskElements = xmlDoc.getElementsByTagName("taskElements")[0].childNodes[0].nodeValue;
+        //}
     })
 
 
