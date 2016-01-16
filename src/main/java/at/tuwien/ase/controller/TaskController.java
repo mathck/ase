@@ -9,6 +9,7 @@ import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -18,6 +19,7 @@ import java.util.LinkedList;
  */
 
 @RestController
+@RequestMapping("/api/")
 public class TaskController {
 
     @Autowired
@@ -29,8 +31,10 @@ public class TaskController {
     private static final Logger logger = LogManager.getLogger(TaskController.class);
 
     // @author Daniel Hofer
+    //@RequestMapping(value = "/api/workspace/projects/tasks/{tID}", method = RequestMethod.GET)
     @RequestMapping(value = "workspace/projects/tasks/{tID}", method = RequestMethod.GET)
     @ResponseBody
+    @PreAuthorize("hasPermission(#tID, 'VIEW_TASK')")
     public Task getTaskByID(@PathVariable("tID") int tID) throws Exception {
         return ts.getByID(tID);
     }

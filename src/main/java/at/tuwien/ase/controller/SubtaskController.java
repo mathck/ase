@@ -18,6 +18,7 @@ import java.util.LinkedList;
  */
 
 @RestController
+@RequestMapping("/api/")
 public class SubtaskController {
 
     @Autowired

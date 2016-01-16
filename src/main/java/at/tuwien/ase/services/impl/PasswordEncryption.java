@@ -1,5 +1,7 @@
 package at.tuwien.ase.services.impl;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
@@ -8,6 +10,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Password encryption class. Used for encrypting, salt creation and authenticating.
@@ -22,6 +25,8 @@ public class PasswordEncryption {
      *
      * @return A byte array containing the generated salt.
      */
+
+    @Deprecated
     public static byte[] generateSalt() {
         SecureRandom random = null;
         try {
@@ -41,6 +46,8 @@ public class PasswordEncryption {
      * @param salt The generated or loaded salt.
      * @return A byte array containing the encrypted password.
      */
+
+    @Deprecated
     public static byte[] getEncryptedPassword(String password, byte[] salt) {
         String algorithm = "PBKDF2WithHmacSHA1";
         int derivedKeyLength = 160;
@@ -55,6 +62,24 @@ public class PasswordEncryption {
         return null;
     }
 
+    public static String getEncryptedPassword(String password) {
+        Random r = new Random();
+        int random = r.nextInt(10-1) + 1;
+
+        for (int i = 1; i <= 10; i++){
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(password);
+
+            if (i == random){
+                return hashedPassword;
+            }
+
+        }
+
+        return null;
+    }
+
     /**
      * Encrypts the password and compares it with the already encrypted password provided.
      *
@@ -66,6 +91,8 @@ public class PasswordEncryption {
      *          available in the local VM.
      * @throws InvalidKeySpecException Thrown if the encryption with the provided salt fails.
      */
+
+    @Deprecated
     public static boolean authenticate(String attemptedPassword, byte[] encryptedPassword, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] encryptedAttemptedPassword = getEncryptedPassword(attemptedPassword, salt);
         return Arrays.equals(encryptedPassword, encryptedAttemptedPassword);

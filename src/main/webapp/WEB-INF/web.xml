@@ -4,40 +4,49 @@
 	http://java.sun.com/xml/ns/j2ee/web-app_3_1.xsd">
 	<display-name>Restful Web Application</display-name>
 
-	<!-- Spring Web RESTService -->
-	<!-- @author Tomislav Nikic -->
+	<!-- @author Daniel Hofer -->
 	<servlet>
 		<servlet-name>rest</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/applicationContext.xml</param-value>
-		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>rest</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 
-
-	<!-- check login filter -->
-	<!-- @author Daniel Hofer -->
-	<filter>
-		<filter-name>checkLoginFilter</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>checkLoginFilter</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
 
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+	<listener>
+		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+
+	<!-- @author Daniel Hofer -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/applicationContext.xml,
+			/WEB-INF/spring-security.xml
+		</param-value>
+	</context-param>
+
+	<!-- Spring Security -->
+	<!-- @author Daniel Hofer -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
 
 	<!-- Spring Web RESTService -->
 	<!-- @author Tomislav Nikic -->
-	<servlet-mapping>
-		<servlet-name>rest</servlet-name>
-		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
 
 </web-app>

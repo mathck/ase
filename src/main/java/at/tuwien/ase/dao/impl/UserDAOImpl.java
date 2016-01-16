@@ -54,7 +54,7 @@ public class UserDAOImpl implements UserDAO {
      */
     public void insertUser(User user) {
         logger.info("Inserting user <" + user.getLastName() + " " + user.getFirstName() + "> into DB");
-        String sqlQuery = "INSERT INTO taskit_user (mail, firstname, lastname, password, avatar_url, salt, login_current_fails) " +
+        String sqlQuery = "INSERT INTO taskit_user (mail, firstname, lastname, password_encr, avatar_url, salt, login_current_fails) " +
                 "VALUES (?,?,?,?,?,?,?)";
         this.jdbcTemplate.update(
                 sqlQuery,
@@ -97,7 +97,7 @@ public class UserDAOImpl implements UserDAO {
                 "SET " +
                 "firstname = COALESCE (?, firstname), " +
                 "lastname = COALESCE (?, lastname), " +
-                "password = COALESCE (?, password), " +
+                "password = COALESCE (?, password_encr), " +
                 "avatar_url = COALESCE (?, avatar_url) " +
                 "WHERE mail = ?";
         this.jdbcTemplate.update(
@@ -149,7 +149,7 @@ public class UserDAOImpl implements UserDAO {
      */
     public User authUser(String userID) throws EmptyResultDataAccessException {
         logger.info("Searching for user <" + userID + "> in DB to authenticate");
-        String sqlQuery = "SELECT mail, password, salt " +
+        String sqlQuery = "SELECT mail, password_encr, salt " +
                 "FROM taskit_user " +
                 "WHERE mail = ?";
         return this.jdbcTemplate.queryForObject(
@@ -159,7 +159,7 @@ public class UserDAOImpl implements UserDAO {
                     public User mapRow(ResultSet resultSet, int i) throws SQLException {
                         User user = new User();
                         user.setUserID(resultSet.getString("mail"));
-                        user.setPasswordEnc(resultSet.getBytes("password"));
+                        user.setPasswordEnc(resultSet.getString("password_encr"));
                         user.setSalt(resultSet.getBytes("salt"));
                         logger.info("Found <" + user.getUserID() + "> in DB");
                         return user;

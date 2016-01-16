@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ import java.util.LinkedList;
  */
 
 @RestController
+@RequestMapping("/api/")
 public class UserController {
 
     private static final Logger logger = LogManager.getLogger(UserController.class);
@@ -36,7 +38,7 @@ public class UserController {
      *
      * @param user Consumes a user object containing firstname, lastname, password, avatar, and mail
      */
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "user/register", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public void createUser(@RequestBody User user) throws Exception {
         userService.writeUser(user);
@@ -49,7 +51,7 @@ public class UserController {
      * @param userID Consumes a user id (email)
      * @return User                    Returns the user object stored in the database
      */
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @RequestMapping(value = "user", method = RequestMethod.GET)
     @ResponseBody
     public User getUser(@RequestParam("uID") String userID) throws Exception {
         logger.debug("get user with id " + userID);
@@ -62,7 +64,7 @@ public class UserController {
      *
      * @return LinkedList&lt;User&gt;	Returns a linked list of users
      */
-    @RequestMapping(value = "/user/all", method = RequestMethod.GET)
+    @RequestMapping(value = "user/all", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<User> getAllUser() {
         return userService.getAllUsers();
@@ -74,7 +76,7 @@ public class UserController {
      * @param userID  The user ID (email)
      * @param user A user object containing firstname, lastname, avatar, password and user ID
      */
-    @RequestMapping(value = "/user", method = RequestMethod.PATCH, consumes = "application/json")
+    @RequestMapping(value = "user", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public void updateUser(@RequestParam("uID") String userID, @RequestBody User user) throws Exception {
         userService.updateUser(userID, user);
@@ -87,6 +89,7 @@ public class UserController {
      */
     @RequestMapping(value = "user", method = RequestMethod.DELETE)
     @ResponseBody
+    @PreAuthorize("hasPermission(#userID, 'DELETE_USER')")
     public void deleteUser(@RequestParam("uID") String userID) {
         userService.deleteUser(userID);
     }

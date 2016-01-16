@@ -19,6 +19,7 @@ import java.util.LinkedList;
  * @version 1.0, 14.12.2015
  */
 @RestController
+@RequestMapping("/api/")
 public class ProjectController {
 
     @Autowired
@@ -34,7 +35,7 @@ public class ProjectController {
      * @return
      * @throws EmptyResultDataAccessException
      */
-    @RequestMapping(value = "/workspace/projects", method = RequestMethod.GET)
+    @RequestMapping(value = "workspace/projects", method = RequestMethod.GET)
     @ResponseBody
     public Project getProject(@RequestParam("pID") int pID, @RequestParam("uID") String uID) throws Exception {
         return projectService.getByID(pID, uID);
@@ -45,7 +46,7 @@ public class ProjectController {
      * @param project
      * @return
      */
-    @RequestMapping(value = "/workspace/projects", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "workspace/projects", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public JsonStringWrapper createProject(@RequestBody Project project) throws Exception {
         return projectService.writeProject(project);
@@ -56,7 +57,7 @@ public class ProjectController {
      * @param pID
      * @param project
      */
-    @RequestMapping(value = "/workspace/projects", method = RequestMethod.PATCH, consumes = "application/json")
+    @RequestMapping(value = "workspace/projects", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public void updateProject(@RequestParam("pID") int pID, @RequestBody Project project) throws Exception {
         projectService.updateProject(pID, project);
@@ -68,7 +69,7 @@ public class ProjectController {
      * @return
      * @throws EmptyResultDataAccessException
      */
-    @RequestMapping(value = "/workspace/projects/user", method = RequestMethod.GET)
+    @RequestMapping(value = "workspace/projects/user", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Project> getProjectsFromUser(@RequestParam("uID") String uID) throws EmptyResultDataAccessException {
         return projectService.getAllProjectsFromUser(uID);
@@ -79,7 +80,7 @@ public class ProjectController {
      * @return
      * @throws EmptyResultDataAccessException
      */
-    @RequestMapping(value = "/workspace/projects/all", method = RequestMethod.GET)
+    @RequestMapping(value = "workspace/projects/all", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<Project> getAllProjects() throws EmptyResultDataAccessException {
         return projectService.getAllProjects();
@@ -89,7 +90,7 @@ public class ProjectController {
      *
      * @param user
      */
-    @RequestMapping(value = "/workspace/projects/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "workspace/projects/add", method = RequestMethod.PUT)
     @ResponseBody
     public void addUserToProject(@RequestBody UserRole user) throws Exception {
         projectService.addUser(user.getProject(), user.getUser(), user.getRole());
@@ -100,7 +101,7 @@ public class ProjectController {
      * @param uID
      * @param pID
      */
-    @RequestMapping(value = "/workspace/projects/remove/{pID}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "workspace/projects/remove/{pID}", method = RequestMethod.DELETE)
     @ResponseBody
     public void removeUserFromProject(@RequestParam("uID") String uID, @PathVariable("pID") int pID) {
         projectService.removeUser(pID, uID);
