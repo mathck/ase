@@ -1105,20 +1105,60 @@ materialAdmin
         $scope.template={};
         TemplateFactory.show({tID: $scope.tID}).$promise.then(function(response){
                 $scope.template=response;
+
+                var identifier;
+                var body;
+                var elementPositionStart;
+                var elementPositionEnd;
+                var elementId;
+                $scope.title = "";
+                //$scope.parseDSL=function(){
+                    parser = new DOMParser();
+                    $scope.syntax=$scope.template.syntax;
+                    xmlDoc = parser.parseFromString($scope.template.syntax,"text/xml");
+                    $scope.identifier = xmlDoc.getElementsByTagName("identifier")[0].childNodes[1].nodeValue;
+
+                    identifier = xmlDoc.getElementsByTagName("identifier")[0].childNodes;
+
+                    for (i = 0; i < identifier.length; i++) {
+                            switch(identifier[i].nodeName) {
+                                case "title":
+                                    $scope.title = identifier[i].childNodes[0].nodeValue;
+                                    break;
+                                case "description":
+                                    $scope.description = identifier[i].childNodes[0].nodeValue;
+                                    break;
+                                case "estimatedWorkTime":
+                                    $scope.estimatedWorkTime = Math.floor(identifier[i].childNodes[0].nodeValue/60) + " H : " + identifier[i].childNodes[0].nodeValue%60 +" Min";
+                                    break;
+                                case "deadline":
+                                    $scope.deadline = identifier[i].childNodes[0].nodeValue;
+                                    break;
+                                case "githook":
+                                    $scope.githook = identifier[i].childNodes[0].nodeValue;
+                                    break;
+                                case "comments":
+                                    $scope.comments = identifier[i].childNodes[0].nodeValue;
+                                    break;
+                            }
+                    }
+
+                    body = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskBody")[0]);
+                    elementPositionStart = body.substring(body.search("{taskElement:"));
+                    elementPositionEnd = body.search(/(taskElement)(\d+)/);
+
+                    $scope.elementId = elementPositionStart + " || " + elementPositionEnd;
+                    //body.substring(body.search("{taskElement:"),body.search(/(\{taskElement)(\d+)(\})/));
+                    //$scope.taskBody = body.search("{taskElement:");
+                    //$scope.taskBodyTemp = body;
+                    //$scope.taskElements = xmlDoc.getElementsByTagName("taskElements")[0].childNodes[0].nodeValue;
+                //}
             }, function(error){
                 ErrorHandler.handle(error);
             });
 
         //$scope.parseDSL();
 
-        //$scope.parseDSL=function(){
-            parser = new DOMParser();
-            $scope.syntax=$scope.template.syntax;
-            xmlDoc = parser.parseFromString($scope.template.syntax,"text/xml");
-            $scope.identifier = xmlDoc.getElementsByTagName("identifier")[0].childNodes[0].nodeValue;
-            $scope.taskBody = xmlDoc.getElementsByTagName("taskBody")[0].childNodes[0].nodeValue;
-            $scope.taskElements = xmlDoc.getElementsByTagName("taskElements")[0].childNodes[0].nodeValue;
-        //}
     })
 
 
