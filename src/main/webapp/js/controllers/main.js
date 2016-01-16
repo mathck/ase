@@ -86,7 +86,7 @@ materialAdmin
     // =========================================================================
     // Header
     // =========================================================================
-    .controller('headerCtrl', function($scope, $timeout, messageService, IssuesMessageBoxFactory, TokenService){
+    .controller('headerCtrl', function($scope, $timeout, messageService, ErrorHandler, IssuesMessageBoxFactory, TokenService){
 
          // Top Search
         this.openSearch = function(){
@@ -1056,7 +1056,7 @@ materialAdmin
 
     .controller('createTemplateCtrl', function ( $scope, $state, growlService, TokenService, ErrorHandler, TemplateFactory) {
         //console.log("Template creation started");
-        $scope.minimalCode="<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n\t<template>\n\t\t<identifier>\n\t\t\t<title>Smallest</title>\n\t\t\t<description>Sample</description>\n\t\t\t<estimatedWorkTime>60</estimatedWorkTime>\n\t\t\t<deadline>2016-03-03</deadline>\n\t\t\t<githook>???</githook>\n\t\t\t<comments>false</comments>\n\t\t</identifier>\n\t</template>";
+        $scope.minimalCode="<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<template>\n<identifier>\n<title>Smallest</title>\n<description>Sample</description>\n<estimatedWorkTime>60</estimatedWorkTime>\n<deadline>2016-03-03</deadline>\n<githook>???</githook>\n<comments>false</comments>\n</identifier>\n</template>";
 
         $scope.template={};
         $scope.createTemplate = function(){
@@ -1143,11 +1143,44 @@ materialAdmin
                             }
                     }
 
-                    body = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskBody")[0]);
-                    elementPositionStart = body.substring(body.search("{taskElement:"));
-                    elementPositionEnd = body.search(/(taskElement)(\d+)/);
+                    $scope.taskElementsBody = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskElements")[0]);
+                    var taskElementsXML = [];
+                    taskElementsXML = xmlDoc.getElementsByTagName("taskElements")[0].childNodes;
+                    //console.log(taskElementsXML);
 
-                    $scope.elementId = elementPositionStart + " || " + elementPositionEnd;
+                    var taskElements=[];
+                    console.log("taskElements:");
+                    for (i = 0; i < taskElementsXML.length; i++) {
+                        var taskElement;
+                        console.log(taskElementsXML[i]);
+                        //console.log(taskElementsXML.getElementsByTagName("type")[0]);
+                    }
+
+                    $scope.taskBody = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskBody")[0]);
+                    console.log("taskBody:");
+                    //extract position of taskElements in body
+                    var pattern= /{taskElement:(\d+)}/g;
+                    var match;
+
+
+
+                    while (match=pattern.exec($scope.taskBody)){
+                        console.log(match);
+                        console.log(match.index);
+                        var start=match.index
+                        var end=match.index + match[0].length;
+                        console.log(start + "," + end);
+                    }
+
+                    /*var elements = body.match(/{taskElement:(\d+)}/g);
+                    console.log(elements);
+                    console.log("For each");
+                    elements.forEach(function(element){
+                        console.log(element);
+                    })*/
+
+
+                    //$scope.elementId = element +":"+ elementPositionStart + " || " + "asd";
                     //body.substring(body.search("{taskElement:"),body.search(/(\{taskElement)(\d+)(\})/));
                     //$scope.taskBody = body.search("{taskElement:");
                     //$scope.taskBodyTemp = body;
