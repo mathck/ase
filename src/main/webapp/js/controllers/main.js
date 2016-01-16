@@ -1056,6 +1056,8 @@ materialAdmin
 
     .controller('createTemplateCtrl', function ( $scope, $state, growlService, TokenService, ErrorHandler, TemplateFactory) {
         //console.log("Template creation started");
+        $scope.minimalCode="<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<template>\n<identifier>\n<title>Smallest</title>\n<description>Sample</description>\n<estimatedWorkTime>60</estimatedWorkTime>\n<deadline>2016-03-03</deadline>\n<githook>???</githook>\n<comments>false</comments>\n</identifier>\n</template>";
+
         $scope.template={};
         $scope.createTemplate = function(){
             TemplateFactory.create({templateCategoryName: "default", templateCategoryDescription: "default category",

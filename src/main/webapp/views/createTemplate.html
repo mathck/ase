@@ -71,11 +71,12 @@ $(document).delegate('#textbox', 'keydown', function(e) {
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="fg-line">
-                                <textarea id="textbox" class="form-control input-md description code" placeholder="Write your code here..." data-ng-model="template.syntax"></textarea>
+                                <textarea id="textbox" class="form-control input-md description code" data-ng-model="template.syntax">
+                                    {{minimalCode}}
+                                </textarea>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
