@@ -1097,7 +1097,7 @@ materialAdmin
     // VIEW TEMPLATE
     //=================================================
 
-    .controller('viewTemplateCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler, TemplateFactory) {
+    .controller('viewTemplateCtrl', function ( $scope, $state, $stateParams, $sce, growlService, TokenService, ErrorHandler, TemplateFactory) {
         //console.log("Template view started");
         //console.log($stateParams.tID);
         $scope.tID=$stateParams.tID;
@@ -1164,15 +1164,15 @@ materialAdmin
                             "'>";
                             break;
                         case "checkbox":
-                            taskElement.code='<label><input type="checkbox" name="ny"> New York</label>';
+                            //taskElement.code='<label><input type="checkbox" name="ny"> New York</label>';
 
-                            /*taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
+                            taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
                                 xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
                                 "' " +
                                 (xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue=="checked"?"checked":"")+
                                 " value='" +
                                 xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() +
-                                "'><i class='input-helper'></i></label></div>";*/
+                                "'><i class='input-helper'></i>" + xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() + "</label></div>";
                             break;
                         case "textbox":
                             taskElement.code="<textbox id='"+
@@ -1230,6 +1230,7 @@ materialAdmin
                                 //console.log("replacing " + match[0] + " with " + taskElement.code);
                                 //console.log($scope.taskBody);
                                 $scope.taskBody=$scope.taskBody.replace(match[0],taskElement.code);
+                                $scope.trustedTaskBody = $sce.trustAsHtml($scope.taskBody);
                                 //console.log($scope.taskBody);
                             }
                         });
