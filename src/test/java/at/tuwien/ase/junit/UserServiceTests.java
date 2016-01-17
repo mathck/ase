@@ -1,4 +1,4 @@
-package at.tuwien.ase;
+package at.tuwien.ase.junit;
 
 /**
  * Created by mathc_000 on 22-Nov-15.

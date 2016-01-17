@@ -1,4 +1,4 @@
-package at.tuwien.ase;
+package at.tuwien.ase.junit;
 
 import at.tuwien.ase.model.Task;
 import at.tuwien.ase.dao.TaskDAO;
