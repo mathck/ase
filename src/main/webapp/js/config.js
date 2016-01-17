@@ -183,7 +183,20 @@ materialAdmin
 
             .state ('viewTemplate', {
                 url: '/viewTemplate/:tID',
-                templateUrl: 'views/viewTemplate.html'
+                templateUrl: 'views/viewTemplate.html',
+                resolve: {
+                    loadPlugin: function($ocLazyLoad) {
+                        return $ocLazyLoad.load ([
+                            {
+                                name: 'css',
+                                insertBefore: '#app-level',
+                                files: [
+                                    'vendors/bower_components/nouislider/jquery.nouislider.css'
+                                ]
+                            }
+                        ])
+                    }
+                }
             })
 
             //------------------------------

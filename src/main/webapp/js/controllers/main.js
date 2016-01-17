@@ -1097,168 +1097,28 @@ materialAdmin
     // VIEW TEMPLATE
     //=================================================
 
-    .controller('viewTemplateCtrl', function ( $scope, $state, $stateParams, $sce, growlService, TokenService, ErrorHandler, TemplateFactory) {
-        //console.log("Template view started");
-        //console.log($stateParams.tID);
-        $scope.tID=$stateParams.tID;
+    .controller('viewTemplateCtrl', function ( $scope, $state, $stateParams, $compile, $sce, growlService, TokenService, ErrorHandler, TemplateFactory) {
 
-        $scope.template={};
-        TemplateFactory.show({tID: $scope.tID}).$promise.then(function(response){
-                $scope.template=response;
-
-                var identifier;
-                var body;
-                var elementPositionStart;
-                var elementPositionEnd;
-                var elementId;
-                $scope.title = "";
-                //$scope.parseDSL=function(){
-                    parser = new DOMParser();
-                    $scope.syntax=$scope.template.syntax;
-                    xmlDoc = parser.parseFromString($scope.template.syntax,"text/xml");
-                    $scope.identifier = xmlDoc.getElementsByTagName("identifier")[0].childNodes[1].nodeValue;
-
-                    identifier = xmlDoc.getElementsByTagName("identifier")[0].childNodes;
-
-                    for (i = 0; i < identifier.length; i++) {
-                            switch(identifier[i].nodeName) {
-                                case "title":
-                                    $scope.title = identifier[i].childNodes[0].nodeValue;
-                                    break;
-                                case "description":
-                                    $scope.description = identifier[i].childNodes[0].nodeValue;
-                                    break;
-                                case "estimatedWorkTime":
-                                    $scope.estimatedWorkTime = Math.floor(identifier[i].childNodes[0].nodeValue/60) + " H : " + identifier[i].childNodes[0].nodeValue%60 +" Min";
-                                    break;
-                                case "deadline":
-                                    $scope.deadline = identifier[i].childNodes[0].nodeValue;
-                                    break;
-                                case "githook":
-                                    $scope.githook = identifier[i].childNodes[0].nodeValue;
-                                    break;
-                                case "comments":
-                                    $scope.comments = identifier[i].childNodes[0].nodeValue;
-                                    break;
-                            }
-                    }
-
-                    $scope.taskElementsBody = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskElements")[0]);
-                    var taskElementsXML = [];
-                    var taskElements=[];
-
-                    taskElementsXML=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement");
-
-                    //console.log("taskElements:");
-                    for (i = 0; i < taskElementsXML.length; i++) {
-                        var taskElement={};
-                        //console.log(taskElementsXML[i]);
-                        taskElement.type=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("type")[0].firstChild.nodeValue.trim();
-                        taskElement.id=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim();
-                        //console.log("Element: " + taskElement.type);
-                        //console.log("id: " + taskElement.id);
-                        switch (taskElement.type)
-                        {
-                        case "image":
-                            taskElement.code="<img src='"+xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("link")[0].firstChild.nodeValue.trim()+
-                            "'>";
-                            break;
-                        case "checkbox":
-                            //taskElement.code='<label><input type="checkbox" name="ny"> New York</label>';
-
-                            taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
-                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
-                                "' " +
-                                (xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue=="checked"?"checked":"")+
-                                " value='" +
-                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() +
-                                "'><i class='input-helper'></i>" + xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() + "</label></div>";
-                            break;
-                        case "textbox":
-                            taskElement.code="<textbox id='"+
-                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
-                                "'>" +
-                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.trim() +
-                                "</textbox>";
-                            break;
-                        case "file":
-                            taskElement.code="<a href='"+
-                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("link")[0].firstChild.nodeValue.trim() +
-                                "'>"+
-                                xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue.trim() +
-                                "</a>";
-                            break;
-                        case "slider":
-                            values=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.split("|");
-                            var length=values.length;
-
-                            taskElement.code="<small class='c-gray ng-binding'>Current value: 2</small> <div slider='' id='"+
-                            xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
-                            "' class='input-slider ng-pristine ng-untouched ng-valid ng-isolate-scope noUi-target noUi-ltr noUi-horizontal noUi-background' start='"+
-                            1+"' end='"+length+"'><div class='noUi-base'><div style='left: 33.3333%;' class='noUi-origin'><div class='noUi-handle noUi-handle-lower'></div></div></div></div>";
-                            break;
-                        default:
-                            //ErrorHandler.handle({status:"0", item:"XML does not conform to XSD. Wrong element type."});
-                            break;
-                        }
-                        taskElements.push(taskElement);
-                    }
-                    //console.log(taskElements);
-
-                    $scope.taskBody = new XMLSerializer().serializeToString(xmlDoc.getElementsByTagName("taskBody")[0]);
-                    //console.log("taskBody:");
-
-
-                    $scope.taskBody=$scope.taskBody.replace("<taskBody>","");
-                    $scope.taskBody=$scope.taskBody.replace("</taskBody>","");
-
-                    //extract position of taskElements in body
-                    var pattern= /{taskElement:(\d+)}/g;
-                    var match;
-                    while (match=pattern.exec($scope.taskBody)){
-                        //console.log(match);
-                        //console.log(match.index);
-                        var start=match.index;
-                        var end=match.index + match[0].length;
-                        //console.log(start + "," + end);
-                        var insertElement={}
-                        taskElements.forEach(function(taskElement){
-                            //console.log(taskElement.id);
-                            //console.log(match[1]);
-
-                            if (taskElement.id==match[1]){
-                                //console.log("replacing " + match[0] + " with " + taskElement.code);
-                                //console.log($scope.taskBody);
-                                $scope.taskBody=$scope.taskBody.replace(match[0],taskElement.code);
-                                $scope.trustedTaskBody = $sce.trustAsHtml($scope.taskBody);
-                                //console.log($scope.taskBody);
-                            }
-                        });
-                        //console.log($scope.taskBody);
-                    }
-
-                    /*var elements = body.match(/{taskElement:(\d+)}/g);
-                    console.log(elements);
-                    console.log("For each");
-                    elements.forEach(function(element){
-                        console.log(element);
-                    })*/
-
-
-                    //$scope.elementId = element +":"+ elementPositionStart + " || " + "asd";
-                    //body.substring(body.search("{taskElement:"),body.search(/(\{taskElement)(\d+)(\})/));
-                    //$scope.taskBody = body.search("{taskElement:");
-                    //$scope.taskBodyTemp = body;
-                    //$scope.taskElements = xmlDoc.getElementsByTagName("taskElements")[0].childNodes[0].nodeValue;
-                //}
-            }, function(error){
-                ErrorHandler.handle(error);
-            });
-
-        //$scope.parseDSL();
+        configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory);
 
     })
 
+    //=================================================
+    // DSL SPECIFIC DIRECTIVE
+    //=================================================
+
+    .directive('dynamic', function ($compile) {
+      return {
+        restrict: 'A',
+        replace: true,
+        link: function (scope, ele, attrs) {
+          scope.$watch(attrs.dynamic, function(html) {
+            ele.html(html);
+            $compile(ele.contents())(scope);
+          });
+        }
+      };
+    })
 
     //=================================================
     // CALENDAR

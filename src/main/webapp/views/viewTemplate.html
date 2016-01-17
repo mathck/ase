@@ -76,24 +76,17 @@ $(document).delegate('#textbox', 'keydown', function(e) {
             <div class="card">
                 <div class="card-body card-padding">
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div>{{syntax}}</div>TESTTESTTESTTEST<div>{{identifier}}</div><div>{{taskBody}}</div><div>{{taskElement}}</div>
+                        <div class="col-sm-6">
                             <p class="c-black f-500 m-b-20 m-t-20">{{title}}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             {{description}}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            {{estimatedWorkTime}}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            {{deadline}}
+                        <div class="col-sm-6">
+                            <p><span class="c-black f-500 m-b-20 m-t-20">Estimated Work Time: </span>{{estimatedWorkTime}}</p>
+                            <p><span class="c-black f-500 m-b-20 m-t-20">Deadline: </span>{{deadline}}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -109,11 +102,11 @@ $(document).delegate('#textbox', 'keydown', function(e) {
                     <div class="row">
                         <div class="col-sm-12">
                             <h3>Hier könnte auch unser Code stehen:</h3>
-                            <span ng-bind-html="trustedTaskBody"></span>
+                            <span dynamic="trustedTaskBody"></span>
                         </div>
                     </div>
                 </div>
-            </div>
+             </div>
         </div>
     </section>
 </section>
