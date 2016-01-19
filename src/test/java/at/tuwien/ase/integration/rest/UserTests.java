@@ -1,14 +1,7 @@
 package at.tuwien.ase.integration.rest;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.path.json.JsonPath.from;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isIn;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
-import at.tuwien.ase.data_generator.AppConfig;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,7 +16,7 @@ import com.jayway.restassured.http.ContentType;
 
 // @author: Mateusz Czernecki
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class UserTests {
 
     RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
@@ -39,6 +32,8 @@ public class UserTests {
     public void setup() throws Exception {
         requestSpecBuilder.setContentType(ContentType.JSON).addHeader("Accept", ContentType.JSON.getAcceptHeader());
     }
+
+    // role tests todo ex. delete something or create something i cannot do
 
     @Test
     public void logoutWithoutTokenReturns401() {

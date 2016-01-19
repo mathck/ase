@@ -8,7 +8,6 @@ import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.TaskDAO;
 import at.tuwien.ase.dao.UserDAO;
-import at.tuwien.ase.data_generator.AppConfig;
 import at.tuwien.ase.model.*;
 import at.tuwien.ase.services.*;
 import at.tuwien.ase.services.impl.IssueServiceImpl;
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.*;
 // Im Notfall auskommentieren und ruhig pushen
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class ProjectServiceTests {
 
     static UserDAO userDAO;

@@ -4,7 +4,6 @@ package at.tuwien.ase.junit;
  * Created by mathc_000 on 22-Nov-15.
  */
 
-import at.tuwien.ase.data_generator.AppConfig;
 import at.tuwien.ase.model.*;
 import at.tuwien.ase.services.LevelService;
 import at.tuwien.ase.services.impl.LevelServiceImpl;
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 // Im Notfall auskommentieren und ruhig pushen
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class LevelServiceTests {
 
     static LevelService levelService;

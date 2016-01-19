@@ -1,7 +1,6 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
-import at.tuwien.ase.data_generator.RandomUserGenerator;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.ProjectService;
@@ -47,43 +46,38 @@ public class TestdataController {
         User admin = new User("admin@school.com", "1234qwer");
         admin.setFirstName("Admin");
         admin.setLastName("School");
-        admin.setAvatar(RandomUserGenerator.getRandomAvatar());
+        admin.setAvatar("img/avatars/4.png");
         userService.writeUser(admin);
 
-        // create 2000 students
+        // create 10000 students
         List<User> students = new ArrayList<User>();
-        for(int i = 0; i < 200; i++) {
-            String firstname = RandomUserGenerator.getRandomFirstname();
-            String lastname = RandomUserGenerator.getRandomLastname();
-            String mail = RandomUserGenerator.getMailByName(firstname, lastname, "student");
-
-            User currentUser = new User(mail, "1234qwer");
-            currentUser.setFirstName(firstname);
-            currentUser.setLastName(lastname);
-            currentUser.setAvatar(RandomUserGenerator.getRandomAvatar());
+        for(int i = 0; i < 10000; i++) {
+            User currentUser = new User("user" + _userCounter, "1234qwer");
+            currentUser.setFirstName("user");
+            currentUser.setLastName("" + _userCounter);
+            currentUser.setAvatar("img/avatars/" + _userCounter % 30 + ".png");
 
             userService.writeUser(currentUser);
             students.add(currentUser);
+            _userCounter++;
         }
 
         List<User> teachers = new ArrayList<User>();
-        // create 100 teachers
-        for(int i = 0; i < 10; i++) {
-            String firstname = RandomUserGenerator.getRandomFirstname();
-            String lastname = RandomUserGenerator.getRandomLastname();
-            String mail = RandomUserGenerator.getMailByName(firstname, lastname, "teacher");
+        // create 1000 teachers
+        for(int i = 0; i < 1000; i++) {
 
-            User currentUser = new User(mail, "1234qwer");
-            currentUser.setFirstName(firstname);
-            currentUser.setLastName(lastname);
-            currentUser.setAvatar(RandomUserGenerator.getRandomAvatar());
+            User currentUser = new User("user" + _userCounter, "1234qwer");
+            currentUser.setFirstName("user");
+            currentUser.setLastName("" + _userCounter);
+            currentUser.setAvatar("img/avatars/" + _userCounter % 30 + ".png");
 
             userService.writeUser(currentUser);
             teachers.add(currentUser);
+            _userCounter++;
         }
 
-        // create 100 class projects for every teacher
-        for(int i = 0; i < 10; i++) {
+        // create 1000 class projects for every teacher
+        for(int i = 0; i < 1000; i++) {
             Project project = new Project(i+1, "Class " + (i+1), "Class project for class " + (i+1));
 
             // 5 tasks (homeworks) for every class
@@ -103,12 +97,18 @@ public class TestdataController {
             project.addUser(admin.getUserID(), "ADMIN");
             project.addUser(teachers.get(i).getUserID(), "ADMIN");
 
-            // 20 students for every class
-            for(int k = i * 20; k < ((i * 20) + 20); k++) {
+            // 100 students for every class
+            for(int k = i * 100; k < ((i * 100) + 100); k++) {
                 project.addUser(students.get(k).getUserID(), "CONTRIBUTOR");
             }
 
             projectService.writeProject(project);
         }
+    }
+
+    private int _userCounter = 1;
+
+    private String getMailByName(String username) {
+        return username + "@" + "mail" + ".com";
     }
 }

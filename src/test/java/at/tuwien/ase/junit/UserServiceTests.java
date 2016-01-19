@@ -6,7 +6,6 @@ package at.tuwien.ase.junit;
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.UserDAO;
-import at.tuwien.ase.data_generator.AppConfig;
 import at.tuwien.ase.model.Level;
 import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.LevelService;
@@ -28,7 +27,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 // Im Notfall auskommentieren und ruhig pushen
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class UserServiceTests {
 
     static UserDAO userDAO;
