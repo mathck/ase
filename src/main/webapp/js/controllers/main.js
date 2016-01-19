@@ -890,9 +890,27 @@ materialAdmin
 
         $scope.templates={};
         //initialize available states for subtasks
-        $scope.states = [{id:'0', title:'Awaiting precondition'},
-            {id:'1',title:'Working'},
-            {id:'2',title:'Failed'}];
+        $scope.states = [
+            {id:'1',title:'Draft'},
+            {id:'2',title:'Not Started'},
+            {id:'3',title:'Awaiting precondition'},
+            {id:'4',title:'Waiting'},
+            {id:'5',title:'Created'},
+            {id:'6',title:'Open'},
+            {id:'7',title:'Active'},
+            {id:'8',title:'In Progress'},
+            {id:'9',title:'Working'},
+            {id:'10',title:'Verified'},
+            {id:'11',title:'Resolved'},
+            {id:'12',title:'Completed'},
+            {id:'13',title:'Finished'},
+            {id:'14',title:'Done'},
+            {id:'15',title:'Accepted'},
+            {id:'16',title:'Info Requested'},
+            {id:'17',title:'Incomplete'},
+            {id:'18',title:'Cancelled'},
+            {id:'19',title:'Failed'}
+            ];
         $scope.allTemplates='Templates: '
         //retrieve list of templates from backend
         TemplateFactory.query().$promise.then(function(response){
