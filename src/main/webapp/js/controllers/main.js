@@ -925,7 +925,7 @@ materialAdmin
                 name: "state" + counterStates++,
                 id: counterStates
             });
-            console.log($scope.data.stateFields);
+            //console.log($scope.data.stateFields);
             $scope.allStateFields="";
             $scope.data.stateFields.forEach(function (stateField){
                 $scope.allStateFields+=", " + stateField.title;
@@ -936,7 +936,7 @@ materialAdmin
                 name: "template" + counterTemplates++,
                 id: counterTemplates
             });
-            console.log($scope.data.templateFields);
+            //console.log($scope.data.templateFields);
             $scope.allTemplateFields="";
             $scope.data.templateFields.forEach(function (templateField){
                 $scope.allTemplateFields+=", " + templateField.id;
@@ -991,7 +991,7 @@ materialAdmin
                 }
             else {
                 //if all required information is available, send task creation request to backend
-                console.log("users:");
+                //console.log("users:");
                 if ($scope.task.userType==='all'){
                     $scope.task.contributors=[];
                     $scope.userList.forEach(function(user){
@@ -1000,11 +1000,11 @@ materialAdmin
                 }else{
                     $scope.task.contributors=$scope.task.contributorSelection;
                 }
-                console.log($scope.task.userType);
-                console.log($scope.task.contributors);
+               // console.log($scope.task.userType);
+               // console.log($scope.task.contributors);
 
                 //create an array of subtasks that conforms to the API
-                console.log("subtasks:");
+                //console.log("subtasks:");
                 $scope.task.subtasks=[];
                 $scope.data.templateFields.forEach(function (templateField){
                     if (!(templateField.id===undefined)){
@@ -1012,10 +1012,10 @@ materialAdmin
                         $scope.task.subtasks.push(subtask);
                     }
                 });
-                console.log($scope.task.subtasks);
+                //console.log($scope.task.subtasks);
 
                 //create an array of subtasks that conforms to the API and includes Open and Closed
-                console.log("states:");
+                //console.log("states:");
                 $scope.task.states=[{stateName:'Open'}, {stateName:'Closed'}];
                 $scope.data.stateFields.forEach(function (stateField){
                     if (!(stateField.state===undefined)){
@@ -1023,7 +1023,7 @@ materialAdmin
                         $scope.task.states.push(state);
                     }
                 });
-                console.log($scope.task.states);
+                //console.log($scope.task.states);
 
                 //Send request to server
                 TasksFactory.create({pid: $scope.currentPID},
