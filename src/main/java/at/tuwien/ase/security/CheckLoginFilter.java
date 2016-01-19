@@ -31,7 +31,6 @@ public class CheckLoginFilter extends GenericFilterBean {
 
         String uri = ((HttpServletRequest) request).getRequestURI().toString();
 
-
         // todo use a whitelist instead of multiple if's
         //for register and for login the token validation is not necessary
         if (!uri.equalsIgnoreCase("/taskit/api/user/login")
@@ -66,12 +65,9 @@ public class CheckLoginFilter extends GenericFilterBean {
             //no token validation necessary
             chain.doFilter(request, response);
         }
-
-
     }
 
     private void createJsonError(HttpServletResponse response, int responseCode, String errorMessage) throws IOException {
-
         ObjectMapper mapper = new ObjectMapper();
 
         //create jsonStringMapper object with error message
@@ -83,9 +79,5 @@ public class CheckLoginFilter extends GenericFilterBean {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonString);
-
     }
-
-
-
 }

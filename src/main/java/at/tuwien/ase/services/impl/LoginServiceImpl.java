@@ -87,7 +87,7 @@ public class LoginServiceImpl implements LoginService {
             //reset num login attempts
             loginDAO.resetCurrentLoginFails(email);
 
-        }else{
+        } else {
             //authentication NOT successful
 
             //increment counter for failed logins
@@ -96,14 +96,12 @@ public class LoginServiceImpl implements LoginService {
             //check login threshold exceeded
             if (countLoginFails + 1 >= maxLoginAttempts) {
                 throw new Exception("Authentication failed! User is locked for " + this.loginCooldownInMins + " minutes!");
-            }else{
+            } else {
                 throw new Exception ("Authentication failed! User mail or password incorrect!");
             }
-
         }
 
         return token;
-
     }
 
     public void logout(String email) throws Exception {
@@ -111,8 +109,6 @@ public class LoginServiceImpl implements LoginService {
     }
 
     public boolean checkLogin(String token) throws Exception {
-
         return loginDAO.checkLoginValidity(token, tokenValidityInMins);
-
     }
 }
