@@ -61,9 +61,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--{{allStateFields}}-->
                             <form>
-                                <div data-ng-repeat="stateField in data.stateFields">
-                                    <div data-display-states="stateField" data-states="states"></div>
+                                <div data-ng-repeat="stateFieldId in data.stateFieldIds">
+                                    <select class="form-control" data-ng-model="data.stateFields[stateFieldId.id]" required="Please select a state" data-ng-options="state.title for state in states track by state.title">
+                                    </select>
                                 </div>
                                 <button data-ng-click="addState()" class="btn bgm-teal waves-effect"><i class="zmdi zmdi-plus"></i></button>
                                 <button data-ng-click="removeState()" class="btn btn-danger waves-effect"><i class="zmdi zmdi-minus"></i></button>
@@ -72,21 +74,16 @@
                         </div>
                         <div class="col-sm-6">
                             <p class="c-black f-500 m-b-20 m-t-20">Select Template</p>
-                            <div class="form-group">
-                                <div class="fg-line">
-                                    <div class="select">
-                                        <select class="form-control">
-                                            <option value="Template 1" selected="selected">Template 1</option>
-                                            <option value="Template 2">Template 2</option>
-                                            <option value="Template 3">Template 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--{{allTemplateFields}}-->
                             <form>
-                                <div data-ng-repeat="templateField in data.templateFields">
-                                    <div data-display-templates="templateField" data-templates="templates"></div>
+                                <!--<div data-ng-repeat="templateField in data.templateFields">
+                                    <div data-display-templates="templateField" data-templates="templates.title"></div>
+                                </div>-->
+                                <div data-ng-repeat="templateFieldId in data.templateFieldIds">
+                                    <select class="form-control" data-ng-model="data.templateFields[templateFieldId.id]" required="Please select a template" data-ng-options="template.title for template in templates track by template.id">
+                                    </select>
                                 </div>
+
                                 <button data-ng-click="addTemplate()" class="btn bgm-teal waves-effect"><i class="zmdi zmdi-plus"></i></button>
                                 <button data-ng-click="removeTemplate()" class="btn btn-danger waves-effect"><i class="zmdi zmdi-minus"></i></button>
                                 <!--<tt>{{data.fields}}</tt>-->
@@ -102,6 +99,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12 m-b-15">
+                            <p class="c-black f-500 m-b-20 m-t-20">Comments</p>
+                            <div class="radio m-b-15">
+                                <label>
+                                    <input data-ng-model="task.comments" type="radio" value="true" checked="checked">
+                                    <i class="input-helper"></i>
+                                    Enable Comments
+                                </label>
+                            </div>
+                            <div class="radio m-b-15">
+                                <label>
+                                    <input data-ng-model="task.comments" type="radio" value="false">
+                                    <i class="input-helper"></i>
+                                    Disable Comments
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card">
@@ -113,14 +129,14 @@
                         <div class="col-sm-12 m-b-15">
                             <div class="radio m-b-15">
                                 <label>
-                                    <input data-ng-model="taskType" type="radio" checked="checked">
+                                    <input data-ng-model="task.type" type="radio" value="collaborative_task" checked="checked">
                                     <i class="input-helper"></i>
-                                    Cooperative Task
+                                    Collaborative Task
                                 </label>
                             </div>
                             <div class="radio m-b-15">
                                 <label>
-                                    <input data-ng-model="taskType" type="radio" value="">
+                                    <input data-ng-model="task.type" type="radio" value="single_task">
                                     <i class="input-helper"></i>
                                     Single User Task
                                 </label>
@@ -130,7 +146,7 @@
                      <div class="row">
                          <div class="col-sm-12 m-b-15">
                              <p class="f-500 c-black m-b-15">Contributor/s</p>
-                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPicker" data-ng-options="user.userID as user.name for user in userList"></select>
+                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="task.contributors" data-ng-options="user.userID as user.name for user in userList"></select>
                          </div>
                      </div>
                 </div>

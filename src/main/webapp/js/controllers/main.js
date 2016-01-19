@@ -680,7 +680,8 @@ materialAdmin
                     return(user.user.trim()==TokenService.username);
                 });
                 $scope.currentUserRole=thisUser[0].role.trim();
-                console.log("Current User Role:" + $scope.currentUserRole);
+                //console.log("Current User Role:" + $scope.currentUserRole);
+                console.log($scope.selectedProject.allTasks);
             }, function(error){
                 ErrorHandler.handle("Could not fetch project information from server.", error);
             });
@@ -862,7 +863,7 @@ materialAdmin
     //=================================================
 
     .controller('createTaskCtrl', function ( $scope, $state, $stateParams, $timeout, growlService, TokenService, ErrorHandler,
-        TasksFactory, IssueRetrieveFactory, ProjectFactory, UserFactory) {
+        TasksFactory, TemplateFactory, IssueRetrieveFactory, ProjectFactory, UserFactory) {
         console.log("starting task creation");
         $scope.titleFail = false;
         $scope.descriptionFail = false;
@@ -870,6 +871,8 @@ materialAdmin
         $scope.currentPID = $stateParams.pID;
         $scope.currentIID = $stateParams.iID;
 
+
+        //set fields if task originates from an issue
         if (!(typeof $scope.currentIID==='undefined')){
             $scope.currentIID = $stateParams.iID;
             IssueRetrieveFactory.show({issueID: $scope.currentIID}).$promise.then(function(response){
@@ -885,31 +888,76 @@ materialAdmin
                 });
         }
 
-        var counter = 0;
+        $scope.templates={};
+        //initialize available states for subtasks
+        $scope.states = [{id:'0', title:'Awaiting precondition'},
+            {id:'1',title:'Working'},
+            {id:'2',title:'Failed'}];
+        $scope.allTemplates='Templates: '
+        //retrieve list of templates from backend
+        TemplateFactory.query().$promise.then(function(response){
+            $scope.templates=response;
+            $scope.templates.forEach(function(template){
+                template.title=template.title.trim();
+                template.description=template.description.trim();
+                template.creationDate=template.creationDate.trim();
+                $scope.allTemplates=$scope.allTemplates + ", " + template.title;
+            })
+            //console.log($scope.templates);
+        }, function(error){
+            ErrorHandler.handle("Could not retrieve templates from server", error);
+        });
+
+        //initialize arrays for states and templates/subtasks
+        var counterTemplates = 0;
+        var counterStates= 0;
+
         $scope.data = {
             stateFields: [],
-            templateFields: []
+            stateFieldIds:[],
+            templateFields: [],
+            templateFieldIds: []
         }
 
-        $scope.states = ['Open', 'Closed'];
-        $scope.templates = ['Template 1', 'Template 2', 'Template 3'];
+        //add and remove selection fields for states and templates on click
         $scope.addState = function() {
-            $scope.data.stateFields.push({
-                name: "test " + counter++
+            $scope.data.stateFieldIds.push({
+                name: "state" + counterStates++,
+                id: counterStates
             });
+            console.log($scope.data.stateFields);
+            $scope.allStateFields="";
+            $scope.data.stateFields.forEach(function (stateField){
+                $scope.allStateFields+=", " + stateField.title;
+            })
         };
         $scope.addTemplate = function() {
-            $scope.data.templateFields.push({
-                name: "test " + counter++
+            $scope.data.templateFieldIds.push({
+                name: "template" + counterTemplates++,
+                id: counterTemplates
             });
-        };
-        $scope.removeTemplate = function() {
-            $scope.data.templateFields.pop();
-        };
-        $scope.removeState = function() {
-            $scope.data.stateFields.pop();
+            console.log($scope.data.templateFields);
+            $scope.allTemplateFields="";
+            $scope.data.templateFields.forEach(function (templateField){
+                $scope.allTemplateFields+=", " + templateField.id;
+            })
         };
 
+        $scope.removeTemplate= function() {
+            $scope.data.templateFieldIds.pop();
+            $scope.data.templateFields.pop();
+            counterTemplates--;
+        };
+
+        $scope.removeState = function() {
+            $scope.data.stateFieldsIds.pop();
+            $scope.data.stateFields.pop();
+            counterStates--;
+        };
+
+        $scope.addTemplate();
+
+        //retrieve user list of the current project from server
         ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
             $scope.selectedProject=response;
             $scope.userList=[];
@@ -927,56 +975,66 @@ materialAdmin
             ErrorHandler.handle("Could not fetch project information from server.", error);
         });
 
+        //prepare data and send request for task creation to backend
         $scope.createTask = function() {
+            //error handling if not title is filled in
             if(!$scope.task) {
                 $scope.titleFail = true;
                 $timeout(function(){document.getElementById('taskTitle').focus();});
             }
             else
+                //error handling if no description is filled in
                 if(!$scope.task.description) {
                     $scope.descriptionFail = true;
                     $timeout(function(){document.getElementById('taskDescription').focus();});
                 }
             else {
-                console.log($scope.taskType);
-                //if($scope.taskType=="cooperative"){
-                    TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
-                        taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
-                        userList: $scope.userPicker}).$promise.then(function(result){
+                //if all required information is available, send task creation request to backend
+                console.log("users:");
+                console.log($scope.task.contributors);
+
+                //create an array of subtasks that conforms to the API
+                console.log("subtasks:");
+                $scope.task.subtasks=[];
+                $scope.data.templateFields.forEach(function (templateField){
+                    if (!(templateField.id===undefined)){
+                        var subtask={dslTemplateId: templateField.id};
+                        $scope.task.subtasks.push(subtask);
+                    }
+                });
+                console.log($scope.task.subtasks);
+
+                //create an array of subtasks that conforms to the API and includes Open and Closed
+                console.log("states:");
+                $scope.task.states=[{stateName:'Open'}, {stateName:'Closed'}];
+                $scope.data.stateFields.forEach(function (stateField){
+                    if (!(stateField.state===undefined)){
+                        var state={stateName: stateField.title};
+                        $scope.task.states.push(state);
+                    }
+                });
+                console.log($scope.task.states);
+
+                //Send request to server
+                TasksFactory.create({pid: $scope.currentPID},
+                    {title: $scope.task.title, description: $scope.task.description, executionType: $scope.task.type,
+                    projectId: $scope.currentPID, userMail: TokenService.username, commentsAllowed: $scope.task.comments,
+                    subtaskList: $scope.task.subtasks, userList: $scope.task.contributors,
+                    taskStates: $scope.task.states}).$promise.then(function(result){
+                        //if successful, delete Issue if applicable and change to ProjectView
                         growlService.growl("Task created.");
                         if($scope.isTransformedIssue){
                                 IssueRetrieveFactory.delete({issueID: $scope.currentIID}).$promise.then(function(response){
                                 console.log("issue deleted.")
+                                growlService.growl("Issue deleted.");
                             }, function(error){
                                 ErrorHandler.handle("Could not delete Issue.", error);
                             });
                         }
                         $state.go("viewProject", {pID:$scope.currentPID});
-                    }, function(error){
-                        ErrorHandler.handle("Could not save task.", error);
-                    });
-                /*}else{
-                    var allUsers=$scope.userPicker;
-                    var lastUserInList=allUsers[allUsers.length()-1];
-                    console.log(lastUserInList);
-                    $scope.userPicker.forEach(function(user){
-                        var userList=[];
-                        userList.push(user);
-                        console.log(userList);
-                        title=$scope.task.title + " " + user;
-                        TasksFactory.create({pid: $scope.currentPID},{title: $scope.task.title, description: $scope.task.description,
-                            taskType:'task', dslTemplateId:'null', projectId:$scope.currentPID, userMail:TokenService.username, status: 'open',
-                        userList: $userList}).$promise.then(function(result){
-                            if (user==lastUserInList){
-                                growlService.growl("Task created.");
-                                $state.go("viewProject", {pID:$scope.currentPID});
-                            }
-                        }, function(error){
-                            ErrorHandler.handle("Could not save task.", error);
-                        });
-                    });
-                }*/
-                //console.log($scope.userPicker);
+                }, function(error){
+                    ErrorHandler.handle("Could not save task.", error);
+                });
             }
         }
     })

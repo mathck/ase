@@ -9,7 +9,8 @@ taskServices.factory('TasksFactory', function ($resource) {
         },
         create: {
             method: 'POST',
-            params: {pid: '@pid'}
+            params: {pid: '@pid'},
+            isArray: true
         }
     })
 });
