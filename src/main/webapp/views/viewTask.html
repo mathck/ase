@@ -92,35 +92,49 @@
                 </div>
             </div>
 
-             <div class="card" data-ng-repeat="subtask in task.subtaskList">
+             <div class="card" data-ng-repeat="subtask in task.parsedSubtaskList">
                  <div class="card-header">
                      <div class="row">
                          <div class="col-sm-6">
-                             <p class="c-black f-500 m-b-20 m-t-20">{{title}}</p>
+                             <p class="c-black f-500 m-b-20 m-t-20">{{subtask.title}}</p>
                          </div>
                      </div>
                      <div class="row">
                          <div class="col-sm-6">
-                             {{description}}
+                             {{subtask.description}}
                          </div>
                          <div class="col-sm-6">
-                             <p><span class="c-black f-500 m-b-20 m-t-20">Estimated Work Time: </span>{{estimatedWorkTime}}</p>
-                             <p><span class="c-black f-500 m-b-20 m-t-20">Deadline: </span>{{deadline}}</p>
+                             <p><span class="c-black f-500 m-b-20 m-t-20">Percentage Reached: </span>{{subtask.percentageReached}}</p>
+                             <p><span class="c-black f-500 m-b-20 m-t-20">XP: </span>{{subtask.xp}}</p>
+                             <p><span class="c-black f-500 m-b-20 m-t-20">Deadline: </span>{{subtask.deadline}}</p>
                          </div>
                      </div>
                      <div class="row">
                          <div class="col-sm-12">
-                             {{githook}}
+                             {{subtask.githook}}
                          </div>
                      </div>
                      <div class="row">
                          <div class="col-sm-12">
-                             {{comments}}
+                             {{subtask.comments}}
                          </div>
                      </div>
                      <div class="row">
                          <div class="col-sm-12">
-                             <span dynamic="trustedTaskBody"></span>
+                             <span dynamic="subtask.trustedTaskBody"></span>
+                         </div>
+                     </div>
+                     <div class="row">
+                         <div class="form-group">
+                             <div class="fg-line">
+                                 <div class="select">
+                                     <select class="form-control" data-ng-model="task.taskStates[subtask.id]" required="Please select a state" data-ng-options="state.stateName for state in task.taskStates track by state.id">
+                                     </select>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-sm-3">
+                             <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Subtask" data-ng-click="updateSubtask(subtask.id)"><i class="zmdi zmdi-check"></i>Save Subtask</button>
                          </div>
                      </div>
                  </div>

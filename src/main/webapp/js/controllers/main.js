@@ -1103,24 +1103,29 @@ materialAdmin
         TaskFactory.show({tID: $stateParams.tID}).$promise.then(function(response){
             console.log(response);
             $scope.task=response;
+            console.log($scope.task);
             $scope.task.title=$scope.task.title.trim();
             $scope.task.description=$scope.task.description.trim();
             $scope.task.status=$scope.task.status.trim();
 
 
-            $scope.parsedTemplates=[];
+            $scope.task.parsedSubtaskList=[];
             $scope.task.subtaskList.forEach(function(subtask){
-                parsedTemplate=showDSL(ErrorHandler, TemplateFactory, subtask);
-                if (parsedTemplate)
-                    $scope.parsedTemplates.push();
+                parsedTemplate=showDSL(ErrorHandler, subtask);
+                $scope.task.parsedSubtaskList.push(parsedTemplate);
             });
-            console.log($scope.parsedTemplates);
+            //console.log("Parsed Templates:");
+            //console.log($scope.task.parsedSubtaskList);
         }, function(error){
             ErrorHandler.handle("Could not fetch task information from server.", error);
         });
 
         $scope.deleteUserFromTask=function(userID){
             console.log("deleting user "+userID);
+        };
+
+        $scope.updateSubtask=function(subtaskID){
+
         };
 
 
