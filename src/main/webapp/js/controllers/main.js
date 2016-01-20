@@ -890,9 +890,27 @@ materialAdmin
 
         $scope.templates={};
         //initialize available states for subtasks
-        $scope.states = [{id:'0', title:'Awaiting precondition'},
-            {id:'1',title:'Working'},
-            {id:'2',title:'Failed'}];
+        $scope.states = [
+            {id:'1',title:'Draft'},
+            {id:'2',title:'Not Started'},
+            {id:'3',title:'Awaiting precondition'},
+            {id:'4',title:'Waiting'},
+            {id:'5',title:'Created'},
+            {id:'6',title:'Open'},
+            {id:'7',title:'Active'},
+            {id:'8',title:'In Progress'},
+            {id:'9',title:'Working'},
+            {id:'10',title:'Verified'},
+            {id:'11',title:'Resolved'},
+            {id:'12',title:'Completed'},
+            {id:'13',title:'Finished'},
+            {id:'14',title:'Done'},
+            {id:'15',title:'Accepted'},
+            {id:'16',title:'Info Requested'},
+            {id:'17',title:'Incomplete'},
+            {id:'18',title:'Cancelled'},
+            {id:'19',title:'Failed'}
+            ];
         $scope.allTemplates='Templates: '
         //retrieve list of templates from backend
         TemplateFactory.query().$promise.then(function(response){
@@ -925,7 +943,7 @@ materialAdmin
                 name: "state" + counterStates++,
                 id: counterStates
             });
-            console.log($scope.data.stateFields);
+            //console.log($scope.data.stateFields);
             $scope.allStateFields="";
             $scope.data.stateFields.forEach(function (stateField){
                 $scope.allStateFields+=", " + stateField.title;
@@ -936,7 +954,7 @@ materialAdmin
                 name: "template" + counterTemplates++,
                 id: counterTemplates
             });
-            console.log($scope.data.templateFields);
+            //console.log($scope.data.templateFields);
             $scope.allTemplateFields="";
             $scope.data.templateFields.forEach(function (templateField){
                 $scope.allTemplateFields+=", " + templateField.id;
@@ -956,11 +974,12 @@ materialAdmin
         };
 
         $scope.addTemplate();
+        $scope.userList=[];
 
         //retrieve user list of the current project from server
         ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
             $scope.selectedProject=response;
-            $scope.userList=[];
+
             //get user information for all users of the current project
             $scope.selectedProject.allUser.forEach(function(participant){
                 UserFactory.get({uID: participant.user}).$promise.then(function(user){
@@ -990,11 +1009,20 @@ materialAdmin
                 }
             else {
                 //if all required information is available, send task creation request to backend
-                console.log("users:");
-                console.log($scope.task.contributors);
+                //console.log("users:");
+                if ($scope.task.userType==='all'){
+                    $scope.task.contributors=[];
+                    $scope.userList.forEach(function(user){
+                        $scope.task.contributors.push(user.userID);
+                    })
+                }else{
+                    $scope.task.contributors=$scope.task.contributorSelection;
+                }
+               // console.log($scope.task.userType);
+               // console.log($scope.task.contributors);
 
                 //create an array of subtasks that conforms to the API
-                console.log("subtasks:");
+                //console.log("subtasks:");
                 $scope.task.subtasks=[];
                 $scope.data.templateFields.forEach(function (templateField){
                     if (!(templateField.id===undefined)){
@@ -1002,10 +1030,10 @@ materialAdmin
                         $scope.task.subtasks.push(subtask);
                     }
                 });
-                console.log($scope.task.subtasks);
+                //console.log($scope.task.subtasks);
 
                 //create an array of subtasks that conforms to the API and includes Open and Closed
-                console.log("states:");
+                //console.log("states:");
                 $scope.task.states=[{stateName:'Open'}, {stateName:'Closed'}];
                 $scope.data.stateFields.forEach(function (stateField){
                     if (!(stateField.state===undefined)){
@@ -1013,7 +1041,7 @@ materialAdmin
                         $scope.task.states.push(state);
                     }
                 });
-                console.log($scope.task.states);
+                //console.log($scope.task.states);
 
                 //Send request to server
                 TasksFactory.create({pid: $scope.currentPID},
@@ -1044,7 +1072,7 @@ materialAdmin
     //=================================================
 
     .controller('updateTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
-        TaskFactory, IssuesFactory, ProjectFactory, UserFactory) {
+        TaskFactory, IssuesFactory, TemplateFactory, ProjectFactory, UserFactory) {
 
         $scope.currentPID = $stateParams.pID;
         $scope.currentTID = $stateParams.tID;
@@ -1054,6 +1082,9 @@ materialAdmin
 
         ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
             $scope.project=response;
+            $scope.project.title=$scope.project.title.trim();
+            $scope.project.description=$scope.project.description.trim();
+
             $scope.project.userList=[];
             //get user information for all users of the current project
             $scope.project.allUser.forEach(function(participant){
@@ -1072,6 +1103,18 @@ materialAdmin
         TaskFactory.show({tID: $stateParams.tID}).$promise.then(function(response){
             console.log(response);
             $scope.task=response;
+            $scope.task.title=$scope.task.title.trim();
+            $scope.task.description=$scope.task.description.trim();
+            $scope.task.status=$scope.task.status.trim();
+
+
+            $scope.parsedTemplates=[];
+            $scope.task.subtaskList.forEach(function(subtask){
+                parsedTemplate=showDSL(ErrorHandler, TemplateFactory, subtask);
+                if (parsedTemplate)
+                    $scope.parsedTemplates.push();
+            });
+            console.log($scope.parsedTemplates);
         }, function(error){
             ErrorHandler.handle("Could not fetch task information from server.", error);
         });

@@ -41,9 +41,8 @@
                             <p class="c-black f-500 m-b-20 m-t-20">Change State</p>
                             <div class="form-group">
                                 <div class="fg-line">
-                                    <div class="select">
+                                    <div class="select" data-ng-model="task.status">
                                         <select class="form-control">
-                                            <option value="New">New</option>
                                             <option value="Open" selected="selected">Open</option>
                                             <option value="Closed">Closed</option>
                                         </select>
@@ -63,7 +62,7 @@
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>E-Mail</th>
-                                        <!--<th>Project Level</th>-->
+                                        <th>Level</th>
                                         <th>Delete</th>
                                     </tr>
                                     </thead>
@@ -73,7 +72,7 @@
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.firstName}}</td>
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.lastName}}</td>
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.userID}}</td>
-                                        <!--<td>{{user.level}}</td> TODO Level to be implemented -->
+                                        <td>{{user.currentLevel}}</td>
                                         <td><button data-ng-click="deleteUserFromTask(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     </tbody>
@@ -93,9 +92,37 @@
                 </div>
             </div>
 
-             <div class="card">
+             <div class="card" data-ng-repeat="subtask in task.subtaskList">
                  <div class="card-header">
-                     <h2><< Subtask Title >><small>Subtask description...</small></h2>
+                     <div class="row">
+                         <div class="col-sm-6">
+                             <p class="c-black f-500 m-b-20 m-t-20">{{title}}</p>
+                         </div>
+                     </div>
+                     <div class="row">
+                         <div class="col-sm-6">
+                             {{description}}
+                         </div>
+                         <div class="col-sm-6">
+                             <p><span class="c-black f-500 m-b-20 m-t-20">Estimated Work Time: </span>{{estimatedWorkTime}}</p>
+                             <p><span class="c-black f-500 m-b-20 m-t-20">Deadline: </span>{{deadline}}</p>
+                         </div>
+                     </div>
+                     <div class="row">
+                         <div class="col-sm-12">
+                             {{githook}}
+                         </div>
+                     </div>
+                     <div class="row">
+                         <div class="col-sm-12">
+                             {{comments}}
+                         </div>
+                     </div>
+                     <div class="row">
+                         <div class="col-sm-12">
+                             <span dynamic="trustedTaskBody"></span>
+                         </div>
+                     </div>
                  </div>
              </div>
         </div>
