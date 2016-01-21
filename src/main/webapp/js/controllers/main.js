@@ -8,24 +8,26 @@ materialAdmin
 
         TokenService.username = $cookies.email;
         TokenService.token = ($cookies.token).valueOf();
+        $http.defaults.headers.common['user-token'] = String(TokenService.token);
+        $http.defaults.headers.common['userID'] = String($cookies.email);
+
+
         if ( (TokenService.token == '') || (typeof TokenService.token === 'undefined') ){
             $window.location.href='/taskit/index.html';
         }
         TokenService.isLogged=true;
-        $http.defaults.headers.common['user-token'] = String(TokenService.token);
         UserFactory.show({uID: TokenService.username}).$promise.then(function(response){
-                TokenService.user=response; //set persistent UserInformation
-                growlService.growl('Welcome back ' + TokenService.user.firstName +' :D', 'inverse');
-                //initialize Variables for Menubar
-                $scope.loggedUser={};
-                $scope.loggedUser.avatar=TokenService.user.avatar;
-                $scope.loggedUser.firstName=TokenService.user.firstName;
-                $scope.loggedUser.lastName=TokenService.user.lastName;
-                $scope.loggedUser.userID=TokenService.user.userID;
-                $scope.loggedUser.userLevel=TokenService.user.level.currentLevel;
-                console.log($scope.loggedUser.userLevel);
+            TokenService.user=response; //set persistent UserInformation
+            growlService.growl('Welcome back ' + TokenService.user.firstName +' :D', 'inverse');
+            //initialize Variables for Menubar
+            $scope.loggedUser={};
+            $scope.loggedUser.avatar=TokenService.user.avatar;
+            $scope.loggedUser.firstName=TokenService.user.firstName;
+            $scope.loggedUser.lastName=TokenService.user.lastName;
+            $scope.loggedUser.userID=TokenService.user.userID;
+            $scope.loggedUser.userLevel=TokenService.user.level.currentLevel;
+            console.log($scope.loggedUser.userLevel);
         });
-
 
         // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -54,6 +56,8 @@ materialAdmin
             $cookies.token='';
             growlService.growl('Logging out...');
             $window.location.href='/taskit/index.html';
+            delete $cookies['email'];
+            delete $cookies['token'];
         };
 
         //Close sidebar on click
