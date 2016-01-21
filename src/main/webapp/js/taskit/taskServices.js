@@ -23,11 +23,38 @@ taskServices.factory('TaskFactory', function ($resource) {
         },
         update: {
             method: 'PUT',
-            params: {pid: '@pid', id: '@id'}
+            params: {pID: '@pID', tID: '@tID'}
         },
         delete: {
             method: 'DELETE',
-            params: {pid: '@pid', id: '@id'}
+            params: {pID: '@pID', tID: '@ID'}
+        }
+    })
+});
+
+taskServices.factory('TaskUserFactory', function ($resource) {
+    return $resource('/taskit/api/workspace/users/:uID/tasks/:tID', {}, {
+        add: {
+            method: 'POST',
+            params: {uID: '@uID', tID: '@tID'}
+        },
+        delete: {
+            method: 'DELETE',
+            params: {uID: '@uID', tID: '@tID'}
+        }
+    })
+});
+
+
+taskServices.factory('TaskCommentFactory', function ($resource) {
+    return $resource('/taskit/api/workspace/projects/tasks/:tID/comments/:cID', {}, {
+        add: {
+            method: 'POST',
+            params: {tID: '@tID'}
+        },
+        delete: {
+            method: 'DELETE',
+            params: {cID:'@cID', tID: '@tID'}
         }
     })
 });

@@ -779,7 +779,7 @@ materialAdmin
                     title: $scope.selectedProject.title,
                     description: $scope.selectedProject.description
                 });
-                    //save newly added users to project:
+                //save newly added users to project:
                 $scope.users.userPickerContributor.forEach(function(contributor){
                     AddUserToProjectFactory.add({project: $scope.currentPID, user: contributor, role: "CONTRIBUTOR"});
                 });
@@ -1072,19 +1072,21 @@ materialAdmin
     //=================================================
 
     .controller('updateTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
-        TaskFactory, IssuesFactory, TemplateFactory, ProjectFactory, UserFactory) {
+        TaskFactory, TaskUserFactory, TaskCommentFactory, IssuesFactory, TemplateFactory, ProjectFactory, UserFactory) {
 
+        //retrieve current project id and task id from the state params
         $scope.currentPID = $stateParams.pID;
         $scope.currentTID = $stateParams.tID;
+        //console.log($scope.currentPID);
+        //console.log($scope.currentTID);
 
-        console.log($scope.currentPID);
-        console.log($scope.currentTID);
-
+        //retrieve information from the project the current task is related to
         ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
             $scope.project=response;
             $scope.project.title=$scope.project.title.trim();
             $scope.project.description=$scope.project.description.trim();
 
+            //generate user list of potential contributors
             $scope.project.userList=[];
             //get user information for all users of the current project
             $scope.project.allUser.forEach(function(participant){
@@ -1100,6 +1102,7 @@ materialAdmin
             ErrorHandler.handle("Could not fetch project information from server.", error);
         });
 
+        //retrieve task related information from server
         TaskFactory.show({tID: $stateParams.tID}).$promise.then(function(response){
             console.log(response);
             $scope.task=response;
@@ -1108,22 +1111,36 @@ materialAdmin
             $scope.task.description=$scope.task.description.trim();
             $scope.task.status=$scope.task.status.trim();
 
-
+            //parse the DSL of all subtasks of the task
             $scope.task.parsedSubtaskList=[];
             $scope.task.subtaskList.forEach(function(subtask){
                 parsedTemplate=showDSL(ErrorHandler, subtask);
                 $scope.task.parsedSubtaskList.push(parsedTemplate);
             });
+
             //console.log("Parsed Templates:");
             //console.log($scope.task.parsedSubtaskList);
         }, function(error){
             ErrorHandler.handle("Could not fetch task information from server.", error);
         });
 
+        //delete user from task
         $scope.deleteUserFromTask=function(userID){
-            console.log("deleting user "+userID);
+            TaskUserFactory.delete({uID: userID, tID:$scope.currentTID});
         };
 
+        //save a new comment
+        $scope.addComment=function(){
+            TaskCommentFactory.add({tID: $scope.currentTID},
+                {text: $scope.newCommentText, user_mail:TokenService.username});
+        };
+
+        //save a new comment
+        $scope.deleteComment=function(commentID){
+            TaskCommentFactory.delete({tID: $scope.currentTID, cID: commentID})
+        };
+
+        //update subtask
         $scope.updateSubtask=function(subtaskID){
 
         };
