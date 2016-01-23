@@ -196,6 +196,16 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.loadAllByProjectAndUser(pID, uID);
     }
 
+    public LinkedList<Comment> getAllCommentsByTask(int tID) throws Exception{
+        logger.debug("get all comments from task with id=" + tID);
+        return taskDAO.loadAllCommentsByTask(tID);
+    }
+
+    public LinkedList<User> getAllUserFromTask(int tID) throws Exception{
+        logger.debug("get all users from task with id=" + tID);
+        return taskDAO.loadAllUsersByTask(tID);
+    }
+
     public void assignUserToTask(int tID, String uID) throws Exception {
         logger.debug("assign user with id="+uID+" to task with id="+tID);
         taskDAO.assignUserToTask(tID, uID);

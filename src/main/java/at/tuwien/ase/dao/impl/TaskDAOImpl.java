@@ -245,6 +245,82 @@ public class TaskDAOImpl implements TaskDAO {
         return mapRows(rows);
     }
 
+    public LinkedList<Comment> loadAllCommentsByTask(int tID){
+
+        logger.debug("retrieve from db: all comments from tasks with id="+tID);
+
+        String sqlQuery = "SELECT TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
+                "FROM TASK_COMMENTS " +
+                "WHERE TASK_ID = ? ";
+
+        LinkedList<Comment> commentList = new LinkedList<Comment>();
+        Comment comment;
+        int commentId;
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                tID
+        );
+
+        for (Map<String,Object> row : rows) {
+            if (row.get("comment_id") != null) {
+
+                commentId = (Integer) row.get("comment_id");
+
+                comment = new Comment();
+
+                comment.setId(commentId);
+                comment.setUser_mail((String) row.get("comment_mail"));
+                comment.setText((String) row.get("comment_text"));
+                comment.setCreationDate(new java.sql.Date(((Timestamp) row.get("comment_creation_date")).getTime()));
+
+                //add comment to commentList
+                commentList.add(comment);
+
+            }
+        }
+
+        return commentList;
+
+    }
+
+    public LinkedList<User> loadAllUsersByTask(int tID){
+
+        logger.debug("retrieve from db: all users from tasks with id="+tID);
+
+        String sqlQuery = "SELECT USER_MAIL " +
+                "FROM REL_USER_TASK " +
+                "WHERE TASK_ID = ? ";
+
+        LinkedList<User> userList = new LinkedList<User>();
+        User user;
+        String userId;
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                tID
+        );
+
+        for (Map<String,Object> row : rows) {
+
+            if (row.get("user_mail") != null) {
+
+                userId = (String) row.get("user_mail");
+
+                user = new User();
+
+                user.setUserID(userId);
+
+                //add user to userList
+                userList.add(user);
+
+            }
+
+        }
+
+        return userList;
+    }
+
     public void addUserToTask(String uID, int tID) {
 
         logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);
@@ -521,6 +597,7 @@ public class TaskDAOImpl implements TaskDAO {
                     if (commentsMap.get(taskId + commentId) == null) {
                         comment = new Comment();
 
+                        comment.setId(commentId);
                         comment.setUser_mail((String) row.get("comment_mail"));
                         comment.setText((String) row.get("comment_text"));
                         comment.setCreationDate(new java.sql.Date(((Timestamp) row.get("comment_creation_date")).getTime()));

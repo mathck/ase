@@ -221,4 +221,51 @@ public class UserDAOImpl implements UserDAO {
         return new LinkedList<UserRole>(list);
     }
 
+    public LinkedList<User> getRelatedUser(String userId) {
+        String sqlQuery = "SELECT  u.mail, u.firstname, u.lastname, u.avatar_url " +
+                "FROM ( " +
+                    "SELECT project_id " +
+                    "FROM rel_user_project r " +
+                    "WHERE user_mail = ? " +
+                ") p JOIN rel_user_project r ON p.project_id = r.project_id JOIN taskit_user u ON r.user_mail = u.mail " +
+                "WHERE u.mail != ?";
+        List<User> list = this.jdbcTemplate.query(
+                sqlQuery,
+                new String[]{userId, userId},
+                new RowMapper<User>() {
+                    public User mapRow(ResultSet resultSet, int i) throws SQLException {
+                        User user = new User();
+                        user.setUserID(resultSet.getString("mail"));
+                        user.setFirstName(resultSet.getString("firstname"));
+                        user.setLastName(resultSet.getString("lastname"));
+                        user.setAvatar(resultSet.getString("avatar_url"));
+                        return user;
+                    }
+                }
+        );
+        return new LinkedList<User>(list);
+    }
+
+    public LinkedList<User> getUserList(String search) {
+        String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
+                "FROM taskit_user " +
+                "WHERE firstname LIKE ? " +
+                "OR lastname LIKE ? ";
+        List<User> list = this.jdbcTemplate.query(
+                sqlQuery,
+                new String[]{"%"+search+"%", "%"+search+"%"},
+                new RowMapper<User>() {
+                    public User mapRow(ResultSet resultSet, int i) throws SQLException {
+                        User user = new User();
+                        user.setUserID(resultSet.getString("mail"));
+                        user.setFirstName(resultSet.getString("firstname"));
+                        user.setLastName(resultSet.getString("lastname"));
+                        user.setAvatar(resultSet.getString("avatar_url"));
+                        return user;
+                    }
+                }
+        );
+        return new LinkedList<User>(list);
+    }
+
 }

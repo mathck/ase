@@ -26,4 +26,9 @@ public interface UserService {
     LinkedList<UserRole> getAllUsersFromProject(int pID);
 
     void updateUser(String uID, User user);
+
+    LinkedList<User> getRelatedUser(String userId);
+
+    LinkedList<User> getUserList(String search);
+
 }

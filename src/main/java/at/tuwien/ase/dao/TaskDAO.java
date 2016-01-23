@@ -23,7 +23,8 @@ public interface TaskDAO {
 
     LinkedList<Task> loadAllByProject(int pID);
     LinkedList<Task> loadAllByUser(String uID);
-
+    LinkedList<Comment> loadAllCommentsByTask(int tID);
+    LinkedList<User> loadAllUsersByTask(int tID);
 
     //assign user to task
     void addUserToTask(String uID, int tID);
