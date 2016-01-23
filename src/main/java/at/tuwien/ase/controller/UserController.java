@@ -85,10 +85,22 @@ public class UserController {
      *
      * @param userID The user ID (email)
      */
-    @RequestMapping(value = "user", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteUser(@RequestParam("uID") String userID) {
         userService.deleteUser(userID);
+    }
+
+    @RequestMapping(value = "/user/pagination", method = RequestMethod.GET, consumes = "application/json")
+    @ResponseBody
+    public LinkedList<User> relatedUser(@RequestParam("uID") String userId) throws Exception {
+        return userService.getRelatedUser(userId);
+    }
+
+    @RequestMapping(value = "/user/search", method = RequestMethod.GET, consumes = "application/json")
+    @ResponseBody
+    public LinkedList<User> searchUser (@RequestParam("string") String search) throws Exception {
+        return userService.getUserList(search);
     }
 
 }

@@ -27,4 +27,8 @@ public interface UserDAO {
 
     LinkedList<UserRole> loadAllByProject(int pID);
 
+    LinkedList<User> getRelatedUser(String userId);
+
+    LinkedList<User> getUserList(String search);
+
 }

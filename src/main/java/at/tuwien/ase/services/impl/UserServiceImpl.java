@@ -187,4 +187,12 @@ public class UserServiceImpl implements UserService {
         //userDAO.updateUser(userID, user); // todo TOM pls verify that this should not be here and remove it completely
     }
 
+    public LinkedList<User> getRelatedUser(String userId) {
+        return userDAO.getRelatedUser(userId);
+    }
+
+    public LinkedList<User> getUserList(String search) {
+        return userDAO.getUserList(search);
+    }
+
 }
