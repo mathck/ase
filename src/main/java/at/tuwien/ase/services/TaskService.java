@@ -4,6 +4,7 @@ import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.Comment;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
+import at.tuwien.ase.model.User;
 
 import java.util.LinkedList;
 
@@ -22,6 +23,7 @@ public interface TaskService {
 
     LinkedList<Task> getAllTasksFromProject(int pID) throws Exception;
     LinkedList<Comment> getAllCommentsByTask(int tID) throws Exception;
+    LinkedList<User> getAllUserFromTask(int tID) throws Exception;
 
     LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID) throws Exception;
 

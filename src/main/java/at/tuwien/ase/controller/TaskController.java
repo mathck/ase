@@ -5,6 +5,7 @@ import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.model.Comment;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
+import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -110,6 +111,14 @@ public class TaskController {
     @ResponseBody
     public LinkedList<Comment> getAllCommentsByTask(@PathVariable("tID") int tID)  throws Exception {
         return ts.getAllCommentsByTask(tID);
+    }
+
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/tasks/{tID}/users", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<User> getUsersFromTask(@PathVariable("tID") int tID)  throws Exception {
+        return ts.getAllUserFromTask(tID);
     }
 
 }

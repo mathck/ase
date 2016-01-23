@@ -284,6 +284,43 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
+    public LinkedList<User> loadAllUsersByTask(int tID){
+
+        logger.debug("retrieve from db: all users from tasks with id="+tID);
+
+        String sqlQuery = "SELECT USER_MAIL " +
+                "FROM REL_USER_TASK " +
+                "WHERE TASK_ID = ? ";
+
+        LinkedList<User> userList = new LinkedList<User>();
+        User user;
+        String userId;
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
+                sqlQuery,
+                tID
+        );
+
+        for (Map<String,Object> row : rows) {
+
+            if (row.get("user_mail") != null) {
+
+                userId = (String) row.get("user_mail");
+
+                user = new User();
+
+                user.setUserID(userId);
+
+                //add user to userList
+                userList.add(user);
+
+            }
+
+        }
+
+        return userList;
+    }
+
     public void addUserToTask(String uID, int tID) {
 
         logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);
