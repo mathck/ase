@@ -1131,8 +1131,11 @@ materialAdmin
 
         //delete user from task
         $scope.deleteUserFromTask=function(userID){
-            TaskUserFactory.delete({uID: userID, tID:$scope.currentTID});
-            updateTaskInformation();
+            TaskUserFactory.delete({uID: userID, tID:$scope.currentTID}).$promise.then(function(response){
+                updateTaskInformation();
+            }, function(error){
+                ErrorHandler.handle("Could not fetch task information from server.", error);
+            });
         };
 
         $scope.updateTask=function(){
@@ -1160,13 +1163,20 @@ materialAdmin
 
         //save a new comment
         $scope.addComment=function(){
-            TaskCommentFactory.add({tID: $scope.currentTID},
-                {text: $scope.newCommentText, user_mail:TokenService.username});
+            TaskCommentFactory.add({tID: $scope.currentTID},{text: $scope.newCommentText, user_mail:TokenService.username}).$promise.then(function(response){
+                updateTaskInformation();
+            }, function(error){
+                ErrorHandler.handle("Could not add comment.", error);
+            });
         };
 
         //save a new comment
         $scope.deleteComment=function(commentID){
-            TaskCommentFactory.delete({tID: $scope.currentTID, cID: commentID})
+            TaskCommentFactory.delete({tID: $scope.currentTID, cID: commentID}).$promise.then(function(response){
+                updateTaskInformation();
+            }, function(error){
+                ErrorHandler.handle("Could not delete comment.", error);
+            });
         };
 
         //update subtask
