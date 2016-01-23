@@ -42,6 +42,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/users/{uID}/tasks", method = RequestMethod.GET)
     @ResponseBody
+    @PreAuthorize("hasPermission(#uID, 'CHANGE_USER') AND hasPermission(#pID, 'VIEW_PROJECT')")
     public LinkedList<Task> getTasksByProjectAndUser(@PathVariable("pID") int pID, @PathVariable("uID") String uID) throws Exception {
         return ts.getAllTasksFromProjectAndUser(pID, uID);
     }
@@ -49,6 +50,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
+    @PreAuthorize("hasPermission(#pID, 'CHANGE_PROJECT')")
     public LinkedList<Integer> createTask(@RequestBody Task task, @PathVariable("pID") int pID) throws Exception {
        return ts.writeTask(pID, task);
     }
@@ -63,6 +65,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/{pID}/tasks", method = RequestMethod.GET)
     @ResponseBody
+    @PreAuthorize("hasPermission(#pID, 'VIEW_PROJECT')")
     public LinkedList<Task> getAllTasksFromProject(@PathVariable("pID") int pID)  throws Exception {
         return ts.getAllTasksFromProject(pID);
     }
@@ -70,6 +73,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/tasks", method = RequestMethod.GET)
     @ResponseBody
+    @PreAuthorize("hasPermission(#uID, 'CHANGE_USER')")
     public LinkedList<Task> getAllTasksAssignedToUser(@PathVariable("uID") String uID)  throws Exception {
         return ts.getAllTasksFromUser(uID);
     }
@@ -77,6 +81,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/tasks/{tID}", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
+    @PreAuthorize("hasPermission(#tID, 'CHANGE_TASK')")
     public void assignUserToTask(@PathVariable("tID") int tID, @PathVariable("uID") String uID) throws Exception {
         ts.assignUserToTask(tID, uID);
     }
@@ -84,6 +89,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/tasks/{tID}", method = RequestMethod.DELETE)
     @ResponseBody
+    @PreAuthorize("hasPermission(#tID, 'CHANGE_TASK')")
     public void reomveUserFromTask(@PathVariable("tID") int tID, @PathVariable("uID") String uID) throws Exception {
         ts.removeUserFromTask(tID, uID);
     }
@@ -91,6 +97,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/tasks/{tID}", method = RequestMethod.DELETE)
     @ResponseBody
+    @PreAuthorize("hasPermission(#tID, 'CHANGE_TASK')")
     public void deleteTasksByID(@PathVariable("tID") int tID)  throws Exception {
         ts.deleteTaskByID(tID);
     }
@@ -98,6 +105,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/tasks/{tID}/comments", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
+    @PreAuthorize("hasPermission(#tID, 'VIEW_TASK')")
     public JsonStringWrapper addCommentToTask(@PathVariable("tID") int tID, @RequestBody Comment comment) throws Exception {
         return ts.addCommentToTask(tID, comment);
     }
@@ -105,6 +113,7 @@ public class TaskController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/projects/tasks/{tID}/comments/{cID}", method = RequestMethod.DELETE)
     @ResponseBody
+    @PreAuthorize("hasPermission(#tID, 'CHANGE_TASK') AND hasPermission(#cID, 'CHANGE_COMMENT')")
     public void deleteCommentFromTask(@PathVariable("tID") int tID, @PathVariable("cID") int cID)  throws Exception {
         ts.deleteCommentFromTask(tID, cID);
     }

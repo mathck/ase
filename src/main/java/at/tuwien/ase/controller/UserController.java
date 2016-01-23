@@ -21,7 +21,7 @@ import java.util.LinkedList;
  */
 
 @RestController
-
+@RequestMapping("/api")
 public class UserController {
 
     private static final Logger logger = LogManager.getLogger(UserController.class);
@@ -49,9 +49,9 @@ public class UserController {
      * provided.
      *
      * @param userID Consumes a user id (email)
-     * @return User                    Returns the user object stored in the database
+     * @return User Returns the user object stored in the database
      */
-    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
     public User getUser(@RequestParam("uID") String userID) throws Exception {
         logger.debug("get user with id " + userID);
@@ -64,7 +64,7 @@ public class UserController {
      *
      * @return LinkedList&lt;User&gt;	Returns a linked list of users
      */
-    @RequestMapping(value = "/api/user/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/all", method = RequestMethod.GET)
     @ResponseBody
     public LinkedList<User> getAllUser() {
         return userService.getAllUsers();
@@ -76,8 +76,9 @@ public class UserController {
      * @param userID  The user ID (email)
      * @param user A user object containing firstname, lastname, avatar, password and user ID
      */
-    @RequestMapping(value = "/api/user", method = RequestMethod.PATCH, consumes = "application/json")
+    @RequestMapping(value = "/user", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
+    @PreAuthorize("hasPermission(#userID, 'CHANGE_USER')")
     public void updateUser(@RequestParam("uID") String userID, @RequestBody User user) throws Exception {
         userService.updateUser(userID, user);
     }
@@ -87,9 +88,9 @@ public class UserController {
      *
      * @param userID The user ID (email)
      */
-    @RequestMapping(value = "/api/user", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user", method = RequestMethod.DELETE)
     @ResponseBody
-    @PreAuthorize("hasPermission(#userID, 'DELETE_USER')")
+    @PreAuthorize("hasPermission(#userID, 'CHANGE_USER')")
     public void deleteUser(@RequestParam("uID") String userID) {
         userService.deleteUser(userID);
     }
