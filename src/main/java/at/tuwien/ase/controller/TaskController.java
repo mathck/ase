@@ -105,4 +105,11 @@ public class TaskController {
         ts.deleteCommentFromTask(tID, cID);
     }
 
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/projects/tasks/{tID}/comments", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<Comment> getAllCommentsByTask(@PathVariable("tID") int tID)  throws Exception {
+        return ts.getAllCommentsByTask(tID);
+    }
+
 }

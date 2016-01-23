@@ -21,6 +21,7 @@ public interface TaskService {
     LinkedList<Task> getAllTasksFromUser(String uID) throws Exception;
 
     LinkedList<Task> getAllTasksFromProject(int pID) throws Exception;
+    LinkedList<Comment> getAllCommentsByTask(int tID) throws Exception;
 
     LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID) throws Exception;
 
