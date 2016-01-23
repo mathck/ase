@@ -18,7 +18,7 @@
                     </li>
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Task" data-ng-click="updateTask()"><i class="zmdi zmdi-check"></i>Save Task</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Update Task" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="updateTask()"><i class="zmdi zmdi-check"></i>Update Task Information</button>
                         </div>
                     </li>
                 </ul>
@@ -26,7 +26,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2><small>Edit the provided fields in order to modify a task.</small></h2>
+                    <h2 data-ng-show="currentUserRole=='ADMIN'"><small>Edit the provided fields in order to modify a task.</small></h2>
                 </div>
 
                 <div class="card-body card-padding">
@@ -35,7 +35,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-label"></i></span>
                                 <div class="fg-line">
-                                        <input type="text" class="form-control input-lg" placeholder="<<Title>>" data-ng-model="task.title"> (from: {{project.title}})
+                                        <input type="text" class="form-control input-lg" data-ng-disabled="currentUserRole=='CONTRIBUTOR'" placeholder="<<Title>>" data-ng-model="task.title"> (from: {{project.title}})
                                 </div>
                             </div>
                             <p class="c-black f-500 m-b-20 m-t-20">Change State</p>
@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         <div class="col-sm-8 right">
-                            <div class="fg-line">
+                            <div class="fg-line" data-ng-show="currentUserRole=='ADMIN'">
                                 <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="userPicker" data-ng-options="user.userID as user.name for user in project.userList"></select>
                             </div>
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
@@ -63,7 +63,7 @@
                                         <th>Last Name</th>
                                         <th>E-Mail</th>
                                         <th>Level</th>
-                                        <th>Delete</th>
+                                        <th data-ng-show="currentUserRole=='ADMIN'">Delete</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -73,7 +73,7 @@
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.lastName}}</td>
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.userID}}</td>
                                         <td data-ui-sref="pages.profile.profile-about({uID: user.userID})">{{user.currentLevel}}</td>
-                                        <td><button data-ng-click="deleteUserFromTask(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                        <td data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteUserFromTask(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -85,7 +85,7 @@
                         <div class="col-sm-12">
                             <p class="c-black f-500 m-b-20 m-t-20">Description</p>
                             <div class="fg-line">
-                                <textarea class="form-control input-md description" placeholder="Your description..." data-ng-model="task.description"></textarea>
+                                <textarea class="form-control input-md description" data-ng-disabled="currentUserRole=='CONTRIBUTOR'" placeholder="Your description..." data-ng-model="task.description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                                      <th>Date</th>
                                      <th>username</th>
                                      <th>Comment</th>
-                                     <th>Delete</th>
+                                     <th data-ng-show="currentUserRole=='ADMIN'">Delete</th>
                                  </tr>
                              </thead>
                              <tbody>
@@ -111,7 +111,7 @@
                                      <td>{{comment.creationDate}}</td>
                                      <td data-ui-sref="pages.profile.profile-about({uID: comment.user_mail})">{{comment.user_mail.trim()}}</td>
                                      <td>{{comment.text.trim()}}</td>
-                                     <td><button data-ng-click="deleteCommentFromTask(comment.id)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                     <td data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteCommentFromTask(comment.id)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                  </tr>
                              </tbody>
                          </table>

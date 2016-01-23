@@ -685,7 +685,7 @@ materialAdmin
                 });
                 $scope.currentUserRole=thisUser[0].role.trim();
                 //console.log("Current User Role:" + $scope.currentUserRole);
-                console.log($scope.selectedProject.allTasks);
+                //console.log($scope.selectedProject.allTasks);
             }, function(error){
                 ErrorHandler.handle("Could not fetch project information from server.", error);
             });
@@ -1096,12 +1096,17 @@ materialAdmin
             $scope.project.allUser.forEach(function(participant){
                 UserFactory.get({uID: participant.user}).$promise.then(function(user){
                     user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
-                    //user.userID={userID: user.userID.trim()};
+                    user.role=participant.role.trim();
                     $scope.project.userList.push(user);
                 }, function(error){
                     ErrorHandler.handle("Could not fetch users from server.", error);
                 });
             });
+            thisUser=$scope.project.allUser.filter(function(user){
+                return(user.user.trim()==TokenService.username);
+            });
+            $scope.currentUserRole=thisUser[0].role.trim();
+            console.log("Current User Role:" + $scope.currentUserRole);
         }, function(error){
             ErrorHandler.handle("Could not fetch project information from server.", error);
         });
