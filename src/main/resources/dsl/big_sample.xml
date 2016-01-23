@@ -7,11 +7,9 @@
 		<estimatedWorkTime>60</estimatedWorkTime>	
 		<deadline>2016-03-03</deadline>
 		<githook>???</githook>
-		<comments>true</comments>
 	</identifier>
 
 	<taskBody>
-
 		<h1>Nice Subtask</h1>
 		<br/><br/>
 		<h2>Eine Frage für euch!</h2>
@@ -36,45 +34,38 @@
 		<br/>
 		Wie gut hat Dir dieser Task gefallen?
 		<br/>
-		
 	</taskBody>
 
 	<taskElements>
 		<taskElement id="1">
 			<status></status>
 			<value></value>
-			<link>http://www.michi.com/tier.jpg</link>
-			<type>image</type> 
+            <link>http://www.michi.com/tier.jpg</link>
+			<type>image</type>
 		</taskElement>
 		<taskElement id="2">
 			<status>checked</status>
 			<value>Katze</value>
-			<link></link>
-			<type>checkbox</type> 
-		</taskElement>
-		<taskElement id="3">
-			<status>unchecked</status>
-			<value>Maus</value>
-			<link></link>
-			<type>checkbox</type> 
+            <link></link>
+			<type>checkbox</type>
 		</taskElement>
 		<taskElement id="3">
 			<status></status>
 			<value>hier dein text...</value>
-			<link></link>
-			<type>textbox</type> 
+            <link></link>
+			<type>textbox</type>
 		</taskElement>
 		<taskElement id="4">
 			<status>file</status>
 			<value></value>
-			<link>C:\loesung.pdf</link>
-			<type>file</type> 
+            <link>C:\loesung.pdf</link>
+			<type>file</type>
 		</taskElement>
 		<taskElement id="5">
 			<status>gut</status>
 			<value>gut|mittelmäßig|schlecht</value>
-			<link></link>
-			<type>slider</type> 
+            <link></link>
+			<type>slider</type>
 		</taskElement>
 	</taskElements>
 </template>
