@@ -1081,61 +1081,81 @@ materialAdmin
         //retrieve current project id and task id from the state params
         $scope.currentPID = $stateParams.pID;
         $scope.currentTID = $stateParams.tID;
-        //console.log($scope.currentPID);
-        //console.log($scope.currentTID);
 
-        //retrieve information from the project the current task is related to
-        ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
-            $scope.project=response;
-            $scope.project.title=$scope.project.title.trim();
-            $scope.project.description=$scope.project.description.trim();
+        updateTaskInformation=function(){
+            //retrieve information from the project the current task is related to
+            ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
+                $scope.project=response;
+                $scope.project.title=$scope.project.title.trim();
+                $scope.project.description=$scope.project.description.trim();
 
-            //generate user list of potential contributors
-            $scope.project.userList=[];
-            //get user information for all users of the current project
-            $scope.project.allUser.forEach(function(participant){
-                UserFactory.get({uID: participant.user}).$promise.then(function(user){
-                    user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
-                    user.role=participant.role.trim();
-                    $scope.project.userList.push(user);
-                }, function(error){
-                    ErrorHandler.handle("Could not fetch users from server.", error);
+                //generate user list of potential contributors
+                $scope.project.userList=[];
+                //get user information for all users of the current project
+                $scope.project.allUser.forEach(function(participant){
+                    UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                        user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
+                        user.role=participant.role.trim();
+                        $scope.project.userList.push(user);
+                    }, function(error){
+                        ErrorHandler.handle("Could not fetch users from server.", error);
+                    });
                 });
-            });
-            thisUser=$scope.project.allUser.filter(function(user){
-                return(user.user.trim()==TokenService.username);
-            });
-            $scope.currentUserRole=thisUser[0].role.trim();
-            console.log("Current User Role:" + $scope.currentUserRole);
-        }, function(error){
-            ErrorHandler.handle("Could not fetch project information from server.", error);
-        });
-
-        //retrieve task related information from server
-        TaskFactory.show({tID: $stateParams.tID}).$promise.then(function(response){
-            console.log(response);
-            $scope.task=response;
-            console.log($scope.task);
-            $scope.task.title=$scope.task.title.trim();
-            $scope.task.description=$scope.task.description.trim();
-            $scope.task.status=$scope.task.status.trim();
-
-            //parse the DSL of all subtasks of the task
-            $scope.task.parsedSubtaskList=[];
-            $scope.task.subtaskList.forEach(function(subtask){
-                parsedTemplate=showDSL(ErrorHandler, subtask);
-                $scope.task.parsedSubtaskList.push(parsedTemplate);
+                thisUser=$scope.project.allUser.filter(function(user){
+                    return(user.user.trim()==TokenService.username);
+                });
+                $scope.currentUserRole=thisUser[0].role.trim();
+                console.log("Current User Role:" + $scope.currentUserRole);
+            }, function(error){
+                ErrorHandler.handle("Could not fetch project information from server.", error);
             });
 
-            //console.log("Parsed Templates:");
-            //console.log($scope.task.parsedSubtaskList);
-        }, function(error){
-            ErrorHandler.handle("Could not fetch task information from server.", error);
-        });
+            //retrieve task related information from server
+            TaskFactory.show({tID: $stateParams.tID}).$promise.then(function(response){
+                $scope.task=response;
+                $scope.task.title=$scope.task.title.trim();
+                $scope.task.description=$scope.task.description.trim();
+                $scope.task.status=$scope.task.status.trim();
+
+                //parse the DSL of all subtasks of the task
+                $scope.task.parsedSubtaskList=[];
+                $scope.task.subtaskList.forEach(function(subtask){
+                    parsedTemplate=showDSL(ErrorHandler, subtask);
+                    $scope.task.parsedSubtaskList.push(parsedTemplate);
+                });
+            }, function(error){
+                ErrorHandler.handle("Could not fetch task information from server.", error);
+            });
+        };
+        updateTaskInformation();
 
         //delete user from task
         $scope.deleteUserFromTask=function(userID){
             TaskUserFactory.delete({uID: userID, tID:$scope.currentTID});
+            updateTaskInformation();
+        };
+
+        $scope.updateTask=function(){
+            if(!$scope.task.title) {
+                $scope.titleFail = true;
+                $timeout(function(){document.getElementById('taskTitle').focus();});
+            }
+            else
+                if(!$scope.task.description) {
+                    $scope.descriptionFail = true;
+                    $timeout(function(){document.getElementById('taskDescription').focus();});
+                }
+            else {
+                /*TaskFactory.update({pID: $scope.currentPID, tID: $scope.currentTID}, {
+                    title: $scope.task.title,
+                    description: $scope.task.description
+                });*/
+                //save newly added users to project:
+                $scope.userPicker.forEach(function(contributor){
+                    TaskUserFactory.add({uID: contributor, tID:$scope.currentTID});
+                });
+                updateTaskInformation();
+            }
         };
 
         //save a new comment
