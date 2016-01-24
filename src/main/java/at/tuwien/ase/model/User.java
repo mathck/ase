@@ -25,7 +25,7 @@ public class User {
 
     private LinkedList<String> projectList = null;
 
-    private String password;
+    private byte[] password;
     private byte[] salt;
 
     public User() {}
@@ -40,7 +40,7 @@ public class User {
     public User(String userID, String password) {
         this.userID = userID;
         this.salt = PasswordEncryption.generateSalt();
-        this.password = PasswordEncryption.getEncryptedPassword(password);
+        this.password = PasswordEncryption.getEncryptedPassword(password, salt);
     }
 
     public String getUserID() {
@@ -75,7 +75,7 @@ public class User {
         this.avatar = avatar;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
@@ -90,14 +90,14 @@ public class User {
             if (salt == null) {
                 salt = PasswordEncryption.generateSalt();
             }
-            this.password = PasswordEncryption.getEncryptedPassword(password);
+            this.password = PasswordEncryption.getEncryptedPassword(password, salt);
         } else {
             this.password = null;
             this.salt = null;
         }
     }
 
-    public void setPasswordEnc(String password) {
+    public void setPasswordEnc(byte[] password) {
         this.password = password;
     }
 
