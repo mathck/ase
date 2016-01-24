@@ -31,27 +31,18 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-chart"></i></span>
                                 <div class="fg-line">
-                                    <input type="text" class="form-control input-md ng-pristine ng-valid ng-touched" placeholder="Name" data-ng-model="reward.name">
+                                    <input type="text" class="form-control input-md ng-pristine ng-valid ng-touched" placeholder="Name" data-ng-model="newReward.name">
                                 </div>
                             </div>
                             <br>
                             <div class="form-group">
                                 <div class="fg-line">
-                                    <div class="select">
-                                        <select class="form-control">
-                                            <option value="" selected="selected">Choose Level</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                        </select>
-                                    </div>
+                                    Choose XP:
+                                    <input type="text" class="form-control input-md ng-pristine ng-valid ng-touched" placeholder="XP Base" data-ng-model="newReward.xp">
+                                </div>
+                                <div class="fg-line">
+                                    Choose Image Link:
+                                    <input type="text" class="form-control input-md ng-pristine ng-valid ng-touched" placeholder="Link" data-ng-model="newReward.link">
                                 </div>
                             </div>
                             <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -60,7 +51,7 @@
                                     <span class="btn btn-info btn-file waves-effect">
                                         <span class="fileinput-new">Select image</span>
                                         <span class="fileinput-exists">Change</span>
-                                        <input kl_virtual_keyboard_secure_input="on" name="..." type="file">
+                                        <input name="..." type="file">
                                     </span>
                                     <a href="#" class="btn btn-danger fileinput-exists waves-effect" data-dismiss="fileinput">Remove</a>
                                 </div>
@@ -75,22 +66,24 @@
                                     <tr>
                                         <th></th>
                                         <th>Name</th>
-                                        <th>Level</th>
+                                        <th>XP Base</th>
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
+                                    <!-- Start of ng repeat for rewards -->
+                                    <tr data-ng-repeat="reward in rewards">
                                         <td class="col-xs-2">
                                             <div class="thumbnail noHeader">
-                                                <img src="media/gallery/thumbs/6.jpg" alt="">
+                                                <img src="{{reward.imageLink}}" alt="Image for {{reward.name}}">
                                             </div>
                                         </td>
-                                        <td>Reward1</td>
-                                        <td>1</td>
+                                        <td>{{reward.name}}</td>
+                                        <td>{{reward.xpbase}}</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
-                                    <tr>
+                                    <!-- NG repeat for rewards ends here -->
+                                    <!--<tr>
                                         <td class="col-xs-2">
                                             <div class="thumbnail noHeader">
                                                 <img src="media/gallery/thumbs/7.jpg" alt="">
@@ -119,7 +112,7 @@
                                         <td>Reward4</td>
                                         <td>2</td>
                                         <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
-                                    </tr>
+                                    </tr>-->
                                     </tbody>
                                 </table>
                             </div>
