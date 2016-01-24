@@ -49,25 +49,33 @@ public class DslTemplateServiceImpl implements DslTemplateService{
     private static final Logger logger = LogManager.getLogger(DslTemplateServiceImpl.class);
 
 
-    public JsonStringWrapper writeDslTemplate(DslTemplate template) throws Exception {
+    public JsonStringWrapper writeDslTemplate(DslTemplate template, String mode) throws Exception {
         int id;
 
         logger.debug("post new dsl template");
+
+        if (!mode.trim().equals("validate") && !mode.trim().equals("create")){
+            throw new ValidationException("mode not supported. Supported modes are: create, validate");
+        }
 
         // TODO validate dsl
 
         //unmarshal and validate xml template
         unmarshalTemplateXml(template);
 
-        //set id and creationDate
-        id = dslTemplateDAO.getNewID();
-        template.setId(id);
-        template.setCreationDate(new Date());
+        if (mode.trim().equals("create")) {
+            //set id and creationDate
+            id = dslTemplateDAO.getNewID();
+            template.setId(id);
+            template.setCreationDate(new Date());
 
-        //insert template to db
-        dslTemplateDAO.insertDslTemplate(template);
+            //insert template to db
+            dslTemplateDAO.insertDslTemplate(template);
 
-        return new JsonStringWrapper(id);
+            return new JsonStringWrapper(id);
+        }
+
+        return new JsonStringWrapper(-1);
 
     }
 

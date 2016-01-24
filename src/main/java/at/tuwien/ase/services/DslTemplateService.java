@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface DslTemplateService {
 
-    JsonStringWrapper writeDslTemplate(DslTemplate template) throws Exception;
+    JsonStringWrapper writeDslTemplate(DslTemplate template, String mode) throws Exception;
 
     void deleteDslTemplateByID(int tID);
     void updateDslTemplateById(DslTemplate template, int tID) throws Exception;

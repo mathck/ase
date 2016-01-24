@@ -30,8 +30,8 @@ public class DslTemplateController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public JsonStringWrapper createDslTemplate(@RequestBody DslTemplate dslTemplate) throws Exception  {
-        return ts.writeDslTemplate(dslTemplate);
+    public JsonStringWrapper createDslTemplate(@RequestBody DslTemplate dslTemplate, @RequestParam("mode") String mode) throws Exception  {
+        return ts.writeDslTemplate(dslTemplate, mode);
     }
 
     // @author Daniel Hofer
