@@ -281,7 +281,7 @@ materialAdmin
 
     .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, ErrorHandler){
 
-        currentUID = $stateParams.uID;
+        var currentUID = $stateParams.uID;
 
         console.log("uid:" + $stateParams.uID);
 
@@ -304,6 +304,8 @@ materialAdmin
                ErrorHandler.handle("Could not fetch user information from server.", error);
             });
         }
+
+        console.log("uid:" + TokenService.username + "stateParamUserId: " + $stateParams.uID + " TokenService.user.userID: " + TokenService.user.userID + " TokenService.user: " + TokenService.user);
 
         ProjectsFactory.query({uID: $scope.userID}).$promise.then(function(response){
         //AdminProjectsFactory.query().$promise.then(function(response){
@@ -871,7 +873,12 @@ materialAdmin
         console.log("starting task creation");
         $scope.titleFail = false;
         $scope.descriptionFail = false;
+        $scope.templateFail = false;
         $scope.isTransformedIssue=false;
+        $scope.task={};
+        $scope.task.comments = false;
+        $scope.task.userType = false;
+        $scope.task.type = "collaborative_task";
         $scope.currentPID = $stateParams.pID;
         $scope.currentIID = $stateParams.iID;
 
@@ -972,7 +979,7 @@ materialAdmin
         };
 
         $scope.removeState = function() {
-            $scope.data.stateFieldsIds.pop();
+            $scope.data.stateFieldIds.pop();
             $scope.data.stateFields.pop();
             counterStates--;
         };
@@ -1000,16 +1007,43 @@ materialAdmin
 
         //prepare data and send request for task creation to backend
         $scope.createTask = function() {
+            $scope.templateFail = false;
+            $scope.titleFail = false;
+            $scope.descriptionFail = false;
+
+            //create an array of subtasks that conforms to the API
+            $scope.task.subtasks=[];
+            $scope.data.templateFields.forEach(function (templateField){
+                if (!(templateField.id===undefined)){
+                    var subtask={dslTemplateId: templateField.id};
+                    $scope.task.subtasks.push(subtask);
+                }
+            });
+
             //error handling if not title is filled in
-            if(!$scope.task) {
+            if(!$scope.task || !$scope.task.title) {
                 $scope.titleFail = true;
-                $timeout(function(){document.getElementById('taskTitle').focus();});
+                $timeout(function(){
+                    $('html, body').animate({ scrollTop: 0 }, 'fast');
+                    document.getElementById('taskTitle').focus();
+                });
             }
             else
                 //error handling if no description is filled in
                 if(!$scope.task.description) {
                     $scope.descriptionFail = true;
-                    $timeout(function(){document.getElementById('taskDescription').focus();});
+                    $timeout(function(){
+                        $('html, body').animate({ scrollTop: 0 }, 'fast');
+                        document.getElementById('taskDescription').focus();
+                    });
+                }
+            else
+                //error handling if no template is selected
+                if ( $scope.task.subtasks.length == 0 ) {
+                    $scope.templateFail = true;
+                    $timeout(function(){
+                        $('html, body').animate({ scrollTop: 0 }, 'fast');
+                    });
                 }
             else {
                 //if all required information is available, send task creation request to backend
@@ -1022,22 +1056,8 @@ materialAdmin
                 }else{
                     $scope.task.contributors=$scope.task.contributorSelection;
                 }
-               // console.log($scope.task.userType);
-               // console.log($scope.task.contributors);
 
-                //create an array of subtasks that conforms to the API
-                //console.log("subtasks:");
-                $scope.task.subtasks=[];
-                $scope.data.templateFields.forEach(function (templateField){
-                    if (!(templateField.id===undefined)){
-                        var subtask={dslTemplateId: templateField.id};
-                        $scope.task.subtasks.push(subtask);
-                    }
-                });
-                //console.log($scope.task.subtasks);
-
-                //create an array of subtasks that conforms to the API and includes Open and Closed
-                //console.log("states:");
+                //create an array of states that conforms to the API and includes Open and Closed
                 $scope.task.states=[{stateName:'Open'}, {stateName:'Closed'}];
                 $scope.data.stateFields.forEach(function (stateField){
                     if (!(stateField.state===undefined)){
@@ -1057,7 +1077,7 @@ materialAdmin
                         growlService.growl("Task created.");
                         if($scope.isTransformedIssue){
                                 IssueRetrieveFactory.delete({issueID: $scope.currentIID}).$promise.then(function(response){
-                                console.log("issue deleted.")
+                                console.log("Issue deleted.");
                                 growlService.growl("Issue deleted.");
                             }, function(error){
                                 ErrorHandler.handle("Could not delete Issue.", error);
@@ -1075,12 +1095,17 @@ materialAdmin
     // TASK UPDATE
     //=================================================
 
-    .controller('updateTaskCtrl', function ( $scope, $state, $stateParams, growlService, TokenService, ErrorHandler,
+    .controller('updateTaskCtrl', function ( $scope, $state, $stateParams, $timeout, growlService, TokenService, ErrorHandler,
         TaskFactory, TaskUserFactory, TaskCommentFactory, IssuesFactory, TemplateFactory, ProjectFactory, UserFactory) {
 
         //retrieve current project id and task id from the state params
         $scope.currentPID = $stateParams.pID;
         $scope.currentTID = $stateParams.tID;
+        $scope.maxXp = 0;
+        $scope.userXp = 0;
+
+        //console.log($scope.currentPID);
+        //console.log($scope.currentTID);
 
         updateTaskInformation=function(){
             //retrieve information from the project the current task is related to
@@ -1117,12 +1142,18 @@ materialAdmin
                 $scope.task.description=$scope.task.description.trim();
                 $scope.task.status=$scope.task.status.trim();
 
-                //parse the DSL of all subtasks of the task
-                $scope.task.parsedSubtaskList=[];
-                $scope.task.subtaskList.forEach(function(subtask){
-                    parsedTemplate=showDSL(ErrorHandler, subtask);
-                    $scope.task.parsedSubtaskList.push(parsedTemplate);
-                });
+            //parse the DSL of all subtasks of the task
+            $scope.task.parsedSubtaskList=[];
+            $scope.task.subtaskList.forEach(function(subtask){
+                $scope.MaxXp = $scope.MaxXp + subtask.xp;
+                $scope.userXp = $scope.userXp + subtask.xp * subtask.percentageReached;
+                subtask.status = subtask.status.trim();
+                parsedTemplate=showDSL(ErrorHandler, subtask, $scope);
+                $scope.task.parsedSubtaskList.push(parsedTemplate);
+            });
+
+            //console.log("Parsed Templates:");
+            //console.log($scope.task.parsedSubtaskList);
             }, function(error){
                 ErrorHandler.handle("Could not fetch task information from server.", error);
             });
@@ -1182,9 +1213,40 @@ materialAdmin
         //update subtask
         $scope.updateSubtask=function(subtaskID){
 
+            $scope.task.parsedSubtaskList.forEach(function(subtask) {
+                if( subtask.id == subtaskID ) {
+                    subtask.taskElements.forEach(function(taskElement) {
+
+                        console.log(subtaskID + "[" + taskElement.itemId + "]");
+                        //console.log($scope.task.parsedSubtaskList);
+                        switch(taskElement.itemType.trim()){
+
+                        case "checkbox":
+                            console.log(document.getElementById(subtaskID + "[" + taskElement.itemId + "]")).checked;
+                            break;
+                        case "textbox":
+                            console.log(document.getElementById(subtaskID + "[" + taskElement.itemId + "]")).value;
+                            break;
+                        case "slider":break;
+                        }
+
+                    });
+
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
         };
-
-
     })
 
     .directive('displayStates', function($compile) {
@@ -1554,6 +1616,5 @@ materialAdmin
                 angular.element('#'+target).removeClass(animation);
             }, animationDuration);
         }
-    
     })
 
