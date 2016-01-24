@@ -505,30 +505,17 @@ materialAdmin
     })
 
     //=================================================
-    // REWARD CREATION
+    // REWARD VIEW
     //=================================================
 
-    .controller('createRewardCtrl', function (ProjectsFactory, UsersFactory, $scope, $location, $window) {
+    .controller('createRewardCtrl', function (ProjectsFactory, UsersFactory, RewardsCreatedByUserFactory, ErrorHandler, TokenService, $scope, $location, $window) {
 
-            // callback for ng-click 'create Project':
-        /*console.log("starting");
-        $scope.createProject = function () {
-            //UserFactory.show("test").then(function(loggedUser){
-            var newProject = {
-                id: "0",
-                title: $scope.project.title,
-                description: $scope.project.description,
-                userList: []
-                //taskList: [],
-                //issueList: []
-            };
-            //newProject.userList.push(loggedUser);
+        RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+            $scope.rewards=rewards;
+        }, function(error){
+            ErrorHandler.handle("Could not fetch rewards from server.", error);
+        });
 
-            //console.log(loggedUser);
-            console.log(newProject);
-            ProjectsFactory.create(newProject);
-            $location.path('/home');
-        };//};*/
     })
 
     //=================================================
