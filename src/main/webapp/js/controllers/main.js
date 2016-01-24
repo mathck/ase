@@ -508,7 +508,8 @@ materialAdmin
     // REWARD VIEW
     //=================================================
 
-    .controller('createRewardCtrl', function (ProjectsFactory, UsersFactory, RewardsCreatedByUserFactory, ErrorHandler, TokenService, $scope, $location, $window) {
+    .controller('createRewardCtrl', function (ProjectsFactory, UsersFactory, RewardFactory, RewardsCreatedByUserFactory, ErrorHandler,
+        TokenService, $scope, $location, $window) {
 
         RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
             $scope.rewards=rewards;
@@ -516,6 +517,18 @@ materialAdmin
             ErrorHandler.handle("Could not fetch rewards from server.", error);
         });
 
+        $scope.createReward=function(){
+            RewardFactory.create({userMail: TokenService.username, name: $scope.newReward.name, description:$scope.newReward.description,
+            xpbase:$scope.newReward.xp, imageLink:$scope.newReward.link}).$promise.then(function(rewards){
+                $scope.rewards=rewards;
+            }, function(error){
+                ErrorHandler.handle("Could not fetch rewards from server.", error);
+            });
+        };
+
+        $scope.deleteReward=function(rewardID){
+            RewardFactory.delete({rID:rewardID});
+        }
     })
 
     //=================================================

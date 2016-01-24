@@ -35,19 +35,14 @@ rewardServices.factory('RewardsAwardedByUserFactory', function ($resource) {
     })
 });
 
-rewardServices.factory('RewardsFactory', function ($resource) {
-    return $resource('/taskit/api/workspace/rewards', {}, {
-        create: {
-            method: 'POST'
-        }
-    })
-});
-
 rewardServices.factory('RewardFactory', function ($resource) {
     return $resource('/taskit/api/workspace/rewards/:rID', {}, {
         show: {
             method: 'GET',
             params: {pID: '@rID'}
-        }
+        },
+    create: {
+        method: 'POST'
+    }
     })
 });
