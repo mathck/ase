@@ -12,21 +12,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+
+import java.io.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.validation.ConstraintViolation;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.File;
-import java.io.Serializable;
-import java.io.StringReader;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import javax.xml.validation.Validator;
 import java.util.regex.Pattern;
 
 /**
@@ -38,6 +42,9 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
     @Autowired
     private DslTemplateDAO dslTemplateDAO;
+
+    @Autowired
+    private javax.validation.Validator validator;
 
     private JavaxErrorHandler errorHandler;
     private SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -58,7 +65,19 @@ public class DslTemplateServiceImpl implements DslTemplateService{
             throw new ValidationException("mode not supported. Supported modes are: create, validate");
         }
 
-        // TODO validate dsl
+        //Validate template Json
+        Set<ConstraintViolation<DslTemplate>> constraintViolationsSubtask = validator.validate(template);
+        if (!constraintViolationsSubtask.isEmpty()){
+            Iterator<ConstraintViolation<DslTemplate>> flavoursIter = constraintViolationsSubtask.iterator();
+            String validationError = new String("");
+
+            while (flavoursIter.hasNext()){
+                ConstraintViolation<DslTemplate> violation =  flavoursIter.next();
+                validationError += violation.getPropertyPath()+": "+violation.getMessage()+"\n";
+            }
+
+            throw new ValidationException(validationError);
+        }
 
         //unmarshal and validate xml template
         unmarshalTemplateXml(template);
@@ -85,7 +104,22 @@ public class DslTemplateServiceImpl implements DslTemplateService{
     }
 
     public void updateDslTemplateById(DslTemplate template, int tID)  throws Exception {
+
         logger.debug("update dsl template with id="+tID);
+
+        //Validate template Json
+        Set<ConstraintViolation<DslTemplate>> constraintViolationsSubtask = validator.validate(template);
+        if (!constraintViolationsSubtask.isEmpty()){
+            Iterator<ConstraintViolation<DslTemplate>> flavoursIter = constraintViolationsSubtask.iterator();
+            String validationError = new String("");
+
+            while (flavoursIter.hasNext()){
+                ConstraintViolation<DslTemplate> violation =  flavoursIter.next();
+                validationError += violation.getPropertyPath()+": "+violation.getMessage()+"\n";
+            }
+
+            throw new ValidationException(validationError);
+        }
 
         //unmarshal and validate xml template
         unmarshalTemplateXml(template);
@@ -130,6 +164,9 @@ public class DslTemplateServiceImpl implements DslTemplateService{
             StringReader reader = new StringReader(dslTemplate.getSyntax());
             Template template = (Template) unmarshaller.unmarshal(reader);
 
+            //xsd validation
+            validate(dslTemplate.getSyntax());
+
             taskBody = convertTaskBodyToString(template.getTaskBody().getContent());
             taskElementList = template.getTaskElements().getTaskElement();
 
@@ -142,8 +179,44 @@ public class DslTemplateServiceImpl implements DslTemplateService{
                 taskElementsInTaskBodyList.add(Integer.valueOf(taskBody.substring(matcher.start()+TASK_ITEM_STRING.length()+2, matcher.end()-1)));
             }
 
+            //check for duplicate ids
+            boolean idDuplicate = false;
+            int currentId;
+            for (int i = 0; i < taskElementsInTaskBodyList.size(); i++){
+
+                currentId = taskElementsInTaskBodyList.get(i);
+
+                idDuplicate = false;
+                for (int j = i + 1; j < taskElementsInTaskBodyList.size(); j++){
+
+                    if (currentId == taskElementsInTaskBodyList.get(j)){
+                        idDuplicate = true;
+                    }
+
+                }
+
+                if (idDuplicate){
+                    throw new ValidationException("Duplicate task elements id found: "+currentId);
+                }
+
+            }
+
+            //compare count of task elements in body and in task element list
+            if (taskElementsInTaskBodyList.size() != taskElementList.size()){
+
+                if (taskElementsInTaskBodyList.size() < taskElementList.size()){
+                    throw new ValidationException("Not all defined task elements are used in task body");
+                }
+
+                if (taskElementsInTaskBodyList.size() > taskElementList.size()){
+                    throw new ValidationException("Not all task elements in task body are defined as task elements");
+                }
+
+            }
+
             //check for each task element in taskBody: Is it defined under <taskElements> ?
             boolean idFound;
+
             for (int i = 0; i < taskElementsInTaskBodyList.size(); i++){
 
                 idFound = false;
@@ -159,6 +232,57 @@ public class DslTemplateServiceImpl implements DslTemplateService{
                     throw new ValidationException("taskElement "+taskElementsInTaskBodyList.get(i)+" in taskBody is not specified under taskElements");
                 }
             }
+
+
+            TaskElement taskElement;
+            for (int i = 0; i < taskElementList.size(); i++) {
+
+                taskElement = taskElementList.get(i);
+
+                if (taskElement.getType().value().trim().equals("checkbox")) {
+                    if (!taskElement.getStatus().trim().toLowerCase().equals("checked") && !taskElement.getStatus().trim().toLowerCase().equals("unchecked")) {
+                        throw new ValidationException("Wrong status for taskItem with id " + taskElement.getId() + ". Allowed: checked or unchecked");
+                    }
+                }
+
+                if (taskElement.getType().value().trim().equals("slider")) {
+                    if (!taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getStatus().trim().toLowerCase())
+                            && !taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getStatus().trim().toLowerCase() + "|")
+                            && !taskElement.getValue().trim().toLowerCase().contains(taskElement.getStatus().trim().toLowerCase() + "|")
+                            ) {
+                        throw new ValidationException("Wrong status for taskItem with id " + taskElement.getId());
+                    }
+                }
+
+                //solution must be present
+                if (!taskElement.getType().value().toLowerCase().equals("image")
+                        && !taskElement.getType().value().trim().toLowerCase().equals("file")) {
+
+                    if (taskElement.getSolution() != null && taskElement.getSolution().length() > 1){
+
+                        if (taskElement.getType().value().trim().equals("checkbox")) {
+                            if (!taskElement.getSolution().trim().toLowerCase().equals("checked") && !taskElement.getSolution().trim().toLowerCase().equals("unchecked")) {
+                                throw new ValidationException("Wrong solution for taskItem with id " + taskElement.getId() + ". Allowed: checked or unchecked");
+                            }
+                        }
+
+                        if (taskElement.getType().value().trim().equals("slider")) {
+                            if (!taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getSolution().trim().toLowerCase())
+                                    && !taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getSolution().trim().toLowerCase() + "|")
+                                    && !taskElement.getValue().trim().toLowerCase().contains(taskElement.getSolution().trim().toLowerCase() + "|")
+                                    ) {
+                                throw new ValidationException("Wrong solution for taskItem with id " + taskElement.getId());
+                            }
+                        }
+
+                    }else{
+                        throw new ValidationException("Solution must be present for task element: "+taskElement.getId());
+                    }
+
+                }
+
+            }
+
 
             return template;
 
@@ -197,6 +321,25 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
         return returnString;
 
+    }
+
+
+    public void validate(String xml) throws ValidationException{
+
+        File xsdFile = null;
+        ClassLoader classLoader = getClass().getClassLoader();
+
+        try {
+            xsdFile =  new File(classLoader.getResource(TEMPLATE_XSD_FILE_NAME).getFile());
+            SchemaFactory factory =
+                    SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new StreamSource(xsdFile));
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+
+        }catch(Exception ex){
+            throw new ValidationException(ex.getMessage());
+        }
     }
 
 

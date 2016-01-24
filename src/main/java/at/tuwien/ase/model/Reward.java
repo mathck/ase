@@ -1,17 +1,37 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
  * Created by DanielHofer on 20.11.2015.
  */
 public class Reward {
+
     private int id;
+
+    @NotNull
+    @Size(min = 2)
     private String userMail;
+
+    @NotNull
+    @Size(min = 5)
     private String name;
+
+    @NotNull
+    @Size(min = 5)
     private String description;
+
+    @NotNull
+    @Min(value = 0)
     private int xpbase;
+
+    @NotNull
+    @Size(min = 5)
     private String imageLink;
+
     private Date creationDate;
 
     // Must have no-argument constructor

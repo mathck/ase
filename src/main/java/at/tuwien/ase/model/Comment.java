@@ -1,5 +1,7 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -9,8 +11,15 @@ public class Comment {
 
     private Integer id;
     private Integer task_id;
+
+    @NotNull
+    @Size(min = 1)
     private String text;
+
+    @NotNull
+    @Size(min = 5)
     private String user_mail;
+
     private Date creationDate;
     private User user;
 

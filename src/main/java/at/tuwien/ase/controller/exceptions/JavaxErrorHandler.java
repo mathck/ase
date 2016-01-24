@@ -59,17 +59,9 @@ public class JavaxErrorHandler implements ValidationEventHandler {
 
     //handle validation event
     public boolean handleEvent(ValidationEvent event) {
-        errors += "\n\nEVENT";
-        errors += "\nSEVERITY:  " + event.getSeverity();
-        errors += "\nMESSAGE:  " + event.getMessage();
-        errors += "\nLINKED EXCEPTION:  " + event.getLinkedException();
-        errors += "\nLOCATOR";
-        errors += "\n    LINE NUMBER:  " + event.getLocator().getLineNumber();
-        errors += "\n    COLUMN NUMBER:  " + event.getLocator().getColumnNumber();
-        errors += "\n    OFFSET:  " + event.getLocator().getOffset();
-        errors += "\n    OBJECT:  " + event.getLocator().getObject();
-        errors += "\n    NODE:  " + event.getLocator().getNode();
-        errors += "\n    URL:  " + event.getLocator().getURL();
+
+        errors += event.getMessage();
+
         return true;
     }
 

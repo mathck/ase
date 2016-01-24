@@ -2,6 +2,8 @@ package at.tuwien.ase.model;
 
 import at.tuwien.ase.services.impl.PasswordEncryption;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 
 /**
@@ -13,6 +15,8 @@ import java.util.LinkedList;
  */
 public class User {
 
+    @NotNull
+    @Size(min = 2)
     private String userID;
     private String firstName;
     private String lastName;
@@ -21,7 +25,7 @@ public class User {
 
     private LinkedList<String> projectList = null;
 
-    private byte[] password;
+    private String password;
     private byte[] salt;
 
     public User() {}
@@ -36,7 +40,7 @@ public class User {
     public User(String userID, String password) {
         this.userID = userID;
         this.salt = PasswordEncryption.generateSalt();
-        this.password = PasswordEncryption.getEncryptedPassword(password, salt);
+        this.password = PasswordEncryption.getEncryptedPassword(password);
     }
 
     public String getUserID() {
@@ -71,7 +75,7 @@ public class User {
         this.avatar = avatar;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -86,14 +90,14 @@ public class User {
             if (salt == null) {
                 salt = PasswordEncryption.generateSalt();
             }
-            this.password = PasswordEncryption.getEncryptedPassword(password, salt);
+            this.password = PasswordEncryption.getEncryptedPassword(password);
         } else {
             this.password = null;
             this.salt = null;
         }
     }
 
-    public void setPasswordEnc(byte[] password) {
+    public void setPasswordEnc(String password) {
         this.password = password;
     }
 

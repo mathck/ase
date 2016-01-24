@@ -1,5 +1,7 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -8,12 +10,31 @@ import java.util.Date;
 public class DslTemplate {
 
     private Integer id;
+
+    @NotNull
+    @Size(min = 2)
     private String templateCategoryName;
+
+    @NotNull
+    @Size(min = 5)
     private String templateCategoryDescription;
+
+    @NotNull
+    @Size(min = 5)
     private String title;
+
+    @NotNull
+    @Size(min = 5)
     private String description;
+
     private Date creationDate;
+
+    @NotNull
+    @Size(min = 5)
     private String syntax;
+
+    @NotNull
+    @Size(min = 2)
     private String user_mail;
 
     // Must have no-argument constructor

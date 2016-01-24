@@ -1,5 +1,7 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -14,6 +16,9 @@ public class Subtask implements Cloneable{
     private int taskId; //reference to task ('consists of')
     private String status;
     private String taskBody;
+
+    @NotNull
+    @Min(value = 0)
     private Integer dslTemplateId;
     private int xp;
     private Date creationDate;

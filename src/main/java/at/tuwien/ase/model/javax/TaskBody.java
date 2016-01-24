@@ -2,7 +2,7 @@
 // Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.8-b130911.1802 generiert 
 // Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2016.01.13 um 07:20:15 PM CET 
+// Generiert: 2016.01.24 um 06:35:21 PM CET 
 //
 
 
@@ -50,11 +50,11 @@ import javax.xml.bind.annotation.XmlType;
 public class TaskBody {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "h3", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "h2", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "br", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "h3", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "h1", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "b", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "b", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "h2", type = JAXBElement.class, required = false)
     })
     @XmlMixed
     protected List<Serializable> content;
@@ -78,9 +78,9 @@ public class TaskBody {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link String }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 

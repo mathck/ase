@@ -29,7 +29,7 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     private static final Logger logger = LogManager.getLogger(SubtaskServiceImpl.class);
 
-    public JsonStringWrapper writeSubtask(Subtask subtask) {
+    public JsonStringWrapper writeSubtask(Subtask subtask)  {
         logger.debug("create new subtask");
         int id;
 
