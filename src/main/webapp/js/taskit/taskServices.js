@@ -58,3 +58,12 @@ taskServices.factory('TaskCommentFactory', function ($resource) {
         }
     })
 });
+
+taskServices.factory('SubtaskFactory', function ($resource) {
+    return $resource('/taskit/api/workspace/tasks/subtasks/:sID', {}, {
+        update: {
+            method: 'PATCH',
+            params: {sID: '@sID'}
+        }
+    })
+});
