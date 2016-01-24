@@ -526,6 +526,7 @@ materialAdmin
             });
         };
 
+
         $scope.deleteReward=function(rewardID){
             RewardFactory.delete({rID:rewardID});
         }
