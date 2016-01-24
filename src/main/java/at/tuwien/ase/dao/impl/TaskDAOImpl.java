@@ -122,7 +122,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
-                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, TASKIT_USER.AVATAR_URL as users_avatar_url, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
                 "FROM " +
                 "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
@@ -179,7 +179,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
-                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, TASKIT_USER.AVATAR_URL as users_avatar_url, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
                 "FROM " +
                 "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
@@ -202,7 +202,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
-                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, TASKIT_USER.AVATAR_URL as users_avatar_url, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
                 "FROM " +
                 "TASK LEFT JOIN TASK_STATES ON TASK.ID = TASK_STATES.TASK_ID " +
@@ -226,7 +226,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         String sqlQuery = "SELECT TASK.ID as task_id, TASK.TITLE as task_title, TASK.DESCRIPTION as task_description, TASK.TASK_TYPE as task_task_type, TASK.CREATION_DATE as task_creation_date, TASK.UPDATE_DATE as task_update_date, TASK.PROJECT_ID as task_project_id, TASK.USER_MAIL as task_user_mail, TASK.STATUS as task_status, TASK.EXECUTION_TYPE as task_execution_type, TASK.COMMENTS_ALLOWED as task_comments_allowed, " +
                 "TASK_STATES.ID as states_id, TASK_STATES.STATE_NAME as states_state_name, TASK_STATES.TASK_ID as states_task_id, " +
-                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, " +
+                "TASKIT_USER.MAIL as users_mail, TASKIT_USER.FIRSTNAME as users_firstname, TASKIT_USER.LASTNAME as users_lastname, TASKIT_USER.AVATAR_URL as users_avatar_url, " +
                 "TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
                 "FROM " +
                 "(SELECT REL_USER_TASK.TASK_ID FROM REL_USER_TASK WHERE REL_USER_TASK.USER_MAIL = ?) as user_tasks, " +
@@ -249,12 +249,17 @@ public class TaskDAOImpl implements TaskDAO {
 
         logger.debug("retrieve from db: all comments from tasks with id="+tID);
 
-        String sqlQuery = "SELECT TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.USER_MAIL as comment_mail, TASK_COMMENTS.CREATION_DATE as comment_creation_date " +
-                "FROM TASK_COMMENTS " +
-                "WHERE TASK_ID = ? ";
+
+        String sqlQuery = "SELECT TASK_COMMENTS.ID as comment_id, TASK_COMMENTS.TEXT as comment_text, TASK_COMMENTS.CREATION_DATE as comment_creation_date, " +
+                "TASKIT_USER.MAIL as comment_users_mail, TASKIT_USER.FIRSTNAME as comment_users_firstname, TASKIT_USER.LASTNAME as comment_users_lastname, TASKIT_USER.AVATAR_URL as comment_users_avatar_url " +
+                "FROM " +
+                "TASK_COMMENTS LEFT JOIN TASKIT_USER ON TASK_COMMENTS.USER_MAIL = TASKIT_USER.MAIL " +
+                "WHERE TASK_COMMENTS.TASK_ID = ? ";
+
 
         LinkedList<Comment> commentList = new LinkedList<Comment>();
         Comment comment;
+        User user;
         int commentId;
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
@@ -270,9 +275,18 @@ public class TaskDAOImpl implements TaskDAO {
                 comment = new Comment();
 
                 comment.setId(commentId);
-                comment.setUser_mail((String) row.get("comment_mail"));
                 comment.setText((String) row.get("comment_text"));
                 comment.setCreationDate(new java.sql.Date(((Timestamp) row.get("comment_creation_date")).getTime()));
+
+                user = new User();
+
+                user.setUserID((String) row.get("comment_users_mail"));
+                user.setFirstName((String) row.get("comment_users_firstname"));
+                user.setLastName((String) row.get("comment_users_lastname"));;
+                user.setAvatar((String) row.get("comment_users_avatar_url"));
+
+                //add user to comment
+                comment.setUser(user);
 
                 //add comment to commentList
                 commentList.add(comment);
@@ -512,10 +526,11 @@ public class TaskDAOImpl implements TaskDAO {
         int commentId;
         String userId;
         int taskId;
+        String combinedId;
         LinkedList<Task> tasks = new LinkedList<Task>();
         HashMap<Integer, Task> taskMap = new HashMap<Integer, Task>();
-        HashMap<Integer, TaskState> statesMap = new HashMap<Integer, TaskState>();
-        HashMap<Integer, Comment> commentsMap = new HashMap<Integer, Comment>();
+        HashMap<String, TaskState> statesMap = new HashMap<String, TaskState>();
+        HashMap<String, Comment> commentsMap = new HashMap<String, Comment>();
         HashMap<String, User> usersMap = new HashMap<String, User>();
 
         Task task;
@@ -553,8 +568,11 @@ public class TaskDAOImpl implements TaskDAO {
 
                 if (row.get("states_id") != null) {
                     statesId = (Integer) row.get("states_id");
+
+                    combinedId = String.valueOf(taskId)+"_"+String.valueOf(statesId);
+
                     //state already in task object?
-                    if (statesMap.get(taskId + statesId) == null) {
+                    if (statesMap.get(combinedId) == null) {
                         taskState = new TaskState();
 
                         taskState.setId((Integer) row.get("states_id"));
@@ -563,7 +581,7 @@ public class TaskDAOImpl implements TaskDAO {
 
                         //put taskState to task element
                         ((Task) taskMap.get(taskId)).addTaskState(taskState);
-                        statesMap.put(taskId + statesId, taskState);
+                        statesMap.put(combinedId, taskState);
 
                     }
 
@@ -572,18 +590,21 @@ public class TaskDAOImpl implements TaskDAO {
                 if (row.get("users_mail") != null) {
 
                     userId = (String) row.get("users_mail");
-                    //user already in task object?
 
-                    if (usersMap.get(taskId + userId.trim()) == null) {
+                    combinedId = String.valueOf(taskId)+"_"+String.valueOf(userId.trim());
+
+                    //user already in task object?
+                    if (usersMap.get(combinedId) == null) {
                         user = new User();
 
                         user.setUserID((String) row.get("users_mail"));
                         user.setFirstName((String) row.get("users_firstname"));
                         user.setLastName((String) row.get("users_lastname"));
+                        user.setAvatar((String) row.get("users_avatar_url"));
 
                         //put taskState to task element
                         ((Task) taskMap.get(taskId)).addUser(user);
-                        usersMap.put(taskId + userId.trim(), user);
+                        usersMap.put(combinedId, user);
 
                     }
 
@@ -592,9 +613,11 @@ public class TaskDAOImpl implements TaskDAO {
                 if (row.get("comment_id") != null) {
 
                     commentId = (Integer) row.get("comment_id");
-                    //comment already in task object?
 
-                    if (commentsMap.get(taskId + commentId) == null) {
+                    combinedId = String.valueOf(taskId)+"_"+String.valueOf(commentId);
+
+                    //comment already in task object?
+                    if (commentsMap.get(combinedId) == null) {
                         comment = new Comment();
 
                         comment.setId(commentId);
@@ -604,7 +627,7 @@ public class TaskDAOImpl implements TaskDAO {
 
                         //put comment to task element
                         ((Task) taskMap.get(taskId)).addComment(comment);
-                        commentsMap.put(taskId + commentId, comment);
+                        commentsMap.put(combinedId, comment);
 
                     }
 

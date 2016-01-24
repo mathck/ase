@@ -251,6 +251,9 @@ public class TaskServiceImpl implements TaskService {
         DslTemplate dslTemplate;
         Template template;
         String taskBody;
+        boolean elementAlreadyInList;
+        String combinedId1;
+        String combinedId2;
         List<TaskElement> taskElementList;
         TaskElementJson taskElementJson;
 
@@ -293,7 +296,25 @@ public class TaskServiceImpl implements TaskService {
                         taskElementJson = TaskElementJsonFactory.getTaskElement(taskElement);
                         taskElementJson.setDslTemplateId(s.getDslTemplateId());
                         taskElementJson.setSubtaskId(s.getId());
-                        taskElementJsonList.add(taskElementJson);
+
+                        //do not add duplicates (=twice a taskElement of the same dsl where the itemId matches)
+                        elementAlreadyInList = false;
+                        for (TaskElementJson taskElementJsonListElement : taskElementJsonList) {
+
+                            combinedId1 = taskElementJsonListElement.getItemId()+"_"+taskElementJsonListElement.getDslTemplateId();
+                            combinedId2 = taskElementJson.getItemId()+"_"+taskElementJson.getDslTemplateId();
+
+                            if (combinedId1.equals(combinedId2)){
+                                elementAlreadyInList = true;
+                                break;
+                            }
+
+                        }
+
+                        //add element to list
+                        if (!elementAlreadyInList) {
+                            taskElementJsonList.add(taskElementJson);
+                        }
 
                     }
 

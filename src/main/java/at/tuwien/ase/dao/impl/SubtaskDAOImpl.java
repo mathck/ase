@@ -469,8 +469,9 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         int taskitemId;
         LinkedList<Subtask> subtasks = new LinkedList<Subtask>();
         HashMap<Integer, Subtask> subtaskMap = new HashMap<Integer, Subtask>();
-        HashMap<Integer, TaskElementJson> taskElementJsonMap = new HashMap<Integer, TaskElementJson>();
+        HashMap<String, TaskElementJson> taskElementJsonMap = new HashMap<String, TaskElementJson>();
         Subtask subtask;
+        String combinedId;
         TaskElementJson taskElementJson;
 
         for (Map<String,Object> row : rows) {
@@ -506,9 +507,11 @@ public class SubtaskDAOImpl implements SubtaskDAO {
                 if (row.get("taskitems_id") != null) {
 
                     taskitemId = (Integer) row.get("taskitems_id");
-                    //subtask already in task object?
 
-                    if (taskElementJsonMap.get(subtaskId + taskitemId) == null) {
+                    combinedId = String.valueOf(subtaskId)+"_"+String.valueOf(taskitemId);
+
+                    //subtask already in task object?
+                    if (taskElementJsonMap.get(combinedId) == null) {
                         //create task item and add it to subtask
                         taskElementJson = new TaskElementJson();
 
@@ -526,7 +529,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
                         //add task element to subtask
                         ((Subtask)subtaskMap.get(subtaskId)).addTaskElement(taskElementJson);
-                        taskElementJsonMap.put(subtaskId + taskitemId, taskElementJson);
+                        taskElementJsonMap.put(combinedId, taskElementJson);
 
                     }
 

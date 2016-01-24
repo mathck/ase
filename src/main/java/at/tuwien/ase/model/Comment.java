@@ -12,6 +12,7 @@ public class Comment {
     private String text;
     private String user_mail;
     private Date creationDate;
+    private User user;
 
     // Must have no-argument constructor
     public Comment() {
@@ -58,6 +59,14 @@ public class Comment {
         this.creationDate = creationDate;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -66,6 +75,7 @@ public class Comment {
                 ", text='" + text + '\'' +
                 ", user_mail='" + user_mail + '\'' +
                 ", creationDate=" + creationDate +
+                ", user=" + user +
                 '}';
     }
 }
