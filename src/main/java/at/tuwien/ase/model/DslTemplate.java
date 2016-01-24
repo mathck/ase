@@ -14,6 +14,7 @@ public class DslTemplate {
     private String description;
     private Date creationDate;
     private String syntax;
+    private String user_mail;
 
     // Must have no-argument constructor
     public DslTemplate() {
@@ -76,6 +77,14 @@ public class DslTemplate {
         this.syntax = syntax;
     }
 
+    public String getUser_mail() {
+        return user_mail;
+    }
+
+    public void setUser_mail(String user_mail) {
+        this.user_mail = user_mail;
+    }
+
     @Override
     public String toString() {
         return "DslTemplate{" +
@@ -86,7 +95,7 @@ public class DslTemplate {
                 ", description='" + description + '\'' +
                 ", creationDate=" + creationDate +
                 ", syntax='" + syntax + '\'' +
+                ", user_mail='" + user_mail + '\'' +
                 '}';
     }
-
 }

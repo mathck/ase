@@ -30,8 +30,8 @@ public class DslTemplateController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public JsonStringWrapper createDslTemplate(@RequestBody DslTemplate dslTemplate) throws Exception  {
-        return ts.writeDslTemplate(dslTemplate);
+    public JsonStringWrapper createDslTemplate(@RequestBody DslTemplate dslTemplate, @RequestParam("mode") String mode) throws Exception  {
+        return ts.writeDslTemplate(dslTemplate, mode);
     }
 
     // @author Daniel Hofer
@@ -53,6 +53,13 @@ public class DslTemplateController {
     @ResponseBody
     public LinkedList<DslTemplate> getAllDslTemplates() throws Exception {
         return ts.getAllDslTemplates();
+    }
+
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/users/{uID}/templates", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<DslTemplate> getAllDslTemplatesByUser(@PathVariable("uID") String uID) throws Exception {
+        return ts.getAllDslTemplatesByUser(uID);
     }
 
     // @author Daniel Hofer

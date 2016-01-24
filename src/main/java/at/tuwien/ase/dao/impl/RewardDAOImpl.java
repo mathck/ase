@@ -45,7 +45,7 @@ public class RewardDAOImpl implements RewardDAO{
         this.jdbcTemplate.update(
                 sqlQuery,
                 reward.getId(),
-                reward.getUserMail(),
+                reward.getUserMail().trim(),
                 reward.getName(),
                 reward.getDescription(),
                 reward.getXpbase(),
@@ -120,7 +120,7 @@ public class RewardDAOImpl implements RewardDAO{
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
-                uID);
+                uID.trim());
 
         return mapRows(rows);
 
@@ -137,7 +137,7 @@ public class RewardDAOImpl implements RewardDAO{
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
-                uID);
+                uID.trim());
 
         return mapRows(rows);
     }
@@ -171,7 +171,7 @@ public class RewardDAOImpl implements RewardDAO{
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 pID,
-                uID);
+                uID.trim());
 
         return mapRows(rows);
     }
@@ -186,7 +186,7 @@ public class RewardDAOImpl implements RewardDAO{
         this.jdbcTemplate.update(
                 sqlQuery,
                 this.getNewIDForRelRewardProjectUser(),
-                uID,
+                uID.trim(),
                 rID,
                 pID
         );

@@ -42,8 +42,8 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
 
         logger.debug("insert into db: dsl template with id=" + template.getId());
 
-        String sqlQuery = "INSERT INTO DSL_TEMPLATE (ID, TITLE, DESCRIPTION, SYNTAX, CREATION_DATE, TEMPLATE_CATEGORY_NAME, TEMPLATE_CATEGORY_DESCRIPTION) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO DSL_TEMPLATE (ID, TITLE, DESCRIPTION, SYNTAX, CREATION_DATE, TEMPLATE_CATEGORY_NAME, TEMPLATE_CATEGORY_DESCRIPTION, USER_MAIL) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         this.jdbcTemplate.update(
                 sqlQuery,
@@ -53,8 +53,9 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
                 template.getSyntax(),
                 template.getCreationDate(),
                 template.getTemplateCategoryName(),
-                template.getTemplateCategoryDescription());
-
+                template.getTemplateCategoryDescription(),
+                template.getUser_mail().trim()
+        );
     }
 
     public void removeDslTemplateByID(int tID) {
@@ -75,7 +76,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
 
         logger.debug("retrieve from db: dsl template with id=" + tID);
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, SYNTAX, CREATION_DATE, TEMPLATE_CATEGORY_NAME, TEMPLATE_CATEGORY_DESCRIPTION " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, SYNTAX, CREATION_DATE, TEMPLATE_CATEGORY_NAME, TEMPLATE_CATEGORY_DESCRIPTION, USER_MAIL " +
                 "FROM DSL_TEMPLATE " +
                 "WHERE ID = ? ";
 
@@ -92,6 +93,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
                         template.setCreationDate(rs.getDate("creation_date"));
                         template.setTemplateCategoryName(rs.getString("template_category_name"));
                         template.setTemplateCategoryDescription(rs.getString("template_category_description"));
+                        template.setUser_mail(rs.getString("user_mail"));
                         return template;
                     }
                 });
@@ -101,7 +103,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
 
         logger.debug("retrieve from db: all dsl templates");
 
-        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, SYNTAX, CREATION_DATE, TEMPLATE_CATEGORY_NAME, TEMPLATE_CATEGORY_DESCRIPTION " +
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, SYNTAX, CREATION_DATE, TEMPLATE_CATEGORY_NAME, TEMPLATE_CATEGORY_DESCRIPTION, USER_MAIL " +
                 "FROM DSL_TEMPLATE ";
 
         LinkedList<DslTemplate> templates = new LinkedList<DslTemplate>();
@@ -118,6 +120,37 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
             template.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
             template.setTemplateCategoryName((String)row.get("template_category_name"));
             template.setTemplateCategoryDescription((String)row.get("template_category_description"));
+            template.setUser_mail((String)row.get("user_mail"));
+
+            templates.add(template);
+        }
+
+        return templates;
+    }
+
+    public LinkedList<DslTemplate> loadAllByUser(String uID) {
+
+        logger.debug("retrieve from db: all dsl templates from user="+uID);
+
+        String sqlQuery = "SELECT ID, TITLE, DESCRIPTION, SYNTAX, CREATION_DATE, TEMPLATE_CATEGORY_NAME, TEMPLATE_CATEGORY_DESCRIPTION, USER_MAIL " +
+                "FROM DSL_TEMPLATE " +
+                "WHERE USER_MAIL = ?";
+
+        LinkedList<DslTemplate> templates = new LinkedList<DslTemplate>();
+
+        List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(sqlQuery, uID.trim());
+        for (Map<String,Object> row : rows) {
+
+            DslTemplate template = new DslTemplate();
+
+            template.setId((Integer)row.get("id"));
+            template.setTitle((String)row.get("title"));
+            template.setDescription((String)row.get("description"));
+            template.setSyntax((String)row.get("syntax"));
+            template.setCreationDate(new java.sql.Date(((Timestamp)row.get("creation_date")).getTime()));
+            template.setTemplateCategoryName((String)row.get("template_category_name"));
+            template.setTemplateCategoryDescription((String)row.get("template_category_description"));
+            template.setUser_mail((String)row.get("user_mail"));
 
             templates.add(template);
         }
