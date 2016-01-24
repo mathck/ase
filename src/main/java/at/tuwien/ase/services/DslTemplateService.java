@@ -21,6 +21,7 @@ public interface DslTemplateService {
     DslTemplate getByID(int tID);
 
     LinkedList<DslTemplate> getAllDslTemplates();
+    LinkedList<DslTemplate> getAllDslTemplatesByUser(String uID);
 
     Template unmarshalTemplateXml(DslTemplate dslTemplate) throws Exception;
     String convertTaskBodyToString(List<Serializable> content) throws  Exception;

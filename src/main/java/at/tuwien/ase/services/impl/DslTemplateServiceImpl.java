@@ -95,6 +95,11 @@ public class DslTemplateServiceImpl implements DslTemplateService{
         return dslTemplateDAO.loadAll();
     }
 
+    public LinkedList<DslTemplate> getAllDslTemplatesByUser(String uID){
+        logger.debug("get all dsl templates from user="+uID);
+        return dslTemplateDAO.loadAllByUser(uID);
+    }
+
     public Template unmarshalTemplateXml(DslTemplate dslTemplate) throws Exception{
         String taskBody;
         List<TaskElement> taskElementList;

@@ -67,7 +67,7 @@ public class IssueDAOImpl implements IssueDAO {
                 ps.setTimestamp(4, new java.sql.Timestamp(issue.getCreationDate().getTime()));
                 ps.setTimestamp(5, new java.sql.Timestamp(issue.getUpdateDate().getTime()));
                 ps.setInt(6, issue.getProjectId());
-                ps.setString(7, issue.getUserId());
+                ps.setString(7, issue.getUserId().trim());
 
                 return ps;
             }
@@ -171,7 +171,7 @@ public class IssueDAOImpl implements IssueDAO {
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
                 this.taskType,
-                uID
+                uID.trim()
         );
 
         return mapRows(rows);

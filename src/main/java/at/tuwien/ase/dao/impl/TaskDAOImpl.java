@@ -63,7 +63,7 @@ public class TaskDAOImpl implements TaskDAO {
                 task.getCreationDate(),
                 task.getUpdateDate(),
                 task.getExecutionType(),
-                task.getUserMail(),
+                task.getUserMail().trim(),
                 task.isCommentsAllowed()
         );
     }
@@ -89,7 +89,7 @@ public class TaskDAOImpl implements TaskDAO {
                 ps.setTimestamp(6, new java.sql.Timestamp(task.getCreationDate().getTime()));
                 ps.setTimestamp(7, new java.sql.Timestamp(task.getUpdateDate().getTime()));
                 ps.setString(8, task.getExecutionType());
-                ps.setString(9, task.getUserMail());
+                ps.setString(9, task.getUserMail().trim());
                 ps.setString(10, uuID);
                 ps.setBoolean(11, task.isCommentsAllowed());
 
@@ -238,7 +238,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
-                uID,
+                uID.trim(),
                 this.taskType
                 );
 
@@ -323,7 +323,7 @@ public class TaskDAOImpl implements TaskDAO {
 
                 user = new User();
 
-                user.setUserID(userId);
+                user.setUserID(userId.trim());
 
                 //add user to userList
                 userList.add(user);
@@ -344,7 +344,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         this.jdbcTemplate.update(
                 sqlQuery,
-                uID,
+                uID.trim(),
                 tID
         );
 
@@ -417,7 +417,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
-                uID,
+                uID.trim(),
                 this.taskType,
                 pID
         );
@@ -434,7 +434,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         this.jdbcTemplate.update(
                 sqlQuery,
-                uID,
+                uID.trim(),
                 tID
         );
     }
@@ -472,7 +472,7 @@ public class TaskDAOImpl implements TaskDAO {
 
         this.jdbcTemplate.update(
                 sqlQuery,
-                uID,
+                uID.trim(),
                 tID
         );
 
@@ -490,7 +490,7 @@ public class TaskDAOImpl implements TaskDAO {
                 comment.getId(),
                 tID,
                 comment.getText(),
-                comment.getUser_mail(),
+                comment.getUser_mail().trim(),
                 new Date()
         );
 

@@ -322,7 +322,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
         List<Map<String,Object>> rows =  this.jdbcTemplate.queryForList(
                 sqlQuery,
-                uID
+                uID.trim()
         );
 
         return mapRows(rows);

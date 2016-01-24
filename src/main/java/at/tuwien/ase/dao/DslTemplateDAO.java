@@ -14,6 +14,7 @@ public interface DslTemplateDAO {
 
     DslTemplate findByID(int tID);
     LinkedList<DslTemplate> loadAll();
+    LinkedList<DslTemplate> loadAllByUser(String uID);
 
     void alterDslTemplateByID(DslTemplate template, int tID);
 

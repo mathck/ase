@@ -56,6 +56,13 @@ public class DslTemplateController {
     }
 
     // @author Daniel Hofer
+    @RequestMapping(value = "workspace/users/{uID}/templates", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedList<DslTemplate> getAllDslTemplatesByUser(@PathVariable("uID") String uID) throws Exception {
+        return ts.getAllDslTemplatesByUser(uID);
+    }
+
+    // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteDslTemplateByID(@PathVariable("tID") int tID)  throws Exception {
