@@ -2551,6 +2551,92 @@ input[type="range"] {
   display: block;
   width: 100%;
 }
+input[type=range]{
+    -webkit-appearance: none;
+    margin-bottom: 5px;
+
+    /*fix for FF unable to apply focus style bug */
+    border: 1px solid white;
+
+    /*required for proper track sizing in FF*/
+    width: 100%;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #00838F;
+    margin-top: -4px;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #00838F;
+}
+/*hide the outline behind the border*/
+input[type=range]:-moz-focusring{
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+input[type=range]::-ms-track {
+    width: 300px;
+    height: 5px;
+
+    /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+    background: transparent;
+
+    /*leave room for the larger thumb to overflow with a transparent border */
+    border-color: transparent;
+    border-width: 6px 0;
+
+    /*remove default tick marks*/
+    color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+    background: #777;
+    border-radius: 10px;
+}
+input[type=range]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 10px;
+}
+input[type=range]::-ms-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #00838F;
+}
+input[type=range]:focus::-ms-fill-lower {
+    background: #888;
+}
+input[type=range]:focus::-ms-fill-upper {
+    background: #ccc;
+}
 select[multiple],
 select[size] {
   height: auto;
@@ -2901,6 +2987,9 @@ select[multiple].input-lg {
 .has-error.radio-inline label,
 .has-error.checkbox-inline label {
   color: #f44336;
+}
+.has-error-select .form-control{
+    border-color: #f21e0d !important;
 }
 .has-error .form-control {
   border-color: #f44336;
@@ -5194,6 +5283,14 @@ a.badge:focus {
 .jumbotron > hr {
   border-top-color: #dedede;
 }
+.taskHr {
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+}
 .container .jumbotron,
 .container-fluid .jumbotron {
   border-radius: 2px;
@@ -5230,6 +5327,9 @@ a.badge:focus {
   -webkit-transition: border 0.2s ease-in-out;
   -o-transition: border 0.2s ease-in-out;
   transition: border 0.2s ease-in-out;
+}
+.borderless  {
+    border:none;
 }
 .thumbnail > img,
 .thumbnail a > img {
@@ -8890,7 +8990,7 @@ body:not(.sw-toggled) #sidebar {
   position: relative;
 }
 .listview:not(.lv-lg):not(.lv-message) .lv-item {
-  padding: 12px 20px;
+  padding: 0px 20px;
 }
 @media (min-width: 480px) {
   .listview.lv-lg .lv-item {
@@ -9111,7 +9211,7 @@ a.lv-footer:hover {
  * Inside Card will have more padding
  */
 .card-body .lv-item {
-  padding: 12px 20px;
+  padding: 0px 20px;
 }
 .progress {
   box-shadow: none;
@@ -11308,6 +11408,9 @@ html:not(.ie9) .select.fg-line:before {
   position: relative;
   vertical-align: top;
   /* Validation Stats */
+}
+.fg-line-lg {
+    width: 25em !important;
 }
 .fg-line:not(.form-group) {
   display: inline-block;
@@ -13674,6 +13777,9 @@ body.login-content:before {
 .block-header {
   margin-bottom: 25px;
   position: relative;
+}
+.right {
+  float:right;
 }
 @media screen and (min-width: 768px) {
   .block-header {

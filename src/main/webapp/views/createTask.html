@@ -8,7 +8,7 @@
 
          <div class="container" data-ng-controller="createTaskCtrl"><!---->
             <div class="block-header">
-                <h2>Create Task <span data-ng-show="isTransformedIssue"> from issue {{issue.title}}</span></h2>
+                <h2 id="createTask">Create Task <span data-ng-show="isTransformedIssue"> from issue {{issue.title}}</span></h2>
 
                 <ul class="actions">
                     <li>
@@ -44,7 +44,7 @@
                                     <div class="select">
                                         <select class="form-control" disabled>
                                             <!--<option value="New">New</option>-->
-                                            <option value="New" selected="selected">New</option>
+                                            <option value="Open" selected="selected">Open</option>
                                             <!--<option value="Closed">Closed</option>-->
                                         </select>
                                     </div>
@@ -76,16 +76,23 @@
 
                             </form>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" tooltip-class="tooltip-blue" tooltip-enable="templateFail" tooltip-trigger="mouseenter" tooltip="Select a Template!" tooltip-placement="right">
                             <p class="c-black f-500 m-b-20 m-t-20">Select Template</p>
                             <!--{{allTemplateFields}}-->
                             <form>
                                 <!--<div data-ng-repeat="templateField in data.templateFields">
                                     <div data-display-templates="templateField" data-templates="templates.title"></div>
                                 </div>-->
+
                                 <div data-ng-repeat="templateFieldId in data.templateFieldIds">
-                                    <select class="form-control" data-ng-model="data.templateFields[templateFieldId.id]" required="Please select a template" data-ng-options="template.title for template in templates track by template.id">
-                                    </select>
+                                    <div class="form-group">
+                                        <div ng-class="!templateFail ? 'fg-line' : 'fg-line has-feedback has-error has-error-select'">
+                                            <div class="select">
+                                                <select class="form-control" data-ng-model="data.templateFields[templateFieldId.id]" required="Please select a template" data-ng-options="template.title for template in templates track by template.id">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <button data-ng-click="addTemplate()" class="btn bgm-teal waves-effect"><i class="zmdi zmdi-plus"></i></button>
@@ -106,7 +113,15 @@
                     <div class="row">
                         <div class="col-sm-12 m-b-15">
                             <p class="c-black f-500 m-b-20 m-t-20">Comments</p>
-                            <div class="radio m-b-15">
+
+                            <div class="checkbox m-b-15 ng-scope">
+                                <label>
+                                    <input type="checkbox" data-ng-model="task.comments"><i class="input-helper"></i>
+                                    Enable Comments
+                                </label>
+                            </div>
+
+                            <!--<div class="radio m-b-15">
                                 <label>
                                     <input data-ng-model="task.comments" type="radio" value="true" checked="checked">
                                     <i class="input-helper"></i>
@@ -119,7 +134,7 @@
                                     <i class="input-helper"></i>
                                     Disable Comments
                                 </label>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -133,7 +148,7 @@
                         <div class="col-sm-12 m-b-15">
                             <div class="radio m-b-15">
                                 <label>
-                                    <input data-ng-model="task.type" type="radio" value="collaborative_task" checked="checked">
+                                    <input data-ng-model="task.type" type="radio" value="collaborative_task">
                                     <i class="input-helper"></i>
                                     Collaborative Task
                                 </label>
@@ -150,21 +165,13 @@
                      <div class="row">
                          <div class="col-sm-12 m-b-15">
                              <p class="f-500 c-black m-b-15">Contributor/s</p>
-                             <div class="radio m-b-15">
+                             <div class="checkbox m-b-15 ng-scope">
                                  <label>
-                                     <input data-ng-model="task.userType" type="radio" value="specific" checked="checked">
-                                     <i class="input-helper"></i>
-                                     Add specific users to task
-                                 </label>
-                                 <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="task.contributorSelection" data-ng-disabled="task.userType=='all'" data-ng-options="user.userID as user.name for user in userList"></select>
-                             </div>
-                             <div class="radio m-b-15">
-                                 <label>
-                                     <input data-ng-model="task.userType" type="radio" value="all">
-                                     <i class="input-helper"></i>
+                                     <input type="checkbox" data-ng-model="task.userType"><i class="input-helper"></i>
                                      Add all users to task
                                  </label>
                              </div>
+                             <select chosen multiple data-placeholder="Select a User..." class="w-100" data-ng-model="task.contributorSelection" data-ng-disabled="task.userType=='all'" data-ng-options="user.userID as user.name for user in userList"></select>
                          </div>
                      </div>
                 </div>

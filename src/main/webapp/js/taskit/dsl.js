@@ -1,3 +1,5 @@
+var sliderCounter = 0;
+
 function configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory){
     $scope.tID=$stateParams.tID;
 
@@ -5,6 +7,9 @@ function configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory){
     TemplateFactory.show({tID: $scope.tID}).$promise.then(function(response){
         $scope.template=response;
         var identifier;
+        $scope.values = {};
+        $scope.model = {};
+        $scope.model.range = {};
         var body;
 
         $scope.title = "";
@@ -54,7 +59,7 @@ function configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory){
                 "'></div>";
                 break;
             case "checkbox":
-                taskElement.code="<br><div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
+                taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
                     xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()+
                     "' " +
                     (xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue=="checked"?"checked":"")+
@@ -73,10 +78,17 @@ function configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory){
                   "</a></div></div>";
                 break;
             case "slider":
-                $scope.values=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.split("|");
-                var length=$scope.values.length;
+                $scope.values[xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()]=xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("value")[0].firstChild.nodeValue.split("|");
+                var length=$scope.values[xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()].length;
+                var j = 0;
 
-                taskElement.code="<br><input type='range' min='0' max='" + (length-1) + "' ng-model='model.range' id='" + xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim() + "'><div>{{values[model.range]}}</div>";
+                $scope.values[xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()].forEach(function(value){
+                    if(value == xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getElementsByTagName("status")[0].firstChild.nodeValue.trim()) {
+                        $scope.model.range[xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim()] = j;
+                    }
+                    j++;
+                });
+                taskElement.code="<br><input type='range' min='0' max='" + (length-1) + "' ng-model='model.range[" + xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim() + "]'><div id='" + xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim() + "'>{{ values[" + xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim() + "][model.range[" + xmlDoc.getElementsByTagName("taskElements")[0].getElementsByTagName("taskElement")[i].getAttribute("id").trim() + "]]}}</div>";
                 break;
             default:
                 ErrorHandler.handle({status:"0", item:"XML does not conform to XSD. Wrong element type."});
@@ -109,9 +121,12 @@ function configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory){
     });
 }
 
-function showDSL(ErrorHandler,template){
+function showDSL(ErrorHandler,template,$scope){
     var identifier;
     var body;
+    $scope.model = {};
+    $scope.model.range = {};
+    $scope.values = {};
 
     //console.log("Template:")
     //console.log(template);
@@ -119,12 +134,12 @@ function showDSL(ErrorHandler,template){
         switch (taskElement.itemType.trim())
         {
         case "image":
-            taskElement.code="<br><div class='thumbnail noHeader'><img src='"+
+            taskElement.code="<br><div class='thumbnail borderless noHeader'><img src='"+
                 taskElement.link.trim()+
                 "'></div>";
             break;
         case "checkbox":
-            taskElement.code="<br><div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
+            taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
                 template.id + "["+taskElement.itemId +"]"+
                 "' " +
                 (taskElement.status.trim()=="checked"?"checked":"")+
@@ -145,15 +160,27 @@ function showDSL(ErrorHandler,template){
         case "slider":
             taskElement.values=[];
             taskElement.values=taskElement.value.trim().split("|");
+            $scope.values[sliderCounter] = taskElement.values;
             var length=taskElement.values.length;
+            var j = 0;
 
-            taskElement.code="<br><input type='range' min='0' max='" + (length-1) + "' ng-model='model.range' id='" + template.id + "["+taskElement.itemId +"]"+ + "'><div>{{values[model.range]}}</div>";
+            taskElement.values.forEach(function(value){
+                if(value == taskElement.status.trim()) {
+                    $scope.model.range[sliderCounter] = j;
+                }
+                j++;
+            });
+
+            taskElement.code="<br><input type='range' min='0' max='" + (length-1) + "' ng-model='model.range[" + sliderCounter + "]'>" +
+            "<div id='" + template.id + "[" + taskElement.itemId + "]'>{{values[" + sliderCounter + "][model.range[ " + sliderCounter + "]]}}</div>";
+            console.log( "taskElement.ItemId: " + taskElement.itemId + "   || taskElement.values[$scope.model.range[sliderCounter]]   " + taskElement.values[$scope.model.range[sliderCounter]]  + "   ||   $scope.model.range[sliderCounter] :   " + $scope.model.range[sliderCounter] + "   ||   SliderCounter: " + sliderCounter);
+            sliderCounter++;
             break;
         default:
             ErrorHandler.handle({status:"0", item:"XML does not conform to XSD. Wrong element type."});
             break;
         }
-        template.taskElements.push(taskElement);
+        //template.taskElements.push(taskElement);
     })
 
     //extract position of taskElements in body
