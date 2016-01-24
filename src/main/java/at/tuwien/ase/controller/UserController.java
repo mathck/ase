@@ -56,6 +56,7 @@ public class UserController {
         return userService.getByID(userID);
     }
 
+
     /**
      * This is a controller that collects all the users available on the database and returns them
      * as a linked list
