@@ -51,10 +51,10 @@ public class TestdataController {
 
         // create 10000 students
         List<User> students = new ArrayList<User>();
-        for(int i = 0; i < 10000; i++) {
-            User currentUser = new User("user" + _userCounter, "1234qwer");
+        for(int i = 0; i < 100; i++) {
+            User currentUser = new User("user" + _userCounter + "@mail.com", "1234qwer");
             currentUser.setFirstName("user");
-            currentUser.setLastName("" + _userCounter);
+            currentUser.setLastName("________" + _userCounter);
             currentUser.setAvatar("img/avatars/" + _userCounter % 30 + ".png");
 
             userService.writeUser(currentUser);
@@ -64,11 +64,11 @@ public class TestdataController {
 
         List<User> teachers = new ArrayList<User>();
         // create 1000 teachers
-        for(int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 10; i++) {
 
-            User currentUser = new User("user" + _userCounter, "1234qwer");
+            User currentUser = new User("user" + _userCounter + "@mail.com", "1234qwer");
             currentUser.setFirstName("user");
-            currentUser.setLastName("" + _userCounter);
+            currentUser.setLastName("________" + _userCounter);
             currentUser.setAvatar("img/avatars/" + _userCounter % 30 + ".png");
 
             userService.writeUser(currentUser);
@@ -77,7 +77,7 @@ public class TestdataController {
         }
 
         // create 1000 class projects for every teacher
-        for(int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 10; i++) {
             Project project = new Project(i+1, "Class " + (i+1), "Class project for class " + (i+1));
 
             // 5 tasks (homeworks) for every class
@@ -98,7 +98,7 @@ public class TestdataController {
             project.addUser(teachers.get(i).getUserID(), "ADMIN");
 
             // 100 students for every class
-            for(int k = i * 100; k < ((i * 100) + 100); k++) {
+            for(int k = i * 10; k < ((i * 10) + 10); k++) {
                 project.addUser(students.get(k).getUserID(), "CONTRIBUTOR");
             }
 
