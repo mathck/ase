@@ -682,7 +682,7 @@ materialAdmin
                 $scope.selectedProject.userList=[];
                 //get user information for all users of the current project
                 $scope.selectedProject.allUser.forEach(function(participant){
-                    UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                    UserFactory.get({uID: participant.user.trim()}).$promise.then(function(user){
                         user.role=participant.role.trim();
                         $scope.selectedProject.userList.push(user);
                     }, function(error){
@@ -1315,7 +1315,8 @@ materialAdmin
         $scope.createTemplate = function(){
             console.log(myCodeMirror.getValue());
             TemplateFactory.create({mode:"create"},{templateCategoryName: "default", templateCategoryDescription: "default category",
-            title: $scope.template.title.trim(), description: $scope.template.description.trim(), syntax: myCodeMirror.getValue()}).$promise.then(function(response){
+            title: $scope.template.title.trim(), description: $scope.template.description.trim(),
+            syntax: myCodeMirror.getValue(), user_mail:TokenService.username}).$promise.then(function(response){
                 growlService.growl("Template successfully created!");
                 $state.go("viewTemplates");
             }, function(error){
