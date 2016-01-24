@@ -124,9 +124,6 @@ function configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory){
 function showDSL(ErrorHandler,template,$scope){
     var identifier;
     var body;
-    $scope.model = {};
-    $scope.model.range = {};
-    $scope.values = {};
 
     //console.log("Template:")
     //console.log(template);
@@ -139,8 +136,8 @@ function showDSL(ErrorHandler,template,$scope){
                 "'></div>";
             break;
         case "checkbox":
-            taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' id='" +
-                template.id + "["+taskElement.itemId +"]"+
+            taskElement.code="<div class='checkbox m-b-15'> <label> <input type='checkbox' " + (template.status.trim() == 'open' ? '' : 'disabled') + " id='" +
+                template.id + "["+taskElement.id +"]"+
                 "' " +
                 (taskElement.status.trim()=="checked"?"checked":"")+
                 " value='" +
@@ -148,8 +145,8 @@ function showDSL(ErrorHandler,template,$scope){
                 "'><i class='input-helper'></i>" + taskElement.value.trim() + "</label></div>";
             break;
         case "textbox":
-            taskElement.code="<br><div class='row'><div class='col-sm-12'><div class='fg-line'><textarea class='form-control input-md description'' rows='4' cols='50' id='"+
-                template.id + "["+taskElement.itemId +"]"+
+            taskElement.code="<br><div class='row'><div class='col-sm-12'><div class='fg-line'><textarea" + (template.status.trim() == 'open' ? '' : 'disabled') + " class='form-control input-md description'' rows='4' cols='50' id='"+
+                template.id + "["+taskElement.id +"]"+
                 "'>" + taskElement.value.trim() + "</textarea></div></div></div>";
             break;
         case "file":
@@ -160,20 +157,22 @@ function showDSL(ErrorHandler,template,$scope){
         case "slider":
             taskElement.values=[];
             taskElement.values=taskElement.value.trim().split("|");
-            $scope.values[sliderCounter] = taskElement.values;
+            $scope.values[taskElement.id] = taskElement.values;
             var length=taskElement.values.length;
             var j = 0;
 
+            // sollte passen
             taskElement.values.forEach(function(value){
                 if(value == taskElement.status.trim()) {
-                    $scope.model.range[sliderCounter] = j;
+                    $scope.model.range[taskElement.id] = j;
                 }
                 j++;
             });
 
-            taskElement.code="<br><input type='range' min='0' max='" + (length-1) + "' ng-model='model.range[" + sliderCounter + "]'>" +
-            "<div id='" + template.id + "[" + taskElement.itemId + "]'>{{values[" + sliderCounter + "][model.range[ " + sliderCounter + "]]}}</div>";
-            console.log( "taskElement.ItemId: " + taskElement.itemId + "   || taskElement.values[$scope.model.range[sliderCounter]]   " + taskElement.values[$scope.model.range[sliderCounter]]  + "   ||   $scope.model.range[sliderCounter] :   " + $scope.model.range[sliderCounter] + "   ||   SliderCounter: " + sliderCounter);
+            taskElement.code="<br><input type='range'" + (template.status.trim() == 'open' ? '' : 'disabled') + " min='0' max='" + (length-1) + "' ng-model='model.range[" + taskElement.id + "]'>" +
+            "<input type='text' disabled class='form-control centerText' id='" + template.id + "[" + taskElement.id + "]' value='{{values[" + taskElement.id + "][model.range[" + taskElement.id + "]]}}'>";
+            //console.log( "taskElement.ItemId: " + taskElement.itemId + "   || taskElement.values[$scope.model.range[taskElement.id]]   " + taskElement.values[$scope.model.range[taskElement.id]]  + "   ||   $scope.model.range[taskElement.id] :   " + $scope.model.range[taskElement.id] + "   ||   taskElement.id: " + taskElement.id);
+            console.log("$scope.model.range[26] " + $scope.model.range[26] + "  |  $scope.values[taskElement.id] " + $scope.values[taskElement.id][1] + " | " + $scope.values[taskElement.id][$scope.model.range[taskElement.id ]] );
             sliderCounter++;
             break;
         default:

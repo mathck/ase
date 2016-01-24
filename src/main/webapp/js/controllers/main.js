@@ -1096,7 +1096,7 @@ materialAdmin
     //=================================================
 
     .controller('updateTaskCtrl', function ( $scope, $state, $stateParams, $timeout, growlService, TokenService, ErrorHandler,
-        TaskFactory, TaskUserFactory, TaskCommentFactory, IssuesFactory, TemplateFactory, ProjectFactory, UserFactory) {
+        TaskFactory, TaskUserFactory, TaskCommentFactory, IssuesFactory, TemplateFactory, ProjectFactory, UserFactory, SubtaskFactory) {
 
         //retrieve current project id and task id from the state params
         $scope.currentPID = $stateParams.pID;
@@ -1144,6 +1144,9 @@ materialAdmin
 
             //parse the DSL of all subtasks of the task
             $scope.task.parsedSubtaskList=[];
+            $scope.model = {};
+            $scope.model.range = {};
+            $scope.values = {};
             $scope.task.subtaskList.forEach(function(subtask){
                 $scope.MaxXp = $scope.MaxXp + subtask.xp;
                 $scope.userXp = $scope.userXp + subtask.xp * subtask.percentageReached;
@@ -1152,8 +1155,8 @@ materialAdmin
                 $scope.task.parsedSubtaskList.push(parsedTemplate);
             });
 
-            //console.log("Parsed Templates:");
-            //console.log($scope.task.parsedSubtaskList);
+            console.log("Parsed Templates:");
+            console.log($scope.task.parsedSubtaskList);
             }, function(error){
                 ErrorHandler.handle("Could not fetch task information from server.", error);
             });
@@ -1215,37 +1218,48 @@ materialAdmin
 
             $scope.task.parsedSubtaskList.forEach(function(subtask) {
                 if( subtask.id == subtaskID ) {
+                    var taskElementList = [];
+                    var jsonTaskElement = {};
+                    var jsonRequest = {};
+                    var subtaskTitle = "";
+                    var subtaskDescription = "";
+
+
                     subtask.taskElements.forEach(function(taskElement) {
 
-                        console.log(subtaskID + "[" + taskElement.itemId + "]");
+                        console.log(subtaskID + "[" + taskElement.id + "]");
                         //console.log($scope.task.parsedSubtaskList);
                         switch(taskElement.itemType.trim()){
 
                         case "checkbox":
-                            console.log(document.getElementById(subtaskID + "[" + taskElement.itemId + "]")).checked;
+                            if( document.getElementById(subtaskID + "[" + taskElement.id + "]").checked )
+                                jsonTaskElement = { id:taskElement.id, status:"checked", value:taskElement.value};
+                            else
+                                jsonTaskElement = { id:taskElement.id, status:"unchecked", value:taskElement.value};
                             break;
                         case "textbox":
-                            console.log(document.getElementById(subtaskID + "[" + taskElement.itemId + "]")).value;
+                            jsonTaskElement = { id:taskElement.id, value:document.getElementById(subtaskID + "[" + taskElement.id + "]").value, status:document.getElementById(subtaskID + "[" + taskElement.id + "]").value};
                             break;
-                        case "slider":break;
+                        case "slider":
+                            jsonTaskElement = { id:taskElement.id, status:document.getElementById(subtaskID + "[" + taskElement.id + "]").value, value:taskElement.value};
+                            break;
                         }
-
+                        taskElementList.push(jsonTaskElement);
                     });
+                    updateSubtaskRequest = {status:document.getElementById(subtask.id).value, taskElments:taskElementList};
 
-
+                    if(subtask.status == "closed")
+                        SubtaskFactory.update({sID:subtask.id},{status:"closed", title:subtask.title.trim(), description:subtask.description.trim(), xp:subtask.xp, taskElements:taskElementList}).$promise.then(function(response){
+                        }, function(error){
+                           ErrorHandler.handle("Could not update Subtask.", error);
+                        });
+                    else
+                        SubtaskFactory.update({sID:subtask.id}, {title:subtask.title.trim(), description:subtask.description.trim(), xp:subtask.xp, taskElements:taskElementList}).$promise.then(function(response){
+                        }, function(error){
+                           ErrorHandler.handle("Could not update Subtask.", error);
+                        });
                 }
             });
-
-
-
-
-
-
-
-
-
-
-
         };
     })
 

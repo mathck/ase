@@ -97,7 +97,7 @@
                                          {{comment.text.trim()}}
                                          <small class="ms-date"><i class="zmdi zmdi-time"></i> {{comment.creationDate}}</small>
                                      </div>
-                                     <div>data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteCommentFromTask(comment.id)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></div>
+                                     <div data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteCommentFromTask(comment.id)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></div>
                                  </div>
                              </div>
                              <div class="clearfix"></div>
@@ -153,7 +153,7 @@
                                  <div class="col-sm-12">
                                      <div class="fg-line fg-line-lg">
                                          <div class="select">
-                                             <select class="form-control" data-ng-model="subtask.status" ng-trim="true" required="Please select a state">
+                                             <select class="form-control" id="{{subtask.id}}" data-ng-model="subtask.status" ng-trim="true" required="Please select a state">
                                                 <option>open</option>
                                                 <option>closed</option>
                                              </select>
