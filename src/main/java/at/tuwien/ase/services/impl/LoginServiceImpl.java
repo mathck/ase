@@ -1,3 +1,4 @@
+/*
 package at.tuwien.ase.services.impl;
 import at.tuwien.ase.dao.LoginDAO;
 import at.tuwien.ase.dao.UserDAO;
@@ -15,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+*/
 /**
  * Created by DanielHofer on 16.11.2015.
- */
+ *//*
+
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -111,4 +114,4 @@ public class LoginServiceImpl implements LoginService {
     public boolean checkLogin(String token) throws Exception {
         return loginDAO.checkLoginValidity(token, tokenValidityInMins);
     }
-}
+}*/

@@ -97,6 +97,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/pagination", method = RequestMethod.GET, consumes = "application/json")
     @ResponseBody
+    @PreAuthorize("hasPermission(#userId, 'CHANGE_USER')")
     public LinkedList<User> relatedUser(@RequestParam("uID") String userId) throws Exception {
         return userService.getRelatedUser(userId);
     }
