@@ -511,24 +511,32 @@ materialAdmin
     .controller('createRewardCtrl', function (ProjectsFactory, UsersFactory, RewardFactory, RewardsCreatedByUserFactory, ErrorHandler,
         TokenService, $scope, $location, $window) {
 
-        RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
-            $scope.rewards=rewards;
-        }, function(error){
-            ErrorHandler.handle("Could not fetch rewards from server.", error);
-        });
+
+        updateRewards=function(){
+            RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+                $scope.rewards=rewards;
+            }, function(error){
+                ErrorHandler.handle("Could not fetch rewards from server.", error);
+            });
+        }
+
+        updateRewards();
 
         $scope.createReward=function(){
             RewardFactory.create({userMail: TokenService.username, name: $scope.newReward.name, description:$scope.newReward.description,
             xpbase:$scope.newReward.xp, imageLink:$scope.newReward.link}).$promise.then(function(rewards){
-                $scope.rewards=rewards;
+                updateRewards();
             }, function(error){
                 ErrorHandler.handle("Could not fetch rewards from server.", error);
             });
         };
 
-
         $scope.deleteReward=function(rewardID){
-            RewardFactory.delete({rID:rewardID});
+            RewardFactory.delete({rID:rewardID}).$promise.then(function(rewards){
+                updateRewards();
+            }, function(error){
+                ErrorHandler.handle("Could not delete reward from server.", error);
+            });
         }
     })
 
@@ -1296,15 +1304,23 @@ materialAdmin
         //console.log("Template creation started");
         $scope.minimalCode="<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<template>\n<identifier>\n<title>Smallest</title>\n<description>Sample</description>\n<estimatedWorkTime>60</estimatedWorkTime>\n<deadline>2016-03-03</deadline>\n<githook>???</githook>\n<comments>false</comments>\n</identifier>\n</template>";
 
+        var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("dslsyntax"),{
+            mode: "application/xml",
+            lineNumbers:true,
+            htmlMode:false,
+            value:$scope.minimalCode
+        });
+        //, mode:"create"
         $scope.template={};
         $scope.createTemplate = function(){
-            TemplateFactory.create({templateCategoryName: "default", templateCategoryDescription: "default category",
-                title: $scope.template.title.trim(), description: $scope.template.description.trim(), syntax: $scope.template.syntax.trim()}).$promise.then(function(response){
-                    growlService.growl("Template successfully created!");
-                    $state.go("viewTemplates");
-                }, function(error){
-                    ErrorHandler.handle(error);
-                });
+            console.log(myCodeMirror.getValue());
+            TemplateFactory.create({mode:"create"},{templateCategoryName: "default", templateCategoryDescription: "default category",
+            title: $scope.template.title.trim(), description: $scope.template.description.trim(), syntax: myCodeMirror.getValue()}).$promise.then(function(response){
+                growlService.growl("Template successfully created!");
+                $state.go("viewTemplates");
+            }, function(error){
+                ErrorHandler.handle("Could not save template.", error);
+            });
         }
 
     })
