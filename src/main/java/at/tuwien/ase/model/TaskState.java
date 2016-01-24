@@ -1,5 +1,8 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.zip.Inflater;
 
@@ -9,7 +12,11 @@ import java.util.zip.Inflater;
 public class TaskState {
 
     private Integer id;
+
+    @NotNull
+    @Size(min = 2)
     private String stateName;
+
     private Integer taskId;
 
     // Must have no-argument constructor

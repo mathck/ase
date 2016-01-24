@@ -1,5 +1,6 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Reward;
 
@@ -10,7 +11,7 @@ import java.util.LinkedList;
  */
 public interface RewardService {
 
-    JsonStringWrapper writeReward(Reward reward);
+    JsonStringWrapper writeReward(Reward reward) throws ValidationException;
 
     void deleteRewardByID(int rID);
 

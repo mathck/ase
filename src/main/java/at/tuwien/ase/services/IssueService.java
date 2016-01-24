@@ -1,5 +1,6 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
@@ -12,7 +13,7 @@ import java.util.LinkedList;
  */
 public interface IssueService {
 
-    JsonStringWrapper writeIssue(Issue issue, int pID, String uID);
+    JsonStringWrapper writeIssue(Issue issue, int pID, String uID) throws ValidationException;
 
     void deleteIssueByID(int iID);
 

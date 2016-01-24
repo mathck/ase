@@ -1,5 +1,7 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -8,13 +10,25 @@ import java.util.Date;
 public class Issue {
 
     private Integer id;
+
+    @NotNull
+    @Size(min = 5)
     private String title;
+
+    @NotNull
+    @Size(min = 5)
     private String description;
+
     private String taskType;
+
     private Date creationDate;
+
     private Date updateDate;
+
     private Integer projectId;
+
     private String userId;
+
     private User user; //creator of issue
 
     // Must have no-argument constructor

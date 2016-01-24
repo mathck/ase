@@ -15,6 +15,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+
 /**
  * Created by Daniel Hofer on 16.11.2015.
  */
@@ -30,6 +33,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private DslTemplateService dslTemplateService;
+
+    @Autowired
+    private Validator validator;
+
 
     private static final Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
@@ -56,8 +63,6 @@ public class TaskServiceImpl implements TaskService {
 
     public LinkedList<Integer> writeTask(int pID, Task task) throws Exception{
 
-        logger.debug("post new task");
-
         LinkedList<TaskElementJson> taskElementJsonList = new LinkedList<TaskElementJson>();
         LinkedList<TaskElementJson> taskElementJsonListForDbBatch = new LinkedList<TaskElementJson>();
         LinkedList<Subtask> subtaskList = new LinkedList<Subtask>();
@@ -70,6 +75,22 @@ public class TaskServiceImpl implements TaskService {
         int dslTempalteId;
         Subtask subtask;
         String uuID;
+
+        logger.debug("post new task");
+
+        //Validate task Json
+        Set<ConstraintViolation<Task>> constraintViolationsSubtask = validator.validate(task);
+        if (!constraintViolationsSubtask.isEmpty()){
+            Iterator<ConstraintViolation<Task>> flavoursIter = constraintViolationsSubtask.iterator();
+            String validationError = new String("");
+
+            while (flavoursIter.hasNext()){
+                ConstraintViolation<Task> violation =  flavoursIter.next();
+                validationError += violation.getPropertyPath()+": "+violation.getMessage()+"\n";
+            }
+
+            throw new ValidationException(validationError);
+        }
 
         if (task.getTaskStates() == null ||  task.getTaskStates().isEmpty()
                 || task.getSubtaskList() == null ||  task.getSubtaskList().isEmpty()
@@ -221,6 +242,20 @@ public class TaskServiceImpl implements TaskService {
         logger.debug("add comment to task with id="+tID);
 
         int id;
+
+        //Validate task Json
+        Set<ConstraintViolation<Comment>> constraintViolationsSubtask = validator.validate(comment);
+        if (!constraintViolationsSubtask.isEmpty()){
+            Iterator<ConstraintViolation<Comment>> flavoursIter = constraintViolationsSubtask.iterator();
+            String validationError = new String("");
+
+            while (flavoursIter.hasNext()){
+                ConstraintViolation<Comment> violation =  flavoursIter.next();
+                validationError += violation.getPropertyPath()+": "+violation.getMessage()+"\n";
+            }
+
+            throw new ValidationException(validationError);
+        }
 
         Task task = taskDAO.findByID(tID);
 

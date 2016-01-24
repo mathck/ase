@@ -1,5 +1,9 @@
 package at.tuwien.ase.model;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -9,21 +13,54 @@ import java.util.LinkedList;
 public class Task implements Cloneable{
 
     private Integer id;
+
+    @NotNull
+    @Size(min = 5)
     private String title;
+
+    @NotNull
+    @Size(min = 5)
     private String description;
+
     private String taskType;
+
+    @NotNull
     private String executionType; //single_task, collaborative_task
+
     private Date creationDate;
+
     private Date updateDate;
+
+    @NotNull
+    @Min(value = 0)
     private Integer projectId;
+
+    @NotNull
+    @Size(min = 2)
     private String userMail;
+
     private String status; //current status
+
     private User user;
+
+    @NotNull
     private boolean commentsAllowed;
 
+    @NotNull
+    @Size(min = 1, max = 10)
+    @Valid
     private LinkedList<Subtask> subtaskList;
+
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Valid
     private LinkedList<User> userList;
+
+    @NotNull
+    @Size(min = 1, max = 10)
+    @Valid
     private LinkedList<TaskState> taskStates;
+
     private LinkedList<Comment> commentList;
 
     // Must have no-argument constructor

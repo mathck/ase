@@ -1,5 +1,6 @@
 package at.tuwien.ase.services.impl;
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.dao.IssueDAO;
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.TaskDAO;
@@ -15,8 +16,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolation;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * Created by Daniel Hofer on 16.11.2015.
@@ -33,6 +37,9 @@ public class IssueServiceImpl implements IssueService {
 
     @Autowired
     private TaskService ts;
+
+    @Autowired
+    private javax.validation.Validator validator;
 
 
     public IssueServiceImpl() {
@@ -61,8 +68,22 @@ public class IssueServiceImpl implements IssueService {
 
     }
 
-    public JsonStringWrapper writeIssue(Issue issue, int pID, String uID) {
+    public JsonStringWrapper writeIssue(Issue issue, int pID, String uID) throws ValidationException{
         int id;
+
+        //Validate Json
+        Set<ConstraintViolation<Issue>> constraintViolationsSubtask = validator.validate(issue);
+        if (!constraintViolationsSubtask.isEmpty()){
+            Iterator<ConstraintViolation<Issue>> flavoursIter = constraintViolationsSubtask.iterator();
+            String validationError = new String("");
+
+            while (flavoursIter.hasNext()){
+                ConstraintViolation<Issue> violation =  flavoursIter.next();
+                validationError += violation.getPropertyPath()+": "+violation.getMessage()+"\n";
+            }
+
+            throw new ValidationException(validationError);
+        }
 
         logger.debug("post new issue");
 

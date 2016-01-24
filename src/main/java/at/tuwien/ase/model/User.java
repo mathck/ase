@@ -2,6 +2,8 @@ package at.tuwien.ase.model;
 
 import at.tuwien.ase.services.impl.PasswordEncryption;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 
 /**
@@ -13,6 +15,8 @@ import java.util.LinkedList;
  */
 public class User {
 
+    @NotNull
+    @Size(min = 2)
     private String userID;
     private String firstName;
     private String lastName;
