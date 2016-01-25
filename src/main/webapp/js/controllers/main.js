@@ -1113,9 +1113,6 @@ materialAdmin
         $scope.maxXp = 0;
         $scope.userXp = 0;
 
-        //console.log($scope.currentPID);
-        //console.log($scope.currentTID);
-
         updateTaskInformation=function(){
             //retrieve information from the project the current task is related to
             ProjectFactory.show({pID: $scope.currentPID, uID:TokenService.username}).$promise.then(function(response){
