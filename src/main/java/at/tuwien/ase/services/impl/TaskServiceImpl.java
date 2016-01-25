@@ -5,6 +5,7 @@ import java.util.*;
 import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.dao.SubtaskDAO;
 import at.tuwien.ase.dao.TaskDAO;
+import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.model.*;
 import at.tuwien.ase.model.javax.TaskElement;
 import at.tuwien.ase.model.javax.Template;
@@ -28,6 +29,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskDAO taskDAO;
+
+    @Autowired
+    private UserDAO userDAO;
 
     @Autowired
     private SubtaskDAO subtaskDAO;
@@ -115,7 +119,7 @@ public class TaskServiceImpl implements TaskService {
                     for (User u : task.getUserList()) {
 
                         t = (Task) task.clone();
-                        t.setTitle(u.getFirstName() + ": " + taskTitle);
+                        t.setTitle(taskTitle);
                         t.setStatus(t.getTaskStates().get(0).getStateName());
                         t.setCreationDate(new Date());
                         t.setUpdateDate(new Date());
