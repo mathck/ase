@@ -18,8 +18,6 @@ import java.util.LinkedList;
  */
 public class Project {
 
-    @NotNull
-    @Min(1)
     private int projectID;
     @NotNull
     @Size(min = 1, max = 50)
@@ -27,7 +25,6 @@ public class Project {
     @NotNull
     @Size(min = 0, max = 255)
     private String description;
-    @NotNull
     private Level level;
 
     /*
