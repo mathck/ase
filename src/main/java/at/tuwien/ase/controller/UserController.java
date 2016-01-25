@@ -1,16 +1,19 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.User;
 import at.tuwien.ase.services.UserService;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * The controller implementation for user management.
@@ -22,7 +25,8 @@ import java.util.LinkedList;
 @RestController
 public class UserController {
 
-    private static final Logger logger = LogManager.getLogger(UserController.class);
+    private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private Validator validator = factory.getValidator();
 
     @Autowired
     private UserService userService;
@@ -39,7 +43,12 @@ public class UserController {
     @RequestMapping(value = "/user/register", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public void createUser(@RequestBody User user) throws Exception {
-        userService.writeUser(user);
+        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+        if(constraintViolations.size() == 0) {
+            userService.writeUser(user);
+        } else {
+            throw new ValidationException("Data has failed validation test!");
+        }
     }
 
     /**
@@ -52,7 +61,6 @@ public class UserController {
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
     public User getUser(@RequestParam("uID") String userID) throws Exception {
-        logger.debug("get user with id " + userID);
         return userService.getByID(userID);
     }
 
@@ -78,7 +86,12 @@ public class UserController {
     @RequestMapping(value = "/user", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public void updateUser(@RequestParam("uID") String userID, @RequestBody User user) throws Exception {
-        userService.updateUser(userID, user);
+        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+        if(constraintViolations.size() == 0) {
+            userService.updateUser(userID, user);
+        } else {
+            throw new ValidationException("Data has failed validation test!");
+        }
     }
 
     /**

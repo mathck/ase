@@ -1,5 +1,9 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * A model class describing the user-project-role relation object. It contains a
  * string containing the role of the user in this particular project.
@@ -10,7 +14,11 @@ package at.tuwien.ase.model;
 public class UserRole {
 
     private int projectID;
+    @NotNull
+    @Size(min = 2)
     private String userID;
+    @NotNull
+    @Size(min = 7)
     private String role;
 
     public UserRole() {}

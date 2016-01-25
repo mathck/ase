@@ -15,13 +15,16 @@ import java.util.LinkedList;
  */
 public class User {
 
-    @NotNull
-    @Size(min = 2)
+    @Size(min = 5)
     private String userID;
+    @Size(min = 1)
     private String firstName;
+    @Size(min = 1)
     private String lastName;
+    @Size(min = 1)
     private String avatar;
     private Level level;
+
 
     private LinkedList<String> projectList = null;
 

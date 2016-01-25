@@ -1,6 +1,7 @@
 package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.UserRole;
@@ -10,7 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * The controller implementation for project management.
@@ -20,6 +26,9 @@ import java.util.LinkedList;
  */
 @RestController
 public class ProjectController {
+
+    private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private Validator validator = factory.getValidator();
 
     @Autowired
     private ProjectService projectService;
@@ -48,7 +57,12 @@ public class ProjectController {
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public JsonStringWrapper createProject(@RequestBody Project project) throws Exception {
-        return projectService.writeProject(project);
+        Set<ConstraintViolation<Project>> constraintViolations = validator.validate(project);
+        if(constraintViolations.size() == 0) {
+            return projectService.writeProject(project);
+        } else {
+            throw new ValidationException("Data has failed validation test!");
+        }
     }
 
     /**
@@ -59,7 +73,12 @@ public class ProjectController {
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public void updateProject(@RequestParam("pID") int pID, @RequestBody Project project) throws Exception {
-        projectService.updateProject(pID, project);
+        Set<ConstraintViolation<Project>> constraintViolations = validator.validate(project);
+        if(constraintViolations.size() == 0) {
+            projectService.updateProject(pID, project);
+        } else {
+            throw new ValidationException("Data has failed validation test!");
+        }
     }
 
     /**
@@ -92,7 +111,12 @@ public class ProjectController {
     @RequestMapping(value = "/workspace/projects/add", method = RequestMethod.PUT)
     @ResponseBody
     public void addUserToProject(@RequestBody UserRole user) throws Exception {
-        projectService.addUser(user.getProject(), user.getUser(), user.getRole());
+        Set<ConstraintViolation<UserRole>> constraintViolations = validator.validate(user);
+        if(constraintViolations.size() == 0) {
+            projectService.addUser(user.getProject(), user.getUser(), user.getRole());
+        } else {
+            throw new ValidationException("Data has failed validation test!");
+        }
     }
 
     /**
