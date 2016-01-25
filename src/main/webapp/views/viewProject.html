@@ -120,8 +120,8 @@
                         <div class="card floatEffect" data-ng-click="mactrl.sidebarStat($event)" data-ui-sref="viewTask({tID:task.id, pID: currentPID})">
                             <div class="card-header bgm-task">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="zmdi zmdi-file-text c-white"></i></span>
-                                    <img ng-src="{{task.userList[0].avatar}}" alt="Avatar of {{task.userList[0].firstName}} {{task.userList[0].lastName}}" height="20" width="20" data-ng-show="task.executionType=='single_task'"> <h2>{{task.title|limitTo:20}}{{task.title > 30 ? '...' : ''}}<small>{{task.status|limitTo:30}}</small></h2>
+                                    <span class="input-group-addon"><i data-ng-hide="task.executionType.trim()=='single_task'" class="zmdi zmdi-file-text c-white"></i><img ng-src="{{task.userList[0].avatar}}" alt="Avatar of {{task.userList[0].firstName}} {{task.userList[0].lastName}}" height="40" width="40" data-ng-show="task.executionType.trim()=='single_task'"></span>
+                                    <h2>{{task.title|limitTo:20}}{{task.title > 30 ? '...' : ''}}<small>{{task.status|limitTo:30}}</small></h2>
                                 </div>
                             </div>
                             <div class="card-body card-padding">
@@ -235,7 +235,7 @@
                         <div class="col-sm-12">
                             <div class="fg-line" data-ng-show="currentUserRole=='ADMIN'">
                                 <p class="f-500 c-black m-b-15">Reward/s</p>
-                                <select chosen multiple data-placeholder="Add a Reward..." class="w-100" data-ng-model="users.rewardPicker" data-ng-options="reward.rewardID as reward.title for reward in rewards | orderBy:'level'"></select>
+                                <select chosen multiple data-placeholder="Add a Reward..." class="w-100" data-ng-model="users.rewardPicker" data-ng-options="reward.id as reward.name for reward in rewardList | orderBy:'xpbase'"></select>
                             </div>
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
                                 <table class="table table-hover">
