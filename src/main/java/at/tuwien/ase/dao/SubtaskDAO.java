@@ -19,7 +19,8 @@ public interface SubtaskDAO {
      *
      * @param subtask  {@link Subtask} object for db insertion.
      * @return         Id of inserted {@link Subtask}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     int insertSubtask(final Subtask subtask) throws DataAccessException;
 
@@ -32,7 +33,8 @@ public interface SubtaskDAO {
      * @param subtaskList  {@link List} of {@link Subtask} for db insertion.
      * @param taskIds      {@link LinkedList} of {@link Task} Ids.
      * @param uuID         universally unique identifier.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void insertSubtaskBatch(final List<Subtask> subtaskList, final LinkedList<Integer> taskIds, final String uuID) throws DataAccessException;
 
@@ -41,7 +43,8 @@ public interface SubtaskDAO {
      * Remove {@link Subtask} from db by Id.
      *
      * @param tID  Id of {@link Subtask}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void removeSubtaskByID(int tID) throws DataAccessException;
 
@@ -51,7 +54,8 @@ public interface SubtaskDAO {
      *
      * @param tID   Id of {@link Subtask}.
      * @return      Selected {@link Subtask}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     Subtask findByID(int tID) throws DataAccessException;
 
@@ -62,7 +66,8 @@ public interface SubtaskDAO {
      * @param tID   Id of {@link TaskElementJson}
      * @param sID   Id of {@link Subtask}
      * @return      {@link TaskElementJson}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     TaskElementJson findTaskItemByID(int tID, int sID) throws DataAccessException;
 
@@ -71,7 +76,8 @@ public interface SubtaskDAO {
      * Get all {@link Subtask} from db
      *
      * @return {@link LinkedList} of {@link Subtask}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Subtask> loadAll() throws DataAccessException;
 
@@ -81,7 +87,8 @@ public interface SubtaskDAO {
      *
      * @param tID   {@link Task}
      * @return      {@link LinkedList} of {@link Subtask}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Subtask> loadAllByTask(int tID) throws DataAccessException;
 
@@ -91,7 +98,8 @@ public interface SubtaskDAO {
      *
      * @param pID   {@link Project}
      * @return      {@link LinkedList} of {@link Subtask}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Subtask> loadAllByProject(int pID) throws DataAccessException;
 
@@ -101,7 +109,8 @@ public interface SubtaskDAO {
      *
      * @param uID   {@link User}
      * @return      {@link LinkedList} of {@link Subtask}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Subtask> loadAllByUser(String uID) throws DataAccessException;
 
@@ -113,7 +122,8 @@ public interface SubtaskDAO {
      *
      * @param sID   Id of {@link Subtask}.
      * @return      {@link HashMap} where key is id of {@link TaskElementJson} and element is {@link TaskElementJson}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     HashMap<Integer, TaskElementJson> loadAllTaskItemsBySubtaskId(Integer sID) throws DataAccessException;
 
@@ -126,7 +136,8 @@ public interface SubtaskDAO {
      *
      * @param uuID  universally unique identifier.
      * @return      {@link HashMap} where key is id of {@link DslTemplate} and element is {@link LinkedList} of {@link Subtask}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     HashMap<Integer, LinkedList<Subtask>> loadSubtaskIdsByUuID(String uuID) throws DataAccessException;
 
@@ -136,7 +147,8 @@ public interface SubtaskDAO {
      *
      * @param taskItem    {@link TaskElementJson} object.
      * @param sID         Id of {@link Subtask}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void addTaskItemToSubtask(TaskElementJson taskItem, int sID) throws DataAccessException ;
 
@@ -146,7 +158,8 @@ public interface SubtaskDAO {
      * Each {@link TaskElementJson} has an id for {@link Subtask} set.
      *
      * @param taskElementJsonList   {@link List} of {@link TaskElementJson}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList) throws DataAccessException;
 
@@ -155,7 +168,8 @@ public interface SubtaskDAO {
      * Update {@link LinkedList} of {@link TaskElementJsonUpdate} in db.
      *
      * @param taskItemList   {@link LinkedList} of {@link TaskElementJsonUpdate} for db update.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void updateTaskItemBatch(final LinkedList<TaskElementJsonUpdate> taskItemList) throws DataAccessException;
 
@@ -166,7 +180,8 @@ public interface SubtaskDAO {
      * @param sID        Id of {@link Subtask}.
      * @param subtask    {@link Subtask} object
      * @return           Number of affected rows in db
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     int updateSubtaskStatusById(int sID, Subtask subtask) throws DataAccessException;
 
@@ -177,7 +192,8 @@ public interface SubtaskDAO {
      * @param sID        Id of {@link Subtask}.
      * @param subtask    {@link Subtask} object
      * @return           Number of affected rows in db
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     int updateSubtaskById(int sID, SubtaskUpdate subtask) throws DataAccessException;
 

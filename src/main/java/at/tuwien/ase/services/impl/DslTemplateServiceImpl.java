@@ -11,6 +11,7 @@ import at.tuwien.ase.services.DslTemplateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
@@ -98,7 +99,7 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
     }
 
-    public void deleteDslTemplateByID(int tID) {
+    public void deleteDslTemplateByID(int tID) throws DataAccessException{
         logger.debug("delete dsl template with id="+tID);
         dslTemplateDAO.removeDslTemplateByID(tID);
     }
@@ -127,17 +128,17 @@ public class DslTemplateServiceImpl implements DslTemplateService{
         dslTemplateDAO.alterDslTemplateByID(template, tID);
     }
 
-    public DslTemplate getByID(int tID) {
+    public DslTemplate getByID(int tID) throws DataAccessException{
         logger.debug("get dsl template with id="+tID);
         return dslTemplateDAO.findByID(tID);
     }
 
-    public LinkedList<DslTemplate> getAllDslTemplates() {
+    public LinkedList<DslTemplate> getAllDslTemplates() throws DataAccessException{
         logger.debug("get all dsl templates");
         return dslTemplateDAO.loadAll();
     }
 
-    public LinkedList<DslTemplate> getAllDslTemplatesByUser(String uID){
+    public LinkedList<DslTemplate> getAllDslTemplatesByUser(String uID) throws DataAccessException{
         logger.debug("get all dsl templates from user="+uID);
         return dslTemplateDAO.loadAllByUser(uID);
     }
@@ -171,11 +172,11 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
             //validate: on a git hook task no task elements may be defined
             if (template.getIdentifier().isGithook() == true && template.getTaskElements() != null && template.getTaskElements().getTaskElement().size() > 0) {
-                throw new ValidationException("No task elements allowed on a 'git hook' template");
+                throw new ValidationException("No task elements allowed on a git hook template");
             }
 
             //validate: on a non git hook task at least one task elements must be defined
-            if (template.getIdentifier().isGithook() == false && (template.getTaskElements() == null || template.getTaskElements().getTaskElement().size() == 0)) {
+            if (template.getIdentifier().isGithook() == false && (template.getTaskElements() == null && template.getTaskElements().getTaskElement().size() == 0)) {
                 throw new ValidationException("At least one task element must be defined on a 'non git hook' template");
             }
 
@@ -184,7 +185,7 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
                 taskElementList = template.getTaskElements().getTaskElement();
 
-                //validate taskElements in task body via regex
+                //validate taskElements via regex
                 LinkedList<Integer> taskElementsInTaskBodyList = new LinkedList<Integer>();
                 Matcher matcher = Pattern.compile(TASK_ITEM_REGEX).matcher(taskBody);
 
@@ -228,7 +229,7 @@ public class DslTemplateServiceImpl implements DslTemplateService{
 
                 }
 
-                //check for each task element in taskBody: Is it defined in task element list?
+                //check for each task element in taskBody: Is it defined under <taskElements> ?
                 boolean idFound;
 
                 for (int i = 0; i < taskElementsInTaskBodyList.size(); i++) {

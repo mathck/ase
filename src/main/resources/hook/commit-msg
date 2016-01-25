@@ -13,7 +13,6 @@ if grep "#[0-9]*" "$1"; then
 	read -sp "Please enter your password: " password
 	token=$(curl -H "Content-Type: application/json" -X GET $server'/api/user/login?email='$email'&password='$password)
 	token=$(echo $token | grep -o '\[[^"]*')
-	# Needed to set the link to API for closing subtask
-	# curl -H "Content-Type: application/json" -H "user-token: "$token
+	curl -H "Content-Type: application/json" -H "user-token: "$token -X PATCH $server"/workspace/subtasks/"$sID
 	exit 1
 fi

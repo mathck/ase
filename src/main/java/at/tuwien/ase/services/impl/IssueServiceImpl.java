@@ -14,6 +14,7 @@ import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
@@ -52,12 +53,12 @@ public class IssueServiceImpl implements IssueService {
 
     private static final Logger logger = LogManager.getLogger(IssueServiceImpl.class);
 
-    public Issue getByID(int iID) {
+    public Issue getByID(int iID)  throws DataAccessException{
         logger.debug("get issue with id="+iID);
         return issueDAO.findByID(iID);
     }
 
-    public LinkedList<Integer> updateIssueToTask(int iID, int pID, Task task) throws Exception {
+    public LinkedList<Integer> updateIssueToTask(int iID, int pID, Task task)  throws Exception {
         logger.debug("update issue with id="+iID+" to task");
 
         //remove issue
@@ -68,7 +69,7 @@ public class IssueServiceImpl implements IssueService {
 
     }
 
-    public JsonStringWrapper writeIssue(Issue issue, int pID, String uID) throws ValidationException{
+    public JsonStringWrapper writeIssue(Issue issue, int pID, String uID) throws ValidationException, DataAccessException{
         int id;
 
         //Validate Json
@@ -97,27 +98,27 @@ public class IssueServiceImpl implements IssueService {
         return new JsonStringWrapper(id);
     }
 
-    public void deleteIssueByID(int iID)  {
+    public void deleteIssueByID(int iID) throws DataAccessException {
         logger.debug("delete issue with id="+iID);
         issueDAO.removeIssueByID(iID);
     }
 
-    public LinkedList<Issue> getAllIssues() {
+    public LinkedList<Issue> getAllIssues() throws DataAccessException {
         logger.debug("get all issues");
         return issueDAO.loadAll();
     }
 
-    public LinkedList<Issue> getAllIssuesFromUser(String uID) {
+    public LinkedList<Issue> getAllIssuesFromUser(String uID) throws DataAccessException {
         logger.debug("get all issues from user " + uID);
         return issueDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Issue> getAllIssuesFromProject(int pID) {
+    public LinkedList<Issue> getAllIssuesFromProject(int pID) throws DataAccessException {
         logger.debug("get all issues from project " + pID);
         return issueDAO.loadAllByProject(pID);
     }
 
-    public LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID) {
+    public LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID) throws DataAccessException {
         logger.debug("get all issues from project " + pID + " and from user " + uID);
         return issueDAO.loadAllByProjectAndUser(pID, uID);
     }

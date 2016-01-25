@@ -7,6 +7,7 @@ import at.tuwien.ase.services.DslTemplateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -44,28 +45,28 @@ public class DslTemplateController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.GET)
     @ResponseBody
-    public DslTemplate getDslTemplateByID(@PathVariable("tID") int tID) {
+    public DslTemplate getDslTemplateByID(@PathVariable("tID") int tID) throws DataAccessException {
         return ts.getByID(tID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<DslTemplate> getAllDslTemplates() {
+    public LinkedList<DslTemplate> getAllDslTemplates() throws DataAccessException{
         return ts.getAllDslTemplates();
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/templates", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<DslTemplate> getAllDslTemplatesByUser(@PathVariable("uID") String uID) {
+    public LinkedList<DslTemplate> getAllDslTemplatesByUser(@PathVariable("uID") String uID) throws DataAccessException{
         return ts.getAllDslTemplatesByUser(uID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteDslTemplateByID(@PathVariable("tID") int tID)  {
+    public void deleteDslTemplateByID(@PathVariable("tID") int tID) throws DataAccessException{
         ts.deleteDslTemplateByID(tID);
     }
 
