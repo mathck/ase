@@ -65,7 +65,7 @@ public class AuthDAOImpl implements AuthDAO {
                 sqlQuery,
                 userID,
                 tID,
-                new String("MANAGER")
+                new String("ADMIN")
         );
         for (Map<String,Object> row : rows) {
             if (row.get("cnt") != null) {
@@ -129,7 +129,7 @@ public class AuthDAOImpl implements AuthDAO {
                 sqlQuery,
                 userID,
                 pID,
-                new String("MANAGER")
+                new String("ADMIN")
         );
         for (Map<String, Object> row : rows) {
             if (row.get("cnt") != null) {
