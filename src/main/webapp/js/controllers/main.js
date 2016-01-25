@@ -1002,7 +1002,7 @@ materialAdmin
 
             //get user information for all users of the current project
             $scope.selectedProject.allUser.forEach(function(participant){
-                UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                UserFactory.get({uID: participant.user.trim()}).$promise.then(function(user){
                     user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
                     user.userID={userID: user.userID.trim()};
                     $scope.userList.push(user);
@@ -1127,7 +1127,7 @@ materialAdmin
                 $scope.project.userList=[];
                 //get user information for all users of the current project
                 $scope.project.allUser.forEach(function(participant){
-                    UserFactory.get({uID: participant.user}).$promise.then(function(user){
+                    UserFactory.get({uID: participant.user.trim()}).$promise.then(function(user){
                         user.name=user.firstName + " " + user.lastName + " (" + user.userID + ")";
                         user.role=participant.role.trim();
                         $scope.project.userList.push(user);
