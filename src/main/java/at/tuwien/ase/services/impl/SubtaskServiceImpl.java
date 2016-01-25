@@ -48,7 +48,30 @@ public class SubtaskServiceImpl implements SubtaskService {
         subtaskDAO.removeSubtaskByID(sID);
     }
 
-    public void updateSubtask(int sID, SubtaskUpdate subtask) throws Exception {
+    public void closeSubtask(int sID)  throws ValidationException{
+
+        logger.debug("close subtask with id=" + sID);
+
+        Subtask dbSubtask;
+
+        //get subtask from db
+        dbSubtask =  subtaskDAO.findByID(sID);
+
+        if (dbSubtask != null) {
+
+            if (!dbSubtask.getGitHookAllowed()) {
+                throw new ValidationException("No close allowed on a 'non git hook' subtask");
+            }
+
+            dbSubtask.setStatus(new String("closed"));
+
+            subtaskDAO.updateSubtaskStatusById(sID, dbSubtask);
+
+        }
+
+    }
+
+    public void updateSubtask(int sID, SubtaskUpdate subtask) throws ValidationException  {
 
         logger.debug("update subtask with id=" + sID);
 
@@ -80,6 +103,10 @@ public class SubtaskServiceImpl implements SubtaskService {
         s = subtaskDAO.findByID(sID);
 
         if (s != null){
+
+            if (s.getGitHookAllowed()){
+                throw new ValidationException("No update allowed on a 'git hook' subtask");
+            }
 
             //get all taskElements for subtask
             taskElementMap = subtaskDAO.loadAllTaskItemsBySubtaskId(sID);

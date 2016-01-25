@@ -168,121 +168,135 @@ public class DslTemplateServiceImpl implements DslTemplateService{
             validate(dslTemplate.getSyntax());
 
             taskBody = convertTaskBodyToString(template.getTaskBody().getContent());
-            taskElementList = template.getTaskElements().getTaskElement();
 
-            //validate taskElements via regex
-            LinkedList<Integer> taskElementsInTaskBodyList = new LinkedList<Integer>();
-            Matcher matcher = Pattern.compile(TASK_ITEM_REGEX).matcher(taskBody);
-
-            while (matcher.find()) {
-                //get taskelement id
-                taskElementsInTaskBodyList.add(Integer.valueOf(taskBody.substring(matcher.start()+TASK_ITEM_STRING.length()+2, matcher.end()-1)));
+            //validate: on a git hook task no task elements may be defined
+            if (template.getIdentifier().isGithook() == true && template.getTaskElements() != null && template.getTaskElements().getTaskElement().size() > 0) {
+                throw new ValidationException("No task elements allowed on a 'git hook' template");
             }
 
-            //check for duplicate ids
-            boolean idDuplicate = false;
-            int currentId;
-            for (int i = 0; i < taskElementsInTaskBodyList.size(); i++){
-
-                currentId = taskElementsInTaskBodyList.get(i);
-
-                idDuplicate = false;
-                for (int j = i + 1; j < taskElementsInTaskBodyList.size(); j++){
-
-                    if (currentId == taskElementsInTaskBodyList.get(j)){
-                        idDuplicate = true;
-                    }
-
-                }
-
-                if (idDuplicate){
-                    throw new ValidationException("Duplicate task elements id found: "+currentId);
-                }
-
+            //validate: on a non git hook task at least one task elements must be defined
+            if (template.getIdentifier().isGithook() == false && (template.getTaskElements() == null || template.getTaskElements().getTaskElement().size() == 0)) {
+                throw new ValidationException("At least one task element must be defined on a 'non git hook' template");
             }
 
-            //compare count of task elements in body and in task element list
-            if (taskElementsInTaskBodyList.size() != taskElementList.size()){
+            //task element validation
+            if (template.getTaskElements() != null) {
 
-                if (taskElementsInTaskBodyList.size() < taskElementList.size()){
-                    throw new ValidationException("Not all defined task elements are used in task body");
+                taskElementList = template.getTaskElements().getTaskElement();
+
+                //validate taskElements in task body via regex
+                LinkedList<Integer> taskElementsInTaskBodyList = new LinkedList<Integer>();
+                Matcher matcher = Pattern.compile(TASK_ITEM_REGEX).matcher(taskBody);
+
+                while (matcher.find()) {
+                    //get taskelement id
+                    taskElementsInTaskBodyList.add(Integer.valueOf(taskBody.substring(matcher.start() + TASK_ITEM_STRING.length() + 2, matcher.end() - 1)));
                 }
 
-                if (taskElementsInTaskBodyList.size() > taskElementList.size()){
-                    throw new ValidationException("Not all task elements in task body are defined as task elements");
-                }
+                //check for duplicate ids
+                boolean idDuplicate = false;
+                int currentId;
+                for (int i = 0; i < taskElementsInTaskBodyList.size(); i++) {
 
-            }
+                    currentId = taskElementsInTaskBodyList.get(i);
 
-            //check for each task element in taskBody: Is it defined under <taskElements> ?
-            boolean idFound;
+                    idDuplicate = false;
+                    for (int j = i + 1; j < taskElementsInTaskBodyList.size(); j++) {
 
-            for (int i = 0; i < taskElementsInTaskBodyList.size(); i++){
-
-                idFound = false;
-                for (int j = 0; j < taskElementList.size(); j++){
-
-                    if (taskElementList.get(j).getId().intValue() == taskElementsInTaskBodyList.get(i)){
-                        idFound = true;
-                    }
-                }
-
-                //taskElement in taskBody not found under taskElements --> throw exception
-                if (!idFound){
-                    throw new ValidationException("taskElement "+taskElementsInTaskBodyList.get(i)+" in taskBody is not specified under taskElements");
-                }
-            }
-
-
-            TaskElement taskElement;
-            for (int i = 0; i < taskElementList.size(); i++) {
-
-                taskElement = taskElementList.get(i);
-
-                if (taskElement.getType().value().trim().equals("checkbox")) {
-                    if (!taskElement.getStatus().trim().toLowerCase().equals("checked") && !taskElement.getStatus().trim().toLowerCase().equals("unchecked")) {
-                        throw new ValidationException("Wrong status for taskItem with id " + taskElement.getId() + ". Allowed: checked or unchecked");
-                    }
-                }
-
-                if (taskElement.getType().value().trim().equals("slider")) {
-                    if (!taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getStatus().trim().toLowerCase())
-                            && !taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getStatus().trim().toLowerCase() + "|")
-                            && !taskElement.getValue().trim().toLowerCase().contains(taskElement.getStatus().trim().toLowerCase() + "|")
-                            ) {
-                        throw new ValidationException("Wrong status for taskItem with id " + taskElement.getId());
-                    }
-                }
-
-                //solution must be present
-                if (!taskElement.getType().value().toLowerCase().equals("image")
-                        && !taskElement.getType().value().trim().toLowerCase().equals("file")) {
-
-                    if (taskElement.getSolution() != null && taskElement.getSolution().length() > 1){
-
-                        if (taskElement.getType().value().trim().equals("checkbox")) {
-                            if (!taskElement.getSolution().trim().toLowerCase().equals("checked") && !taskElement.getSolution().trim().toLowerCase().equals("unchecked")) {
-                                throw new ValidationException("Wrong solution for taskItem with id " + taskElement.getId() + ". Allowed: checked or unchecked");
-                            }
+                        if (currentId == taskElementsInTaskBodyList.get(j)) {
+                            idDuplicate = true;
                         }
 
-                        if (taskElement.getType().value().trim().equals("slider")) {
-                            if (!taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getSolution().trim().toLowerCase())
-                                    && !taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getSolution().trim().toLowerCase() + "|")
-                                    && !taskElement.getValue().trim().toLowerCase().contains(taskElement.getSolution().trim().toLowerCase() + "|")
-                                    ) {
-                                throw new ValidationException("Wrong solution for taskItem with id " + taskElement.getId());
-                            }
-                        }
+                    }
 
-                    }else{
-                        throw new ValidationException("Solution must be present for task element: "+taskElement.getId());
+                    if (idDuplicate) {
+                        throw new ValidationException("Duplicate task elements id found: " + currentId);
                     }
 
                 }
 
-            }
+                //compare count of task elements in body and in task element list
+                if (taskElementsInTaskBodyList.size() != taskElementList.size()) {
 
+                    if (taskElementsInTaskBodyList.size() < taskElementList.size()) {
+                        throw new ValidationException("Not all defined task elements are used in task body");
+                    }
+
+                    if (taskElementsInTaskBodyList.size() > taskElementList.size()) {
+                        throw new ValidationException("Not all task elements in task body are defined as task elements");
+                    }
+
+                }
+
+                //check for each task element in taskBody: Is it defined in task element list?
+                boolean idFound;
+
+                for (int i = 0; i < taskElementsInTaskBodyList.size(); i++) {
+
+                    idFound = false;
+                    for (int j = 0; j < taskElementList.size(); j++) {
+
+                        if (taskElementList.get(j).getId().intValue() == taskElementsInTaskBodyList.get(i)) {
+                            idFound = true;
+                        }
+                    }
+
+                    //taskElement in taskBody not found under taskElements --> throw exception
+                    if (!idFound) {
+                        throw new ValidationException("taskElement " + taskElementsInTaskBodyList.get(i) + " in taskBody is not specified under taskElements");
+                    }
+                }
+
+
+                TaskElement taskElement;
+                for (int i = 0; i < taskElementList.size(); i++) {
+
+                    taskElement = taskElementList.get(i);
+
+                    if (taskElement.getType().value().trim().equals("checkbox")) {
+                        if (!taskElement.getStatus().trim().toLowerCase().equals("checked") && !taskElement.getStatus().trim().toLowerCase().equals("unchecked")) {
+                            throw new ValidationException("Wrong status for taskItem with id " + taskElement.getId() + ". Allowed: checked or unchecked");
+                        }
+                    }
+
+                    if (taskElement.getType().value().trim().equals("slider")) {
+                        if (!taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getStatus().trim().toLowerCase())
+                                && !taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getStatus().trim().toLowerCase() + "|")
+                                && !taskElement.getValue().trim().toLowerCase().contains(taskElement.getStatus().trim().toLowerCase() + "|")
+                                ) {
+                            throw new ValidationException("Wrong status for taskItem with id " + taskElement.getId());
+                        }
+                    }
+
+                    //solution must be present
+                    if (!taskElement.getType().value().toLowerCase().equals("image")
+                            && !taskElement.getType().value().trim().toLowerCase().equals("file")) {
+
+                        if (taskElement.getSolution() != null && taskElement.getSolution().length() > 1) {
+
+                            if (taskElement.getType().value().trim().equals("checkbox")) {
+                                if (!taskElement.getSolution().trim().toLowerCase().equals("checked") && !taskElement.getSolution().trim().toLowerCase().equals("unchecked")) {
+                                    throw new ValidationException("Wrong solution for taskItem with id " + taskElement.getId() + ". Allowed: checked or unchecked");
+                                }
+                            }
+
+                            if (taskElement.getType().value().trim().equals("slider")) {
+                                if (!taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getSolution().trim().toLowerCase())
+                                        && !taskElement.getValue().trim().toLowerCase().contains("|" + taskElement.getSolution().trim().toLowerCase() + "|")
+                                        && !taskElement.getValue().trim().toLowerCase().contains(taskElement.getSolution().trim().toLowerCase() + "|")
+                                        ) {
+                                    throw new ValidationException("Wrong solution for taskItem with id " + taskElement.getId());
+                                }
+                            }
+
+                        } else {
+                            throw new ValidationException("Solution must be present for task element: " + taskElement.getId());
+                        }
+
+                    }
+
+                }
+            }
 
             return template;
 

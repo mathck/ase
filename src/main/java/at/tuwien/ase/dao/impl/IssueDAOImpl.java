@@ -6,6 +6,7 @@ import at.tuwien.ase.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -39,22 +40,13 @@ public class IssueDAOImpl implements IssueDAO {
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public int insertIssue(final Issue issue) {
+    public int insertIssue(final Issue issue) throws DataAccessException {
 
         logger.debug("insert into db: issue with id=" + issue.getId());
 
         final String sqlQuery = "INSERT INTO TASK (TITLE, DESCRIPTION, TASK_TYPE, CREATION_DATE, UPDATE_DATE, PROJECT_ID, USER_MAIL)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            /*    this.jdbcTemplate.update(
-                        sqlQuery,
-                        issue.getTitle(),
-                        issue.getDescription(),
-                        this.taskType,
-                        issue.getCreationDate(),
-                        issue.getUpdateDate(),
-                        issue.getProjectId(),
-                        issue.getUserId());*/
 
         this.jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -77,7 +69,7 @@ public class IssueDAOImpl implements IssueDAO {
         return keyHolder.getKey().intValue();
     }
 
-    public void removeIssueByID(int iID) {
+    public void removeIssueByID(int iID) throws DataAccessException {
 
         logger.debug("delete from db: issue with id=" + iID);
 
@@ -92,7 +84,7 @@ public class IssueDAOImpl implements IssueDAO {
         );
     }
 
-    public Issue findByID(int issueId) {
+    public Issue findByID(int issueId) throws DataAccessException {
 
         logger.debug("retrieve from db: issue with id=" + issueId);
 
@@ -120,7 +112,7 @@ public class IssueDAOImpl implements IssueDAO {
 
     }
 
-    public LinkedList<Issue> loadAll() {
+    public LinkedList<Issue> loadAll() throws DataAccessException {
 
         logger.debug("retrieve from db: all issues");
 
@@ -138,7 +130,7 @@ public class IssueDAOImpl implements IssueDAO {
 
     }
 
-    public LinkedList<Issue> loadAllByProject(int pID) {
+    public LinkedList<Issue> loadAllByProject(int pID) throws DataAccessException {
 
         logger.debug("retrieve from db: all issues by project with id="+pID);
 
@@ -158,7 +150,7 @@ public class IssueDAOImpl implements IssueDAO {
 
     }
 
-    public LinkedList<Issue> loadAllByUser(String uID) {
+    public LinkedList<Issue> loadAllByUser(String uID) throws DataAccessException {
 
         logger.debug("retrieve from db: all issues by user with id="+uID);
 
@@ -177,7 +169,7 @@ public class IssueDAOImpl implements IssueDAO {
         return mapRows(rows);
     }
 
-    public LinkedList<Issue> loadAllByProjectAndUser(int pID, String uID) {
+    public LinkedList<Issue> loadAllByProjectAndUser(int pID, String uID) throws DataAccessException {
 
         logger.debug("retrieve from db: all issues from user with id="+uID+" and project with id="+pID);
 

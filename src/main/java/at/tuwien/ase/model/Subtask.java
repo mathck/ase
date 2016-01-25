@@ -1,7 +1,9 @@
 package at.tuwien.ase.model;
 
+import javax.validation.BootstrapConfiguration;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -24,6 +26,9 @@ public class Subtask implements Cloneable{
     private Date creationDate;
     private Date updateDate;
     private Integer percentageReached;
+
+    @Null
+    private Boolean gitHookAllowed;
 
     private LinkedList<TaskElementJson> taskElements;
 
@@ -147,6 +152,14 @@ public class Subtask implements Cloneable{
         this.percentageReached = percentageReached;
     }
 
+    public Boolean getGitHookAllowed() {
+        return gitHookAllowed;
+    }
+
+    public void setGitHookAllowed(Boolean gitHookAllowed) {
+        this.gitHookAllowed = gitHookAllowed;
+    }
+
     @Override
     public String toString() {
         return "Subtask{" +
@@ -161,6 +174,7 @@ public class Subtask implements Cloneable{
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +
                 ", percentageReached=" + percentageReached +
+                ", gitHookAllowed=" + gitHookAllowed +
                 ", taskElements=" + taskElements +
                 '}';
     }

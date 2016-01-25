@@ -18,7 +18,8 @@ public interface SubtaskService {
 
     void deleteSubtaskByID(int sID);
 
-    void updateSubtask(int sID, SubtaskUpdate subtask) throws Exception;
+    void updateSubtask(int sID, SubtaskUpdate subtask) throws ValidationException;
+    void closeSubtask(int sID)  throws ValidationException;
 
     Subtask getByID(int sID);
     LinkedList<Subtask> getAllSubtasks();

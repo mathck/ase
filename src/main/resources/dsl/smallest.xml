@@ -5,6 +5,11 @@
 		<description>Sample</description>
 		<estimatedWorkTime>60</estimatedWorkTime>	
 		<deadline>2016-03-03</deadline>
-		<githook>???</githook>
+		<githook>true</githook>
 	</identifier>
+
+	<taskBody>
+		<h1>Nice Subtask</h1>
+	</taskBody>
+
 </template>

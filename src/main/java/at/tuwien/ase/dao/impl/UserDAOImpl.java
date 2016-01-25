@@ -249,11 +249,12 @@ public class UserDAOImpl implements UserDAO {
     public LinkedList<User> getUserList(String search) throws EmptyResultDataAccessException {
         String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
                 "FROM taskit_user " +
-                "WHERE firstname LIKE ? " +
-                "OR lastname LIKE ? ";
+                "WHERE UPPER(firstname) LIKE UPPER(?) " +
+                "OR UPPER(lastname) LIKE UPPER(?) " +
+                "OR UPPER(mail) LIKE UPPER(?)";
         List<User> list = this.jdbcTemplate.query(
                 sqlQuery,
-                new String[]{"%"+search+"%", "%"+search+"%"},
+                new String[]{"%"+search+"%", "%"+search+"%", "%"+search+"%"},
                 new RowMapper<User>() {
                     public User mapRow(ResultSet resultSet, int i) throws SQLException {
                         User user = new User();

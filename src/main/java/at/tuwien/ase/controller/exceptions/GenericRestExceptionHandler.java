@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import at.tuwien.ase.model.JsonStringWrapper;
 import org.apache.logging.log4j.*;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +23,14 @@ public class GenericRestExceptionHandler {
     @ResponseBody
     public JsonStringWrapper handleGenericException(final Exception exception) {
         logException(exception);
-        return new JsonStringWrapper(exception.getMessage());
+        return new JsonStringWrapper("Unknown error occurred");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
     public JsonStringWrapper handleArgumentException(final IllegalArgumentException exception) {
-        logger.warn(exception.getMessage());
+        logException(exception);
         return new JsonStringWrapper(exception.getMessage());
     }
 
@@ -37,7 +38,7 @@ public class GenericRestExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     @ResponseBody
     public JsonStringWrapper handleValidationException(final ValidationException exception) {
-        logger.warn(exception.getMessage());
+        logException(exception);
         return new JsonStringWrapper(exception.getMessage());
     }
 
@@ -45,7 +46,15 @@ public class GenericRestExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseBody
     protected JsonStringWrapper handleEmptyResult(final EmptyResultDataAccessException exception) {
-        logger.warn("No entry available");
+        logException(exception);
+        return new JsonStringWrapper("No entry available");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseBody
+    protected JsonStringWrapper handleDataAccess(final DataAccessException exception) {
+        logException(exception);
         return new JsonStringWrapper("No entry available");
     }
 

@@ -44,28 +44,28 @@ public class DslTemplateController {
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.GET)
     @ResponseBody
-    public DslTemplate getDslTemplateByID(@PathVariable("tID") int tID) throws Exception {
+    public DslTemplate getDslTemplateByID(@PathVariable("tID") int tID) {
         return ts.getByID(tID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<DslTemplate> getAllDslTemplates() throws Exception {
+    public LinkedList<DslTemplate> getAllDslTemplates() {
         return ts.getAllDslTemplates();
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/users/{uID}/templates", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<DslTemplate> getAllDslTemplatesByUser(@PathVariable("uID") String uID) throws Exception {
+    public LinkedList<DslTemplate> getAllDslTemplatesByUser(@PathVariable("uID") String uID) {
         return ts.getAllDslTemplatesByUser(uID);
     }
 
     // @author Daniel Hofer
     @RequestMapping(value = "workspace/templates/{tID}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteDslTemplateByID(@PathVariable("tID") int tID)  throws Exception {
+    public void deleteDslTemplateByID(@PathVariable("tID") int tID)  {
         ts.deleteDslTemplateByID(tID);
     }
 

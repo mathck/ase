@@ -17,6 +17,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.builder.RequestSpecBuilder;
 import com.jayway.restassured.http.ContentType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,6 +103,144 @@ public class UserTests {
                 .then()
                 .statusCode(200).extract().body().jsonPath();
     }
+
+    @Test
+    public void GetAllUsersAllUsersHaveAllRequiredValues() {
+        // Arrange
+        ensrureUserExists();
+        String token = ensureLoggedIn();
+
+        // Act
+        JsonPath response = given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .header("user-token", token)
+                .when()
+                .get("/all")
+                .then()
+                .statusCode(200).extract().body().jsonPath();
+
+        ArrayList<HashMap<String, String>> resp = response.get();
+
+        // Assert
+        Assert.assertNotNull(resp);
+        for(HashMap<String, String> user : resp) {
+            Assert.assertNotNull(user);
+            Assert.assertNotNull(user.keySet().contains("projectList"));
+            Assert.assertNotNull(user.keySet().contains("firstName"));
+            Assert.assertNotNull(user.keySet().contains("lastName"));
+            Assert.assertNotNull(user.keySet().contains("password"));
+            Assert.assertNotNull(user.keySet().contains("salt"));
+            Assert.assertNotNull(user.keySet().contains("level"));
+            Assert.assertNotNull(user.keySet().contains("avatar"));
+            Assert.assertNotNull(user.keySet().contains("userID"));
+        }
+    }
+
+    @Test
+    public void GetSpecificUserMatchesResquiredOutput() {
+        // Arrange
+        ensrureUserExists();
+        String token = ensureLoggedIn();
+
+        // Act
+        JsonPath response = given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .header("user-token", token)
+                .param("uID", getSampleUser().getUserID())
+                .when()
+                .get("")
+                .then()
+                .statusCode(200).extract().body().jsonPath();
+
+        HashMap<String, String> resp = response.get();
+
+        // Assert
+        Assert.assertNotNull(resp);
+        Assert.assertEquals(resp.get("firstName").trim(), getSampleUser().getFirstName());
+        Assert.assertEquals(resp.get("lastName").trim(), getSampleUser().getLastName());
+        Assert.assertEquals(resp.get("avatar").trim(), getSampleUser().getAvatar());
+        Assert.assertEquals(resp.get("userID").trim(), getSampleUser().getUserID());
+    }
+
+    @Test
+    public void SearchFor1UserPaginated() {
+        // Arrange
+        ensrureUserExists();
+        String token = ensureLoggedIn();
+
+        // Act
+        JsonPath response = given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .header("user-token", token)
+                .param("string", "Test")
+                .when()
+                .get("/search")
+                .then()
+                .statusCode(200).extract().body().jsonPath();
+
+        ArrayList<HashMap<String, String>> resp = response.get();
+
+        // Assert
+        Assert.assertNotNull(resp);
+        Assert.assertEquals(1, resp.size());
+        Assert.assertEquals(getSampleUser().getUserID(), resp.get(0).get("userID").trim());
+    }
+
+    @Test
+    public void SearchFor1UserPaginatedIgnoreCase() {
+        // Arrange
+        ensrureUserExists();
+        String token = ensureLoggedIn();
+
+        // Act
+        JsonPath response = given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .header("user-token", token)
+                .param("string", "test")
+                .when()
+                .get("/search")
+                .then()
+                .statusCode(200).extract().body().jsonPath();
+
+        ArrayList<HashMap<String, String>> resp = response.get();
+
+        // Assert
+        Assert.assertNotNull(resp);
+        Assert.assertEquals(1, resp.size());
+        Assert.assertEquals(getSampleUser().getUserID(), resp.get(0).get("userID").trim());
+    }
+
+    @Test
+    public void SearchForManyUsersPaginatedIgnoreCase() {
+        // Arrange
+        ensrureUserExists();
+        String token = ensureLoggedIn();
+
+        // Act
+        JsonPath response = given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .header("user-token", token)
+                .param("string", "user")
+                .when()
+                .get("/search")
+                .then()
+                .statusCode(200).extract().body().jsonPath();
+
+        ArrayList<HashMap<String, String>> resp = response.get();
+
+        // Assert
+        Assert.assertNotNull(resp);
+        Assert.assertTrue(resp.size() > 1);
+    }
+
+    // update existing user
+    // get user for pagination
+    // search user
 
     @Test
     public void correctLogoutReturns200() {
