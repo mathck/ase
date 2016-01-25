@@ -53,7 +53,7 @@ public class UserController {
         if(constraintViolations.size() == 0) {
             userService.writeUser(user);
         } else {
-            throw new ValidationException("Data has failed validation test!");
+            throw new ValidationException(constraintViolations.toArray()[0].toString());
         }
     }
 
@@ -100,7 +100,7 @@ public class UserController {
         if(constraintViolations.size() == 0) {
             userService.updateUser(userID, user);
         } else {
-            throw new ValidationException("Data has failed validation test!");
+            throw new ValidationException(constraintViolations.toArray()[0].toString());
         }
     }
 

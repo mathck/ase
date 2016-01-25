@@ -105,6 +105,27 @@ public class UserTests {
     }
 
     @Test
+    public void DeleteUserIAmNotAllowed() {
+        // Arrange
+        ensrureUserExists();
+        ensrureSecondUserExists();
+        String token = ensureLoggedIn();
+
+        // Act + Assert
+        JsonPath response = given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .header("user-token", token)
+                .param("uID", getSampleUser2().getUserID())
+                .when()
+                .delete("")
+                .then()
+                .statusCode(400).extract().body().jsonPath();
+
+        Assert.assertNotNull(response);
+    }
+
+    @Test
     public void GetAllUsersAllUsersHaveAllRequiredValues() {
         // Arrange
         ensrureUserExists();
@@ -231,16 +252,22 @@ public class UserTests {
                 .then()
                 .statusCode(200).extract().body().jsonPath();
 
+        JsonPath response2 = given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .header("user-token", token)
+                .param("string", "UsEr")
+                .when()
+                .get("/search")
+                .then()
+                .statusCode(200).extract().body().jsonPath();
+
         ArrayList<HashMap<String, String>> resp = response.get();
+        ArrayList<HashMap<String, String>> resp2 = response2.get();
 
         // Assert
-        Assert.assertNotNull(resp);
-        Assert.assertTrue(resp.size() > 1);
+        Assert.assertEquals(resp, resp2);
     }
-
-    // update existing user
-    // get user for pagination
-    // search user
 
     @Test
     public void correctLogoutReturns200() {
@@ -287,6 +314,15 @@ public class UserTests {
         return user;
     }
 
+    private User getSampleUser2() {
+        User user = new User("seconduser@mail.com", PASSWORD);
+        user.setFirstName("Test");
+        user.setLastName("User");
+        user.setAvatar(";)");
+
+        return user;
+    }
+
     private static String PASSWORD = "1234qwer";
 
     private void ensureUserDeleted() {
@@ -312,6 +348,24 @@ public class UserTests {
         map.put("lastName", getSampleUser().getLastName());
         map.put("avatar", getSampleUser().getAvatar());
         map.put("userID", getSampleUser().getUserID());
+        map.put("password", PASSWORD);
+
+        // Act + Assert
+        given()
+                .spec(requestSpecBuilder.build())
+                .log().all()
+                .contentType(ContentType.JSON)
+                .body(map)
+                .when()
+                .post("/register");
+    }
+
+    private void ensrureSecondUserExists() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("firstName", getSampleUser2().getFirstName());
+        map.put("lastName", getSampleUser2().getLastName());
+        map.put("avatar", getSampleUser2().getAvatar());
+        map.put("userID", getSampleUser2().getUserID());
         map.put("password", PASSWORD);
 
         // Act + Assert

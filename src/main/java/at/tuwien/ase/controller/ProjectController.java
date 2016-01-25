@@ -76,7 +76,7 @@ public class ProjectController {
         if(constraintViolations.size() == 0) {
             return projectService.writeProject(project);
         } else {
-            throw new ValidationException("Data has failed validation test!");
+            throw new ValidationException(constraintViolations.toArray()[0].toString());
         }
     }
 
@@ -96,7 +96,7 @@ public class ProjectController {
         if(constraintViolations.size() == 0) {
             projectService.updateProject(pID, project);
         } else {
-            throw new ValidationException("Data has failed validation test!");
+            throw new ValidationException(constraintViolations.toArray()[0].toString());
         }
     }
 
@@ -141,7 +141,7 @@ public class ProjectController {
         if(constraintViolations.size() == 0) {
             projectService.addUser(user.getProject(), user.getUser(), user.getRole());
         } else {
-            throw new ValidationException("Data has failed validation test!");
+            throw new ValidationException(constraintViolations.toArray()[0].toString());
         }
     }
 
