@@ -609,6 +609,7 @@ materialAdmin
         //Get all created rewards for the current user
         RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
             $scope.rewardList=rewards;
+            console.log(rewards);
         }, function(error){
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
         });
@@ -625,7 +626,7 @@ materialAdmin
                     $timeout(function(){document.getElementById('projectDescription').focus();});
                 }
             else {
-                console.log($scope.users.userPickerContributor);
+                //console.log($scope.users.userPickerContributor);
                 ProjectFactory.create({title: $scope.project.title, description: $scope.project.description}).$promise.then(function(response){
                     $scope.pID=response.item;
 
@@ -765,6 +766,7 @@ materialAdmin
 
         //Get all created rewards for the current user
         RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+            console.log(rewards);
             $scope.rewardList=rewards;
         }, function(error){
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
