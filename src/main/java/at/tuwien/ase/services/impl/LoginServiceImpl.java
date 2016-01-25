@@ -111,4 +111,8 @@ public class LoginServiceImpl implements LoginService {
     public boolean checkLogin(String token) throws Exception {
         return loginDAO.checkLoginValidity(token, tokenValidityInMins);
     }
+
+    public String getUserIdByToken(String token) throws Exception {
+        return loginDAO.getUserIdByToken(token);
+    }
 }

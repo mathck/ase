@@ -19,4 +19,6 @@ public interface LoginService {
 
     boolean checkLogin(String token) throws Exception;
 
+    String getUserIdByToken(String token) throws Exception;
+
 }

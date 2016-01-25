@@ -3,6 +3,8 @@ package at.tuwien.ase.controller;
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.User;
+import at.tuwien.ase.security.PermissionEvaluator;
+import at.tuwien.ase.services.LoginService;
 import at.tuwien.ase.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private LoginService loginService;
+    @Autowired
+    private PermissionEvaluator permissionEvaluator;
 
     @Autowired
     private GenericRestExceptionHandler genericRestExceptionHandler;
@@ -85,7 +91,11 @@ public class UserController {
      */
     @RequestMapping(value = "/user", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
-    public void updateUser(@RequestParam("uID") String userID, @RequestBody User user) throws Exception {
+    public void updateUser(@RequestParam("uID") String userID, @RequestBody User user, @RequestHeader("user-token") String token)
+            throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),userID,"CHANGE_USER")) {
+            throw new ValidationException("Not allowed");
+        }
         Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
         if(constraintViolations.size() == 0) {
             userService.updateUser(userID, user);
@@ -101,13 +111,20 @@ public class UserController {
      */
     @RequestMapping(value = "/user", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteUser(@RequestParam("uID") String userID) {
+    public void deleteUser(@RequestParam("uID") String userID, @RequestHeader("user-token") String token) throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),userID,"CHANGE_USER")) {
+            throw new ValidationException("Not allowed");
+        }
         userService.deleteUser(userID);
     }
 
     @RequestMapping(value = "/user/pagination", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<User> relatedUser(@RequestParam("uID") String userId) throws Exception {
+    public LinkedList<User> relatedUser(@RequestParam("uID") String userId, @RequestHeader("user-token") String token)
+            throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),userId,"CHANGE_USER")) {
+            throw new ValidationException("Not allowed");
+        }
         return userService.getRelatedUser(userId);
     }
 

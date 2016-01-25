@@ -5,8 +5,12 @@ import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.UserRole;
+import at.tuwien.ase.security.PermissionEvaluator;
+import at.tuwien.ase.services.LoginService;
 import at.tuwien.ase.services.ProjectService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +36,12 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private LoginService loginService;
+    @Autowired
+    private PermissionEvaluator permissionEvaluator;
+
+    private static final Logger logger = LogManager.getLogger(ProjectController.class);
 
     @Autowired
     private GenericRestExceptionHandler genericRestExceptionHandler;
@@ -45,7 +55,12 @@ public class ProjectController {
      */
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.GET)
     @ResponseBody
-    public Project getProject(@RequestParam("pID") int pID, @RequestParam("uID") String uID) throws Exception {
+    public Project getProject(@RequestParam("pID") int pID, @RequestParam("uID") String uID, @RequestHeader("user-token") String token)
+            throws Exception {
+        logger.debug("token is: "+token);
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),pID,"VIEW_PROJECT")) {
+            throw new ValidationException("Not allowed");
+        }
         return projectService.getByID(pID, uID);
     }
 
@@ -72,7 +87,11 @@ public class ProjectController {
      */
     @RequestMapping(value = "/workspace/projects", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
-    public void updateProject(@RequestParam("pID") int pID, @RequestBody Project project) throws Exception {
+    public void updateProject(@RequestParam("pID") int pID, @RequestBody Project project, @RequestHeader("user-token") String token)
+            throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),pID,"CHANGE_PROJECT")) {
+            throw new ValidationException("Not allowed");
+        }
         Set<ConstraintViolation<Project>> constraintViolations = validator.validate(project);
         if(constraintViolations.size() == 0) {
             projectService.updateProject(pID, project);
@@ -89,7 +108,11 @@ public class ProjectController {
      */
     @RequestMapping(value = "/workspace/projects/user", method = RequestMethod.GET)
     @ResponseBody
-    public LinkedList<Project> getProjectsFromUser(@RequestParam("uID") String uID) throws EmptyResultDataAccessException {
+    public LinkedList<Project> getProjectsFromUser(@RequestParam("uID") String uID, @RequestHeader("user-token") String token)
+            throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),uID,"CHANGE_USER")) {
+            throw new ValidationException("Not allowed");
+        }
         return projectService.getAllProjectsFromUser(uID);
     }
 
@@ -110,7 +133,10 @@ public class ProjectController {
      */
     @RequestMapping(value = "/workspace/projects/add", method = RequestMethod.PUT)
     @ResponseBody
-    public void addUserToProject(@RequestBody UserRole user) throws Exception {
+    public void addUserToProject(@RequestBody UserRole user, @RequestHeader("user-token") String token) throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),user.getProject(),"CHANGE_PROJECT")) {
+            throw new ValidationException("Not allowed");
+        }
         Set<ConstraintViolation<UserRole>> constraintViolations = validator.validate(user);
         if(constraintViolations.size() == 0) {
             projectService.addUser(user.getProject(), user.getUser(), user.getRole());
@@ -126,7 +152,11 @@ public class ProjectController {
      */
     @RequestMapping(value = "/workspace/projects/remove/{pID}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void removeUserFromProject(@RequestParam("uID") String uID, @PathVariable("pID") int pID) {
+    public void removeUserFromProject(@RequestParam("uID") String uID, @PathVariable("pID") int pID, @RequestHeader("user-token") String token)
+            throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),pID,"CHANGE_PROJECT")) {
+            throw new ValidationException("Not allowed");
+        }
         projectService.removeUser(pID, uID);
     }
 
