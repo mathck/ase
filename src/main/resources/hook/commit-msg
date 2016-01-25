@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Git Hook for TaskIt platform.
+# Please change the server to the apropriate value.
+server='http://localhost:8080/taskit'
+
+# Testing if #sID is in the commit message (e.g. git commit -m "Finished subtask #12")
+if grep "#[0-9]*" "$1"; then
+	sID=$(grep -o "#[0-9]*" "$1" | grep -o "[0-9]*")
+	echo "Setting status to closed for subtask ID <"$sID">"
+	exec < /dev/tty
+	read -p "Please enter your e-Mail: " email
+	read -sp "Please enter your password: " password
+	token=$(curl -H "Content-Type: application/json" -X GET $server'/api/user/login?email='$email'&password='$password)
+	token=$(echo $token | grep -o '\[[^"]*')
+	# Needed to set the link to API for closing subtask
+	# curl -H "Content-Type: application/json" -H "user-token: "$token
+	exit 1
+fi
