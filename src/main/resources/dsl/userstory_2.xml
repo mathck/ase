@@ -6,7 +6,7 @@
 		<description>Using already saved DSL based Templates not originally provided by TaskIt</description>
 		<estimatedWorkTime>60</estimatedWorkTime>	
 		<deadline>2016-03-03</deadline>
-		<githook>???</githook>
+		<githook>false</githook>
 	</identifier>
 
 	<taskBody>
@@ -23,14 +23,16 @@
 
 	<taskElements>
 		<taskElement id="1">
-			<status></status>
-			<value>angry;nice</value>
+			<status>checkbox</status>
+			<value>angry</value>
+			<solution>checkbox</solution>
 			<link></link>
 			<type>checkbox</type> 
 		</taskElement>
 		<taskElement id="2">
 			<status></status>
 			<value>text ...</value>
+			<solution>text solution</solution>
 			<link></link>
 			<type>textbox</type> 
 		</taskElement>

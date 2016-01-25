@@ -318,6 +318,7 @@ public class TaskServiceImpl implements TaskService {
                 s.setDescription(template.getIdentifier().getDescription());
                 s.setStatus(new String("open"));
                 s.setXp(template.getIdentifier().getEstimatedWorkTime().intValue());
+                s.setGitHookAllowed(template.getIdentifier().isGithook());
                 s.setCreationDate(new Date());
                 s.setUpdateDate(new Date());
 

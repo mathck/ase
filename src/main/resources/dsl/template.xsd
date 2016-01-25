@@ -12,7 +12,7 @@
 							<xs:element type="xs:string" name="description" minOccurs="1" maxOccurs="1"/>
 							<xs:element type="xs:integer" name="estimatedWorkTime" minOccurs="1" maxOccurs="1"/>
 							<xs:element type="xs:date" name="deadline" minOccurs="0" maxOccurs="1"/>
-							<xs:element type="xs:string" name="githook" minOccurs="1" maxOccurs="1"/>
+							<xs:element type="xs:boolean" name="githook" minOccurs="1" maxOccurs="1"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>

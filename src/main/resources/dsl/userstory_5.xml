@@ -6,7 +6,7 @@
 		<description>In a class with 20 students and 1 teacher the teacher wants to assign homework to his students. Also he wants the students to be rewarded if they do their homework. In this case the class, lasting for 1 year, is one project. The participants are the students. The teacher assigns in the project view specific rewards when a student reaches a level. In this case, the teacher assigns one reward to level 4: Grade 4. For level 5 he applies the Grade 3, level 6 -> grade 2, level 7 -> grade 1.</description>
 		<estimatedWorkTime>60</estimatedWorkTime>	
 		<deadline>2016-03-03</deadline>
-		<githook>???</githook>
+		<githook>false</githook>
 	</identifier>
 
 	<taskBody>

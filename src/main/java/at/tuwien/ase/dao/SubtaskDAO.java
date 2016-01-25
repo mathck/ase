@@ -24,10 +24,11 @@ public interface SubtaskDAO {
     HashMap<Integer, TaskElementJson> loadAllTaskItemsBySubtaskId(Integer sID);
     HashMap<Integer, LinkedList<Subtask>> loadSubtaskIdsByUuID(String uuID);
 
-    void addTaskItemToSubtask(TaskElementJson taskItem, int sID) throws Exception;
-    void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList) throws Exception;
-    void updateTaskItemBatch(final LinkedList<TaskElementJsonUpdate> taskItemList) throws Exception;
+    void addTaskItemToSubtask(TaskElementJson taskItem, int sID) ;
+    void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList);
+    void updateTaskItemBatch(final LinkedList<TaskElementJsonUpdate> taskItemList);
+    int updateSubtaskStatusById(int sID, Subtask subtask);
 
-    int updateSubtaskById(int sID, SubtaskUpdate subtask) throws Exception;
+    int updateSubtaskById(int sID, SubtaskUpdate subtask);
 
 }

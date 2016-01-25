@@ -2,7 +2,7 @@
 // Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.8-b130911.1802 generiert 
 // Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2016.01.24 um 06:35:21 PM CET 
+// Generiert: 2016.01.25 um 05:20:23 PM CET 
 //
 
 
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  *                   &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;element name="estimatedWorkTime" type="{http://www.w3.org/2001/XMLSchema}integer"/>
  *                   &lt;element name="deadline" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
- *                   &lt;element name="githook" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                   &lt;element name="githook" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>

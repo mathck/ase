@@ -84,4 +84,11 @@ public class SubtaskController {
         ts.updateSubtask(sID, subtask);
     }
 
+    // @author Daniel Hofer
+    @RequestMapping(value = "workspace/subtasks/{sID}", method = RequestMethod.PATCH)
+    @ResponseBody
+    public void closeSubtask(@PathVariable("sID") int sID) throws Exception {
+        ts.closeSubtask(sID);
+    }
+
 }
