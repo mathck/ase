@@ -76,15 +76,64 @@ $(document).delegate('#textbox', 'keydown', function(e) {
                     </div>
                 </div>
             </div>
-
             <div class="block-header">
                 <ul class="actions">
+                    <li>
+                        <div class="col-sm-3">
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Preview Template" data-ng-click="previewTemplate()"><i class="zmdi zmdi-check"></i>Preview Template</button>
+                        </div>
+                    </li>
                     <li>
                         <div class="col-sm-3">
                             <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Create Template" data-ng-click="createTemplate()"><i class="zmdi zmdi-check"></i>Create Template</button>
                         </div>
                     </li>
                 </ul>
+            </div>
+            <div class="card">
+                <div class="card-body card-padding">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="fg-line">
+                                <span data-ng-show="error"> {{templateError}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-ng-show="showPreview" class="card">
+                <div class="card-body card-padding">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="c-black f-500 m-b-20 m-t-20">{{title}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {{description}}
+                        </div>
+                        <div class="col-sm-6">
+                            <p><span class="c-black f-500 m-b-20 m-t-20">Estimated Work Time: </span>{{estimatedWorkTime}}</p>
+                            <p><span class="c-black f-500 m-b-20 m-t-20">Deadline: </span>{{deadline}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{githook}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{comments}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3>Hier könnte auch unser Code stehen:</h3>
+                            <span dynamic="trustedTaskBody"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
