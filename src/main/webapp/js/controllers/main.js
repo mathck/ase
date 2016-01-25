@@ -295,7 +295,7 @@ materialAdmin
         //otherwise, show the user informetion of the uID provided
         }else{
             //Get Profile Information from User Service
-            UserFactory.get({uID: currentUID}).$promise.then(function(user){
+            UserFactory.get({uID: currentUID.trim()}).$promise.then(function(user){
                 $scope.avatar=user.avatar;
                 $scope.firstName=user.firstName;
                 $scope.lastName=user.lastName;
@@ -1301,6 +1301,9 @@ materialAdmin
         //console.log("Template creation started");
         $scope.minimalCode="<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<template>\n<identifier>\n<title>Smallest</title>\n<description>Sample</description>\n<estimatedWorkTime>60</estimatedWorkTime>\n<deadline>2016-03-03</deadline>\n<githook>???</githook>\n<comments>false</comments>\n</identifier>\n</template>";
 
+        $scope.error=false;
+        $scope.showPreview=false;
+
         var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("dslsyntax"),{
             mode: "application/xml",
             lineNumbers:true,
@@ -1321,6 +1324,22 @@ materialAdmin
             });
         }
 
+        $scope.previewTemplate = function(){
+            $scope.showPreview=false;
+            $scope.error=false;
+            TemplateFactory.create({mode:"validate"},{templateCategoryName: "default", templateCategoryDescription: "default category",
+            title: $scope.template.title.trim(), description: $scope.template.description.trim(),
+            syntax: myCodeMirror.getValue(), user_mail:TokenService.username}).$promise.then(function(response){
+                growlService.growl("Template successfully parsed!");
+                $scope.showPreview=true;
+                $scope.template.syntax=myCodeMirror.getValue();
+                configureDSL($scope, $scope.template, ErrorHandler, TemplateFactory);
+            }, function(error){
+                $scope.error=true;
+                $scope.templateError="Could not parse template: " + error.data.item;
+            });
+        }
+
     })
 
 
@@ -1332,16 +1351,16 @@ materialAdmin
         //console.log("Template overview started");
         $scope.templates={};
         TemplateFactory.query().$promise.then(function(response){
-                $scope.templates=response;
-                $scope.templates.forEach(function(template){
-                    template.title=template.title.trim();
-                    template.description=template.description.trim();
-                    template.creationDate=template.creationDate.trim();
-                })
-                //console.log($scope.templates);
-            }, function(error){
-                ErrorHandler.handle(error);
-            });
+            $scope.templates=response;
+            $scope.templates.forEach(function(template){
+                template.title=template.title.trim();
+                template.description=template.description.trim();
+                template.creationDate=template.creationDate.trim();
+            })
+            //console.log($scope.templates);
+        }, function(error){
+            ErrorHandler.handle("Could not retrieve templates.", error);
+        });
     })
 
 
@@ -1351,7 +1370,22 @@ materialAdmin
 
     .controller('viewTemplateCtrl', function ( $scope, $state, $stateParams, $compile, $sce, growlService, TokenService, ErrorHandler, TemplateFactory) {
 
-        configureDSL($scope, $stateParams, ErrorHandler, TemplateFactory);
+        $scope.tID=$stateParams.tID;
+
+        /*var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("dslsyntax"),{
+            mode: "application/xml",
+            lineNumbers:true,
+            htmlMode:false,
+            value:$scope.minimalCode
+        });*/
+
+        $scope.template={};
+        TemplateFactory.show({tID: $scope.tID}).$promise.then(function(response){
+            $scope.template=response;
+            configureDSL($scope, $scope.template, ErrorHandler, TemplateFactory);
+        }, function(error){
+            ErrorHandler.handle("Could not retrieve template.", error);
+        });
 
     })
 

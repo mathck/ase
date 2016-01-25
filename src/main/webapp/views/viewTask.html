@@ -91,13 +91,13 @@
                                          <img class="media-object" data-ui-sref="profile({uID: comment.user_mail})" src="img/profile-pics/4.jpg" alt="">
                                      </a>
                                  </div>
-                                 <div class="media-body" data-ui-sref="profile({uID: comment.user_mail})">
+                                 <div class="media-body">
                                      <div class="ms-item">
-                                         <h4 class="media-heading">{{comment.user_mail.trim()}}</h4>
+                                         <h4 class="media-heading" data-ui-sref="profile({uID: comment.user_mail})">{{comment.user_mail.trim()}}</h4>
                                          {{comment.text.trim()}}
                                          <small class="ms-date"><i class="zmdi zmdi-time"></i> {{comment.creationDate}}</small>
                                      </div>
-                                     <div data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteCommentFromTask(comment.id)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></div>
+                                     <div data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteComment(comment.id)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></div>
                                  </div>
                              </div>
                              <div class="clearfix"></div>
