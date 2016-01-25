@@ -39,6 +39,7 @@ public class GenericRestExceptionHandler {
     @ResponseBody
     public JsonStringWrapper handleValidationException(final ValidationException exception) {
         //logException(exception);
+        logger.warn(exception.getMessage());
         return new JsonStringWrapper(exception.getMessage());
     }
 
