@@ -766,7 +766,7 @@ materialAdmin
 
         //Get all created rewards for the current user
         RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
-            console.log(rewards);
+            //console.log(rewards);
             $scope.rewardList=rewards;
         }, function(error){
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
