@@ -63,28 +63,7 @@ public class UserServiceImpl implements UserService {
      * @param user The user object that is inserted.
      */
     public void writeUser(User user) {
-        // todo refac this, same ifs are in updateUser
-        if(user.getFirstName() != null && user.getFirstName().length() > 2) {
-            if(user.getLastName() != null && user.getLastName().length() > 2) {
-                if(user.getAvatar() != null && user.getAvatar().length() > 0) {
-                    if(user.getPassword() != null) {
-                        if(user.getUserID() != null && user.getUserID().length() > 5 && EmailValidator.getInstance().isValid(user.getUserID())) {
-                            userDAO.insertUser(user);
-                        } else {
-                            throw new IllegalArgumentException("User ID is not valid");
-                        }
-                    } else {
-                        throw new IllegalArgumentException("Password is not valid");
-                    }
-                } else {
-                    throw new IllegalArgumentException("Avatar is not valid");
-                }
-            } else {
-                throw new IllegalArgumentException("Last name is not valid: " + user.getLastName());
-            }
-        } else {
-            throw new IllegalArgumentException("First name is not valid: " + user.getFirstName());
-        }
+        userDAO.insertUser(user);
     }
 
     /**
@@ -162,36 +141,14 @@ public class UserServiceImpl implements UserService {
      */
     public void updateUser(String userID, User user)
             throws EmptyResultDataAccessException, IllegalArgumentException {
-        // todo refac this, same ifs are in writeUser
-        if(user.getFirstName() != null && user.getFirstName().length() > 2) {
-            if(user.getLastName() != null && user.getLastName().length() > 2) {
-                if(user.getAvatar() != null && user.getAvatar().length() > 0) {
-                    if(user.getPassword() != null) {
-                        if(user.getUserID() != null && user.getUserID().length() > 5 && EmailValidator.getInstance().isValid(user.getUserID())) {
-                            userDAO.updateUser(userID, user);
-                        } else {
-                            throw new IllegalArgumentException("User ID is not valid");
-                        }
-                    } else {
-                        throw new IllegalArgumentException("Password is not valid");
-                    }
-                } else {
-                    throw new IllegalArgumentException("Avatar is not valid");
-                }
-            } else {
-                throw new IllegalArgumentException("Last name is not valid");
-            }
-        } else {
-            throw new IllegalArgumentException("First name is not valid");
-        }
-        //userDAO.updateUser(userID, user); // todo TOM pls verify that this should not be here and remove it completely
+        userDAO.updateUser(userID, user);
     }
 
-    public LinkedList<User> getRelatedUser(String userId) {
+    public LinkedList<User> getRelatedUser(String userId) throws EmptyResultDataAccessException {
         return userDAO.getRelatedUser(userId);
     }
 
-    public LinkedList<User> getUserList(String search) {
+    public LinkedList<User> getUserList(String search) throws EmptyResultDataAccessException {
         return userDAO.getUserList(search);
     }
 

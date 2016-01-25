@@ -1,5 +1,9 @@
 package at.tuwien.ase.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by mathc_000 on 11-Dec-15.
  */
@@ -7,9 +11,16 @@ package at.tuwien.ase.model;
 public class Level {
 
     private String levelSource; // for what is the level computed?: Project, OverallUserLevel, ... ?
+    @NotNull
     private int currentXp;
+    @NotNull
+    @Min(1)
     private int currentLevel;
+    @NotNull
+    @Min(0)
+    @Max(100)
     private double xpBar; // 0 - 100
+    @NotNull
     private int nextLevel;
 
     public Level(String levelSource, int currentXp, int currentLevel, double xpBar, int nextLevel) {

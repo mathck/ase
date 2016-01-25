@@ -221,7 +221,7 @@ public class UserDAOImpl implements UserDAO {
         return new LinkedList<UserRole>(list);
     }
 
-    public LinkedList<User> getRelatedUser(String userId) {
+    public LinkedList<User> getRelatedUser(String userId) throws EmptyResultDataAccessException {
         String sqlQuery = "SELECT  u.mail, u.firstname, u.lastname, u.avatar_url " +
                 "FROM ( " +
                     "SELECT project_id " +
@@ -246,7 +246,7 @@ public class UserDAOImpl implements UserDAO {
         return new LinkedList<User>(list);
     }
 
-    public LinkedList<User> getUserList(String search) {
+    public LinkedList<User> getUserList(String search) throws EmptyResultDataAccessException {
         String sqlQuery = "SELECT mail, firstname, lastname, avatar_url " +
                 "FROM taskit_user " +
                 "WHERE firstname LIKE ? " +

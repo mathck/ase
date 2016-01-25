@@ -12,7 +12,7 @@ templateServices.factory('TemplateFactory', function ($resource) {
         },
         create: {
             method: 'POST',
-            params: {tID: '@tID'}
+            params: {mode: '@mode'}
         },
         update: {
             method: 'PUT',

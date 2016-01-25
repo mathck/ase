@@ -2,6 +2,9 @@ package at.tuwien.ase.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedList;
@@ -15,9 +18,16 @@ import java.util.LinkedList;
  */
 public class Project {
 
+    @NotNull
+    @Min(1)
     private int projectID;
+    @NotNull
+    @Size(min = 1, max = 50)
     private String title;
+    @NotNull
+    @Size(min = 0, max = 255)
     private String description;
+    @NotNull
     private Level level;
 
     /*
