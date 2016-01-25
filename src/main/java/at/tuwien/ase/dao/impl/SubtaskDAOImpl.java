@@ -10,6 +10,7 @@ import at.tuwien.ase.model.TaskElementJsonUpdate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -44,7 +45,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public int insertSubtask(final Subtask subtask) {
+    public int insertSubtask(final Subtask subtask)  throws DataAccessException {
 
         logger.debug("insert into db: subtask with id=" + subtask.getId());
 
@@ -75,7 +76,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public void insertSubtaskBatch(final List<Subtask> subtaskList, final LinkedList<Integer> taskIds, final String uuID){
+    public void insertSubtaskBatch(final List<Subtask> subtaskList, final LinkedList<Integer> taskIds, final String uuID) throws DataAccessException{
 
         logger.debug("insert into db: subtask list");
 
@@ -119,7 +120,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         });
     }
 
-    public void removeSubtaskByID(int tID) {
+    public void removeSubtaskByID(int tID)  throws DataAccessException{
 
         logger.debug("delete from db: subtask with id=" + tID);
 
@@ -133,7 +134,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         );
     }
 
-    public Subtask findByID(int tID) {
+    public Subtask findByID(int tID)  throws DataAccessException{
 
         logger.debug("retrieve from db: subtask with id=" + tID);
 
@@ -160,7 +161,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         return null;
     }
 
-    public TaskElementJson findTaskItemByID(int tID, int sID) {
+    public TaskElementJson findTaskItemByID(int tID, int sID)  throws DataAccessException{
 
         logger.debug("retrieve from db: task item with id=" + tID);
 
@@ -203,7 +204,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         return null;
     }
 
-    public HashMap<Integer, LinkedList<Subtask>> loadSubtaskIdsByUuID(String uuID) {
+    public HashMap<Integer, LinkedList<Subtask>> loadSubtaskIdsByUuID(String uuID)  throws DataAccessException{
 
         logger.debug("retrieve from db: all subtask ids by uuid");
 
@@ -250,7 +251,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public LinkedList<Subtask> loadAll() {
+    public LinkedList<Subtask> loadAll()  throws DataAccessException{
 
         logger.debug("retrieve from db: all subtasks");
 
@@ -269,7 +270,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public LinkedList<Subtask> loadAllByTask(int tID) {
+    public LinkedList<Subtask> loadAllByTask(int tID)  throws DataAccessException{
 
         logger.debug("retrieve from db: all subtasks by task with id="+tID);
 
@@ -290,7 +291,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public LinkedList<Subtask> loadAllByProject(int pID) {
+    public LinkedList<Subtask> loadAllByProject(int pID)  throws DataAccessException{
 
         logger.debug("retrieve from db: all subtasks by project with id="+pID);
 
@@ -310,7 +311,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         return mapRows(rows);
     }
 
-    public LinkedList<Subtask> loadAllByUser(String uID) {
+    public LinkedList<Subtask> loadAllByUser(String uID)  throws DataAccessException{
 
         logger.debug("retrieve from db: all subtasks by user with id="+uID);
 
@@ -331,7 +332,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public void addTaskItemToSubtask(TaskElementJson taskItem, int sID)  {
+    public void addTaskItemToSubtask(TaskElementJson taskItem, int sID)   throws DataAccessException{
 
         logger.debug("insert into db: add task item to subtask with id="+sID);
 
@@ -352,7 +353,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList){
+    public void addTaskItemToSubtaskBatch(final List<TaskElementJson> taskElementJsonList) throws DataAccessException{
 
         logger.debug("insert into db: add task item to subtask batch");
 
@@ -381,7 +382,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
 
     }
 
-    public int updateSubtaskById(int sID, SubtaskUpdate subtask)  {
+    public int updateSubtaskById(int sID, SubtaskUpdate subtask)  throws DataAccessException {
 
         logger.debug("update db: subtask with id="+sID);
 
@@ -401,7 +402,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         );
     }
 
-    public int updateSubtaskStatusById(int sID, Subtask subtask) {
+    public int updateSubtaskStatusById(int sID, Subtask subtask)  throws DataAccessException {
 
         logger.debug("update db: subtask with id="+sID);
 
@@ -416,7 +417,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         );
     }
 
-    public void updateTaskItemBatch(final LinkedList<TaskElementJsonUpdate> taskItemList)  {
+    public void updateTaskItemBatch(final LinkedList<TaskElementJsonUpdate> taskItemList)  throws DataAccessException {
 
         logger.debug("update db: task items batch ");
 
@@ -443,7 +444,7 @@ public class SubtaskDAOImpl implements SubtaskDAO {
         });
     }
 
-    public HashMap<Integer, TaskElementJson> loadAllTaskItemsBySubtaskId(Integer sID){
+    public HashMap<Integer, TaskElementJson> loadAllTaskItemsBySubtaskId(Integer sID) throws DataAccessException{
 
         logger.debug("retrieve from db: all task items from subtask with id=" + sID);
 

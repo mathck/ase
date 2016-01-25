@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -50,7 +51,7 @@ public class LoginDAOImpl implements LoginDAO{
 
     }*/
 
-    public void addUserToken(String email, String token, Date creationDate)  throws Exception {
+    public void addUserToken(String email, String token, Date creationDate) throws DataAccessException {
 
         logger.debug("update db: user token for user mail="+email);
 
@@ -63,7 +64,7 @@ public class LoginDAOImpl implements LoginDAO{
                 email);
     }
 
-    public void deleteUserToken(String email) throws Exception {
+    public void deleteUserToken(String email) throws DataAccessException {
 
         logger.debug("update db: remove user token for user mail="+email);
 
@@ -75,7 +76,7 @@ public class LoginDAOImpl implements LoginDAO{
 
     }
 
-    public boolean checkLoginValidity(String token, Integer tokenValidityInMins)  throws Exception {
+    public boolean checkLoginValidity(String token, Integer tokenValidityInMins)  throws DataAccessException {
 
         logger.debug("select from db: check login validity");
 
@@ -94,7 +95,7 @@ public class LoginDAOImpl implements LoginDAO{
 
     }
 
-    public int getCountLoginFailsWithinCooldown(String email, Integer loginCooldownInMins) throws Exception {
+    public int getCountLoginFailsWithinCooldown(String email, Integer loginCooldownInMins) throws DataAccessException {
 
         logger.debug("select from db: get count login fails within cooldown");
 
@@ -108,7 +109,7 @@ public class LoginDAOImpl implements LoginDAO{
         return countLoginFails;
     }
 
-    public void resetCurrentLoginFails(String email) throws Exception {
+    public void resetCurrentLoginFails(String email) throws DataAccessException {
 
         logger.debug("update db: reset login counter");
 
@@ -120,7 +121,7 @@ public class LoginDAOImpl implements LoginDAO{
                 email);
     }
 
-    public void incrementCurrentLoginFails(String email) throws Exception {
+    public void incrementCurrentLoginFails(String email) throws DataAccessException {
 
         logger.debug("update db: increment login counter");
 
@@ -131,7 +132,7 @@ public class LoginDAOImpl implements LoginDAO{
                 email);
     }
 
-    public void updateLastLoginAttempt(String email) throws Exception {
+    public void updateLastLoginAttempt(String email) throws DataAccessException {
 
         logger.debug("update db: update lastLoginAttempt");
 

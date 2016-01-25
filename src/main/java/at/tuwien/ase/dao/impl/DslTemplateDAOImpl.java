@@ -5,6 +5,7 @@ import at.tuwien.ase.model.DslTemplate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -38,7 +39,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
     }
 
 
-    public void insertDslTemplate(DslTemplate template) {
+    public void insertDslTemplate(DslTemplate template) throws DataAccessException {
 
         logger.debug("insert into db: dsl template with id=" + template.getId());
 
@@ -58,7 +59,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
         );
     }
 
-    public void removeDslTemplateByID(int tID) {
+    public void removeDslTemplateByID(int tID) throws DataAccessException {
 
         logger.debug("delete from db: dsl template with id=" + tID);
 
@@ -72,7 +73,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
         );
     }
 
-    public DslTemplate findByID(int tID) {
+    public DslTemplate findByID(int tID) throws DataAccessException {
 
         logger.debug("retrieve from db: dsl template with id=" + tID);
 
@@ -99,7 +100,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
                 });
     }
 
-    public LinkedList<DslTemplate> loadAll() {
+    public LinkedList<DslTemplate> loadAll() throws DataAccessException {
 
         logger.debug("retrieve from db: all dsl templates");
 
@@ -128,7 +129,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
         return templates;
     }
 
-    public LinkedList<DslTemplate> loadAllByUser(String uID) {
+    public LinkedList<DslTemplate> loadAllByUser(String uID) throws DataAccessException {
 
         logger.debug("retrieve from db: all dsl templates from user="+uID);
 
@@ -158,7 +159,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
         return templates;
     }
 
-    public void alterDslTemplateByID(DslTemplate template, int tID) {
+    public void alterDslTemplateByID(DslTemplate template, int tID) throws DataAccessException {
 
         logger.debug("update dsl template with id="+tID);
 
@@ -178,7 +179,7 @@ public class DslTemplateDAOImpl implements DslTemplateDAO {
 
     }
 
-    public int getNewID() {
+    public int getNewID() throws DataAccessException {
 
         Integer id = this.jdbcTemplate.queryForObject(
                 "SELECT nextval('seq_dsl_template_id')",

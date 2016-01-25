@@ -6,6 +6,7 @@ import at.tuwien.ase.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -45,7 +46,7 @@ public class TaskDAOImpl implements TaskDAO {
         taskType = new String("task");
     }
 
-    public void insertTask(int pID, Task task) {
+    public void insertTask(int pID, Task task) throws DataAccessException {
 
         logger.debug("insert into db: task with id=" + task.getId());
 
@@ -68,7 +69,7 @@ public class TaskDAOImpl implements TaskDAO {
         );
     }
 
-    public void insertTaskBatch(final int pID, final List<Task> taskList, final String uuID){
+    public void insertTaskBatch(final int pID, final List<Task> taskList, final String uuID) throws DataAccessException{
 
         logger.debug("insert into db: task list");
 
@@ -101,7 +102,7 @@ public class TaskDAOImpl implements TaskDAO {
         });
     }
 
-    public void removeTaskByID(int tID) {
+    public void removeTaskByID(int tID) throws DataAccessException {
 
         logger.debug("delete from db: task with id=" + tID);
 
@@ -116,7 +117,7 @@ public class TaskDAOImpl implements TaskDAO {
         );
     }
 
-    public Task findByID(int taskId) {
+    public Task findByID(int taskId) throws DataAccessException {
 
         logger.debug("retrieve from db: task with id=" + taskId);
 
@@ -147,7 +148,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public LinkedList<Integer> loadTaskIdsByUuID(String uuID) {
+    public LinkedList<Integer> loadTaskIdsByUuID(String uuID) throws DataAccessException {
 
         logger.debug("retrieve from db: all task ids by uuid");
 
@@ -173,7 +174,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public LinkedList<Task> loadAll() {
+    public LinkedList<Task> loadAll() throws DataAccessException {
 
         logger.debug("retrieve from db: all tasks");
 
@@ -196,7 +197,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public LinkedList<Task> loadAllByProject(int pID) {
+    public LinkedList<Task> loadAllByProject(int pID)  throws DataAccessException{
 
         logger.debug("retrieve from db: all tasks by project with id="+pID);
 
@@ -220,7 +221,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public LinkedList<Task> loadAllByUser(String uID) {
+    public LinkedList<Task> loadAllByUser(String uID)  throws DataAccessException{
 
         logger.debug("retrieve from db: all tasks by user with id="+uID);
 
@@ -245,7 +246,7 @@ public class TaskDAOImpl implements TaskDAO {
         return mapRows(rows);
     }
 
-    public LinkedList<Comment> loadAllCommentsByTask(int tID){
+    public LinkedList<Comment> loadAllCommentsByTask(int tID) throws DataAccessException{
 
         logger.debug("retrieve from db: all comments from tasks with id="+tID);
 
@@ -298,7 +299,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public LinkedList<User> loadAllUsersByTask(int tID){
+    public LinkedList<User> loadAllUsersByTask(int tID) throws DataAccessException{
 
         logger.debug("retrieve from db: all users from tasks with id="+tID);
 
@@ -335,7 +336,7 @@ public class TaskDAOImpl implements TaskDAO {
         return userList;
     }
 
-    public void addUserToTask(String uID, int tID) {
+    public void addUserToTask(String uID, int tID)  throws DataAccessException{
 
         logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);
 
@@ -350,7 +351,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public void addStateToTaskStates(TaskState state, int tID) {
+    public void addStateToTaskStates(TaskState state, int tID) throws DataAccessException{
 
         logger.debug("insert into db: add state ="+state.getStateName()+" to task with id="+tID);
 
@@ -364,7 +365,7 @@ public class TaskDAOImpl implements TaskDAO {
         );
     }
 
-    public void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Integer> taskIds) {
+    public void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Integer> taskIds) throws DataAccessException {
 
         logger.debug("insert into db: add states to task batch");
 
@@ -399,7 +400,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public LinkedList<Task> loadAllByProjectAndUser(int pID, String uID) {
+    public LinkedList<Task> loadAllByProjectAndUser(int pID, String uID)  throws DataAccessException{
 
         logger.debug("retrieve from db: all tasks from user with id="+uID+" and project with id="+pID);
 
@@ -425,7 +426,7 @@ public class TaskDAOImpl implements TaskDAO {
         return mapRows(rows);
     }
 
-    public void assignUserToTask(int tID, String uID) {
+    public void assignUserToTask(int tID, String uID)  throws DataAccessException{
 
         logger.debug("insert into db: add user with id="+uID+" to task with id="+tID);
 
@@ -439,7 +440,7 @@ public class TaskDAOImpl implements TaskDAO {
         );
     }
 
-    public void assignUserToTaskBatch(final List<User> userList, final Integer taskId){
+    public void assignUserToTaskBatch(final List<User> userList, final Integer taskId) throws DataAccessException{
 
         logger.debug("insert into db: add user to task batch");
 
@@ -462,7 +463,7 @@ public class TaskDAOImpl implements TaskDAO {
         });
     }
 
-    public void removeUserFromTask(int tID, String uID) {
+    public void removeUserFromTask(int tID, String uID)  throws DataAccessException{
 
         logger.debug("delete from db: remove user with id="+uID+" from task with id="+tID);
 
@@ -478,7 +479,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public void addCommentToTask(int tID, Comment comment) {
+    public void addCommentToTask(int tID, Comment comment)  throws DataAccessException{
 
         logger.debug("insert into db: add comment to task with id=" + tID);
 
@@ -496,7 +497,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     }
 
-    public void removeCommentFromTask(int tID, int cID) {
+    public void removeCommentFromTask(int tID, int cID)  throws DataAccessException{
 
         logger.debug("delete from db: remove comment with id="+cID+" from task with id="+tID);
 
@@ -511,7 +512,7 @@ public class TaskDAOImpl implements TaskDAO {
         );
     }
 
-    public int getNewIDForComments() {
+    public int getNewIDForComments()  throws DataAccessException{
 
         Integer id = this.jdbcTemplate.queryForObject(
                 "SELECT nextval('seq_comments_id')",
