@@ -8,12 +8,21 @@ server='http://localhost:8080/taskit'
 if grep "#[0-9]*" "$1"; then
 	sID=$(grep -o "#[0-9]*" "$1" | grep -o "[0-9]*")
 	echo "Setting status to closed for subtask ID <"$sID">"
-	exec < /dev/tty
-	read -p "Please enter your e-Mail: " email
-	read -sp "Please enter your password: " password
-	token=$(curl -H "Content-Type: application/json" -X GET $server'/api/user/login?email='$email'&password='$password)
+	first=0
+	while [[ -z "$token" ]]; do
+		if [[ $first -eq 1 ]]; then
+			echo "E-Mail or password wrong, try again!"
+		fi
+		exec < /dev/tty
+		read -p "Please enter your e-Mail: " email
+		read -sp "Please enter your password: " password
+		token=$(curl -H "Content-Type: application/json" -X GET $server'/api/user/login?email='$email'&password='$password)
+		echo $token
+		first=1
+	done
 	token=$(echo $token | grep -o '\[[^"]*')
-	# Needed to set the link to API for closing subtask
-	# curl -H "Content-Type: application/json" -H "user-token: "$token
+	echo "user-token: "$token
+	echo $server"/api/workspace/subtasks/"$sID
+	curl -H "Content-Type: application/json" -H "user-token: "$token -X PATCH $server"/api/workspace/subtasks/"$sID
 	exit 1
 fi

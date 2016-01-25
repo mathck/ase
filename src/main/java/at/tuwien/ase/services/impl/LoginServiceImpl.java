@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -104,11 +105,11 @@ public class LoginServiceImpl implements LoginService {
         return token;
     }
 
-    public void logout(String email) throws Exception {
+    public void logout(String email) throws DataAccessException {
         loginDAO.deleteUserToken(email);
     }
 
-    public boolean checkLogin(String token) throws Exception {
+    public boolean checkLogin(String token) throws DataAccessException {
         return loginDAO.checkLoginValidity(token, tokenValidityInMins);
     }
 
