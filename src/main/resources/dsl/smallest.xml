@@ -7,4 +7,9 @@
 		<deadline>2016-03-03</deadline>
 		<githook>true</githook>
 	</identifier>
+
+	<taskBody>
+		<h1>Nice Subtask</h1>
+	</taskBody>
+
 </template>

@@ -2,7 +2,7 @@
 // Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.8-b130911.1802 generiert 
 // Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2016.01.25 um 05:20:23 PM CET 
+// Generiert: 2016.01.25 um 06:32:47 PM CET 
 //
 
 
@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="taskBody" minOccurs="0">
+ *         &lt;element name="taskBody">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -100,6 +100,7 @@ public class Template {
 
     @XmlElement(required = true)
     protected Identifier identifier;
+    @XmlElement(required = true)
     protected TaskBody taskBody;
     protected TaskElements taskElements;
 

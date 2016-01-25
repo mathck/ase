@@ -16,7 +16,7 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="taskBody" minOccurs="0" maxOccurs="1">
+				<xs:element name="taskBody" minOccurs="1" maxOccurs="1">
 					<xs:complexType mixed="true">
 						<xs:choice maxOccurs="unbounded" minOccurs="0">
 							<xs:element type="xs:string" name="h1"/>

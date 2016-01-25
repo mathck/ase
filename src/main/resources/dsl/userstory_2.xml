@@ -23,9 +23,9 @@
 
 	<taskElements>
 		<taskElement id="1">
-			<status>checkbox</status>
+			<status>checked</status>
 			<value>angry</value>
-			<solution>checkbox</solution>
+			<solution>checked</solution>
 			<link></link>
 			<type>checkbox</type> 
 		</taskElement>
