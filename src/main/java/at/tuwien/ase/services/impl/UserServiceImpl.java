@@ -187,11 +187,11 @@ public class UserServiceImpl implements UserService {
         //userDAO.updateUser(userID, user); // todo TOM pls verify that this should not be here and remove it completely
     }
 
-    public LinkedList<User> getRelatedUser(String userId) {
+    public LinkedList<User> getRelatedUser(String userId) throws EmptyResultDataAccessException {
         return userDAO.getRelatedUser(userId);
     }
 
-    public LinkedList<User> getUserList(String search) {
+    public LinkedList<User> getUserList(String search) throws EmptyResultDataAccessException {
         return userDAO.getUserList(search);
     }
 
