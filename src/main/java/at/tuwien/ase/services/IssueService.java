@@ -4,6 +4,7 @@ import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.Issue;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Task;
+import org.springframework.dao.DataAccessException;
 
 import java.util.LinkedList;
 
@@ -13,18 +14,96 @@ import java.util.LinkedList;
  */
 public interface IssueService {
 
-    JsonStringWrapper writeIssue(Issue issue, int pID, String uID) throws ValidationException;
+    /**
+     *
+     *
+     *
+     * @param issue
+     * @param pID
+     * @param uID
+     * @return
+     * @throws ValidationException      if an validation
+     *                                  exception occurred
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
+     */
+    JsonStringWrapper writeIssue(Issue issue, int pID, String uID) throws ValidationException, DataAccessException;
 
-    void deleteIssueByID(int iID);
+    /**
+     *
+     *
+     *
+     * @param iID
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
+     */
+    void deleteIssueByID(int iID) throws DataAccessException;
 
-    Issue getByID(int iID);
-    LinkedList<Issue> getAllIssues();
-    LinkedList<Issue> getAllIssuesFromUser(String uID);
+    /**
+     *
+     *
+     *
+     * @param iID
+     * @return
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
+     */
+    Issue getByID(int iID) throws DataAccessException;
 
-    LinkedList<Issue> getAllIssuesFromProject(int pID);
+    /**
+     *
+     *
+     *
+     * @return
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
+     */
+    LinkedList<Issue> getAllIssues() throws DataAccessException;
 
-    LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID);
+    /**
+     *
+     *
+     *
+     * @param uID
+     * @return
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
+     */
+    LinkedList<Issue> getAllIssuesFromUser(String uID) throws DataAccessException;
 
+    /**
+     *
+     *
+     *
+     * @param pID
+     * @return
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
+     */
+    LinkedList<Issue> getAllIssuesFromProject(int pID) throws DataAccessException;
+
+    /**
+     *
+     *
+     *
+     * @param pID
+     * @param uID
+     * @return
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
+     */
+    LinkedList<Issue> getAllIssuesFromProjectAndUser(int pID, String uID) throws DataAccessException;
+
+    /**
+     *
+     *
+     *
+     * @param iID
+     * @param pID
+     * @param task
+     * @return
+     * @throws Exception      if an exception occurred
+     */
     LinkedList<Integer> updateIssueToTask(int iID, int pID, Task task) throws Exception;
 
 }

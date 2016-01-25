@@ -20,7 +20,8 @@ public interface TaskDAO {
      *
      * @param pID    Id of {@link at.tuwien.ase.model.Project}.
      * @param task   {@link Task} object.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void insertTask(int pID, Task task) throws DataAccessException;
 
@@ -33,7 +34,8 @@ public interface TaskDAO {
      * @param pID          Id of {@link at.tuwien.ase.model.Project}.
      * @param taskList     {@link List} of {@link Task} for db batch insert.
      * @param uuID         universally unique identifier.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void insertTaskBatch(final int pID, final List<Task> taskList, final String uuID) throws DataAccessException;
 
@@ -42,7 +44,8 @@ public interface TaskDAO {
      * Remove {@link Task} from db by id.
      *
      * @param tID   Id of {@link Task} to remove from task.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void removeTaskByID(int tID) throws DataAccessException;
 
@@ -52,7 +55,8 @@ public interface TaskDAO {
      *
      * @param tID   Id of {@link Task}.
      * @return      {@link Task} object.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     Task findByID(int tID) throws DataAccessException;
 
@@ -61,7 +65,8 @@ public interface TaskDAO {
      * Get all {@link Task} from db.
      *
      * @return {@link LinkedList} of {@link Task}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Task> loadAll() throws DataAccessException;
 
@@ -72,7 +77,8 @@ public interface TaskDAO {
      *
      * @param uuID    universally unique identifier.
      * @return        {@link LinkedList} of {@link Task} id's.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Integer> loadTaskIdsByUuID(String uuID) throws DataAccessException;
 
@@ -82,7 +88,8 @@ public interface TaskDAO {
      *
      * @param pID   Id of {@link at.tuwien.ase.model.Project}.
      * @return      {@link LinkedList} of {@link Task}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Task> loadAllByProject(int pID) throws DataAccessException;
 
@@ -92,7 +99,8 @@ public interface TaskDAO {
      *
      * @param uID   Id of {@link User}.
      * @return      {@link LinkedList} of {@link Task}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Task> loadAllByUser(String uID) throws DataAccessException;
 
@@ -102,7 +110,8 @@ public interface TaskDAO {
      *
      * @param tID     Id of  {@link Task}.
      * @return        {@link LinkedList} of {@link Comment}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Comment> loadAllCommentsByTask(int tID) throws DataAccessException;
 
@@ -112,7 +121,8 @@ public interface TaskDAO {
      *
      * @param tID     Id of  {@link Task}.
      * @return        {@link LinkedList} of {@link User}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<User> loadAllUsersByTask(int tID) throws DataAccessException;
 
@@ -122,7 +132,8 @@ public interface TaskDAO {
      *
      * @param uID  Id of {@link User}.
      * @param tID  Id of {@link Task}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void addUserToTask(String uID, int tID) throws DataAccessException;
 
@@ -134,7 +145,8 @@ public interface TaskDAO {
      *
      * @param taskStateList   {@link LinkedList} of @link TaskState}.
      * @param taskIds         {@link LinkedList} of {@link Task} id's.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void addStateToTaskStatesBatch(final List<TaskState> taskStateList, final LinkedList<Integer> taskIds) throws DataAccessException;
 
@@ -144,7 +156,8 @@ public interface TaskDAO {
      *
      * @param state    {@link TaskState} object.
      * @param tID      Id of {@link Task}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void addStateToTaskStates(TaskState state, int tID) throws DataAccessException;
 
@@ -157,7 +170,8 @@ public interface TaskDAO {
      * @param pID    Id of {@link at.tuwien.ase.model.Project}.
      * @param uID    Id of {@link User}.
      * @return       {@link LinkedList} of {@link Task}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<Task> loadAllByProjectAndUser(int pID, String uID) throws DataAccessException;
 
@@ -166,7 +180,8 @@ public interface TaskDAO {
      * Get new Id from db sequence for {@link Comment} insertion.
      *
      * @return Generated Id.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     int getNewIDForComments() throws DataAccessException;
 
@@ -176,7 +191,8 @@ public interface TaskDAO {
      *
      * @param tID  Id of {@link Task}.
      * @param uID  Id of {@link User}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void assignUserToTask(int tID, String uID) throws DataAccessException;
 
@@ -186,7 +202,8 @@ public interface TaskDAO {
      *
      * @param userList  {@link List} of {@link User}.
      * @param taskId    Id of {@link Task}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void assignUserToTaskBatch(final List<User> userList, final Integer taskId) throws DataAccessException;
 
@@ -196,7 +213,8 @@ public interface TaskDAO {
      *
      * @param tID    Id of {@link Task}.
      * @param uID    Id of {@link User}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void removeUserFromTask(int tID, String uID) throws DataAccessException;
 
@@ -206,7 +224,8 @@ public interface TaskDAO {
      *
      * @param tID         Id of {@link Task}.
      * @param comment     {@link Comment} object.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void addCommentToTask(int tID, Comment comment) throws DataAccessException;
 
@@ -216,7 +235,8 @@ public interface TaskDAO {
      *
      * @param tID         Id of {@link Task}.
      * @param cID         Id of {@link Comment}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void removeCommentFromTask(int tID, int cID) throws DataAccessException;
 
