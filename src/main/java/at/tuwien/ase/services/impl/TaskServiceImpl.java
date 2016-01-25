@@ -114,7 +114,7 @@ public class TaskServiceImpl implements TaskService {
                     for (User u : task.getUserList()) {
 
                         t = (Task) task.clone();
-                        t.setTitle(u.getFirstName() + ": " + taskTitle);
+                        t.setTitle(taskTitle);
                         t.setStatus(t.getTaskStates().get(0).getStateName());
                         t.setCreationDate(new Date());
                         t.setUpdateDate(new Date());
