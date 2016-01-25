@@ -14,10 +14,10 @@ public interface RewardService {
 
     /**
      *
+     * Write {@link Reward} to db.
      *
-     *
-     * @param reward
-     * @return
+     * @param reward   {@link Reward} object.
+     * @return         Id of {@link Reward} wrapped in {@link JsonStringWrapper}
      * @throws ValidationException      if an validation
      *                                  exception occurred
      * @throws DataAccessException      if an data access
@@ -27,9 +27,9 @@ public interface RewardService {
 
     /**
      *
+     * Delete {@link Reward} by Id.
      *
-     *
-     * @param rID
+     * @param rID  Id of {@link Reward}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -37,10 +37,10 @@ public interface RewardService {
 
     /**
      *
+     * Get {@link Reward} by Id.
      *
-     *
-     * @param rID
-     * @return
+     * @param rID  Id of {@link Reward}.
+     * @return     {@link Reward} object.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -48,9 +48,9 @@ public interface RewardService {
 
     /**
      *
+     * Get all {@link Reward} from db.
      *
-     *
-     * @return
+     * @return {@link LinkedList} of {@link Reward}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -58,10 +58,10 @@ public interface RewardService {
 
     /**
      *
+     * Get {@link LinkedList} of {@link Reward} by specific {@link at.tuwien.ase.model.User}.
      *
-     *
-     * @param uID
-     * @return
+     * @param uID    Id of {@link at.tuwien.ase.model.User}.
+     * @return       {@link LinkedList} of {@link Reward}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -69,10 +69,10 @@ public interface RewardService {
 
     /**
      *
+     * Get {@link LinkedList} of {@link Reward} awarded to specific {@link at.tuwien.ase.model.User}.
      *
-     *
-     * @param uID
-     * @return
+     * @param uID    Id of {@link at.tuwien.ase.model.User}.
+     * @return       {@link LinkedList} of {@link Reward}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -80,10 +80,10 @@ public interface RewardService {
 
     /**
      *
+     * Get {@link LinkedList} of {@link Reward} from specific {@link at.tuwien.ase.model.Project}.
      *
-     *
-     * @param pID
-     * @return
+     * @param pID    Id of {@link at.tuwien.ase.model.Project}.
+     * @return       {@link LinkedList} of {@link Reward}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -91,11 +91,12 @@ public interface RewardService {
 
     /**
      *
+     * Get {@link LinkedList} of {@link Reward} from specific {@link at.tuwien.ase.model.Project}
+     * and {@link at.tuwien.ase.model.User}.
      *
-     *
-     * @param pID
-     * @param uID
-     * @return
+     * @param pID    Id of {@link at.tuwien.ase.model.Project}.
+     * @param uID    Id of {@link at.tuwien.ase.model.User}.
+     * @return       {@link LinkedList} of {@link Reward}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -103,11 +104,11 @@ public interface RewardService {
 
     /**
      *
+     * Assign {@link Reward} to {@link at.tuwien.ase.model.User}.
      *
-     *
-     * @param pID
-     * @param uID
-     * @param rID
+     * @param pID    Id of {@link at.tuwien.ase.model.Project}.
+     * @param uID    Id of {@link at.tuwien.ase.model.User}.
+     * @param rID    Id of {@link Reward}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
