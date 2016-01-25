@@ -6,6 +6,7 @@ import at.tuwien.ase.model.Reward;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -35,7 +36,7 @@ public class RewardDAOImpl implements RewardDAO{
         this.keyHolder = new GeneratedKeyHolder();
     }
 
-    public void insertReward(Reward reward) {
+    public void insertReward(Reward reward) throws DataAccessException {
 
         logger.debug("insert into db: reward with id=" + reward.getId());
 
@@ -54,7 +55,7 @@ public class RewardDAOImpl implements RewardDAO{
 
     }
 
-    public void removeRewardByID(int rID) {
+    public void removeRewardByID(int rID) throws DataAccessException {
 
         logger.debug("delete from db: reward with id=" + rID);
 
@@ -68,7 +69,7 @@ public class RewardDAOImpl implements RewardDAO{
         );
     }
 
-    public Reward findByID(int rID) {
+    public Reward findByID(int rID) throws DataAccessException {
 
         logger.debug("retrieve from db: reward with id=" + rID);
 
@@ -95,7 +96,7 @@ public class RewardDAOImpl implements RewardDAO{
 
     }
 
-    public LinkedList<Reward> loadAll() {
+    public LinkedList<Reward> loadAll() throws DataAccessException {
 
         logger.debug("retrieve from db: all rewards");
 
@@ -109,7 +110,7 @@ public class RewardDAOImpl implements RewardDAO{
 
     }
 
-    public LinkedList<Reward> loadAllRewardsCreatedByUser(String uID) {
+    public LinkedList<Reward> loadAllRewardsCreatedByUser(String uID) throws DataAccessException {
 
         logger.debug("retrieve from db: all rewards by user with id="+uID);
 
@@ -126,7 +127,7 @@ public class RewardDAOImpl implements RewardDAO{
 
     }
 
-    public LinkedList<Reward> loadAllRewardsAwardedToUser(String uID) {
+    public LinkedList<Reward> loadAllRewardsAwardedToUser(String uID) throws DataAccessException {
 
         logger.debug("retrieve from db: all rewards awarded to user with id="+uID);
 
@@ -142,7 +143,7 @@ public class RewardDAOImpl implements RewardDAO{
         return mapRows(rows);
     }
 
-    public LinkedList<Reward> loadAllByProject(int pID) {
+    public LinkedList<Reward> loadAllByProject(int pID) throws DataAccessException {
 
         logger.debug("retrieve from db: all rewards by project with id="+pID);
 
@@ -158,7 +159,7 @@ public class RewardDAOImpl implements RewardDAO{
         return mapRows(rows);
     }
 
-    public LinkedList<Reward> loadAllByProjectAndUser(int pID, String uID) {
+    public LinkedList<Reward> loadAllByProjectAndUser(int pID, String uID) throws DataAccessException {
 
         logger.debug("retrieve from db: all rewards from user with id="+uID+" and project with id="+pID);
 
@@ -176,7 +177,7 @@ public class RewardDAOImpl implements RewardDAO{
         return mapRows(rows);
     }
 
-    public void assignAwardToUser(int pID, String uID, int rID) {
+    public void assignAwardToUser(int pID, String uID, int rID) throws DataAccessException {
 
         logger.debug("insert into db: add reward with id="+rID+" to user with id="+uID+" in project with id="+pID);
 
@@ -192,7 +193,7 @@ public class RewardDAOImpl implements RewardDAO{
         );
     }
 
-    public int getNewID() {
+    public int getNewID() throws DataAccessException {
 
         Integer id = this.jdbcTemplate.queryForObject(
                 "SELECT nextval('seq_reward_id')",
@@ -201,7 +202,7 @@ public class RewardDAOImpl implements RewardDAO{
         return id;
     }
 
-    public int getNewIDForRelRewardProjectUser() {
+    public int getNewIDForRelRewardProjectUser() throws DataAccessException {
         Integer id = this.jdbcTemplate.queryForObject(
                 "SELECT nextval('seq_user_reward_project_id')",
                 Integer.class);
