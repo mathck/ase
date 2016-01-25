@@ -23,4 +23,6 @@ public interface LoginDAO {
 
     void updateLastLoginAttempt(String email) throws Exception;
 
+    String getUserIdByToken(String token) throws Exception;
+
 }

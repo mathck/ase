@@ -140,10 +140,20 @@ public class LoginDAOImpl implements LoginDAO{
         this.jdbcTemplate.update(
                 sqlQuery,
                 new Date(),
-                email);
-
+                email
+        );
     }
 
+    public String getUserIdByToken(String token) throws Exception {
+        String sqlQuery = "SELECT mail " +
+                "FROM taskit_user " +
+                "WHERE auth_token = ?";
+        return this.jdbcTemplate.queryForObject(
+                sqlQuery,
+                String.class,
+                token
+        );
+    }
 
 }
 
