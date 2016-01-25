@@ -178,7 +178,7 @@
                                         <td data-ui-sref="profile({uID: user.userID})">{{user.firstName}}</td>
                                         <td data-ui-sref="profile({uID: user.userID})">{{user.lastName}}</td>
                                         <td data-ui-sref="profile({uID: user.userID})">{{user.userID}}</td>
-                                        <!--<td>{{user.level}}</td><!--TODO Level to be implemented -->
+                                        <td>{{user.level.currentXp}}</td>
                                         <td><button data-ng-click="deleteUserFromProject(user.userID)" data-ng-show="currentUserRole=='ADMIN'" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                     </tr>
                                     <!--NG Repeat for Contributor ends here -->
