@@ -15,7 +15,6 @@ import java.util.LinkedList;
  */
 public class User {
 
-    @Size(min = 5)
     private String userID;
     @Size(min = 1)
     private String firstName;

@@ -68,36 +68,27 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     public JsonStringWrapper writeProject(Project project) throws Exception {
-        if(project.getTitle() != null && project.getTitle().length() > 3) {
-            if(project.getDescription() != null && project.getDescription().length() > 3) {
-                project.setCreationTimeDB(new Timestamp(new Date().getTime()));
-                project.setUpdateTimeDB(project.getCreationTimeDB());
+        project.setCreationTimeDB(new Timestamp(new Date().getTime()));
+        project.setUpdateTimeDB(project.getCreationTimeDB());
 
-                int projectID = projectDAO.insertProject(project);
+        int projectID = projectDAO.insertProject(project);
 
-                if (project.getAllUser() != null && !project.getAllUser().isEmpty()) {
-                    for (UserRole user : project.getAllUser()) {
-                        projectDAO.addUserToProject(user.getUser(), user.getProject(), user.getRole());
-                    }
-                }
-                if (project.getAllIssues() != null && !project.getAllIssues().isEmpty()) {
-                    for (Issue issue : project.getAllIssues()) {
-                        issueService.writeIssue(issue, project.getProjectID(), issue.getUserId());
-                    }
-                }
-                if (project.getAllTasks() != null && !project.getAllTasks().isEmpty()) {
-                    for (Task task : project.getAllTasks()) {
-                        taskService.writeTask(project.getProjectID(), task);
-                    }
-                }
-
-                return new JsonStringWrapper(projectID);
-            } else {
-                throw new IllegalArgumentException("No or too short description for project");
+        if (project.getAllUser() != null && !project.getAllUser().isEmpty()) {
+            for (UserRole user : project.getAllUser()) {
+                projectDAO.addUserToProject(user.getUser(), user.getProject(), user.getRole());
             }
-        } else {
-            throw new IllegalArgumentException("No or too short title for project");
         }
+        if (project.getAllIssues() != null && !project.getAllIssues().isEmpty()) {
+            for (Issue issue : project.getAllIssues()) {
+                issueService.writeIssue(issue, project.getProjectID(), issue.getUserId());
+            }
+        }
+        if (project.getAllTasks() != null && !project.getAllTasks().isEmpty()) {
+            for (Task task : project.getAllTasks()) {
+                taskService.writeTask(project.getProjectID(), task);
+            }
+        }
+        return new JsonStringWrapper(projectID);
     }
 
     /**
@@ -129,16 +120,8 @@ public class ProjectServiceImpl implements ProjectService {
      * @param project
      */
     public void updateProject(int projectID, Project project) {
-        if (project.getTitle() != null && project.getTitle().length() > 3) {
-            if (project.getDescription() != null && project.getDescription().length() > 3) {
-                project.setUpdateTimeDB(new Timestamp(new Date().getTime()));
-                projectDAO.updateProject(projectID, project);
-            } else {
-                throw new IllegalArgumentException("No or too short description for project");
-            }
-        } else {
-            throw new IllegalArgumentException("No or too short title for project");
-        }
+        project.setUpdateTimeDB(new Timestamp(new Date().getTime()));
+        projectDAO.updateProject(projectID, project);
     }
 
     /**
