@@ -18,7 +18,8 @@ public interface LoginDAO {
      * @param email            User mail specifies the user.
      * @param token            Generated token.
      * @param creationDate     Token creation date.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void addUserToken(String email, String token, Date creationDate) throws DataAccessException;
 
@@ -27,7 +28,8 @@ public interface LoginDAO {
      * Remove token from db user. This terminates the login.
      *
      * @param email    User mail specifies the user.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void deleteUserToken(String email) throws DataAccessException;
 
@@ -38,7 +40,8 @@ public interface LoginDAO {
      * @param token                 Generated login token.
      * @param tokenValidityInMins   Token validity time specified in milliseconds.
      * @return                      True, if login is valid. False, if login is not valid.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     boolean checkLoginValidity(String token, Integer tokenValidityInMins) throws DataAccessException;
 
@@ -49,7 +52,8 @@ public interface LoginDAO {
      * @param email                 User mail specifies the user.
      * @param loginCooldownInMins   Login cooldown in milliseconds.
      * @return                      count of failed logins within login cooldown period.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     int getCountLoginFailsWithinCooldown(String email, Integer loginCooldownInMins) throws DataAccessException;
 
@@ -58,7 +62,8 @@ public interface LoginDAO {
      * Reset counter of unsuccessful login attempts from a specific user.
      *
      * @param email  User mail specifies the user.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void resetCurrentLoginFails(String email) throws DataAccessException;
 
@@ -67,7 +72,8 @@ public interface LoginDAO {
      * Increment counter of unsuccessful login attempts from a specific user.
      *
      * @param email  User mail specifies the user.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void incrementCurrentLoginFails(String email) throws DataAccessException;
 
@@ -76,10 +82,9 @@ public interface LoginDAO {
      * Updates {@link Date} of an unsuccessful login attempt from a specific user.
      *
      * @param email  User mail specifies the user.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void updateLastLoginAttempt(String email) throws DataAccessException;
-
-    String getUserIdByToken(String token) throws Exception;
 
 }
