@@ -83,6 +83,9 @@ public class Comment {
                 ", task_id=" + task_id +
                 ", text='" + text + '\'' +
                 ", user_mail='" + user_mail + '\'' +
+                ", firstName='" + getUser().getFirstName() + '\'' +
+                ", lastName='" + getUser().getLastName() + '\'' +
+                ", avatar='" + getUser().getAvatar() + '\'' +
                 ", creationDate=" + creationDate +
                 ", user=" + user +
                 '}';
