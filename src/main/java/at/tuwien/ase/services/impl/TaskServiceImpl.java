@@ -13,6 +13,7 @@ import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
@@ -47,7 +48,7 @@ public class TaskServiceImpl implements TaskService {
         this.taskDAO = taskDAO;
     }
 
-    public Task getByID(int tID) throws Exception {
+    public Task getByID(int tID) throws DataAccessException {
         logger.debug("get task with id=" + tID);
         Task task =  taskDAO.findByID(tID);
 
@@ -192,52 +193,52 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
-    public void deleteTaskByID(int tID) throws Exception {
+    public void deleteTaskByID(int tID) throws DataAccessException {
         logger.debug("delete task with id="+tID);
         taskDAO.removeTaskByID(tID);
     }
 
-    public LinkedList<Task> getAllTasks() throws Exception {
+    public LinkedList<Task> getAllTasks() throws DataAccessException {
         logger.debug("get all tasks");
         return taskDAO.loadAll();
     }
 
-    public LinkedList<Task> getAllTasksFromUser(String uID) throws Exception {
+    public LinkedList<Task> getAllTasksFromUser(String uID) throws DataAccessException {
         logger.debug("get all tasks from user"+uID);
         return taskDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Task> getAllTasksFromProject(int pID) throws Exception {
+    public LinkedList<Task> getAllTasksFromProject(int pID)throws DataAccessException {
         logger.debug("get all tasks from project");
         return taskDAO.loadAllByProject(pID);
     }
 
-    public LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID) throws Exception {
+    public LinkedList<Task> getAllTasksFromProjectAndUser(int pID, String uID) throws DataAccessException {
         logger.debug("get all tasks from project " + pID + " and from user " + uID);
         return taskDAO.loadAllByProjectAndUser(pID, uID);
     }
 
-    public LinkedList<Comment> getAllCommentsByTask(int tID) throws Exception{
+    public LinkedList<Comment> getAllCommentsByTask(int tID) throws DataAccessException{
         logger.debug("get all comments from task with id=" + tID);
         return taskDAO.loadAllCommentsByTask(tID);
     }
 
-    public LinkedList<User> getAllUserFromTask(int tID) throws Exception{
+    public LinkedList<User> getAllUserFromTask(int tID) throws DataAccessException{
         logger.debug("get all users from task with id=" + tID);
         return taskDAO.loadAllUsersByTask(tID);
     }
 
-    public void assignUserToTask(int tID, String uID) throws Exception {
+    public void assignUserToTask(int tID, String uID)throws DataAccessException {
         logger.debug("assign user with id="+uID+" to task with id="+tID);
         taskDAO.assignUserToTask(tID, uID);
     }
 
-    public void removeUserFromTask(int tID, String uID) throws Exception {
+    public void removeUserFromTask(int tID, String uID) throws DataAccessException {
         logger.debug("remove user with id="+uID+" from task with id="+tID);
         taskDAO.removeUserFromTask(tID, uID);
     }
 
-    public JsonStringWrapper addCommentToTask(int tID, Comment comment) throws ValidationException {
+    public JsonStringWrapper addCommentToTask(int tID, Comment comment) throws ValidationException, DataAccessException {
 
         logger.debug("add comment to task with id="+tID);
 
@@ -276,7 +277,7 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
-    public void deleteCommentFromTask(int tID, int cID) throws Exception {
+    public void deleteCommentFromTask(int tID, int cID) throws DataAccessException {
         logger.debug("remove comment with id="+cID+" from task with id="+tID);
         taskDAO.removeCommentFromTask(tID, cID);
     }

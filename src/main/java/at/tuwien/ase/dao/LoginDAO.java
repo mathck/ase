@@ -92,7 +92,7 @@ public interface LoginDAO {
      * Get id of {@link at.tuwien.ase.model.User} by string token
      *
      * @param token   login token
-     * @return        {@link at.tuwien.ase.model.User} object
+     * @return        id of {@link at.tuwien.ase.model.User}
      * @throws Exception      if an exception occurred
      */
     String getUserIdByToken(String token) throws Exception;

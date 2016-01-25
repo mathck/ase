@@ -3,6 +3,7 @@ package at.tuwien.ase.services;
 import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Reward;
+import org.springframework.dao.DataAccessException;
 
 import java.util.LinkedList;
 
@@ -11,17 +12,77 @@ import java.util.LinkedList;
  */
 public interface RewardService {
 
-    JsonStringWrapper writeReward(Reward reward) throws ValidationException;
+    /**
+     *
+     * @param reward
+     * @return
+     * @throws ValidationException
+     * @throws DataAccessException
+     */
+    JsonStringWrapper writeReward(Reward reward) throws ValidationException, DataAccessException;
 
-    void deleteRewardByID(int rID);
+    /**
+     *
+     * @param rID
+     * @throws DataAccessException
+     */
+    void deleteRewardByID(int rID)throws DataAccessException;
 
-    Reward getByID(int rID);
-    LinkedList<Reward> getAllRewards();
-    LinkedList<Reward> getAllRewardsCreatedByUser(String uID);
-    LinkedList<Reward> getAllRewardsAwardedToUser(String uID);
-    LinkedList<Reward> getAllRewardsFromProject(int pID);
-    LinkedList<Reward> getAllRewardsFromProjectAndUser(int pID, String uID);
+    /**
+     *
+     * @param rID
+     * @return
+     * @throws DataAccessException
+     */
+    Reward getByID(int rID)throws DataAccessException;
 
-    void assignAwardToUser(int pID, String uID, int rID);
+    /**
+     *
+     * @return
+     * @throws DataAccessException
+     */
+    LinkedList<Reward> getAllRewards()throws DataAccessException;
+
+    /**
+     *
+     * @param uID
+     * @return
+     * @throws DataAccessException
+     */
+    LinkedList<Reward> getAllRewardsCreatedByUser(String uID)throws DataAccessException;
+
+    /**
+     *
+     * @param uID
+     * @return
+     * @throws DataAccessException
+     */
+    LinkedList<Reward> getAllRewardsAwardedToUser(String uID)throws DataAccessException;
+
+    /**
+     *
+     * @param pID
+     * @return
+     * @throws DataAccessException
+     */
+    LinkedList<Reward> getAllRewardsFromProject(int pID)throws DataAccessException;
+
+    /**
+     *
+     * @param pID
+     * @param uID
+     * @return
+     * @throws DataAccessException
+     */
+    LinkedList<Reward> getAllRewardsFromProjectAndUser(int pID, String uID)throws DataAccessException;
+
+    /**
+     *
+     * @param pID
+     * @param uID
+     * @param rID
+     * @throws DataAccessException
+     */
+    void assignAwardToUser(int pID, String uID, int rID)throws DataAccessException;
 
 }

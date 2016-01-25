@@ -16,12 +16,12 @@ public interface IssueService {
 
     /**
      *
+     * Write {@link Issue} to db,
      *
-     *
-     * @param issue
-     * @param pID
-     * @param uID
-     * @return
+     * @param issue   {@link Issue} object
+     * @param pID     Id of {@link at.tuwien.ase.model.Project}
+     * @param uID     Id of {@link at.tuwien.ase.model.User}
+     * @return        Id of created {@link Issue} wrapped in {@link JsonStringWrapper}
      * @throws ValidationException      if an validation
      *                                  exception occurred
      * @throws DataAccessException      if an data access
@@ -31,9 +31,9 @@ public interface IssueService {
 
     /**
      *
+     * Delete {@link Issue} by Id.
      *
-     *
-     * @param iID
+     * @param iID  Id of {@link Issue}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -41,10 +41,10 @@ public interface IssueService {
 
     /**
      *
+     * Get {@link Issue} by Id.
      *
-     *
-     * @param iID
-     * @return
+     * @param iID   Id of {@link Issue}.
+     * @return      {@link Issue} object.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -52,9 +52,9 @@ public interface IssueService {
 
     /**
      *
+     * Get all {@link Issue}.
      *
-     *
-     * @return
+     * @return  {@link LinkedList} of {@link Issue}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -62,10 +62,10 @@ public interface IssueService {
 
     /**
      *
+     * Get all {@link Issue} from specific {@link at.tuwien.ase.model.User}.
      *
-     *
-     * @param uID
-     * @return
+     * @param uID   Id of {@link at.tuwien.ase.model.User}.
+     * @return      {@link LinkedList} of {@link Issue}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -73,10 +73,10 @@ public interface IssueService {
 
     /**
      *
+     * Get all {@link Issue} from specific {@link at.tuwien.ase.model.Project}.
      *
-     *
-     * @param pID
-     * @return
+     * @param pID   Id of {@link at.tuwien.ase.model.Project}.
+     * @return      {@link LinkedList} of {@link Issue}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -84,11 +84,11 @@ public interface IssueService {
 
     /**
      *
+     * Get all {@link Issue} from specific {@link at.tuwien.ase.model.Project} and {@link at.tuwien.ase.model.User}.
      *
-     *
-     * @param pID
-     * @param uID
-     * @return
+     * @param pID   Id of {@link at.tuwien.ase.model.Project}.
+     * @param uID   Id of {@link at.tuwien.ase.model.User}.
+     * @return      {@link LinkedList} of {@link Issue}.
      * @throws DataAccessException      if an data access
      *                                  exception occurred
      */
@@ -96,12 +96,13 @@ public interface IssueService {
 
     /**
      *
+     * Update {@link Issue} to {@link Task}. {@link Issue} will be
+     * removed and a new {@link Task} object will be created.
      *
-     *
-     * @param iID
-     * @param pID
-     * @param task
-     * @return
+     * @param iID   Id of {@link Issue}.
+     * @param pID   Id of {@link at.tuwien.ase.model.Project}.
+     * @param task  {@link Task} object.
+     * @return      {@link LinkedList} of {@link Task} id's.
      * @throws Exception      if an exception occurred
      */
     LinkedList<Integer> updateIssueToTask(int iID, int pID, Task task) throws Exception;
