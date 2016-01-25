@@ -52,6 +52,9 @@ public class PermissionEvaluator {
 
         if (permission.equals("VIEW_SUBTASK")){
             Integer subtaskId = (Integer) o;
+            if(subtaskDAO.findByID(subtaskId) == null) {
+                return false;
+            }
             Integer taskId = subtaskDAO.findByID(subtaskId).getTaskId();
             if (authDAO.userIsTaskAssignee(authUserId, taskId) || authDAO.userIsManagerInProjectByTask(authUserId, taskId)){
                 return true;
@@ -61,6 +64,9 @@ public class PermissionEvaluator {
         }
         if (permission.equals("CHANGE_SUBTASK")){
             Integer subtaskId = (Integer) o;
+            if(subtaskDAO.findByID(subtaskId) == null) {
+                return false;
+            }
             Integer taskId = subtaskDAO.findByID(subtaskId).getTaskId();
             if (authDAO.userIsManagerInProjectByTask(authUserId, taskId)){
                 return true;

@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
@@ -32,7 +33,7 @@ public class RewardServiceImpl implements RewardService {
 
     private static final Logger logger = LogManager.getLogger(IssueServiceImpl.class);
 
-    public JsonStringWrapper writeReward(Reward reward) throws ValidationException {
+    public JsonStringWrapper writeReward(Reward reward) throws ValidationException, DataAccessException {
         logger.debug("create new reward");
         int id;
 
@@ -59,42 +60,42 @@ public class RewardServiceImpl implements RewardService {
         return new JsonStringWrapper(id);
     }
 
-    public void deleteRewardByID(int rID) {
+    public void deleteRewardByID(int rID) throws DataAccessException {
         logger.debug("delete reward with id="+rID);
         rewardDAO.removeRewardByID(rID);
     }
 
-    public Reward getByID(int rID) {
+    public Reward getByID(int rID) throws DataAccessException {
         logger.debug("get reward with id="+rID);
         return rewardDAO.findByID(rID);
     }
 
-    public LinkedList<Reward> getAllRewards() {
+    public LinkedList<Reward> getAllRewards() throws DataAccessException{
         logger.debug("get all rewards");
         return rewardDAO.loadAll();
     }
 
-    public LinkedList<Reward> getAllRewardsCreatedByUser(String uID) {
+    public LinkedList<Reward> getAllRewardsCreatedByUser(String uID) throws DataAccessException{
         logger.debug("get all rewards created from user with id="+uID);
         return rewardDAO.loadAllRewardsCreatedByUser(uID);
     }
 
-    public LinkedList<Reward> getAllRewardsAwardedToUser(String uID) {
+    public LinkedList<Reward> getAllRewardsAwardedToUser(String uID) throws DataAccessException{
         logger.debug("get all rewards awarded to user with id="+uID);
         return rewardDAO.loadAllRewardsAwardedToUser(uID);
     }
 
-    public LinkedList<Reward> getAllRewardsFromProject(int pID) {
+    public LinkedList<Reward> getAllRewardsFromProject(int pID)throws DataAccessException {
         logger.debug("get all rewards from project with id="+pID);
         return rewardDAO.loadAllByProject(pID);
     }
 
-    public LinkedList<Reward> getAllRewardsFromProjectAndUser(int pID, String uID) {
+    public LinkedList<Reward> getAllRewardsFromProjectAndUser(int pID, String uID) throws DataAccessException{
         logger.debug("get all rewards from project " + pID + " and from user " + uID);
         return rewardDAO.loadAllByProjectAndUser(pID, uID);
     }
 
-    public void assignAwardToUser(int pID, String uID, int rID) {
+    public void assignAwardToUser(int pID, String uID, int rID)throws DataAccessException {
         logger.debug("assign reward with id="+rID+" to user with id="+uID+" in project with id="+pID);
         rewardDAO.assignAwardToUser(pID, uID, rID);
     }

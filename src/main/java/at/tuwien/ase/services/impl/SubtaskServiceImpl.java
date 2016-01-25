@@ -9,6 +9,7 @@ import at.tuwien.ase.services.SubtaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
@@ -29,7 +30,7 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     private static final Logger logger = LogManager.getLogger(SubtaskServiceImpl.class);
 
-    public JsonStringWrapper writeSubtask(Subtask subtask)  {
+    public JsonStringWrapper writeSubtask(Subtask subtask) throws DataAccessException {
         logger.debug("create new subtask");
         int id;
 
@@ -43,12 +44,12 @@ public class SubtaskServiceImpl implements SubtaskService {
         return new JsonStringWrapper(id);
     }
 
-    public void deleteSubtaskByID(int sID) {
+    public void deleteSubtaskByID(int sID) throws DataAccessException {
         logger.debug("delete subtask with id=" + sID);
         subtaskDAO.removeSubtaskByID(sID);
     }
 
-    public void closeSubtask(int sID)  throws ValidationException{
+    public void closeSubtask(int sID)  throws ValidationException,DataAccessException {
 
         logger.debug("close subtask with id=" + sID);
 
@@ -71,7 +72,7 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     }
 
-    public void updateSubtask(int sID, SubtaskUpdate subtask) throws ValidationException  {
+    public void updateSubtask(int sID, SubtaskUpdate subtask) throws ValidationException, DataAccessException  {
 
         logger.debug("update subtask with id=" + sID);
 
@@ -209,27 +210,27 @@ public class SubtaskServiceImpl implements SubtaskService {
 
     }
 
-    public Subtask getByID(int sID) {
+    public Subtask getByID(int sID)  throws DataAccessException{
         logger.debug("get subtask with id=" + sID);
         return subtaskDAO.findByID(sID);
     }
 
-    public LinkedList<Subtask> getAllSubtasks() {
+    public LinkedList<Subtask> getAllSubtasks()  throws DataAccessException {
         logger.debug("get all subtasks");
         return subtaskDAO.loadAll();
     }
 
-    public LinkedList<Subtask> getAllSubtasksFromTask(int tID) {
+    public LinkedList<Subtask> getAllSubtasksFromTask(int tID)  throws DataAccessException{
         logger.debug("get all subtasks from task with id="+tID);
         return subtaskDAO.loadAllByTask(tID);
     }
 
-    public LinkedList<Subtask> getAllSubtasksFromUser(String uID) {
+    public LinkedList<Subtask> getAllSubtasksFromUser(String uID)  throws DataAccessException{
         logger.debug("get all subtasks from user with id="+uID);
         return subtaskDAO.loadAllByUser(uID);
     }
 
-    public LinkedList<Subtask> getAllSubtasksFromProject(int pID) {
+    public LinkedList<Subtask> getAllSubtasksFromProject(int pID)  throws DataAccessException{
         logger.debug("get all subtasks from project with id="+pID);
         return subtaskDAO.loadAllByProject(pID);
     }

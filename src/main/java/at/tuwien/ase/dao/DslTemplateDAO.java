@@ -14,7 +14,8 @@ public interface DslTemplateDAO {
      * Inserts a dsl template to db
      *
      * @param template {@link DslTemplate} object for db insertion
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void insertDslTemplate(DslTemplate template) throws DataAccessException;
 
@@ -23,7 +24,8 @@ public interface DslTemplateDAO {
      * The {@link DslTemplate} must be specified by id.
      *
      * @param tID template id for db removal
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void removeDslTemplateByID(int tID) throws DataAccessException;
 
@@ -33,7 +35,8 @@ public interface DslTemplateDAO {
      *
      * @param tID template id for db select
      * @return {@link DslTemplate} that was retrieved from db
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     DslTemplate findByID(int tID) throws DataAccessException;
 
@@ -42,7 +45,8 @@ public interface DslTemplateDAO {
      * Load all {@link DslTemplate} from db
      *
      * @return {@link LinkedList} of {@link DslTemplate}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<DslTemplate> loadAll() throws DataAccessException;
 
@@ -51,7 +55,8 @@ public interface DslTemplateDAO {
      *
      * @param uID user id for db selection
      * @return {@link LinkedList} of {@link DslTemplate}.
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     LinkedList<DslTemplate> loadAllByUser(String uID) throws DataAccessException;
 
@@ -61,7 +66,8 @@ public interface DslTemplateDAO {
      *
      * @param template updated {@link DslTemplate}
      * @param tID      id of {@link DslTemplate}
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     void alterDslTemplateByID(DslTemplate template, int tID) throws DataAccessException;
 
@@ -70,7 +76,8 @@ public interface DslTemplateDAO {
      * Get new Id from db sequence for {@link DslTemplate} insertion
      *
      * @return Generated id
-     * @throws DataAccessException
+     * @throws DataAccessException      if an data access
+     *                                  exception occurred
      */
     int getNewID() throws DataAccessException;
 
