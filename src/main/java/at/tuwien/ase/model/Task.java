@@ -52,7 +52,7 @@ public class Task implements Cloneable{
     private LinkedList<Subtask> subtaskList;
 
     @NotNull
-    @Size(min = 1, max = 30)
+    @Size(min = 0, max = 30)
     @Valid
     private LinkedList<User> userList;
 

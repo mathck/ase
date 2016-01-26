@@ -1232,16 +1232,18 @@ materialAdmin
                     var subtaskTitle = "";
                     var subtaskDescription = "";
                     subtask.taskElements.forEach(function(taskElement) {
+                        jsonTaskElement={};
 
                         console.log(subtaskID + "[" + taskElement.id + "]");
                         //console.log($scope.task.parsedSubtaskList);
                         switch(taskElement.itemType.trim()){
 
                         case "checkbox":
-                            if( document.getElementById(subtaskID + "[" + taskElement.id + "]").checked )
+                            if( document.getElementById(subtaskID + "[" + taskElement.id + "]").checked ){
                                 jsonTaskElement = { id:taskElement.id, status:"checked", value:taskElement.value};
-                            else
+                            }else{
                                 jsonTaskElement = { id:taskElement.id, status:"unchecked", value:taskElement.value};
+                            }
                             break;
                         case "textbox":
                             jsonTaskElement = { id:taskElement.id, value:document.getElementById(subtaskID + "[" + taskElement.id + "]").value, status:document.getElementById(subtaskID + "[" + taskElement.id + "]").value};
@@ -1249,12 +1251,18 @@ materialAdmin
                         case "slider":
                             jsonTaskElement = { id:taskElement.id, status:document.getElementById(subtaskID + "[" + taskElement.id + "]").value, value:taskElement.value};
                             break;
+                        case "file":
+                            jsonTaskElement = { id:taskElement.id, status:"file", link: taskElement.link};
+                            break;
+                        case "image":
+                            jsonTaskElement = { id:taskElement.id, status:"image", link: taskElement.link};
+                            break;
                         }
                         taskElementList.push(jsonTaskElement);
-
                     });
-
-                    updateSubtaskRequest = {status:document.getElementById(subtask.id).value, taskElments:taskElementList};
+                    console.log("taskElementList");
+                    console.log(taskElementList);
+                    updateSubtaskRequest = {status:document.getElementById(subtask.id).value, taskElements:taskElementList};
                     if(subtask.status == "closed")
                         SubtaskFactory.update({sID:subtask.id},{status:"closed", title:subtask.title.trim(), description:subtask.description.trim(), xp:subtask.xp, taskElements:taskElementList}).$promise.then(function(response){
                         }, function(error){
