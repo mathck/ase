@@ -72,7 +72,7 @@ public class Task implements Cloneable{
         commentList = new LinkedList<Comment>();
     }
 
-    public Task(String status, String executionType, String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userMail, LinkedList<TaskState> taskStates, LinkedList<Subtask> subtasks, LinkedList<User> users) {
+    public Task(String status, String executionType, String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userMail, LinkedList<TaskState> taskStates, LinkedList<Subtask> subtasks, LinkedList<User> users, boolean commentsAllowed) {
         this.status = status;
         this.executionType = executionType;
         this.title = title;
@@ -85,11 +85,12 @@ public class Task implements Cloneable{
         subtaskList = subtasks;
         userList = users;
         this.taskStates = taskStates;
+        this.commentsAllowed = commentsAllowed;
         commentList = new LinkedList<Comment>();
     }
 
     public Task(String title, String description) {
-        this(null, "single_task", title, description, null, null, null, null, null, null, null, null);
+        this(null, "single_task", title, description, null, null, null, null, null, null, null, null, false);
     }
 
     public Integer getId() {

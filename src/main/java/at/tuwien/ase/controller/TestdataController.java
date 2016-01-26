@@ -49,8 +49,8 @@ public class TestdataController {
     @RequestMapping(value = "/testdata/all/generate/5796e83c-f5fa-4730-9915-a47bfcecad6d", method = RequestMethod.POST)
     @ResponseBody
     public void generateTestData() throws Exception {
-        generateTestData(1);
-        generateTestData(5);
+        generateTestData1();
+        generateTestData5();
     }
 
     @RequestMapping(value = "/testdata/5/generate/5796e83c-f5fa-4730-9915-a47bfcecad6d", method = RequestMethod.POST)
@@ -89,6 +89,8 @@ public class TestdataController {
                 taskName = "Task";
                 break;
         }
+
+        _globalDslCounter++;
 
         // create principal
         User admin = new User("admin@" + projectName + ".com", "1234qwer");
@@ -152,12 +154,34 @@ public class TestdataController {
                         project.getProjectID(),
                         teachers.get(i).getUserID(),
                         new LinkedList<TaskState>(Arrays.asList(new TaskState(0, "im on it", 0))),
-                        new LinkedList<Subtask>(Arrays.asList(new Subtask("subtask title", "description", 0, "Open", 50, new Date(), new Date(), 1))),
-                        users);
+                        new LinkedList<Subtask>(Arrays.asList(new Subtask("subtask title", "description", 0, "Open", 50, new Date(), new Date(), _globalDslCounter))),
+                        users,
+                        false);
 
                 project.addTask(task);
                 //taskService.writeTask(i+1, task);
             }
+
+            LinkedList<User> users = new LinkedList<User>();
+            for(int k = i * 10; k < ((i * 10) + 10); k++) {
+                users.add(students.get(k));
+            }
+
+            Task task = new Task("Open",
+                    "collaborative_task",
+                    taskName + " together",
+                    "Do this and do that",
+                    "task",
+                    new Date(),
+                    new Date(),
+                    project.getProjectID(),
+                    teachers.get(i).getUserID(),
+                    new LinkedList<TaskState>(Arrays.asList(new TaskState(0, "im on it", 0))),
+                    new LinkedList<Subtask>(Arrays.asList(new Subtask("subtask title", "description", 0, "Open", 50, new Date(), new Date(), _globalDslCounter))),
+                    users,
+                    true);
+
+            project.addTask(task);
 
             // 1 admin and 1 teacher for every class
             project.addUser(admin.getUserID(), "ADMIN");
@@ -174,6 +198,7 @@ public class TestdataController {
     }
 
     private int _globalProjectCounter = 0;
+    private int _globalDslCounter = 0;
 
     static String readFile(Path path, Charset encoding)
             throws IOException
