@@ -57,9 +57,7 @@
                                 <div class="form-group">
                                     <div class="fg-line">
                                         <div class="select" data-ng-model="task.status">
-                                            <select class="form-control">
-                                                <option value="Open" selected="selected">Open</option>
-                                                <option value="Closed">Closed</option>
+                                            <select class="form-control" data-ng-options="state.stateName for state in task.taskStates track by statetaskId">
                                             </select>
                                         </div>
                                     </div>

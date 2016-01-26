@@ -1117,20 +1117,25 @@ materialAdmin
                 }
             else {
                 //if all required information is available, send task creation request to backend
-                //console.log("users:");
-                if ($scope.task.userType==='all'){
+                if ($scope.task.userType){
                     $scope.task.contributors=[];
                     $scope.userList.forEach(function(user){
+                        //console.log(user.userID);
                         $scope.task.contributors.push(user.userID);
                     })
                 }else{
                     $scope.task.contributors=$scope.task.contributorSelection;
                 }
+                //console.log("contributors");
+                //console.log($scope.task.contributors);
 
                 //create an array of states that conforms to the API and includes Open and Closed
                 $scope.task.states=[{stateName:'Open'}, {stateName:'Closed'}];
+                //console.log("State Fields")
+                //console.log($scope.data.stateFields);
                 $scope.data.stateFields.forEach(function (stateField){
-                    if (!(stateField.state===undefined)){
+                    //console.log(stateField);
+                    if (!(stateField.title===undefined)){
                         var state={stateName: stateField.title};
                         $scope.task.states.push(state);
                     }
@@ -1214,6 +1219,8 @@ materialAdmin
                 $scope.task.title=$scope.task.title.trim();
                 $scope.task.description=$scope.task.description.trim();
                 $scope.task.status=$scope.task.status.trim();
+                console.log("taskStates");
+                console.log($scope.task.taskStates);
 
                 //get user information regarding the comments section
                 $scope.task.commentList.forEach(function(comment){
