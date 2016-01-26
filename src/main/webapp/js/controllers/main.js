@@ -1450,7 +1450,7 @@ materialAdmin
 
     .controller('createTemplateCtrl', function ( $scope, $state, growlService, TokenService, ErrorHandler, TemplateFactory) {
         //console.log("Template creation started");
-        $scope.minimalCode="<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<template>\n<identifier>\n<title>Smallest</title>\n<description>Sample</description>\n<estimatedWorkTime>60</estimatedWorkTime>\n<deadline>2016-03-03</deadline>\n<githook>???</githook>\n<comments>false</comments>\n</identifier>\n</template>";
+        $scope.minimalCode="<template>\n\t<!-- GENERAL INFORMATION -->\n\t<identifier>\n\t\t<title>Your Title</title>\n\t\t<description>Your Description</description>\n\t\t<estimatedWorkTime>60</estimatedWorkTime>\n\t\t<deadline>2090-01-01</deadline>\n\t\t<githook>false</githook>\n\t</identifier>\n\t<!-- CONTENT -->\n\t<taskBody>\n\t\t<h1>Nice Subtask</h1>\n\t\t{taskElement:1}\n\t</taskBody>\n\t<!-- CONTENT ELEMENTS -->\n\t<taskElements>\n\t\t<taskElement id='1'>\n\t\t\t<status>checked</status>\n\t\t\t<value>angry</value>\n\t\t\t<solution>checked</solution>\n\t\t\t<link></link>\n\t\t\t<type>checkbox</type>\n\t\t</taskElement>\n\t</taskElements>\n</template>";
 
         $scope.error=false;
         $scope.showPreview=false;
@@ -1458,9 +1458,11 @@ materialAdmin
         var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("dslsyntax"),{
             mode: "application/xml",
             lineNumbers:true,
-            htmlMode:false,
-            value:$scope.minimalCode
+            htmlMode:false
         });
+
+        myCodeMirror.setValue($scope.minimalCode);
+
         //, mode:"create"
         $scope.template={};
         $scope.createTemplate = function(){
