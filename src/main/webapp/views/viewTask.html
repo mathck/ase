@@ -184,7 +184,7 @@
                                          <th>First Name</th>
                                          <th>Last Name</th>
                                          <th>E-Mail</th>
-                                         <th>XP</th>
+                                         <!--<th>XP</th>-->
                                          <th>Delete</th>
                                      </tr>
                                      </thead>
@@ -194,7 +194,7 @@
                                          <td data-ui-sref="profile({uID: user.userID})">{{user.firstName}}</td>
                                          <td data-ui-sref="profile({uID: user.userID})">{{user.lastName}}</td>
                                          <td data-ui-sref="profile({uID: user.userID})">{{user.userID}}</td>
-                                         <td data-ui-sref="profile({uID: user.userID})">{{String(user.level.currentXp)}}</td>
+                                         <!--<td data-ui-sref="profile({uID: user.userID})">{{user.level.currentXp}}</td>-->
                                          <td><button data-ng-click="deleteUserFromTask(user.userID)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
                                      </tr>
                                      </tbody>
