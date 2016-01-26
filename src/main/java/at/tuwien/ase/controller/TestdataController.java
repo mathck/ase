@@ -135,7 +135,7 @@ public class TestdataController {
 
         // create 1.000 class projects for every teacher
         for(int i = 0; i < 10; i++) {
-            Project project = new Project(i+1, projectTitle + " " + (i+1), projectTitle + " number " + (i+1));
+            Project project = new Project(++_globalProjectCounter, projectTitle + " " + (i+1), projectTitle + " number " + (i+1));
 
             // 1 task (homeworks) for every student
             for(int j = 0; j < 10; j++) {
@@ -159,8 +159,6 @@ public class TestdataController {
                 //taskService.writeTask(i+1, task);
             }
 
-            issueService.writeIssue(new Issue("Clean Room", "The room is dirty"), i+1, students.get((i * 10)).getUserID());
-
             // 1 admin and 1 teacher for every class
             project.addUser(admin.getUserID(), "ADMIN");
             project.addUser(teachers.get(i).getUserID(), "ADMIN");
@@ -171,8 +169,11 @@ public class TestdataController {
             }
 
             projectService.writeProject(project);
+            //issueService.writeIssue(new Issue("Clean Room", "The room is dirty"), i+1, students.get(_globalProjectCounter).getUserID());
         }
     }
+
+    private int _globalProjectCounter = 0;
 
     static String readFile(Path path, Charset encoding)
             throws IOException
