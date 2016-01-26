@@ -553,7 +553,7 @@ materialAdmin
     // PROJECT CREATION
     //=================================================
 
-    .controller('createProjectCtrl', function ($scope, $location, $window, $timeout, $state, growlService, ErrorHandler,
+    .controller('createProjectCtrl', function ($scope, $location, $window, $q, $timeout, $state, growlService, ErrorHandler,
         TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsCreatedByUserFactory, AddRewardToProjectFactory) {
 
         console.log("starting Project Creation");
@@ -650,18 +650,21 @@ materialAdmin
                     $scope.users.userPickerContributor.forEach(function(contributor){
                         AddUserToProjectFactory.add({project: $scope.pID, user: contributor, role: "CONTRIBUTOR"});
                     });
+                    var addPromises=[];
                     $scope.users.userPickerManager.forEach(function(manager){
-                        AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
+                        addPromises.push(AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"}));
                     });
-                    /*if(!($scope.rewardPicker===undefined)){
-                        var rewardList=[];
-                        $scope.rewardPicker.forEach(function(reward){
-                           rewardList.push({id:reward})
-                        });
-                        console.log(rewardList);
-                        AddRewardToProjectFactory.add({pID:$scope.pID},rewardList);
-                    }*/
-                    $state.go("viewProject",{pID:$scope.pID});
+                    setTimeout(function() {
+                        if(!($scope.rewardPicker===undefined)){
+                            var rewardList=[];
+                            $scope.rewardPicker.forEach(function(reward){
+                               rewardList.push({id:reward})
+                            });
+                            console.log(rewardList);
+                            AddRewardToProjectFactory.add({pID:$scope.pID},rewardList);
+                        }
+                        $state.go("viewProject",{pID:$scope.pID});
+                    },500);
 
                     swal({
                     	title: "Project Created!",
