@@ -13,12 +13,13 @@ import javax.validation.constraints.Size;
  */
 public class UserRole {
 
+    @NotNull
     private int projectID;
     @NotNull
     @Size(min = 2)
     private String userID;
     @NotNull
-    @Size(min = 7)
+    @Size(min = 5)
     private String role;
 
     public UserRole() {}

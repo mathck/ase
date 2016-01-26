@@ -2,6 +2,8 @@ package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.controller.exceptions.ValidationException;
+import at.tuwien.ase.dao.ProjectDAO;
+import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
 import at.tuwien.ase.model.UserRole;
@@ -40,6 +42,8 @@ public class ProjectController {
     private LoginService loginService;
     @Autowired
     private PermissionEvaluator permissionEvaluator;
+    @Autowired
+    private UserDAO userDAO;
 
     private static final Logger logger = LogManager.getLogger(ProjectController.class);
 
@@ -134,7 +138,8 @@ public class ProjectController {
     @RequestMapping(value = "/workspace/projects/add", method = RequestMethod.PUT)
     @ResponseBody
     public void addUserToProject(@RequestBody UserRole user, @RequestHeader("user-token") String token) throws Exception {
-        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),user.getProject(),"CHANGE_PROJECT")) {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),user.getProject(),"CHANGE_PROJECT") &&
+                userDAO.loadAllByProject(user.getProject()).size() > 0) {
             throw new ValidationException("Not allowed");
         }
         Set<ConstraintViolation<UserRole>> constraintViolations = validator.validate(user);
