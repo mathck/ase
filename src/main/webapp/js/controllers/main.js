@@ -279,35 +279,32 @@ materialAdmin
     // Profile
     //=================================================
 
-    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, ErrorHandler){
+    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, RewardsByProjectFactory, ErrorHandler){
 
-        var currentUID = $stateParams.uID;
+        var currentUID;
+        var userRewardProjectIds = [];
+        var userRewardNames = [];
+        var userRewardXpBases = [];
+        $scope.userRewards = [];
 
-        console.log("uid:" + $stateParams.uID);
 
-        //If uID is not set in the state, show information of the user logged in
-        if((typeof currentUID === 'undefined')||currentUID=="" ){
-            $scope.user=TokenService.user;
-            $scope.avatar=TokenService.user.avatar;
-            $scope.firstName=TokenService.user.firstName;
-            $scope.lastName=TokenService.user.lastName;
-            $scope.userID=TokenService.user.userID;
-        //otherwise, show the user informetion of the uID provided
-        }else{
-            //Get Profile Information from User Service
-            UserFactory.get({uID: currentUID.trim()}).$promise.then(function(user){
-                $scope.avatar=user.avatar;
-                $scope.firstName=user.firstName;
-                $scope.lastName=user.lastName;
-                $scope.userID=user.userID;
-            }, function(error){
-               ErrorHandler.handle("Could not fetch user information from server.", error);
-            });
-        }
+        if((typeof $stateParams.uID === 'undefined') || $stateParams.uID=="" )
+            currentUID = TokenService.username.trim();
+        else
+            currentUID = $stateParams.uID.trim();
 
-        console.log("uid:" + TokenService.username + "stateParamUserId: " + $stateParams.uID + " TokenService.user.userID: " + TokenService.user.userID + " TokenService.user: " + TokenService.user);
+        //Get Profile Information from User Service
+        UserFactory.get({uID: currentUID}).$promise.then(function(user){
+            $scope.avatar=user.avatar;
+            $scope.firstName=user.firstName;
+            $scope.lastName=user.lastName;
+            $scope.userID=user.userID;
+            console.log("$scope.userID " + $scope.userID + " , currentUID " + currentUID + " $scope.lastName " + $scope.lastName);
+        }, function(error){
+           ErrorHandler.handle("Could not fetch user information from server.", error);
+        });
 
-        ProjectsFactory.query({uID: $scope.userID}).$promise.then(function(response){
+        ProjectsFactory.query({uID: currentUID}).$promise.then(function(response){
         //AdminProjectsFactory.query().$promise.then(function(response){
         //edit project information so it can easily be displayed (trim returned variables and identify user role for each project
             response.forEach(function(project){
@@ -322,11 +319,22 @@ materialAdmin
                     return(user.user.trim()==TokenService.username);
                 });
                 project.role=userInProject[0].role.trim();
+
+                RewardsByProjectFactory.query({uID: currentUID}).$promise.then(function(response){
+                    response.forEach(function(reward){
+                        reward.name = reward.name.trim();
+                    });
+                    $scope.userRewards.push(response);
+                }, function(error){
+                   ErrorHandler.handle("Could not fetch reward/s.", error);
+                });
+
             });
             $scope.userProjects=response;
         }, function(error){
            ErrorHandler.handle("Could not fetch projects.", error);
         });
+
 
 
         //Edit
@@ -615,7 +623,6 @@ materialAdmin
         });
 
         $scope.createProject = function () {
-
             if(!$scope.project) {
                 $scope.titleFail = true;
                 $timeout(function(){document.getElementById('projectTitle').focus();});
@@ -638,8 +645,14 @@ materialAdmin
                         AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
                     });
 
-                    growlService.growl("Project created!")
                     $state.go("viewProject",{pID:$scope.pID});
+
+                    swal({
+                    	title: "Project Created!",
+                    	type: "success",
+                    	timer: 2500,
+                    	showConfirmButton: false
+                    });
 
                 }, function(error){
                    ErrorHandler.handle("Could not save your project.", error);
@@ -773,10 +786,29 @@ materialAdmin
         });
 
         $scope.deleteUserFromProject=function(userID){
-            RemoveUserFromProjectFactory.delete({pID:$scope.currentPID, uID:userID}).$promise.then(function(response){
-                $scope.updateProjectInformation();
-            }, function(error){
-                ErrorHandler.handle("Could not delete user from project.", error);
+            swal({
+                title: "Remove User from Project?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes!",
+                cancelButtonText: "No!",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            }, function(isConfirm){
+                if (isConfirm) {
+                   RemoveUserFromProjectFactory.delete({pID:$scope.currentPID, uID:userID}).$promise.then(function(response){
+                       $scope.updateProjectInformation();
+                       swal({
+                       	title: "User Removed!",
+                       	type: "success",
+                       	timer: 2000,
+                       	showConfirmButton: false
+                       });
+                   }, function(error){
+                       ErrorHandler.handle("Could not delete user from project.", error);
+                   });
+                }
             });
         }
 
@@ -804,6 +836,12 @@ materialAdmin
                     AddUserToProjectFactory.add({project: $scope.currentPID, user: manager, role: "ADMIN"});
                 });
                 $scope.updateProjectInformation();
+                swal({
+                	title: "Project Saved!",
+                	type: "success",
+                	timer: 2500,
+                	showConfirmButton: false
+                });
             }
         };
     })
@@ -815,7 +853,6 @@ materialAdmin
     .controller('createIssueCtrl', function ( $scope, $state, $stateParams, $state, $timeout, growlService, ErrorHandler, IssuePostFactory, ProjectFactory, TokenService) {
 
         // callback for ng-click 'create Issue':
-        console.log("starting issue creation");
         $scope.currentPID = $stateParams.pID;
 
         ProjectFactory.show({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(response){
@@ -835,8 +872,15 @@ materialAdmin
                }
            else {
                IssuePostFactory.create({pID: $scope.currentPID, uID: TokenService.username}, {title:$scope.issue.title, description:$scope.issue.description}).$promise.then(function(response){
-                    growlService.growl("Issue created.");
                     $state.go("viewProject", {pID:$scope.currentPID});
+
+                    swal({
+                    	title: "Issue Created!",
+                    	type: "success",
+                    	timer: 2500,
+                    	showConfirmButton: false
+                    });
+
                }, function(error){
                     ErrorHandler.handle("Could not create Issue.", error);
                });
@@ -849,7 +893,6 @@ materialAdmin
     //=================================================
 
     .controller('viewIssue', function ($scope, $state, $stateParams, $state, growlService, ErrorHandler, IssueRetrieveFactory, ProjectFactory, TokenService) {
-        console.log("starting issue update");
         $scope.currentIID = $stateParams.iID;
         $scope.currentPID = $stateParams.pID;
 
@@ -866,13 +909,32 @@ materialAdmin
         });
 
         $scope.discardIssue=function(){
-            IssueRetrieveFactory.delete({issueID: $scope.currentIID}).$promise.then(function(response){
-                $state.go("viewProject", {pID:$scope.currentPID});
-            }, function(error){
-                ErrorHandler.handle("Could not delete Issue.", error);
+            swal({
+                title: "Discard Issue?",
+                text: "You will not be able to recover this Issue!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, discard it!",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            }, function(isConfirm){
+                if (isConfirm) {
+                    IssueRetrieveFactory.delete({issueID: $scope.currentIID}).$promise.then(function(response){
+                        $state.go("home");
+                    }, function(error){
+                        ErrorHandler.handle("Could not delete Issue.", error);
+                    });
+                    swal({
+                        title: "Issue discarded!",
+                        timer: 2000,
+                        showConfirmButton: false,
+                        type: "success"
+                    });
+                }
             });
         }
-
 	})
 
     //=================================================
@@ -881,7 +943,6 @@ materialAdmin
 
     .controller('createTaskCtrl', function ( $scope, $state, $stateParams, $timeout, growlService, TokenService, ErrorHandler,
         TasksFactory, TemplateFactory, IssueRetrieveFactory, ProjectFactory, UserFactory) {
-        console.log("starting task creation");
         $scope.titleFail = false;
         $scope.descriptionFail = false;
         $scope.templateFail = false;
@@ -903,8 +964,6 @@ materialAdmin
                     $scope.task={};
                     $scope.task.title=response.title.trim();
                     $scope.task.description=response.description.trim();
-                    console.log($scope.task.title);
-                    console.log($scope.task.description);
                 }, function(error){
                     ErrorHandler.handle("Could not retrieve Issue Information although issue ID was provided.", error);
                 });
@@ -1085,15 +1144,18 @@ materialAdmin
                     subtaskList: $scope.task.subtasks, userList: $scope.task.contributors,
                     taskStates: $scope.task.states}).$promise.then(function(result){
                         //if successful, delete Issue if applicable and change to ProjectView
-                        growlService.growl("Task created.");
                         if($scope.isTransformedIssue){
                                 IssueRetrieveFactory.delete({issueID: $scope.currentIID}).$promise.then(function(response){
-                                console.log("Issue deleted.");
-                                growlService.growl("Issue deleted.");
                             }, function(error){
                                 ErrorHandler.handle("Could not delete Issue.", error);
                             });
                         }
+                        swal({
+                        	title: "Task Created!",
+                        	type: "success",
+                        	timer: 2500,
+                        	showConfirmButton: false
+                        });
                         $state.go("viewProject", {pID:$scope.currentPID});
                 }, function(error){
                     ErrorHandler.handle("Could not save task.", error);
@@ -1137,6 +1199,7 @@ materialAdmin
                 thisUser=$scope.project.allUser.filter(function(user){
                     return(user.user.trim()==TokenService.username);
                 });
+
                 $scope.currentUserRole=thisUser[0].role.trim();
                 console.log("Current User Role:" + $scope.currentUserRole);
             }, function(error){
@@ -1146,9 +1209,27 @@ materialAdmin
             //retrieve task related information from server
             TaskFactory.show({tID: $stateParams.tID}).$promise.then(function(response){
                 $scope.task=response;
+                $scope.comments=[];
+                $scope.commentObject = {};
                 $scope.task.title=$scope.task.title.trim();
                 $scope.task.description=$scope.task.description.trim();
                 $scope.task.status=$scope.task.status.trim();
+
+                //get user information regarding the comments section
+                $scope.task.commentList.forEach(function(comment){
+                    UserFactory.get({uID: comment.user_mail.trim()}).$promise.then(function(user){
+                        user.id = comment.id;
+                        user.text = comment.text.trim();
+                        user.creationDate = comment.creationDate;
+                        user.user_mail = user.userID.trim();
+                        user.firstName = user.firstName.trim();
+                        user.lastName = user.lastName.trim();
+                        user.avatar = user.avatar.trim();
+                        $scope.comments.push(user);
+                    }, function(error){
+                        ErrorHandler.handle("Could not fetch users for comments from server.", error);
+                    });
+                });
 
             //parse the DSL of all subtasks of the task
             $scope.task.parsedSubtaskList=[];
@@ -1173,10 +1254,29 @@ materialAdmin
 
         //delete user from task
         $scope.deleteUserFromTask=function(userID){
-            TaskUserFactory.delete({uID: userID, tID:$scope.currentTID}).$promise.then(function(response){
-                updateTaskInformation();
-            }, function(error){
-                ErrorHandler.handle("Could not fetch task information from server.", error);
+            swal({
+                title: "Remove User from Task?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes!",
+                cancelButtonText: "No!",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },function(isConfirm){
+                if (isConfirm) {
+                    TaskUserFactory.delete({uID: userID, tID:$scope.currentTID}).$promise.then(function(response){
+                        updateTaskInformation();
+                        swal({
+                            title: "User Removed!",
+                            type: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }, function(error){
+                        ErrorHandler.handle("Could not fetch task information from server.", error);
+                    });
+                }
             });
         };
 
@@ -1191,6 +1291,7 @@ materialAdmin
                     $timeout(function(){document.getElementById('taskDescription').focus();});
                 }
             else {
+                //Bitte noch die successmeldung hinzufügen, welche z.b. bei updateProject() verwendet wird, oder Michi bescheid geben, wenns implementiert ist.
                 /*TaskFactory.update({pID: $scope.currentPID, tID: $scope.currentTID}, {
                     title: $scope.task.title,
                     description: $scope.task.description
@@ -1210,14 +1311,35 @@ materialAdmin
             }, function(error){
                 ErrorHandler.handle("Could not add comment.", error);
             });
+            $timeout(function(){$scope.newCommentText="";});
         };
 
-        //save a new comment
+        //delete a comment
         $scope.deleteComment=function(commentID){
-            TaskCommentFactory.delete({tID: $scope.currentTID, cID: commentID}).$promise.then(function(response){
-                updateTaskInformation();
-            }, function(error){
-                ErrorHandler.handle("Could not delete comment.", error);
+            swal({
+                title: "Delete Comment?",
+                text: "You will not be able to recover this Comment!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            }, function(isConfirm){
+                if (isConfirm) {
+                    TaskCommentFactory.delete({tID: $scope.currentTID, cID: commentID}).$promise.then(function(response){
+                        updateTaskInformation();
+                    }, function(error){
+                        ErrorHandler.handle("Could not delete Comment.", error);
+                    });
+                    swal({
+                        title: "Comment deleted!",
+                        timer: 2000,
+                        showConfirmButton: false,
+                        type: "success"
+                    });
+                }
             });
         };
 
@@ -1265,11 +1387,23 @@ materialAdmin
                     updateSubtaskRequest = {status:document.getElementById(subtask.id).value, taskElements:taskElementList};
                     if(subtask.status == "closed")
                         SubtaskFactory.update({sID:subtask.id},{status:"closed", title:subtask.title.trim(), description:subtask.description.trim(), xp:subtask.xp, taskElements:taskElementList}).$promise.then(function(response){
+                            swal({
+                                title: "Subtask Closed!",
+                                type: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
                         }, function(error){
                            ErrorHandler.handle("Could not update Subtask.", error);
                         });
                     else
                         SubtaskFactory.update({sID:subtask.id}, {title:subtask.title.trim(), description:subtask.description.trim(), xp:subtask.xp, taskElements:taskElementList}).$promise.then(function(response){
+                            swal({
+                                title: "Subtask Saved!",
+                                type: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
                         }, function(error){
                            ErrorHandler.handle("Could not update Subtask.", error);
                         });
@@ -1327,7 +1461,12 @@ materialAdmin
             TemplateFactory.create({mode:"create"},{templateCategoryName: "default", templateCategoryDescription: "default category",
             title: $scope.template.title.trim(), description: $scope.template.description.trim(),
             syntax: myCodeMirror.getValue(), user_mail:TokenService.username}).$promise.then(function(response){
-                growlService.growl("Template successfully created!");
+                swal({
+                    title: "Template Created!",
+                    type: "success",
+                    timer: 2500,
+                    showConfirmButton: false
+                });
                 $state.go("viewTemplates");
             }, function(error){
                 ErrorHandler.handle("Could not save template.", error);

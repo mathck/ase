@@ -3939,6 +3939,16 @@ tbody.collapse.in {
   right: 0;
   left: auto;
 }
+.pull-right {
+  right: 0;
+  left: auto;
+}
+.top-sm {
+  top:5px;
+}
+.margin-top-lg {
+  margin-top:70px !important;
+}
 .dropup .caret,
 .navbar-fixed-bottom .dropdown .caret {
   border-top: 0;
@@ -8991,6 +9001,13 @@ body:not(.sw-toggled) #sidebar {
 }
 .listview {
   position: relative;
+}
+.comment {
+
+
+}
+.comment:hover {
+    background-color: #EDECEC;
 }
 .listview:not(.lv-lg):not(.lv-message) .lv-item {
   padding: 0px 20px;

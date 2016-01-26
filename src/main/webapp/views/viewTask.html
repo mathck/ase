@@ -18,7 +18,7 @@
                     </li>
                     <li>
                         <div class="col-sm-3">
-                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Update Task" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="updateTask()"><i class="zmdi zmdi-check"></i>Update Task Information</button>
+                            <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" title="Update Task" data-ng-show="currentUserRole=='ADMIN'" data-ng-click="updateTask()"><i class="zmdi zmdi-check"></i>Update Task Information</button>
                         </div>
                     </li>
                 </ul>
@@ -85,19 +85,19 @@
                  <div class="card-body card-padding">
                      <div class="media-demo">
                          <div class="lv-body">
-                             <div class="lv-item media" data-ng-repeat="comment in task.commentList">
+                             <div class="lv-item media comment" data-ng-repeat="comment in comments | orderBy:'creationDate'">
                                  <div class="lv-avatar pull-left">
                                      <a href="#">
-                                         <img class="media-object" data-ui-sref="profile({uID: comment.user_mail})" src="img/profile-pics/4.jpg" alt="">
+                                         <img class="media-object" data-ui-sref="profile({uID: comment.user_mail})" ng-src="{{comment.avatar}}" width="50px" alt="">
                                      </a>
                                  </div>
                                  <div class="media-body">
                                      <div class="ms-item">
-                                         <h4 class="media-heading" data-ui-sref="profile({uID: comment.user_mail})">{{comment.user_mail.trim()}}</h4>
+                                         <h4 class="media-heading" data-ui-sref="profile({uID: comment.user_mail})">{{comment.firstName.trim()}} {{comment.lastName.trim()}}</h4>
                                          {{comment.text.trim()}}
                                          <small class="ms-date"><i class="zmdi zmdi-time"></i> {{comment.creationDate}}</small>
                                      </div>
-                                     <div data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteComment(comment.id)" class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></div>
+                                     <div class="pull-right" data-ng-show="currentUserRole=='ADMIN'"><button data-ng-click="deleteComment(comment.id)" class="btn bgm-red waves-effect top-sm"><i class="zmdi zmdi-close"></i></button></div>
                                  </div>
                              </div>
                              <div class="clearfix"></div>
@@ -105,7 +105,7 @@
                              <div class="lv-footer ms-reply">
                                  <textarea rows="4" data-ng-model="newCommentText" placeholder="Add a comment..."></textarea>
 
-                                 <button title="Submit Comment" data-ng-click="addComment()" data-swal-success><i class="zmdi zmdi-mail-send c-teal"></i></button>
+                                 <button title="Submit Comment" data-ng-click="addComment()"><i class="zmdi zmdi-mail-send c-teal"></i></button>
                              </div>
                          </div>
                      </div>
@@ -153,7 +153,7 @@
                                  <div class="col-sm-12">
                                      <div class="fg-line fg-line-lg">
                                          <div class="select">
-                                             <select class="form-control" id="{{subtask.id}}" data-ng-model="subtask.status" ng-trim="true" required="Please select a state">
+                                             <select class="form-control" id="{{subtask.id}}" ng-disabled="subtask.gitHookAllowed" data-ng-model="subtask.status" ng-trim="true" required="Please select a state">
                                                 <option>open</option>
                                                 <option>closed</option>
                                              </select>
@@ -163,7 +163,7 @@
                              </li>
                              <li>
                                  <div class="col-sm-3">
-                                     <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" data-swal-success title="Save Subtask" data-ng-click="updateSubtask(subtask.id)"><i class="zmdi zmdi-check"></i>Save Subtask</button>
+                                     <button class="btn bgm-teal btn-icon-text waves-effect waves-effect" ng-disabled="subtask.gitHookAllowed" title="Save Subtask" data-ng-click="updateSubtask(subtask.id)"><i class="zmdi zmdi-check"></i>Save Subtask</button>
                                  </div>
                              </li>
                          </ul>
