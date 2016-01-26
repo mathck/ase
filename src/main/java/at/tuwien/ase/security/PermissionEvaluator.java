@@ -68,7 +68,7 @@ public class PermissionEvaluator {
                 return false;
             }
             Integer taskId = subtaskDAO.findByID(subtaskId).getTaskId();
-            if (authDAO.userIsManagerInProjectByTask(authUserId, taskId)){
+            if (authDAO.userIsManagerInProjectByTask(authUserId, taskId) || authDAO.userIsTaskAssignee(authUserId, taskId)){
                 return true;
             }else{
                 return false;

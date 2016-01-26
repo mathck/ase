@@ -1,28 +1,106 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <template>
-
 	<identifier>
 		<title>User story #5: Teacher and class</title>
-		<description>In a class with 20 students and 1 teacher the teacher wants to assign homework to his students. Also he wants the students to be rewarded if they do their homework. In this case the class, lasting for 1 year, is one project. The participants are the students. The teacher assigns in the project view specific rewards when a student reaches a level. In this case, the teacher assigns one reward to level 4: Grade 4. For level 5 he applies the Grade 3, level 6 -> grade 2, level 7 -> grade 1.</description>
-		<estimatedWorkTime>60</estimatedWorkTime>	
+		<description>Good luck with your homework!</description>
+		<estimatedWorkTime>60</estimatedWorkTime>
 		<deadline>2016-03-03</deadline>
 		<githook>false</githook>
 	</identifier>
 
 	<taskBody>
-
-		<h1>Upload your homework</h1>
+		<h1>Insert all empty fields and check everything that is true:</h1>
 		<br />
+        <h2>Some True False questions for you</h2>
 		{taskElement:1}
-		
+        {taskElement:2}
+        {taskElement:3}
+        {taskElement:4}
+        {taskElement:5}
+        <br />
+        <h2>Now fill in the gaps</h2>
+        The current president of the United States of America is Barack {taskElement:6}<br />
+        In the upcoming presidential election Hillary Clintons main rival is Bernie {taskElement:7}<br />
+        In the upcoming presidential election Donald {taskElement:8} is the current favourite for the republican party<br />
+        <br/>
+
+        How many continents does the world posses?
+        {taskElement:9}
+
+        {taskElement:10}
 	</taskBody>
 
 	<taskElements>
-		<taskElement id="1">
-			<status></status>
-			<value></value>
-			<link>user_story_5/files/loesung.pdf</link>
-			<type>file</type> 
-		</taskElement>
+        <taskElement id='1'>
+            <status>unchecked</status>
+            <value>The highest mountain in the world is mont blanc</value>
+            <solution>unchecked</solution>
+            <link></link>
+            <type>checkbox</type>
+        </taskElement>
+        <taskElement id='2'>
+            <status>unchecked</status>
+            <value>Vienna is the capital city of Austria</value>
+            <solution>checked</solution>
+            <link></link>
+            <type>checkbox</type>
+        </taskElement>
+        <taskElement id='3'>
+            <status>unchecked</status>
+            <value>Madrid is the capital city of Portugal</value>
+            <solution>unchecked</solution>
+            <link></link>
+            <type>checkbox</type>
+        </taskElement>
+        <taskElement id='4'>
+            <status>unchecked</status>
+            <value>London is the capital city of Australia</value>
+            <solution>unchecked</solution>
+            <link></link>
+            <type>checkbox</type>
+        </taskElement>
+        <taskElement id='5'>
+            <status>unchecked</status>
+            <value>The highest mountain in the world is mount everest</value>
+            <solution>checked</solution>
+            <link></link>
+            <type>checkbox</type>
+        </taskElement>
+
+        <taskElement id='6'>
+            <status></status>
+            <value>...</value>
+            <solution>Obama</solution>
+            <link></link>
+            <type>textbox</type>
+        </taskElement>
+        <taskElement id='7'>
+            <status></status>
+            <value>...</value>
+            <solution>Sanders</solution>
+            <link></link>
+            <type>textbox</type>
+        </taskElement>
+        <taskElement id='8'>
+            <status></status>
+            <value>...</value>
+            <solution>Trump</solution>
+            <link></link>
+            <type>textbox</type>
+        </taskElement>
+
+        <taskElement id='9'>
+            <status>one</status>
+            <value>one|two|three|four|five|six|seven</value>
+            <solution>seven</solution>
+            <link></link>
+            <type>slider</type>
+        </taskElement>
+
+        <taskElement id='10'>
+            <status></status>
+            <value></value>
+            <link>http://www.mapsinternational.co.uk/readonly/products_images/2000000676_1.JPG</link>
+            <type>image</type>
+        </taskElement>
 	</taskElements>
 </template>

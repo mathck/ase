@@ -1,17 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <template>
-
 	<identifier>
 		<title>User story #1: Student project</title>
-		<description>Using Predefined Task Templates and Superordinate Tasks</description>
-		<estimatedWorkTime>60</estimatedWorkTime>	
+		<description>Add this githook to your project: http://www.mathck.com/commit-msg and use it like this: git commit -m 'Finished subtask #subtaskID'</description>
+		<estimatedWorkTime>60</estimatedWorkTime>
 		<deadline>2016-03-03</deadline>
 		<githook>true</githook>
 	</identifier>
 
 	<taskBody>
-		<h1>Nice Subtask</h1>
 	</taskBody>
-
 	<taskElements />
 </template>
