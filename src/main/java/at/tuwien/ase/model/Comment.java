@@ -2,6 +2,7 @@ package at.tuwien.ase.model;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -23,10 +24,11 @@ public class Comment {
     @Size(min = 5)
     private String user_mail;
 
-    private Date creationDate;
+    private String creationDate;
+    private String creationDateString;
     private User user;
 
-    Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    //Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     // Must have no-argument constructor
     public Comment() {
@@ -65,12 +67,13 @@ public class Comment {
         this.user_mail = user_mail;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+        this.creationDateString = creationDate.toString();
     }
 
     public User getUser() {
@@ -91,7 +94,7 @@ public class Comment {
                 ", firstName='" + getUser().getFirstName() + '\'' +
                 ", lastName='" + getUser().getLastName() + '\'' +
                 ", avatar='" + getUser().getAvatar() + '\'' +
-                ", creationDate=" + formatter.format(creationDate) +
+                ", creationDate=" + creationDateString +
                 ", user=" + user +
                 '}';
     }

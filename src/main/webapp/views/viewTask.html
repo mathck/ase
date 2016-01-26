@@ -56,8 +56,8 @@
                                 <p class="c-black f-500 m-b-20 m-t-20">State</p>
                                 <div class="form-group">
                                     <div class="fg-line">
-                                        <div class="select" data-ng-model="task.status">
-                                            <select class="form-control" data-ng-options="state.stateName for state in task.taskStates track by statetaskId">
+                                        <div class="select">
+                                            <select class="form-control" data-ng-model="task.status" data-ng-options="state.stateName for state in task.taskStates track by statetaskId">
                                             </select>
                                         </div>
                                     </div>

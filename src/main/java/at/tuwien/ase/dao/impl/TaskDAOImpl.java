@@ -277,7 +277,7 @@ public class TaskDAOImpl implements TaskDAO {
 
                 comment.setId(commentId);
                 comment.setText((String) row.get("comment_text"));
-                comment.setCreationDate(new java.sql.Date(((Timestamp) row.get("comment_creation_date")).getTime()));
+                comment.setCreationDate(((Timestamp) row.get("comment_creation_date")).toString());
 
                 user = new User();
 
@@ -624,7 +624,7 @@ public class TaskDAOImpl implements TaskDAO {
                         comment.setId(commentId);
                         comment.setUser_mail((String) row.get("comment_mail"));
                         comment.setText((String) row.get("comment_text"));
-                        comment.setCreationDate(new java.sql.Date(((Timestamp) row.get("comment_creation_date")).getTime()));
+                        comment.setCreationDate(((Timestamp) row.get("comment_creation_date")).toString());
 
                         //put comment to task element
                         ((Task) taskMap.get(taskId)).addComment(comment);
