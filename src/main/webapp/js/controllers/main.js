@@ -279,7 +279,7 @@ materialAdmin
     // Profile
     //=================================================
 
-    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, RewardsByProjectFactory, ErrorHandler){
+    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, RewardsByProjectFactory, RewardsByUserFactory, ErrorHandler){
 
         var currentUID;
         var userRewardProjectIds = [];
@@ -320,7 +320,7 @@ materialAdmin
                 });
                 project.role=userInProject[0].role.trim();
 
-                RewardsByProjectFactory.query({uID: currentUID}).$promise.then(function(response){
+                RewardsByUserFactory.query({uID: currentUID}).$promise.then(function(response){
                     response.forEach(function(reward){
                         reward.name = reward.name.trim();
                     });

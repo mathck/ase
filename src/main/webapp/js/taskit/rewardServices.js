@@ -14,6 +14,15 @@ rewardServices.factory('RewardsByProjectFactory', function ($resource) {
     })
 });
 
+rewardServices.factory('RewardsByUserFactory', function ($resource) {
+    return $resource('/taskit/api/workspace/users/:uID/rewards', {}, {
+        query: {
+            method: 'GET',
+            params: {uID: '@uID'},
+            isArray: true
+        }
+    })
+});
 
 rewardServices.factory('RewardsCreatedByUserFactory', function ($resource) {
     return $resource('/taskit/api/workspace/projects/rewards', {}, {

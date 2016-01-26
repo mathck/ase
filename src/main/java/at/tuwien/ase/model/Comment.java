@@ -2,6 +2,9 @@ package at.tuwien.ase.model;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,6 +25,8 @@ public class Comment {
 
     private Date creationDate;
     private User user;
+
+    Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     // Must have no-argument constructor
     public Comment() {
@@ -86,7 +91,7 @@ public class Comment {
                 ", firstName='" + getUser().getFirstName() + '\'' +
                 ", lastName='" + getUser().getLastName() + '\'' +
                 ", avatar='" + getUser().getAvatar() + '\'' +
-                ", creationDate=" + creationDate +
+                ", creationDate=" + formatter.format(creationDate) +
                 ", user=" + user +
                 '}';
     }
