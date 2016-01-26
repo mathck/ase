@@ -6,6 +6,7 @@ import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.dao.UserDAO;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.Reward;
 import at.tuwien.ase.model.UserRole;
 import at.tuwien.ase.security.PermissionEvaluator;
 import at.tuwien.ase.services.LoginService;
@@ -163,6 +164,15 @@ public class ProjectController {
             throw new ValidationException("Not allowed");
         }
         projectService.removeUser(pID, uID);
+    }
+
+    @RequestMapping(value = "/workspace/projects/{pID}/rewards", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    public void addRewardsToProject(@RequestBody LinkedList<Reward> rewards, @PathVariable("pID") int pID, @RequestHeader("user-token") String token) throws Exception {
+        if(!permissionEvaluator.hasPermission(loginService.getUserIdByToken(token),pID,"CHANGE_PROJECT")) {
+            throw new ValidationException("Not allowed");
+        }
+        projectService.addRewardsToProject(pID, rewards);
     }
 
 }

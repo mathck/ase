@@ -1,7 +1,10 @@
 package at.tuwien.ase.services;
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.model.JsonStringWrapper;
 import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.Reward;
+import org.springframework.dao.DataAccessException;
 
 import java.util.LinkedList;
 
@@ -18,6 +21,8 @@ public interface ProjectService {
     void deleteProject(int pID);
 
     void updateProject(int pID, Project project);
+
+    void addRewardsToProject(int pID, LinkedList<Reward> rewardList) throws DataAccessException, ValidationException;
 
     Project getByID(int pID, String uID);
 

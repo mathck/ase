@@ -1,5 +1,6 @@
 package at.tuwien.ase.services.impl;
 
+import at.tuwien.ase.controller.exceptions.ValidationException;
 import at.tuwien.ase.dao.*;
 import at.tuwien.ase.model.*;
 import at.tuwien.ase.services.IssueService;
@@ -15,6 +16,7 @@ import at.tuwien.ase.services.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -228,6 +230,17 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = new Project();
         project.setUpdateTimeDB(new Timestamp(new Date().getTime()));
         this.updateProject(projectID, project);
+    }
+
+    public void addRewardsToProject(int pID, LinkedList<Reward> rewardList) throws DataAccessException, ValidationException{
+
+        if (rewardList.size() >= 20){
+            throw new ValidationException("It is not possible to add more than 20 rewards in one execution");
+        }
+
+        //add rewards to project
+        projectDAO.insertRewardsToProjectBatch(pID, rewardList);
+
     }
 
 }
