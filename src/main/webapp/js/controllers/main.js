@@ -553,7 +553,7 @@ materialAdmin
     //=================================================
 
     .controller('createProjectCtrl', function ($scope, $location, $window, $timeout, $state, growlService, ErrorHandler,
-        TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsCreatedByUserFactory) {
+        TokenService, ProjectFactory, AddUserToProjectFactory, UsersFactory, RewardsCreatedByUserFactory, AddRewardToProjectFactory) {
 
         console.log("starting Project Creation");
 
@@ -622,6 +622,14 @@ materialAdmin
            ErrorHandler.handle("Could not fetch your rewards from server.", error);
         });
 
+        //Get all achieved rewards for the current project
+        RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
+            $scope.rewardList=rewards;
+            console.log(rewards);
+        }, function(error){
+           ErrorHandler.handle("Could not fetch your rewards from server.", error);
+        });
+
         $scope.createProject = function () {
             if(!$scope.project) {
                 $scope.titleFail = true;
@@ -644,7 +652,14 @@ materialAdmin
                     $scope.users.userPickerManager.forEach(function(manager){
                         AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
                     });
-
+                    /*if(!($scope.rewardPicker===undefined)){
+                        var rewardList=[];
+                        $scope.rewardPicker.forEach(function(reward){
+                           rewardList.push({id:reward})
+                        });
+                        console.log(rewardList);
+                        AddRewardToProjectFactory.add({pID:$scope.pID},rewardList);
+                    }*/
                     $state.go("viewProject",{pID:$scope.pID});
 
                     swal({
@@ -666,7 +681,8 @@ materialAdmin
     //=================================================
 
     .controller('updateProjectCtrl', function ($scope, $stateParams, $timeout, growlService, ErrorHandler, TokenService,
-        ProjectFactory, AddUserToProjectFactory, UserFactory, UsersFactory, RewardsByProjectFactory, RewardsCreatedByUserFactory, RemoveUserFromProjectFactory) {
+        ProjectFactory, AddUserToProjectFactory, UserFactory, UsersFactory, RewardsByProjectFactory, AvailableRewardsByProjectFactory, RewardsCreatedByUserFactory,
+        AddRewardToProjectFactory, RemoveUserFromProjectFactory) {
 
        growlService.growl('Fetching project information...');
 
@@ -713,6 +729,34 @@ materialAdmin
                 //console.log($scope.selectedProject.allTasks);
             }, function(error){
                 ErrorHandler.handle("Could not fetch project information from server.", error);
+            });
+
+            $scope.rewards={};
+
+            //Get all rewards for the current project and user
+            RewardsByProjectFactory.query({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(allrewards){
+                $scope.rewards.earnedRewards=allrewards;
+                console.log("projectinfo nach earned reward");
+                console.log($scope.selectedProject);
+            }, function(error){
+                ErrorHandler.handle("Could not get rewards for this project.", error);
+            });
+
+            //Get all rewards for the current project
+            AvailableRewardsByProjectFactory.query({pID: $scope.currentPID}).$promise.then(function(availableRewards){
+                $scope.rewards.availableRewards=availableRewards;
+                console.log("projectinfo nach available reward")
+                console.log($scope.selectedProject)
+            }, function(error){
+                ErrorHandler.handle("Could not get rewards for this project.", error);
+            });
+
+            //Get all created rewards for the current user
+            RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(createdRewards){
+                //console.log(rewards);
+                $scope.rewardList=createdRewards;
+            }, function(error){
+               ErrorHandler.handle("Could not fetch your rewards from server.", error);
             });
         };
         $scope.updateProjectInformation();
@@ -770,21 +814,6 @@ materialAdmin
            ErrorHandler.handle("Could not fetch users from server.", error);
         });
 
-        //Get all rewards for the current project and user
-        RewardsByProjectFactory.query({pID: $scope.currentPID, uID: TokenService.username}).$promise.then(function(rewards){
-            $scope.selectedProject.rewards=rewards;
-        }, function(error){
-            ErrorHandler.handle("Could not get rewards for this project.", error);
-        });
-
-        //Get all created rewards for the current user
-        RewardsCreatedByUserFactory.query({uID: TokenService.username}).$promise.then(function(rewards){
-            //console.log(rewards);
-            $scope.rewardList=rewards;
-        }, function(error){
-           ErrorHandler.handle("Could not fetch your rewards from server.", error);
-        });
-
         $scope.deleteUserFromProject=function(userID){
             swal({
                 title: "Remove User from Project?",
@@ -835,6 +864,17 @@ materialAdmin
                 $scope.users.userPickerManager.forEach(function(manager){
                     AddUserToProjectFactory.add({project: $scope.currentPID, user: manager, role: "ADMIN"});
                 });
+
+
+                if(!($scope.rewardPicker===undefined)){
+                    var rewardList=[];
+                    $scope.rewardPicker.forEach(function(reward){
+                       rewardList.push({id:reward})
+                    });
+                    console.log(rewardList);
+                    AddRewardToProjectFactory.add({pID:$scope.currentPID},rewardList);
+                }
+
                 $scope.updateProjectInformation();
                 swal({
                 	title: "Project Saved!",

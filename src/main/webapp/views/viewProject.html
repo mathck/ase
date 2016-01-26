@@ -233,8 +233,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="fg-line" data-ng-show="currentUserRole=='ADMIN'">
-                                <p class="f-500 c-black m-b-15">Reward/s</p>
-                                <select chosen multiple data-placeholder="Add a Reward..." class="w-100" data-ng-model="users.rewardPicker" data-ng-options="reward.id as reward.name for reward in rewardList | orderBy:'xpbase'"></select>
+                                <p class="f-500 c-black m-b-15">Available Reward/s</p>
+                                <select chosen multiple data-placeholder="Add a Reward..." class="w-100" data-ng-model="rewardPicker" data-ng-options="reward.id as reward.name for reward in rewardList | orderBy:'xpbase'"></select>
                             </div>
                             <div tabindex="9" style="overflow: hidden;" class="table-responsive">
                                 <table class="table table-hover">
@@ -244,12 +244,49 @@
                                         <th>Name</th>
                                         <th>Description</th>
                                         <th>XP Base</th>
-                                        <th>Delete</th>
+                                        <!--<th>Delete</th>-->
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <!--NG Repeat for Reward starts here -->
-                                    <tr data-ng-repeat="reward in selectedProject.rewards">
+                                    <tr data-ng-repeat="reward in rewards.availableRewards">
+                                        <td class="col-xs-2">
+                                            <div class="thumbnail noHeader">
+                                                <img ng-src="{{reward.imageLink}}" width="75px" alt="Image of {{reward.name}}">
+                                            </div>
+                                        </td>
+                                        <td>{{reward.name}}</td>
+                                        <td>{{reward.description}}</td>
+                                        <td>{{reward.xpbase}}</td>
+                                        <!--<td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>-->
+                                    </tr>
+                                    <!--NG Repeat for Reward ends  here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-padding">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="fg-line" data-ng-show="currentUserRole=='ADMIN'">
+                                <p class="f-500 c-black m-b-15">Earned Reward/s</p>
+                            </div>
+                            <div tabindex="9" style="overflow: hidden;" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>XP Base</th>
+                                        <!--<th>Delete</th>-->
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--NG Repeat for Reward starts here -->
+                                    <tr data-ng-repeat="reward in rewards.earnedRewards">
                                         <td class="col-xs-2">
                                             <div class="thumbnail noHeader">
                                                 <img ng-src="{{reward.imageLink}}" alt="Image of {{reward.name}}">
@@ -258,7 +295,7 @@
                                         <td>{{reward.name}}</td>
                                         <td>{{reward.description}}</td>
                                         <td>{{reward.xpbase}}</td>
-                                        <td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>
+                                        <!--<td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>-->
                                     </tr>
                                     <!--NG Repeat for Reward ends  here -->
                                     </tbody>

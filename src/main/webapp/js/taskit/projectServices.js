@@ -59,3 +59,12 @@ projectServices.factory('RemoveUserFromProjectFactory', function ($resource) {
         }
     })
 });
+
+projectServices.factory('AddRewardToProjectFactory', function ($resource) {
+    return $resource('/taskit/api/workspace/projects/:pID/rewards', {}, {
+        add: {
+            method: 'POST',
+            params: {pID:'@pID'}
+        }
+    })
+});
