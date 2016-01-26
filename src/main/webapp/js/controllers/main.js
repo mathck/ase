@@ -1287,8 +1287,8 @@ materialAdmin
             $scope.model.range = {};
             $scope.values = {};
             $scope.task.subtaskList.forEach(function(subtask){
-                $scope.MaxXp = $scope.MaxXp + subtask.xp;
-                $scope.userXp = $scope.userXp + subtask.xp * subtask.percentageReached;
+                $scope.maxXp = $scope.maxXp + subtask.xp;
+                $scope.userXp = $scope.userXp + subtask.xp * (subtask.percentageReached/100);
                 subtask.status = subtask.status.trim();
                 parsedTemplate=showDSL(ErrorHandler, subtask, $scope);
                 $scope.task.parsedSubtaskList.push(parsedTemplate);
