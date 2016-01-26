@@ -653,14 +653,14 @@ materialAdmin
                     $scope.users.userPickerManager.forEach(function(manager){
                         AddUserToProjectFactory.add({project: $scope.pID, user: manager, role: "ADMIN"});
                     });
-                    /*if(!($scope.rewardPicker===undefined)){
+                    if(!($scope.rewardPicker===undefined)){
                         var rewardList=[];
                         $scope.rewardPicker.forEach(function(reward){
                            rewardList.push({id:reward})
                         });
                         console.log(rewardList);
                         AddRewardToProjectFactory.add({pID:$scope.pID},rewardList);
-                    }*/
+                    }
                     $state.go("viewProject",{pID:$scope.pID});
 
                     swal({
