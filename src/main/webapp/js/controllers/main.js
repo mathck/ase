@@ -1255,6 +1255,7 @@ materialAdmin
             //console.log($scope.task.parsedSubtaskList);
             }, function(error){
                 ErrorHandler.handle("Could not fetch task information from server.", error);
+                $state.go("viewProject",{pID:$scope.currentPID});
             });
         };
         updateTaskInformation();
