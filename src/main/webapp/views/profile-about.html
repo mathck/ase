@@ -49,23 +49,45 @@
     <div class="pmbb-header">
         <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project {{project.title}} Experience <i data-ng-show="project.role.trim()=='ADMIN'" class="zmdi zmdi-star"></i></h2>
         {{project.description}}
-        <!--
-                <ul class="actions" data-ng-if="pctrl.editSummary === 0">
-                    <li class="dropdown" dropdown>
-                        <a href="" dropdown-toggle>
-                            <i class="zmdi zmdi-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a data-ng-click="pctrl.editSummary = 1" href="">Edit</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                -->
     </div>
-    <div class="pmbb-body p-l-30">
+    <div class="card-body card-padding">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="fg-line" data-ng-show="currentUserRole=='ADMIN'">
+                    <p class="f-500 c-black m-b-15">Earned Reward/s</p>
+                </div>
+                <div tabindex="9" style="overflow: hidden;" class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>XP Base</th>
+                            <!--<th>Delete</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!--NG Repeat for Reward starts here -->
+                        <tr data-ng-repeat="rewards in project.rewards">
+                            <td class="col-xs-2">
+                                <div class="thumbnail noHeader">
+                                    <img ng-src="{{reward.imageLink}}" width="75px" alt="Image of {{reward.name}}">
+                                </div>
+                            </td>
+                            <td>{{reward.name}}</td>
+                            <td>{{reward.description}}</td>
+                            <td>{{reward.xpbase}}</td>
+                            <!--<td><button class="btn bgm-red waves-effect"><i class="zmdi zmdi-close"></i></button></td>-->
+                        </tr>
+                        <!--NG Repeat for Reward ends  here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="pmbb-body p-l-30">
         <div class="pmbb-view" data-ng-if="pctrl.editSummary === 0">
             <div class="rating-list">
                 <div class="listview">
@@ -93,7 +115,7 @@
 
                 </div>
             </div>
-        </div>
+        </div>-->
         <!--
                 <form data-ng-submit="pctrl.submit('profileSummary', 'Profile Summary')" class="pmbb-edit" data-ng-if="pctrl.editSummary === 1">
                     <div class="fg-line">
@@ -104,28 +126,11 @@
                         <button class="btn btn-link btn-sm" data-ng-click="pctrl.editSummary = 0" >Cancel</button>
                     </div>
                 </form>
-                -->
-    </div>
 
-    <div class="row">
-        <div class="col-sm-2">
-            <div class="thumbnail">
-                <img src="media/gallery/thumbs/6.jpg" alt="">
-                <h4>Reward 1</h4>
-                <h5>Level 1</h5>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="thumbnail">
-                <img src="media/gallery/thumbs/7.jpg" alt="" class="disabled">
-                <h4>Reward 2</h4>
-                <h5>Level 4</h5>
-            </div>
-        </div>
     </div>
-</div>
+</div>---->
 
-<div class="pmb-block">
+<!--<div class="pmb-block">
     <div class="pmbb-header">
         <h2><i class="zmdi zmdi-equalizer m-r-5"></i> Project #2 Experience</h2>
         <!--
@@ -185,5 +190,5 @@
                     </form>
                     -->
         </div>
-    </div>
+    </div>-->
 </div>

@@ -286,6 +286,7 @@ materialAdmin
         var userRewardNames = [];
         var userRewardXpBases = [];
         $scope.userRewards = [];
+        $scope.user={};
 
 
         if((typeof $stateParams.uID === 'undefined') || $stateParams.uID=="" )
@@ -295,11 +296,14 @@ materialAdmin
 
         //Get Profile Information from User Service
         UserFactory.get({uID: currentUID}).$promise.then(function(user){
+            $scope.user=user;
             $scope.avatar=user.avatar;
             $scope.firstName=user.firstName;
             $scope.lastName=user.lastName;
             $scope.userID=user.userID;
-            console.log("$scope.userID " + $scope.userID + " , currentUID " + currentUID + " $scope.lastName " + $scope.lastName);
+            //console.log("$scope.userID " + $scope.userID + " , currentUID " + currentUID + " $scope.lastName " + $scope.lastName);
+            console.log("userlevel");
+            console.log($scope.user.level.currentLevel);
         }, function(error){
            ErrorHandler.handle("Could not fetch user information from server.", error);
         });
@@ -308,7 +312,9 @@ materialAdmin
             ProjectsFactory.query({uID: currentUID}).$promise.then(function(response){
             //AdminProjectsFactory.query().$promise.then(function(response){
             //edit project information so it can easily be displayed (trim returned variables and identify user role for each project
-                response.forEach(function(project){
+                var rewards;
+                $scope.userProjects=response;
+                $scope.userProjects.forEach(function(project){
                     project.title=project.title.trim();
 
                     if(project.description == null)
@@ -320,23 +326,24 @@ materialAdmin
                         return(user.user.trim()==TokenService.username);
                     });
                     project.role=userInProject[0].role.trim();
-
-                    RewardsByUserFactory.query({uID: currentUID}).$promise.then(function(response){
+                    var rewards=[];
+                    RewardsByProjectFactory.query({uID: currentUID}, {pID:project.projectID}).$promise.then(function(response){
                         response.forEach(function(reward){
                             reward.name = reward.name.trim();
                         });
-                        $scope.userRewards.push(response);
+                        rewards.push(response);
+                        //$scope.userRewards.push(response);
                     }, function(error){
                        ErrorHandler.handle("Could not fetch reward/s.", error);
                     });
-
+                    project.rewards=rewards;
                 });
-                $scope.userProjects=response;
+
+                console.log($scope.userProjects);
             }, function(error){
                ErrorHandler.handle("Could not fetch projects.", error);
             });
         }
-
 
         //Edit
         this.editSummary = 0;
