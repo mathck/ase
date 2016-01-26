@@ -1224,6 +1224,11 @@ materialAdmin
                 $scope.task.title=$scope.task.title.trim();
                 $scope.task.description=$scope.task.description.trim();
                 $scope.task.status=$scope.task.status.trim();
+
+                $scope.task.taskStates.forEach(function(state){
+                    state.stateName=state.stateName.trim();
+                });
+
                 console.log("taskStates");
                 console.log($scope.task.taskStates);
 
