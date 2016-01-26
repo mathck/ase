@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Daniel Hofer on 04.11.2015.
@@ -71,8 +72,9 @@ public class Task implements Cloneable{
         commentList = new LinkedList<Comment>();
     }
 
-    public Task(String status, String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userMail) {
+    public Task(String status, String executionType, String title, String description, String taskType, Date creationDate, Date updateDate, Integer projectId, String userMail, LinkedList<TaskState> taskStates, LinkedList<Subtask> subtasks, LinkedList<User> users) {
         this.status = status;
+        this.executionType = executionType;
         this.title = title;
         this.description = description;
         this.taskType = taskType;
@@ -80,14 +82,14 @@ public class Task implements Cloneable{
         this.updateDate = updateDate;
         this.projectId = projectId;
         this.userMail = userMail;
-        subtaskList = new LinkedList<Subtask>();
-        userList = new LinkedList<User>();
-        taskStates = new LinkedList<TaskState>();
+        subtaskList = subtasks;
+        userList = users;
+        this.taskStates = taskStates;
         commentList = new LinkedList<Comment>();
     }
 
     public Task(String title, String description) {
-        this(null, title, description, null, null, null, null, null);
+        this(null, "single_task", title, description, null, null, null, null, null, null, null, null);
     }
 
     public Integer getId() {

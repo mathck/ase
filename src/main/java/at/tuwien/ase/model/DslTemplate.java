@@ -37,6 +37,14 @@ public class DslTemplate {
     @Size(min = 2)
     private String user_mail;
 
+    public DslTemplate(String title, String desc, String syntax, String user_mail) {
+        this.title = this.templateCategoryName = title;
+        this.description = this.templateCategoryDescription = desc;
+
+        this.syntax = syntax;
+        this.user_mail = user_mail;
+    }
+
     // Must have no-argument constructor
     public DslTemplate() {
 

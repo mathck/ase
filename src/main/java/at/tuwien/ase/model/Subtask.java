@@ -37,7 +37,7 @@ public class Subtask implements Cloneable{
         taskElements = new LinkedList<TaskElementJson>();
     }
 
-    public Subtask(String title, String description, int taskId, String status, int xp, Date creationDate, Date updateDate) {
+    public Subtask(String title, String description, int taskId, String status, int xp, Date creationDate, Date updateDate, int dslTemplateId) {
         this.title = title;
         this.description = description;
         this.taskId = taskId;
@@ -45,6 +45,7 @@ public class Subtask implements Cloneable{
         this.xp = xp;
         this.creationDate = creationDate;
         this.updateDate = updateDate;
+        this.dslTemplateId = dslTemplateId;
     }
 
     public Integer getId() {
