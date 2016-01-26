@@ -3,10 +3,12 @@ package at.tuwien.ase.dao.impl;
 import at.tuwien.ase.dao.ProjectDAO;
 import at.tuwien.ase.model.Project;
 
+import at.tuwien.ase.model.Reward;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -66,6 +69,18 @@ public class ProjectDAOImpl implements ProjectDAO {
     public int getNewRelationID() {
         Integer relationID = this.jdbcTemplate.queryForObject(
                 "SELECT nextval('seq_user_project_id')",
+                Integer.class);
+        return relationID;
+    }
+
+    /**
+     * Gets a new unique ID for the project-reward relation.
+     *
+     * @return An integer project-reward ID.
+     */
+    public int getNewRewardRelationID() {
+        Integer relationID = this.jdbcTemplate.queryForObject(
+                "SELECT nextval('seq_project_reward_id')",
                 Integer.class);
         return relationID;
     }
@@ -255,6 +270,32 @@ public class ProjectDAOImpl implements ProjectDAO {
                 }
         );
         return new LinkedList<Project>(list);
+    }
+
+    public void insertRewardsToProjectBatch(final int pID, final LinkedList<Reward> rewardList){
+
+        String sqlQuery = "INSERT INTO REL_PROJECT_REWARD (ID, PROJECT_ID, REWARD_ID) " +
+                "VALUES (?, ?, ?)";
+
+        this.jdbcTemplate.batchUpdate(sqlQuery, new BatchPreparedStatementSetter() {
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+
+                Reward reward = rewardList.get(i);
+
+                ps.setInt(1, getNewRewardRelationID());
+                ps.setInt(2, pID);
+                ps.setInt(3, reward.getId());
+
+            }
+
+            public int getBatchSize() {
+                return rewardList.size();
+            }
+
+        });
+
+
     }
 
 }

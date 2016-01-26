@@ -1,6 +1,7 @@
 package at.tuwien.ase.dao;
 
 import at.tuwien.ase.model.Project;
+import at.tuwien.ase.model.Reward;
 
 import java.util.LinkedList;
 
@@ -13,6 +14,8 @@ import java.util.LinkedList;
 public interface ProjectDAO {
 
     int insertProject(Project project);
+
+    void insertRewardsToProjectBatch(int pID, LinkedList<Reward> rewardList);
 
     void removeProject(int pID);
 

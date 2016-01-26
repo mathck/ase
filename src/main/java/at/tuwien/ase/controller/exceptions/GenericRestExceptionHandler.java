@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import at.tuwien.ase.model.JsonStringWrapper;
 import org.apache.logging.log4j.*;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +58,15 @@ public class GenericRestExceptionHandler {
     protected JsonStringWrapper handleDataAccess(final DataAccessException exception) {
         logException(exception);
         return new JsonStringWrapper("No entry available");
+    }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseBody
+    protected JsonStringWrapper handleDuplicateKey(final DuplicateKeyException exception) {
+        logException(exception);
+        return new JsonStringWrapper("Duplicate entry");
     }
 
     //Add more exceptions handling methods as needed
