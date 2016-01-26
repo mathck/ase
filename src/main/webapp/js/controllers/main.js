@@ -279,13 +279,14 @@ materialAdmin
     // Profile
     //=================================================
 
-    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, RewardsByProjectFactory, RewardsByUserFactory, ErrorHandler){
+    .controller('profileCtrl', function($scope, $stateParams, ErrorHandler, growlService, TokenService, UserFactory, ProjectsFactory, ProjectFactory, RewardsByProjectFactory, RewardsByUserFactory, ErrorHandler){
 
         var currentUID;
         var userRewardProjectIds = [];
         var userRewardNames = [];
         var userRewardXpBases = [];
         $scope.userRewards = [];
+        $scope.userProjects = [];
 
 
         if((typeof $stateParams.uID === 'undefined') || $stateParams.uID=="" )
@@ -308,7 +309,14 @@ materialAdmin
         //AdminProjectsFactory.query().$promise.then(function(response){
         //edit project information so it can easily be displayed (trim returned variables and identify user role for each project
             response.forEach(function(project){
-                project.title=project.title.trim();
+
+                ProjectFactory.show({pID: project.projectID, uID:currentUID}).$promise.then(function(response){
+                    project.title=response.title.trim();
+                    project.description=response.description.trim();
+                    project.level=response.level;
+                }, function(error){
+                    ErrorHandler.handle("Could not fetch project information from server.", error);
+                });
 
                 if(project.description == null)
                     project.description = "";
@@ -319,23 +327,20 @@ materialAdmin
                     return(user.user.trim()==TokenService.username);
                 });
                 project.role=userInProject[0].role.trim();
-
-                RewardsByUserFactory.query({uID: currentUID}).$promise.then(function(response){
-                    response.forEach(function(reward){
-                        reward.name = reward.name.trim();
-                    });
-                    $scope.userRewards.push(response);
-                }, function(error){
-                   ErrorHandler.handle("Could not fetch reward/s.", error);
-                });
-
             });
             $scope.userProjects=response;
         }, function(error){
            ErrorHandler.handle("Could not fetch projects.", error);
         });
 
-
+        RewardsByUserFactory.query({uID: currentUID}).$promise.then(function(response){
+            response.forEach(function(reward){
+                reward.name = reward.name.trim();
+            });
+            $scope.userRewards.push(response);
+        }, function(error){
+           ErrorHandler.handle("Could not fetch reward/s.", error);
+        });
 
         //Edit
         this.editSummary = 0;
@@ -1244,8 +1249,8 @@ materialAdmin
             $scope.model.range = {};
             $scope.values = {};
             $scope.task.subtaskList.forEach(function(subtask){
-                $scope.MaxXp = $scope.MaxXp + subtask.xp;
-                $scope.userXp = $scope.userXp + subtask.xp * subtask.percentageReached;
+                $scope.maxXp = $scope.maxXp + parseInt(subtask.xp);
+                $scope.userXp = $scope.userXp + parseInt(subtask.xp) * (parseInt(subtask.percentageReached)/100);
                 subtask.status = subtask.status.trim();
                 parsedTemplate=showDSL(ErrorHandler, subtask, $scope);
                 $scope.task.parsedSubtaskList.push(parsedTemplate);
