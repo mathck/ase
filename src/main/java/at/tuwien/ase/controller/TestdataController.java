@@ -2,10 +2,7 @@ package at.tuwien.ase.controller;
 
 import at.tuwien.ase.controller.exceptions.GenericRestExceptionHandler;
 import at.tuwien.ase.model.*;
-import at.tuwien.ase.services.DslTemplateService;
-import at.tuwien.ase.services.ProjectService;
-import at.tuwien.ase.services.TaskService;
-import at.tuwien.ase.services.UserService;
+import at.tuwien.ase.services.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +38,20 @@ public class TestdataController {
     private TaskService taskService;
 
     @Autowired
+    private IssueService issueService;
+
+    @Autowired
     private DslTemplateService dslService;
 
     @Autowired
     private GenericRestExceptionHandler genericRestExceptionHandler;
+
+    @RequestMapping(value = "/testdata/all/generate/5796e83c-f5fa-4730-9915-a47bfcecad6d", method = RequestMethod.POST)
+    @ResponseBody
+    public void generateTestData() throws Exception {
+        generateTestData(1);
+        generateTestData(5);
+    }
 
     @RequestMapping(value = "/testdata/5/generate/5796e83c-f5fa-4730-9915-a47bfcecad6d", method = RequestMethod.POST)
     @ResponseBody
@@ -118,19 +125,13 @@ public class TestdataController {
         }
 
         String workingDir = System.getProperty("user.dir");
-
         Path path = Paths.get(workingDir, "src", "main", "resources", "dsl", "userstory_" + number + ".xml");
-
         String dsl = readFile(path, StandardCharsets.UTF_8);
-
         dsl = dsl.replaceAll("\t", "");
         dsl = dsl.replaceAll("\n", "");
         dsl = dsl.replaceAll("\r", "");
 
-        // add all dsl templates
-        for(int i = 0; i < 5; i++) {
-            dslService.writeDslTemplate(new DslTemplate("userStory" + i, "description", dsl, admin.getUserID()), "create");
-        }
+        dslService.writeDslTemplate(new DslTemplate("userStory_" + number, "dsl for a user story", dsl, admin.getUserID()), "create");
 
         // create 1.000 class projects for every teacher
         for(int i = 0; i < 10; i++) {
@@ -139,7 +140,7 @@ public class TestdataController {
             // 1 task (homeworks) for every student
             for(int j = 0; j < 10; j++) {
                 LinkedList<User> users = new LinkedList<User>();
-                users.add(students.get(j));
+                users.add(students.get((i * 10) + j));
 
                 Task task = new Task("Open",
                         "single_task",
@@ -157,6 +158,8 @@ public class TestdataController {
                 project.addTask(task);
                 //taskService.writeTask(i+1, task);
             }
+
+            issueService.writeIssue(new Issue("Clean Room", "The room is dirty"), i+1, students.get((i * 10)).getUserID());
 
             // 1 admin and 1 teacher for every class
             project.addUser(admin.getUserID(), "ADMIN");
