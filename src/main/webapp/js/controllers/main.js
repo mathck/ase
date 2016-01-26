@@ -1304,9 +1304,12 @@ materialAdmin
                     description: $scope.task.description
                 });*/
                 //save newly added users to project:
-                $scope.userPicker.forEach(function(contributor){
-                    TaskUserFactory.add({uID: contributor, tID:$scope.currentTID});
-                });
+                if(!($scope.userPicker===undefined)){
+                    $scope.userPicker.forEach(function(contributor){
+                        TaskUserFactory.add({uID: contributor, tID:$scope.currentTID});
+                    });
+                }
+                console.log($scope.userPicker);
                 updateTaskInformation();
             }
         };
